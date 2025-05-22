@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="fav.png">
+    
+    <!--CSS-->
+    <link rel="stylesheet" href="style.css">
+    <!--/CSS-->
+    
+    <!--Boxicons CSS-->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <!--/Boxicons CSS-->
+    
+    <title>Sua Empresa LTDA</title> 
+</head>
+<body>
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="logo.png" alt="">
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name" id="nome">Aurora Grand Hotels</span>
+                    <span class="profession">GRC Control</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu-scrollable">
+
+                <li class="search-box" id="search-box">
+                    <i class='bx bx-search icon'></i>
+                    <input type="text" placeholder="Search...">
+                </li>
+                <br>
+                <br>
+
+                <ul class="menu-links">
+
+                    <li class="nav-link">
+                        <a href="home.html">
+                            <i class='bx bxs-home icon' ></i>
+                            <span class="text nav-text">Home</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="dashboard.html">
+                            <i class='bx bxs-dashboard icon' ></i>
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+
+                    <li class="nav-link has-submenu">
+                        <a href="leads.html">
+                            <i class='bx bxs-user-detail icon' ></i>
+                            <span class="text nav-text">CRM <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="leads.html"><i class='bx bx-user icon' ></i>Negociações (Leads)</a></li>
+                            <li><a href="#"><i class='bx bx-transfer icon' ></i>Follow Up log</a></li>
+                            <li><a href="#"><i class='bx bxs-user-account icon' ></i>Carteira de Clientes</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="calendar.html">
+                            <i class='bx bxs-calendar icon'></i>
+                            <span class="text nav-text">Calendário</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link has-submenu">
+                        <a href="#">
+                            <i class='bx bxs-business icon'></i>
+                            <span class="text nav-text">Hotéis <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="#" style="color: rgb(0, 173, 173);"><i class='bx bx-circle icon' ></i> Todos os hotéis</a></li>
+                            <li><a href="#"><i class='bx bxs-circle-quarter icon' ></i> Aurora Grand Hotel</a></li>
+                            <li><a href="#"><i class='bx bxs-circle-half icon' ></i> Aurora Suites</a></li>
+                            <li><a href="#"><i class='bx bxs-circle-three-quarter icon' ></i> Aurora Budget</a></li>
+                            <li><a href="#"><i class='bx bxs-circle icon' ></i> Aurora Resorts</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="pricespy.html">
+                            <i class='bx bx-show-alt icon'></i>
+                            <span class="text nav-text">Price Spy</span>
+                        </a>
+                    </li>
+
+                    <li id="navselected" class="nav-link">
+                        <a href="reminder.html">
+                            <i class='bx bxs-bell-ring icon' ></i>
+                            <span class="text nav-text">Lembretes</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <ul class="menu-links">
+                    <li class="nav-link has-submenu">
+                        <a href="#">
+                            <img id="profile-pic" src="profile_pic_F.png" alt="Filipe Oliveira">
+                            <span class="text nav-text">Filipe Oliveira <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="#"><i class='bx bx-user icon'></i> Perfil</a></li>
+                            <li><a href="#"><i class='bx bx-cog icon'></i> Configurações</a></li>
+                            <li><a href="#"><i class='bx bx-help-circle icon' ></i> Ajuda</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="logout" id="logout">
+                        <a href="index.html">
+                            <i class='bx bx-log-out icon' ></i>
+                            <span class="text nav-text">Logout</span>
+                        </a>
+                    </li>
+
+                    <li class="mode">
+                        <div class="sun-moon">
+                            <i class='bx bx-moon icon moon'></i>
+                            <i class='bx bx-sun icon sun'></i>
+                        </div>
+                        <span class="mode-text text">Dark mode</span>
+
+                        <div class="toggle-switch">
+                            <span class="switch"></span>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+    </nav>
+
+    <section class="home">
+        <div style="display: none;"> 
+            <h3 id="saudacao"></h3>
+            <p class="data-hora" id="dataHora"></p>
+        </div>
+        <img id="logoavi" src="aviat.png">
+    </section>
+
+    <div class="container">
+        <!-- Currency section -->
+        <!-- <section class="section currency-section">
+            <ul class="currency-list" id="currencyQuotations"></ul>
+        </section> -->
+    
+        <!-- Calculator section -->
+        <section class="section calculator-section">
+            <div>
+                <input type="text" id="calculatorInput" placeholder="0" readonly>
+            </div>
+            <div>
+                <button onclick="appendToCalculator('1')">1</button>
+                <button onclick="appendToCalculator('2')">2</button>
+                <button onclick="appendToCalculator('3')">3</button>
+                <button onclick="appendToCalculator('+')">+</button>
+            </div>
+            <div>
+                <button onclick="appendToCalculator('4')">4</button>
+                <button onclick="appendToCalculator('5')">5</button>
+                <button onclick="appendToCalculator('6')">6</button>
+                <button onclick="appendToCalculator('-')">-</button>
+            </div>
+            <div>
+                <button onclick="appendToCalculator('7')">7</button>
+                <button onclick="appendToCalculator('8')">8</button>
+                <button onclick="appendToCalculator('9')">9</button>
+                <button onclick="appendToCalculator('*')">*</button>
+            </div>
+            <div>
+                <button onclick="clearCalculator()">C</button> <!-- Swapped with "=" button -->
+                <button onclick="appendToCalculator('0')">0</button>
+                <button onclick="calculate()">=</button> <!-- Swapped with "C" button -->
+                <button onclick="appendToCalculator('/')">/</button>
+            </div>
+        </section>
+    </div>
+
+    <!--Footer -->
+    <footer>
+        &copy; <span id="anoAtual"></span> Aurora Grand Hotels.
+    </footer>
+    <!-- /Footer -->
+
+        
+    <script src="script.js"></script>
+
+    <script>
+        document.querySelectorAll('.nav-link.has-submenu > a').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                const parent = this.parentElement;
+
+                // Fecha outros submenus, se quiser comportamento exclusivo
+                document.querySelectorAll('.nav-link.has-submenu').forEach(item => {
+                    if (item !== parent) item.classList.remove('active');
+                });
+
+                parent.classList.toggle('active');
+            });
+        });
+    </script>
+
+</body>
+</html>

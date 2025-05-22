@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="fav.png">
+    
+    <!--CSS-->
+    <link rel="stylesheet" href="stylecale.css">
+    <!--/CSS-->
+    
+    <!--Boxicons CSS-->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <!--/Boxicons CSS-->
+    
+    <title>Sua Empresa LTDA</title> 
+</head>
+<body>
+   <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="logo.png" alt="">
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name" id="nome">Aurora Grand Hotels</span>
+                    <span class="profession">GRC Control</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu-scrollable">
+
+                <li class="search-box" id="search-box">
+                    <i class='bx bx-search icon'></i>
+                    <input type="text" placeholder="Search...">
+                </li>
+                <br>
+                <br>
+
+                <ul class="menu-links">
+
+                    <li class="nav-link">
+                        <a href="home.html">
+                            <i class='bx bxs-home icon' ></i>
+                            <span class="text nav-text">Home</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="dashboard.html">
+                            <i class='bx bxs-dashboard icon' ></i>
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link has-submenu">
+                        <a href="leads.html">
+                            <i class='bx bxs-user-detail icon' ></i>
+                            <span class="text nav-text">CRM <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="leads.html"><i class='bx bx-user icon' ></i>Negociações (Leads)</a></li>
+                            <li><a href="#"><i class='bx bx-transfer icon' ></i>Follow Up log</a></li>
+                            <li><a href="#"><i class='bx bxs-user-account icon' ></i>Carteira de Clientes</a></li>
+                        </ul>
+                    </li>
+
+                    <li id="navselected" class="nav-link">
+                        <a href="calendar.html">
+                            <i class='bx bxs-calendar icon'></i>
+                            <span class="text nav-text">Calendário</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link has-submenu">
+                        <a href="#">
+                            <i class='bx bxs-business icon'></i>
+                            <span class="text nav-text">Hotéis <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="#" style="color: rgb(0, 173, 173);"><i class='bx bx-circle icon' ></i> Todos os hotéis</a></li>
+                            <li><a href="#"><i class='bx bxs-circle-quarter icon' ></i> Aurora Grand Hotel</a></li>
+                            <li><a href="#"><i class='bx bxs-circle-half icon' ></i> Aurora Suites</a></li>
+                            <li><a href="#"><i class='bx bxs-circle-three-quarter icon' ></i> Aurora Budget</a></li>
+                            <li><a href="#"><i class='bx bxs-circle icon' ></i> Aurora Resorts</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="pricespy.html">
+                            <i class='bx bx-show-alt icon'></i>
+                            <span class="text nav-text">Price Spy</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="reminder.html">
+                            <i class='bx bxs-bell-ring icon' ></i>
+                            <span class="text nav-text">Lembretes</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <ul class="menu-links">
+                    <li class="nav-link has-submenu">
+                        <a href="#">
+                            <img id="profile-pic" src="profile_pic_F.png" alt="Filipe Oliveira">
+                            <span class="text nav-text">Filipe Oliveira <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="#"><i class='bx bx-user icon'></i> Perfil</a></li>
+                            <li><a href="#"><i class='bx bx-cog icon'></i> Configurações</a></li>
+                            <li><a href="#"><i class='bx bx-help-circle icon' ></i> Ajuda</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="logout" id="logout">
+                        <a href="index.html">
+                            <i class='bx bx-log-out icon' ></i>
+                            <span class="text nav-text">Logout</span>
+                        </a>
+                    </li>
+
+                    <li class="mode">
+                        <div class="sun-moon">
+                            <i class='bx bx-moon icon moon'></i>
+                            <i class='bx bx-sun icon sun'></i>
+                        </div>
+                        <span class="mode-text text">Dark mode</span>
+
+                        <div class="toggle-switch">
+                            <span class="switch"></span>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+    </nav>
+
+    <section class="home">
+
+        <div class="headernav">
+            <div> 
+              <h3 id="saudacao"></h3>
+              <p class="data-hora" id="dataHora"></p>
+            </div>
+            
+            <div id="legenda">
+                <!-- <div id="goback-btn"><a href="home.html"><h4><span class="invertido">➥</span> Voltar</h4></a></div> -->
+                <div class="day holiday"></div><p> Feriado Nacional</p>
+                <p></p>
+                <div class="day celebrate"></div><p> Datas Comemorativas</p>
+                <p></p>
+                <div class="day event"></div><p> Eventos Relevantes</p>
+    
+                <!-- Botão para abrir o formulário -->
+                <div class="add-event-container" style=" margin-left: 10px; margin-top: 5px;" onclick="document.getElementById('event-form').style.display = 'block'">
+                    <a style="cursor: pointer; transition: .4s;"><i class='bx bx-calendar-plus'></i></a>
+                    <div class="descricaoo">Adicionar novo evento</div>
+                </div>
+            </div>
+        </div>
+        
+    
+        <div class="calendar-container">
+    
+          <div id="goback-btn1"><a href="home.html"><h4><span class="invertido">➥</span></h4></a>
+    
+                <div class="add-event-container" style=" margin-left: 10px; margin-top: 5px;" onclick="document.getElementById('event-form').style.display = 'block'">
+                    <h1 style="cursor: pointer; transition: .4s;"><i class='bx bx-calendar-plus'></i></h1>
+                    <div class="descricaoo">Adicionar novo evento</div>
+                </div>
+    
+            </div> 
+          
+            <br id="br">
+            
+            <!-- Janeiro -->
+            <div class="month">
+                <h2>Janeiro</h2>
+                <div class="weekdays">
+                    <div id="weekend" class="weekday">Dom</div>
+                    <div class="weekday">Seg</div>
+                    <div class="weekday">Ter</div>
+                    <div class="weekday">Qua</div>
+                    <div class="weekday">Qui</div>
+                    <div class="weekday">Sex</div>
+                    <div id="weekend" class="weekday">Sáb</div>
+                </div>
+                <div class="days">
+                    <div class="day"><strong></strong> </div>
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    <div class="day">1</div>
+                    <div class="day">2</div>
+                    <div class="day">3</div>
+                    <div class="day"><strong>4</strong></div>
+                    <div class="day"><strong>5</strong></div>
+                    <div class="day">6</div>
+                    <div class="day">7</div>
+                    <div class="day">8</div>
+                    <div class="day">9</div>
+                    <div class="day">10</div>
+                    <div class="day"><strong>11</strong></div>
+                    <div class="day"><strong>12</strong></div>
+                    <div class="day">13</div>
+                    <div class="day">14</div>
+                    <div class="day">15</div>
+                    <div class="day">16</div>
+                    <div class="day">17</div>
+                    <div class="day"><strong>18</strong></div>
+                    <div class="day"><strong>19</strong></div>
+                    <div class="day">20</div>
+                    <div class="day">21</div>
+                    <div class="day">22</div>
+                    <div class="day">23</div>
+                    <div class="day">24</div>
+                    <div class="day"><strong>25</strong></div>
+                    <div class="day"><strong>26</strong></div>
+                    <div class="day">27</div>
+                    <div class="day">28</div>
+                    <div class="day">29</div>
+                    <div class="day">30</div>
+                    <div class="day">31</div>
+                </div>
+            </div>
+    
+            <!-- Fevereiro -->
+            <div class="month">
+                <h2>Fevereiro</h2>
+                <div class="weekdays">
+                    <div id="weekend" class="weekday">Dom</div>
+                    <div class="weekday">Seg</div>
+                    <div class="weekday">Ter</div>
+                    <div class="weekday">Qua</div>
+                    <div class="weekday">Qui</div>
+                    <div class="weekday">Sex</div>
+                    <div id="weekend" class="weekday">Sáb</div>
+                </div>
+                <div class="days">
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    <div class="day"><strong>1</strong></div>
+                    <div class="day"><strong>2</strong></div>
+                    <div class="day">3</div>
+                    <div class="day">4</div>
+                    <div class="day">5</div>
+                    <div class="day">6</div>
+                    <div class="day">7</div>
+                    <div class="day"><strong>8</strong></div>
+                    <div class="day"><strong>9</strong></div>
+                    <div class="day">10</div>
+                    <div class="day">11</div>
+                    <div class="day">12</div>
+                    <div class="day">13</div>
+                    <div class="day">14</div>
+                    <div class="day"><strong>15</strong></div>
+                    <div class="day"><strong>16</strong></div>
+                    <div class="day">17</div>
+                    <div class="day">18</div>
+                    <div class="day">19</div>
+                    <div class="day">20</div>
+                    <div class="day">21</div>
+                    <div class="day"><strong>22</strong></div>
+                    <div class="day"><strong>23</strong></div>
+                    <div class="day">24</div>
+                    <div class="day">25</div>
+                    <div class="day">26</div>
+                    <div class="day">27</div>
+                    <div class="day">28</div>
+                </div>
+            </div>
+    
+            <!-- Março -->
+            <div class="month">
+                <h2>Março</h2>
+                <div class="weekdays">
+                    <div id="weekend" class="weekday">Dom</div>
+                    <div class="weekday">Seg</div>
+                    <div class="weekday">Ter</div>
+                    <div class="weekday">Qua</div>
+                    <div class="weekday">Qui</div>
+                    <div class="weekday">Sex</div>
+                    <div id="weekend" class="weekday">Sáb</div>
+                </div>
+                <div class="days">
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    <div class="day"><strong>1</strong></div>
+                    <div class="day"><strong>2</strong></div>
+                    <div class="day">3</div>
+                    <div class="day">4</div>
+                    <div class="day">5</div>
+                    <div class="day">6</div>
+                    <div class="day">7</div>
+                    <div class="day"><strong>8</strong></div>
+                    <div class="day"><strong>9</strong></div>
+                    <div class="day">10</div>
+                    <div class="day">11</div>
+                    <div class="day">12</div>
+                    <div class="day">13</div>
+                    <div class="day">14</div>
+                    <div class="day"><strong>15</strong></div>
+                    <div class="day"><strong>16</strong></div>
+                    <div class="day">17</div>
+                    <div class="day">18</div>
+                    <div class="day">19</div>
+                    <div class="day">20</div>
+                    <div class="day">21</div>
+                    <div class="day"><strong>22</strong></div>
+                    <div class="day"><strong>23</strong></div>
+                    <div class="day">24</div>
+                    <div class="day">25</div>
+                    <div class="day">26</div>
+                    <div class="day">27</div>
+                    <div class="day">28</div>
+                    <div class="day"><strong>29</strong></div>
+                    <div class="day"><strong>30</strong></div>
+                    <div class="day">31</div>
+                </div>
+            </div>
+    
+            <!-- Abril -->
+            <div class="month">
+                <h2>Abril</h2>
+                <div class="weekdays">
+                    <div id="weekend" class="weekday">Dom</div>
+                    <div class="weekday">Seg</div>
+                    <div class="weekday">Ter</div>
+                    <div class="weekday">Qua</div>
+                    <div class="weekday">Qui</div>
+                    <div class="weekday">Sex</div>
+                    <div id="weekend" class="weekday">Sáb</div>
+                </div>
+                <div class="days">
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    <div class="day">1</div>
+                    <div class="day">2</div>
+                    <div class="day">3</div>
+                    <div class="day">4</div>
+                    <div class="day"><strong>5</strong></div>
+                    <div class="day"><strong>6</strong></div>
+                    <div class="day">7</div>
+                    <div class="day">8</div>
+                    <div class="day">9</div>
+                    <div class="day">10</div>
+                    <div class="day">11</div>
+                    <div class="day"><strong>12</strong></div>
+                    <div class="day"><strong>13</strong></div>
+                    <div class="day">14</div>
+                    <div class="day">15</div>
+                    <div class="day">16</div>
+                    <div class="day">17</div>
+                    <div class="day">18</div>
+                    <div class="day"><strong>19</strong></div>
+                    <div class="day"><strong>20</strong></div>
+                    <div class="day">21</div>
+                    <div class="day">22</div>
+                    <div class="day">23</div>
+                    <div class="day">24</div>
+                    <div class="day">25</div>
+                    <div class="day"><strong>26</strong></div>
+                    <div class="day"><strong>27</strong></div>
+                    <div class="day">28</div>
+                    <div class="day">29</div>
+                    <div class="day">30</div>
+                </div>
+            </div>
+    
+            <!-- Maio -->
+            <div class="month">
+                <h2>Maio</h2>
+                <div class="weekdays">
+                    <div id="weekend" class="weekday">Dom</div>
+                    <div class="weekday">Seg</div>
+                    <div class="weekday">Ter</div>
+                    <div class="weekday">Qua</div>
+                    <div class="weekday">Qui</div>
+                    <div class="weekday">Sex</div>
+                    <div id="weekend" class="weekday">Sáb</div>
+                </div>
+                <div class="days">
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    <div class="day">1</div>
+                    <div class="day">2</div>
+                    <div class="day"><strong>3</strong></div>
+                    <div class="day"><strong>4</strong></div>
+                    <div class="day">5</div>
+                    <div class="day">6</div>
+                    <div class="day">7</div>
+                    <div class="day">8</div>
+                    <div class="day">9</div>
+                    <div class="day"><strong>10</strong></div>
+                    <div class="day"><strong>11</strong></div>
+                    <div class="day">12</div>
+                    <div class="day">13</div>
+                    <div class="day">14</div>
+                    <div class="day">15</div>
+                    <div class="day">16</div>
+                    <div class="day"><strong>17</strong></div>
+                    <div class="day"><strong>18</strong></div>
+                    <div class="day">19</div>
+                    <div class="day">20</div>
+                    <div class="day">21</div>
+                    <div class="day">22</div>
+                    <div class="day">23</div>
+                    <div class="day"><strong>24</strong></div>
+                    <div class="day"><strong>25</strong></div>
+                    <div class="day">26</div>
+                    <div class="day">27</div>
+                    <div class="day">28</div>
+                    <div class="day">29</div>
+                    <div class="day">30</div>
+                    <div class="day"><strong>31</strong></div>
+                </div>
+            </div>
+    
+            <!-- Junho -->
+            <div class="month">
+                <h2>Junho</h2>
+                <div class="weekdays">
+                    <div id="weekend" class="weekday">Dom</div>
+                    <div class="weekday">Seg</div>
+                    <div class="weekday">Ter</div>
+                    <div class="weekday">Qua</div>
+                    <div class="weekday">Qui</div>
+                    <div class="weekday">Sex</div>
+                    <div id="weekend" class="weekday">Sáb</div>
+                </div>
+                <div class="days">
+                    <div class="day"><strong>1</strong></div>
+                    <div class="day">2</div>
+                    <div class="day">3</div>
+                    <div class="day">4</div>
+                    <div class="day">5</div>
+                    <div class="day">6</div>
+                    <div class="day"><strong>7</strong></div>
+                    <div class="day"><strong>8</strong></div>
+                    <div class="day">9</div>
+                    <div class="day">10</div>
+                    <div class="day">11</div>
+                    <div class="day">12</div>
+                    <div class="day">13</div>
+                    <div class="day"><strong>14</strong></div>
+                    <div class="day"><strong>15</strong></div>
+                    <div class="day">16</div>
+                    <div class="day">17</div>
+                    <div class="day">18</div>
+                    <div class="day">19</div>
+                    <div class="day">20</div>
+                    <div class="day"><strong>21</strong></div>
+                    <div class="day"><strong>22</strong></div>
+                    <div class="day">23</div>
+                    <div class="day">24</div>
+                    <div class="day">25</div>
+                    <div class="day">26</div>
+                    <div class="day">27</div>
+                    <div class="day"><strong>28</strong></div>
+                    <div class="day"><strong>29</strong></div>
+                    <div class="day">30</div>
+                </div>
+            </div>
+    
+            <!-- Julho -->
+            <div class="month">
+                <h2>Julho</h2>
+                <div class="weekdays">
+                    <div id="weekend" class="weekday">Dom</div>
+                    <div class="weekday">Seg</div>
+                    <div class="weekday">Ter</div>
+                    <div class="weekday">Qua</div>
+                    <div class="weekday">Qui</div>
+                    <div class="weekday">Sex</div>
+                    <div id="weekend" class="weekday">Sáb</div>
+                </div>
+                <div class="days">
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    <div class="day">1</div>
+                    <div class="day">2</div>
+                    <div class="day">3</div>
+                    <div class="day">4</div>
+                    <div class="day"><strong>5</strong></div>
+                    <div class="day"><strong>6</strong></div>
+                    <div class="day">7</div>
+                    <div class="day">8</div>
+                    <div class="day">9</div>
+                    <div class="day">10</div>
+                    <div class="day">11</div>
+                    <div class="day"><strong>12</strong></div>
+                    <div class="day"><strong>13</strong></div>
+                    <div class="day">14</div>
+                    <div class="day">15</div>
+                    <div class="day">16</div>
+                    <div class="day">17</div>
+                    <div class="day">18</div>
+                    <div class="day"><strong>19</strong></div>
+                    <div class="day"><strong>20</strong></div>
+                    <div class="day">21</div>
+                    <div class="day">22</div>
+                    <div class="day">23</div>
+                    <div class="day">24</div>
+                    <div class="day">25</div>
+                    <div class="day"><strong>26</strong></div>
+                    <div class="day"><strong>27</strong></div>
+                    <div class="day">28</div>
+                    <div class="day">29</div>
+                    <div class="day">30</div>
+                    <div class="day">31</div>
+                </div>
+            </div>
+    
+            <!-- Agosto -->
+            <div class="month">
+                <h2>Agosto</h2>
+                <div class="weekdays">
+                    <div id="weekend" class="weekday">Dom</div>
+                    <div class="weekday">Seg</div>
+                    <div class="weekday">Ter</div>
+                    <div class="weekday">Qua</div>
+                    <div class="weekday">Qui</div>
+                    <div class="weekday">Sex</div>
+                    <div id="weekend" class="weekday">Sáb</div>
+                </div>
+                <div class="days">
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    <div class="day">1</div>
+                    <div class="day"><strong>2</strong></div>
+                    <div class="day"><strong>3</strong></div>
+                    <div class="day">4</div>
+                    <div class="day">5</div>
+                    <div class="day">6</div>
+                    <div class="day">7</div>
+                    <div class="day">8</div>
+                    <div class="day"><strong>9</strong></div>
+                    <div class="day"><strong>10</strong></div>
+                    <div class="day">11</div>
+                    <div class="day">12</div>
+                    <div class="day">13</div>
+                    <div class="day">14</div>
+                    <div class="day">15</div>
+                    <div class="day"><strong>16</strong></div>
+                    <div class="day"><strong>17</strong></div>
+                    <div class="day">18</div>
+                    <div class="day">19</div>
+                    <div class="day">20</div>
+                    <div class="day">21</div>
+                    <div class="day">22</div>
+                    <div class="day"><strong>23</strong></div>
+                    <div class="day"><strong>24</strong></div>
+                    <div class="day">25</div>
+                    <div class="day">26</div>
+                    <div class="day">27</div>
+                    <div class="day">28</div>
+                    <div class="day">29</div>
+                    <div class="day"><strong>30</strong></div>
+                    <div class="day"><strong>31</strong></div>
+                </div>
+            </div>
+    
+            <!-- Setembro -->
+            <div class="month">
+                <h2>Setembro</h2>
+                <div class="weekdays">
+                    <div id="weekend" class="weekday">Dom</div>
+                    <div class="weekday">Seg</div>
+                    <div class="weekday">Ter</div>
+                    <div class="weekday">Qua</div>
+                    <div class="weekday">Qui</div>
+                    <div class="weekday">Sex</div>
+                    <div id="weekend" class="weekday">Sáb</div>
+                </div>
+                <div class="days">
+                    <div class="day"></div>
+                    <div class="day">1</div>
+                    <div class="day">2</div>
+                    <div class="day">3</div>
+                    <div class="day">4</div>
+                    <div class="day">5</div>
+                    <div class="day"><strong>6</strong></div>
+                    <div class="day"><strong>7</strong></div>
+                    <div class="day">8</div>
+                    <div class="day">9</div>
+                    <div class="day">10</div>
+                    <div class="day">11</div>
+                    <div class="day">12</div>
+                    <div class="day"><strong>13</strong></div>
+                    <div class="day"><strong>14</strong></div>
+                    <div class="day">15</div>
+                    <div class="day">16</div>
+                    <div class="day">17</div>
+                    <div class="day">18</div>
+                    <div class="day">19</div>
+                    <div class="day"><strong>20</strong></div>
+                    <div class="day"><strong>21</strong></div>
+                    <div class="day">22</div>
+                    <div class="day">23</div>
+                    <div class="day">24</div>
+                    <div class="day">25</div>
+                    <div class="day">26</div>
+                    <div class="day"><strong>27</strong></div>
+                    <div class="day"><strong>28</strong></div>
+                    <div class="day">29</div>
+                    <div class="day">30</div>
+                </div>
+            </div>
+    
+            <!-- Outubro -->
+            <div class="month">
+                <h2>Outubro</h2>
+                <div class="weekdays">
+                    <div id="weekend" class="weekday">Dom</div>
+                    <div class="weekday">Seg</div>
+                    <div class="weekday">Ter</div>
+                    <div class="weekday">Qua</div>
+                    <div class="weekday">Qui</div>
+                    <div class="weekday">Sex</div>
+                    <div id="weekend" class="weekday">Sáb</div>
+                </div>
+                <div class="days">
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    <div class="day">1</div>
+                    <div class="day">2</div>
+                    <div class="day">3</div>
+                    <div class="day"><strong>4</strong></div>
+                    <div class="day"><strong>5</strong></div>
+                    <div class="day">6</div>
+                    <div class="day">7</div>
+                    <div class="day">8</div>
+                    <div class="day">9</div>
+                    <div class="day">10</div>
+                    <div class="day"><strong>11</strong></div>
+                    <div class="day"><strong>12</strong></div>
+                    <div class="day">13</div>
+                    <div class="day">14</div>
+                    <div class="day">15</div>
+                    <div class="day">16</div>
+                    <div class="day">17</div>
+                    <div class="day"><strong>18</strong></div>
+                    <div class="day"><strong>19</strong></div>
+                    <div class="day">20</div>
+                    <div class="day">21</div>
+                    <div class="day">22</div>
+                    <div class="day">23</div>
+                    <div class="day">24</div>
+                    <div class="day"><strong>25</strong></div>
+                    <div class="day"><strong>26</strong></div>
+                    <div class="day">27</div>
+                    <div class="day">28</div>
+                    <div class="day">29</div>
+                    <div class="day">30</div>
+                    <div class="day">31</div>
+                </div>
+            </div>
+    
+            <!-- Novembro -->
+            <div class="month">
+                <h2>Novembro</h2>
+                <div class="weekdays">
+                    <div id="weekend" class="weekday">Dom</div>
+                    <div class="weekday">Seg</div>
+                    <div class="weekday">Ter</div>
+                    <div class="weekday">Qua</div>
+                    <div class="weekday">Qui</div>
+                    <div class="weekday">Sex</div>
+                    <div id="weekend" class="weekday">Sáb</div>
+                </div>
+                <div class="days">
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    <div class="day"><strong>1</strong></div>
+                    <div class="day"><strong>2</strong></div>
+                    <div class="day">3</div>
+                    <div class="day">4</div>
+                    <div class="day">5</div>
+                    <div class="day">6</div>
+                    <div class="day">7</div>
+                    <div class="day"><strong>8</strong></div>
+                    <div class="day"><strong>9</strong></div>
+                    <div class="day">10</div>
+                    <div class="day">11</div>
+                    <div class="day">12</div>
+                    <div class="day">13</div>
+                    <div class="day">14</div>
+                    <div class="day"><strong>15</strong></div>
+                    <div class="day"><strong>16</strong></div>
+                    <div class="day">17</div>
+                    <div class="day">18</div>
+                    <div class="day">19</div>
+                    <div class="day">20</div>
+                    <div class="day">21</div>
+                    <div class="day"><strong>22</strong></div>
+                    <div class="day"><strong>23</strong></div>
+                    <div class="day">24</div>
+                    <div class="day">25</div>
+                    <div class="day">26</div>
+                    <div class="day">27</div>
+                    <div class="day">28</div>
+                    <div class="day"><strong>29</strong></div>
+                    <div class="day"><strong>30</strong></div>
+                </div>
+            </div>
+            <!-- Dezembro -->
+            <div class="month">
+                <h2>Dezembro</h2>
+                <div class="weekdays">
+                    <div id="weekend" class="weekday">Dom</div>
+                    <div class="weekday">Seg</div>
+                    <div class="weekday">Ter</div>
+                    <div class="weekday">Qua</div>
+                    <div class="weekday">Qui</div>
+                    <div class="weekday">Sex</div>
+                    <div id="weekend" class="weekday">Sáb</div>
+                </div>
+                <div class="days">
+                    <div class="day"></div>
+                    <div class="day">1</div>
+                    <div class="day">2</div>
+                    <div class="day">3</div>
+                    <div class="day">4</div>
+                    <div class="day">5</div>
+                    <div class="day"><strong>6</strong></div>
+                    <div class="day"><strong>7</strong></div>
+                    <div class="day">8</div>
+                    <div class="day">9</div>
+                    <div class="day">10</div>
+                    <div class="day">11</div>
+                    <div class="day">12</div>
+                    <div class="day"><strong>13</strong></div>
+                    <div class="day"><strong>14</strong></div>
+                    <div class="day">15</div>
+                    <div class="day">16</div>
+                    <div class="day">17</div>
+                    <div class="day">18</div>
+                    <div class="day">19</div>
+                    <div class="day"><strong>20</strong></div>
+                    <div class="day"><strong>21</strong></div>
+                    <div class="day">22</div>
+                    <div class="day">23</div>
+                    <div class="day">24</div>
+                    <div class="day">25</div>
+                    <div class="day">26</div>
+                    <div class="day"><strong>27</strong></div>
+                    <div class="day"><strong>28</strong></div>
+                    <div class="day">29</div>
+                    <div class="day">30</div>
+                    <div class="day">31</div>
+                </div>
+            </div>
+                
+        </div>
+    
+        <div id="event-form" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);backdrop-filter: blur(3px); background: #1a2436a5; padding: 20px; border-radius: 10px; z-index: 2000;">
+            <h3 style="color: #e59513; margin-bottom: 15px;">Adicionar Evento</h3>
+            <input type="date" id="event-date" style="padding: 8px; margin: 5px; background: #2a3447; border: 1px solid #e59513; color: white; border-radius: 5px;">
+            <select id="event-type" style="padding: 8px; margin: 5px; background: #2a3447; border: 1px solid #e59513; color: white; border-radius: 5px;">
+                <option value="event">Evento Relevante</option>
+                <option value="holiday">Feriado Nacional</option>
+                <option value="celebrate">Data Comemorativa</option>
+            </select>
+            <input type="text" id="event-description" placeholder="Descrição do evento" style="padding: 8px; margin: 5px; background: #2a3447; border: 1px solid #e59513; color: white; border-radius: 5px;">
+            <button onclick="submitEvent()" style="background: #e59513; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Enviar</button>
+            <button onclick="document.getElementById('event-form').style.display = 'none'" style="background: #ff4444; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Cancelar</button>
+        </div>
+
+
+
+
+        <img id="logoavi" src="aviat.png">
+    </section>
+
+    
+
+    <!--Footer -->
+    <footer>
+        &copy; <span id="anoAtual"></span> Aurora Grand Hotels.
+    </footer>
+    <!-- /Footer -->
+
+        
+    <script src="script.js"></script>
+
+    <script>
+        // Função para obter a saudação dependendo da hora do dia
+        function obterSaudacao() {
+            const agora = new Date();
+            const hora = agora.getHours(); // Obtém a hora atual (de 0 a 23)
+
+            let saudacao = "";
+            
+            if (hora >= 6 && hora < 12) {
+                saudacao = "Olá, Bom dia! Seja bem-vindo(a)!";
+            } else if (hora >= 12 && hora < 18) {
+                saudacao = "Olá, Boa tarde! Seja bem-vindo(a)!";
+            } else {
+                saudacao = "Olá, Boa noite! Seja bem-vindo(a)!";
+            }
+
+            return saudacao;
+        }
+
+        // Exibe a saudação no elemento com o id "saudacao"
+        document.getElementById("saudacao").textContent = obterSaudacao();
+
+
+        function updateDataHora() {
+        const data = new Date();
+        const options = {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+        };
+        const dataHoraFormatada = data.toLocaleString("pt-BR", options);
+        document.getElementById("dataHora").textContent = dataHoraFormatada;
+        }
+
+        setInterval(updateDataHora, 1000);
+
+
+        // Responsive logo
+        window.addEventListener("load", function () {
+            let logo = document.getElementById("logoAHI");
+
+            function atualizarLogo() {
+                if (window.innerWidth <= 768) {
+                    logo.src = "static/img/ahi_logo_mobile.png";
+                } else {
+                    logo.src = "static/img/logo_ahi.png";
+                }
+            }
+
+            atualizarLogo(); // Atualiza ao carregar a página
+            window.addEventListener("resize", atualizarLogo); // Atualiza ao redimensionar a tela
+        });
+
+            document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("anoAtual").textContent = new Date().getFullYear();
+        });
+
+    </script>
+
+    <script>
+
+        // --- URL do Apps Script ---  editor-role@ahi-calendar-450523.iam.gserviceaccount.com
+        const scriptURL = "https://script.google.com/macros/s/AKfycbzPNUYKtray48iAzTv0lXHfa0NW2EzhABpAlw3sTSztiPVV4COvt38JnXDtDhze9Yh_/exec";
+
+        // 1️⃣ Buscar eventos ao carregar a página
+        document.addEventListener("DOMContentLoaded", function () {
+          const callbackName = "jsonpCallback";
+      
+          // Criar um script dinâmico para JSONP
+          window[callbackName] = function (data) {
+              console.log("Eventos carregados via JSONP:", data);
+              data.forEach(evento => {
+                  adicionarEventoNoCalendario(evento.date, evento.type, evento.description);
+              });
+          };
+      
+          // Criando a requisição JSONP
+          const script = document.createElement("script");
+          script.src = `${scriptURL}?callback=${callbackName}`;
+          document.body.appendChild(script);
+      });
+
+
+
+        // 2️⃣ Função para adicionar evento no calendário
+        function adicionarEventoNoCalendario(eventDate, eventType, eventDescription) {
+            console.log("Adicionando evento:", eventDate, eventType, eventDescription); // Debug
+
+            var [year, month, day] = eventDate.split("-").map(Number);
+            month = month - 1;
+
+            var monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+            var targetMonthName = monthNames[month];
+
+            var monthContainers = document.getElementsByClassName("month");
+            var targetMonthContainer = null;
+            for (var i = 0; i < monthContainers.length; i++) {
+                var h2 = monthContainers[i].querySelector("h2");
+                if (h2 && h2.textContent.trim() === targetMonthName) {
+                    targetMonthContainer = monthContainers[i];
+                    break;
+                }
+            }
+
+            if (!targetMonthContainer) {
+                console.warn("Mês não encontrado:", targetMonthName);
+                return;
+            }
+
+            var dayElements = targetMonthContainer.getElementsByClassName("day");
+            var targetDayElement = null;
+            
+            for (var j = 0; j < dayElements.length; j++) {
+                // 🔹 Agora conseguimos pegar corretamente os dias que estão dentro de <strong>
+                let dayText = dayElements[j].querySelector("strong") 
+                    ? dayElements[j].querySelector("strong").textContent.trim() 
+                    : dayElements[j].childNodes[0]?.nodeValue?.trim();
+            
+                if (dayText === day.toString()) {
+                    targetDayElement = dayElements[j];
+                    break;
+                }
+            }
+
+
+            if (!targetDayElement) {
+                console.warn("Dia não encontrado:", day);
+                return;
+            }
+
+            // 🔹 Verifica se já existe um tooltip no dia
+            var existingTooltip = targetDayElement.querySelector(".tooltip");
+            
+            if (existingTooltip) {
+                // 🔹 Se já existir um tooltip, adicionamos o evento nele
+                existingTooltip.innerHTML += "<br>" + eventDescription;
+            } else {
+                // 🔹 Se não existir, criamos um novo tooltip
+                var tooltipSpan = document.createElement("span");
+                tooltipSpan.className = "tooltip";
+                tooltipSpan.innerHTML = eventDescription;
+                targetDayElement.appendChild(tooltipSpan);
+            }
+            
+            // 🔹 Adicionamos a classe para destacar o evento no calendário
+            targetDayElement.classList.add(eventType);
+        }
+
+
+        // 3️⃣ Função para enviar evento e atualizar calendário
+        function submitEvent() {
+            var eventDate = document.getElementById("event-date").value;
+            var eventType = document.getElementById("event-type").value;
+            var eventDescription = document.getElementById("event-description").value;
+        
+            if (!eventDate || !eventDescription) {
+                alert("Preencha todos os campos para adicionar o evento.");
+                return;
+            }
+        
+            var formData = new FormData();
+            formData.append("date", eventDate);
+            formData.append("type", eventType);
+            formData.append("description", eventDescription);
+        
+            fetch(scriptURL, {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.text())  // 🔹 Alterado para .text() para evitar erro de CORS
+            .then(result => {
+                console.log("Resposta do servidor:", result);
+                
+                try {
+                    var jsonResponse = JSON.parse(result); // 🔹 Agora tentamos converter manualmente o JSON
+                    if (jsonResponse.status === "success") {
+                        console.log("Evento salvo com sucesso!");
+                        adicionarEventoNoCalendario(eventDate, eventType, eventDescription);
+                        alert("Evento salvo com sucesso!");
+                    } else {
+                        throw new Error("Erro ao salvar evento.");
+                    }
+                } catch (error) {
+                    console.error("Erro ao processar resposta:", error);
+                    alert("Erro ao processar resposta do servidor!");
+                }
+            })
+            .catch(error => {
+                console.error("Erro ao enviar evento:", error);
+                alert("Erro ao salvar o evento!");
+            });
+        
+            document.getElementById("event-form").style.display = "none";
+            document.getElementById("event-date").value = "";
+            document.getElementById("event-description").value = "";
+        }
+
+    </script>
+
+    <script>
+        document.querySelectorAll('.nav-link.has-submenu > a').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                const parent = this.parentElement;
+
+                // Fecha outros submenus, se quiser comportamento exclusivo
+                document.querySelectorAll('.nav-link.has-submenu').forEach(item => {
+                    if (item !== parent) item.classList.remove('active');
+                });
+
+                parent.classList.toggle('active');
+            });
+        });
+    </script>
+
+</body>
+</html>

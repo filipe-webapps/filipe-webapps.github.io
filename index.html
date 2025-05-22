@@ -1,0 +1,208 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="fav.png">
+    <title>Sua Empresa LTDA - Virtual Assistants</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            background: linear-gradient(rgb(255, 255, 255), rgba(255, 255, 255, 0.505),rgba(0, 0, 0, 0.92)), url('background.png');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #620404;
+        }
+
+        header {
+            background-color: transparent;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #logo {
+            max-width: 15%;
+            height: auto;
+        }
+        #saudacao{
+            margin-top: 15px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #132d61;
+        }
+        #dataHora {
+            font-size: 12px;
+            margin-top: -10px;
+            font-weight: 500;
+            color: #1c2538;
+        }
+
+        section {
+            margin: 2px auto;
+            max-width: 400px;
+            background-color: rgba(255, 255, 255, 0.105);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 0 60px rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            text-align: center;
+            border: none;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            border: 1px solid #003D8A;
+            border-radius: 10px;
+            background-color: #cacacad0;
+            color: #003D8A;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        button {
+            background-color: #003D8A;
+            color: #fff;
+            padding: 10px 50px;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+        button:hover {
+            background-color: #155c9e;
+        }
+
+        a {
+            color: #07548b;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #1285f0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: transparent;
+            color: #ffffff;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <img id="logo" src="aviat.png" alt="Logo">
+        <div class="headernav">
+            <div> 
+              <h2 id="saudacao"></h2>
+              <p class="data-hora" id="dataHora"></p>
+            </div>
+        </div>
+    </header>
+
+    <section>
+        <h2 style="color:#132d61">GRC Painel</h2>
+        <form id="loginForm" action="user_area.html" method="post">
+            <input type="text" id="username" name="username" placeholder="Usuário" required>
+            <input type="password" id="password" name="password" placeholder="Senha" required>
+            <button type="submit">Login</button>
+        </form>
+        <p><a href="forgot_password.html" id="forgotPasswordLink">Esqueceu sua senha?</a></p>
+        <p>Novo aqui? <a href="create_account.html" id="createAccountLink">Crie uma conta</a></p>
+    </section>
+
+    <!--Footer -->
+    <footer>
+        &copy; <span id="anoAtual"></span> Aurora Grand Hotels.
+    </footer>
+    <!-- /Footer -->
+
+    <script>
+
+        // Função para obter a saudação dependendo da hora do dia
+        function obterSaudacao() {
+            const agora = new Date();
+            const hora = agora.getHours(); // Obtém a hora atual (de 0 a 23)
+
+            let saudacao = "";
+            
+            if (hora >= 6 && hora < 12) {
+                saudacao = "Olá, Bom dia! Seja bem-vindo(a)!";
+            } else if (hora >= 12 && hora < 18) {
+                saudacao = "Olá, Boa tarde! Seja bem-vindo(a)!";
+            } else {
+                saudacao = "Olá, Boa noite! Seja bem-vindo(a)!";
+            }
+
+            return saudacao;
+        }
+
+        // Exibe a saudação no elemento com o id "saudacao"
+        document.getElementById("saudacao").textContent = obterSaudacao();
+
+        function updateDataHora() {
+        const data = new Date();
+        const options = {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+        };
+        const dataHoraFormatada = data.toLocaleString("pt-BR", options);
+        document.getElementById("dataHora").textContent = dataHoraFormatada;
+        }
+
+        setInterval(updateDataHora, 1000);
+
+        document.getElementById("anoAtual").textContent = new Date().getFullYear();
+
+
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+            var redirectUrl; // Variable to store the URL to redirect to
+
+            // Check the username and password
+            if (username === "usuario" && password === "123") {
+                redirectUrl = "home.html"; // Set the redirect URL for the sales department
+            } else if (username === "filipe" && password === "123") {
+                redirectUrl = "home.html"; // Set the redirect URL for the purchasing department
+            } else {
+                // If the credentials are invalid, display an error message and exit the function
+                alert("Usuário ou senha inválida. Tente novamente.");
+                return;
+            }
+
+            // Redirect to the appropriate page
+            window.location.href = redirectUrl;
+        });
+
+        document.getElementById("createAccountLink").addEventListener("click", function(event) {
+            event.preventDefault(); // Prevent default link behavior
+            window.location.href = "create_account.html"; // Redirect to the create account page
+        });
+
+        document.getElementById("forgotPasswordLink").addEventListener("click", function(event) {
+            event.preventDefault(); // Prevent default link behavior
+            window.location.href = "forgot_password.html"; // Redirect to the forgot password page
+        });
+    </script>
+
+</body>
+</html>
