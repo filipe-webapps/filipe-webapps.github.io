@@ -269,6 +269,71 @@
             color: #00d5ed;
         }
 
+        /* Modal de recuperação */
+        #modal-recuperacao {
+            position: fixed;
+            z-index: 999;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.699);
+            backdrop-filter: blur(5px); /* Aplica o efeito de desfoque de 10px */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.834);
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            text-align: center;
+            color: #333;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 10px;
+        }
+
+        .modal-content p {
+            margin-bottom: 20px;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            background: transparent;
+            border: 2px solid #132d61;
+            margin-bottom: 15px;
+            outline: none;
+            color: #333;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* Mensagem de sucesso */
+        #mensagem-sucesso {
+            position: fixed;
+            z-index: 1000;
+            top: 20px;
+            right: 20px;
+            background: #132d61;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+
 
         footer {
             text-align: center;
@@ -403,18 +468,19 @@
 
         <!-- SIGNUP BOX -->
         <div class="form-box register">
-            <form action="">
+            <form action="" method="POST" name="accountForm">
+                <input type="hidden" name="formType" value="new">
                 <h1 id="createAccount">Crie sua conta</h1>
                 <div class="input-box">
-                    <input type="text" placeholder="Usuário" required>
+                    <input type="text" name="nome" placeholder="Usuário" required>
                     <i class='bx bx-user'></i>
                 </div>
                 <div class="input-box">
-                    <input type="email" placeholder="E-mail" required>
+                    <input type="email" name="email" placeholder="E-mail" required>
                     <i class='bx bxl-gmail' ></i>
                 </div>
                 <div class="input-box">
-                    <input type="password" id="passwordz" placeholder="Senha" required>
+                    <input type="password" name="password" id="passwordz" placeholder="Senha" required>
                     <i class='bx bxs-lock' id="btn-passwordz" onclick="showPasswordz()"></i>
                 </div>
                 <div class="forgot-link">
@@ -450,6 +516,25 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal de Recuperação de Senha -->
+    <div id="modal-recuperacao" style="display: none;">
+        <div class="modal-content">
+            <h2>Recuperar Acesso</h2>
+            <p>Digite seu e-mail que em até <b>24h</b> enviaremos seu novo acesso:</p>
+            <form id="form-recuperacao" method="POST" name="accountForm">
+                <input type="hidden" name="formType" value="forgot">
+                <input type="email" name="email" id="email-recuperacao" placeholder="Digite seu e-mail" required>
+                <button type="submit" class="btn">Enviar</button>
+            </form>
+            <span class="close-modal">&times;</span>
+        </div>
+    </div>
+    <!-- Mensagem de confirmação -->
+    <div id="mensagem-sucesso" style="display: none;">
+        <p>✔️ Solicitação de recuperação de acesso enviada!</p>
+    </div>
+    <!-- /Modal de Recuperação de Senha -->
 
     <!--Footer -->
     <footer>
@@ -565,6 +650,94 @@
         loginBtn.addEventListener('click', () => {
             container.classList.remove('active');
         });
+    </script>
+
+    <script>
+        const scriptURL = "https://script.google.com/macros/s/AKfycbynFwICgHKalvEwUZq0fTu5qfJHEM2EJct_aovxSEzpjb86ASU6x6QTbURZS_e8RVrkvg/exec";
+        
+        const accountForm = document.forms['accountForm'];
+
+        accountForm.addEventListener('submit', e => {
+            e.preventDefault();
+
+            const formData = new FormData(accountForm);
+
+            fetch(scriptURL, { method: 'POST', body: formData })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Resposta do servidor (new user):", data);
+                
+                // Exibe mensagem de sucesso
+                const msg = document.getElementById('mensagem-sucesso');
+                msg.style.display = 'block';
+
+                setTimeout(() => {
+                    msg.style.display = 'none';
+                }, 4000);
+                
+
+                console.log("Solicitação de novo usuário enviada com sucesso! Verifique seu e-mail nas próximas horas.");
+
+                setTimeout(() => {
+                    // Redireciona para a página desejada após o envio bem-sucedido
+                    window.location.href = 'index.html';
+                }, 4000);
+            })
+            
+            .catch(error => {
+                console.error('Erro no envio:', error);
+                alert('Erro ao enviar. Tente novamente.');
+            });
+        });
+        // Envio do formulário de recuperação de senha
+        const recoveryForm = document.getElementById('form-recuperacao');
+
+        recoveryForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('email-recuperacao').value;
+
+            const formData = new FormData();
+            formData.append('email', email);       // <-- nome que o Apps Script espera
+            formData.append('formType', 'forgot'); // <-- registra como recuperação
+
+            fetch(scriptURL, { method: 'POST', body: formData })
+                .then(response => {
+                    // Fecha o modal
+                    document.getElementById('modal-recuperacao').style.display = 'none';
+
+                    // Limpa o campo
+                    recoveryForm.reset();
+
+                    // Exibe mensagem de sucesso
+                    const msg = document.getElementById('mensagem-sucesso');
+                    msg.style.display = 'block';
+
+                    setTimeout(() => {
+                        msg.style.display = 'none';
+                    }, 2000);
+
+                    console.log("Solicitação de recuperação enviada com sucesso!");
+                })
+                .catch(error => {
+                    console.error('Erro no envio:', error);
+                    alert('Erro ao enviar. Tente novamente.');
+                });
+        });
+
+        // Abrir modal
+        document.querySelectorAll('.forgot-link a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('modal-recuperacao').style.display = 'flex';
+            });
+        });
+
+        // Fechar modal
+        document.querySelector('.close-modal').addEventListener('click', () => {
+            document.getElementById('modal-recuperacao').style.display = 'none';
+        });
+
     </script>
 
 </body>
