@@ -85,8 +85,15 @@ body.dark{
     align-items: flex-start;
 }
 .sidebar.close .nav-link.has-submenu .submenu i {
-    margin-left: -12px;
+    margin-left: -30px;
+    font-size: 12px;
+    color: var(--menutext-color);
 }
+.sidebar.close .nav-link.has-submenu .submenu a {
+    color: var(--sidebar-color);
+    gap: 40px;
+}
+/* copiar isso aqui pros outros................................................................................. */
 
 /* Estilo do submenu */
 .nav-link.has-submenu .submenu {
