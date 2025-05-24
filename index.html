@@ -8,6 +8,10 @@
     
     <!-- Boxicons CSS -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- Json manifest for mobile icon App -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000">
     
     <title>Aurora Grand Hotels - Painel Operacional</title>
 
@@ -99,7 +103,7 @@
             outline: none;
             font-size: 16px;
             color: #333;
-            font-weight: 500;
+            font-weight: 700;
         }
 
         .input-box input::placeholder {
@@ -201,7 +205,7 @@
             left: -250%;
             width: 300%;
             height: 100%;
-            background: linear-gradient(90deg, #beaea2d4, #000000bb), url('background.png');
+            background: linear-gradient(90deg, #beaea2d4, #000000a2), url('background.png');
             background-position: left;
             border-radius: 150px;
             z-index: 2;
@@ -253,6 +257,8 @@
 
         .toggle-panel p {
             margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: 600;
         }
 
         .toggle-panel .btn {
@@ -480,7 +486,7 @@
                     <i class='bx bxl-gmail' ></i>
                 </div>
                 <div class="input-box">
-                    <input type="password" name="password" id="passwordz" placeholder="Senha" required>
+                    <input type="password" name="password" id="passwordz" placeholder="Crie uma senha" required>
                     <i class='bx bxs-lock' id="btn-passwordz" onclick="showPasswordz()"></i>
                 </div>
                 <div class="forgot-link">
@@ -503,7 +509,7 @@
                 <img src="aurora_logo3.png">
                 <h1 id="saudacao"></h1>
                 <p class="data-hora" id="dataHora"></p>
-                <p>Ainda não criou sua conta?</p>
+                <p>Ainda não tem uma conta?</p>
                 <button class="btn register-btn">Criar conta</button>
             </div>
             
