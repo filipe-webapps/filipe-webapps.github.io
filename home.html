@@ -149,55 +149,48 @@
     </nav>
 
     <section class="home">
-        <h1 id="saudacao" style="font-size: 25px; text-align: left; color: var(--tittle-color);font-weight: 600;"></h1>
-        <h1 style="font-size: 30px; text-align: left; color: var(--tittle-color); font-weight: 800;">Como posso ajudar?</h1>
+        <div id="content-chat">
+            <h1 id="saudacao"></h1>
+            <h2 id="howcani" style="font-size: 35px; text-align: center; color: #868686b9; font-weight: 500;">Como posso te ajudar hoje?</h2>
+
+            <div class="reminders">
+                <!-- Box 1 - Lembretes -->
+                <div class="infobox">
+                    <h3>🔔 Lembretes Ativos</h3>
+                    <p>3 lembretes para os próximos dias:</p>
+                    <ul style="text-align: left; font-size: 14px; margin-top: 10px;">
+                        <li>✔ Follow-up com Cliente XPTO</li>
+                        <li>✔ Vencimento de fatura em 2 dias</li>
+                    </ul>
+                </div>
+        
+                <!-- Box 2 - Receita Total -->
+                <div class="infobox">
+                    <h3>💰 Receita Total (Mês)</h3>
+                    <p style="font-size: 22px; font-weight: bold; color: green;">R$ 28.500</p>
+                    <p style="font-size: 14px;">Meta mensal: R$ 35.000</p>
+                </div>
+        
+                <!-- Box 3 - Leads Ativos -->
+                <div class="infobox">
+                    <h3>👥 Leads Ativos</h3>
+                    <p>Você possui <strong>128 leads ativos</strong>.</p>
+                    <p>Novos esta semana: <strong>7</strong></p>
+                </div>
+            </div>
+        </div>
+        
         
         <div class="chat-container" id="chat">
             <!-- Mensagens aparecerão aqui -->
-          </div>
+        </div>
         
-          <div class="input-container">
+        <div class="input-container">
             <input type="text" id="userInput" placeholder="Digite sua mensagem..." />
             <button onclick="sendMessage()"><i class='bx bxs-send isend'></i></button>
-          </div>
+        </div>
     
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
-    
-            <!-- Box 1 - Lembretes -->
-            <div class="section">
-                <h3>🔔 Lembretes Ativos</h3>
-                <p>3 lembretes agendados para os próximos dias:</p>
-                <ul style="text-align: left; font-size: 14px; margin-top: 10px;">
-                    <li>✔ Follow-up com Cliente XPTO</li>
-                    <li>✔ Vencimento de fatura em 2 dias</li>
-                    <li>✔ Atualizar cotação do cliente ABC</li>
-                </ul>
-            </div>
-    
-            <!-- Box 2 - Receita Total -->
-            <div class="section">
-                <h3>💰 Receita Total (Mês)</h3>
-                <p style="font-size: 22px; font-weight: bold; color: green;">R$ 28.500</p>
-                <p style="font-size: 14px;">Meta mensal: R$ 35.000</p>
-            </div>
-    
-            <!-- Box 3 - Leads Ativos -->
-            <div class="section">
-                <h3>👥 Leads Ativos</h3>
-                <p>Você possui <strong>128 leads ativos</strong>.</p>
-                <p>Novos esta semana: <strong>7</strong></p>
-            </div>
-    
-            <!-- Box 4 - Câmbio Atual -->
-            <div class="section">
-                <h3>💱 Câmbio Atual</h3>
-                <ul style="text-align: left; font-size: 14px; margin-top: 10px;">
-                    <li>🇺🇸 Dólar: R$ 5,12</li>
-                    <li>🇪🇺 Euro: R$ 5,56</li>
-                    <li>🇧🇷 Real: R$ 1,00</li>
-                </ul>
-                <p style="margin-top: 10px;"><em>Atualizado às 10:05</em></p>
-            </div>
     
         </div>
     
@@ -236,8 +229,6 @@
         document.getElementById("saudacao").textContent = obterSaudacao();
 
 
-
-
         const chat = document.getElementById("chat");
         const input = document.getElementById("userInput");
 
@@ -247,7 +238,20 @@
 
             const avatar = document.createElement("div");
             avatar.className = `avatar ${sender}`;
-            avatar.textContent = sender === "user" ? "Vc" : "IA";
+
+            if (sender === "user") {
+                // Cria um elemento <img> para a foto
+                const userImg = document.createElement('img');
+
+                // Pega o endereço da imagem do perfil na sidebar pelo ID 'profile-pic'
+                userImg.src = document.getElementById('profile-pic').src;
+
+                // Adiciona a imagem ao avatar
+                avatar.appendChild(userImg);
+            } else {
+                // Adiciona o ícone do bot
+                avatar.innerHTML = "<i class='bx bxs-bot'></i>";
+            }
 
             const bubble = document.createElement("div");
             bubble.className = "bubble";
@@ -259,9 +263,17 @@
             chat.scrollTop = chat.scrollHeight;
         }
 
+
         async function sendMessage() {
             const text = input.value.trim();
             if (!text) return;
+
+            // --- Adicione estas duas linhas ---
+            document.getElementById("content-chat").style.display = "none";
+            // document.getElementById("saudacao").style.display = "none";
+            // document.getElementById("howcani").style.display = "none";
+            // ------------------------------------
+
             addMessage(text, "user");
             input.value = "";
 
@@ -300,7 +312,6 @@
             });
         });
     </script>
-
     <!-- /Submenu Script -->
 
 </body>
