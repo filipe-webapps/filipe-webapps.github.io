@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="fav.png">
+    
+    <!--CSS-->
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* ===== Configurações ===== */
+
+        /* ===== FAQ Estilo ===== */
+        .faq-item details {
+            background-color: var(--body-color);
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        body.dark .faq-item details {
+            background-color: var(--primary-color);
+            border: 1px solid #555;
+        }
+
+        .faq-item summary {
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .faq-item p {
+            margin-top: 8px;
+            color: var(--tittle-color);
+        }
+        .settings-container {
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            padding: 25px;
+            width: auto;
+            min-height: 65vh;
+        }
+
+        body.dark .settings-container {
+            background-color: var(--primary-color);
+        }
+
+        .settings-container h3 {
+            color: var(--tittle-color);
+            margin-bottom: 10px;
+        }
+
+        .settings-container label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: var(--tittle-color);
+        }
+
+        .settings-container input[type="text"],
+        .settings-container input[type="email"],
+        .settings-container input[type="tel"],
+        .settings-container select {
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            background-color: var(--body-color);
+            color: var(--tittle-color);
+            margin-bottom: 15px;
+        }
+
+        body.dark .settings-container input,
+        body.dark .settings-container select {
+            background-color: var(--input-chat);
+            border: 1px solid #555;
+            color: var(--text-color);
+        }
+
+        .settings-container input[type="checkbox"] {
+            margin-right: 8px;
+            transform: scale(1.2);
+        }
+
+        .settings-container hr {
+            border: none;
+            border-top: 1px solid rgba(128, 128, 128, 0.3);
+            margin: 20px 0;
+        }
+
+        .settings-container .buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .settings-container .buttons button {
+            padding: 8px 18px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        .settings-container .buttons .save-btn {
+            background-color: #132d61;
+            color: white;
+        }
+
+        .settings-container .buttons .save-btn:hover {
+            background-color: #0e234a;
+        }
+
+        .settings-container .buttons .reset-btn {
+            background-color: #aaa;
+            color: white;
+        }
+
+        .settings-container .buttons .reset-btn:hover {
+            background-color: #888;
+        }
+    </style>
+    <!--/CSS-->
+    
+    <!--Boxicons CSS-->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <!--/Boxicons CSS-->
+    
+    <title>Aurora Grand Hotels</title> 
+</head>
+<body>
+
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="logo.png" alt="">
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name" id="nome">Aurora Grand Hotels</span>
+                    <span class="profession">GRC Control</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu-scrollable">
+
+                <li class="search-box" id="search-box">
+                    <i class='bx bx-search icon'></i>
+                    <input type="text" placeholder="Search...">
+                </li>
+                <br>
+                <br>
+
+                <ul class="menu-links">
+
+                    <li class="nav-link">
+                        <a href="home.html">
+                            <i class='bx bxs-home icon' ></i>
+                            <span class="text nav-text">Home</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="dashboard.html">
+                            <i class='bx bxs-dashboard icon' ></i>
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+
+                    <li class="nav-link has-submenu">
+                        <a href="leads.html">
+                            <i class='bx bxs-user-detail icon' ></i>
+                            <span class="text nav-text">CRM <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="leads.html"><i class='bx bx-user icon' ></i>Negociações (Leads)</a></li>
+                            <li><a href="fup.html"><i class='bx bx-transfer icon' ></i>Follow Up log</a></li>
+                            <li><a href="clients.html"><i class='bx bxs-user-account icon' ></i>Carteira de Clientes</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="calendar.html">
+                            <i class='bx bxs-calendar icon'></i>
+                            <span class="text nav-text">Calendário</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link has-submenu">
+                        <a href="#">
+                            <i class='bx bxs-business icon'></i>
+                            <span class="text nav-text">Hotéis <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="hotel-1.html"><i class='bx bx-home-smile icon'></i> Aurora Golden</a></li>
+                            <li><a href="hotel-2.html"><i class='bx bxs-buildings icon'></i> Aurora Suites</a></li>
+                            <li><a href="hotel-3.html"><i class='bx bx-building icon'></i> Aurora Budget</a></li>
+                            <li><a href="hotel-4.html"><i class='bx bxs-arch icon'></i> Aurora Resorts</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="pricespy.html">
+                            <i class='bx bx-show-alt icon'></i>
+                            <span class="text nav-text">Price Spy</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="reminder.html">
+                            <i class='bx bxs-bell-ring icon' ></i>
+                            <span class="text nav-text">Lembretes</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <ul class="menu-links">
+                    <li class="nav-link has-submenu">
+                        <a href="#">
+                            <img id="profile-pic" src="profile_pic_F.png" alt="Filipe Oliveira">
+                            <span class="text nav-text">Filipe Oliveira <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="profile.html"><i class='bx bx-user icon'></i> Perfil</a></li>
+                            <li><a href="settings.html"><i class='bx bx-cog icon'></i> Configurações</a></li>
+                            <li id="subactive"><a href="#"><i class='bx bx-help-circle icon' ></i> Ajuda</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="logout" id="logout">
+                        <a href="index.html">
+                            <i class='bx bx-log-out icon' ></i>
+                            <span class="text nav-text">Logout</span>
+                        </a>
+                    </li>
+
+                    <li class="mode">
+                        <div class="sun-moon">
+                            <i class='bx bx-moon icon moon'></i>
+                            <i class='bx bx-sun icon sun'></i>
+                        </div>
+                        <span class="mode-text text">Dark mode</span>
+
+                        <div class="toggle-switch">
+                            <span class="switch"></span>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="home">
+        <div style="display: none;"> 
+            <h3 id="saudacao"></h3>
+            <p class="data-hora" id="dataHora"></p>
+        </div>
+
+        <div class="settings-container">
+            <h3>Perguntas Frequentes (FAQ)</h3>
+
+            <div class="faq-item">
+                <details>
+                    <summary>🛎️ Como cadastro um novo hóspede?</summary>
+                    <p>Vá no menu "CRM" → "Carteira de Clientes" → "Adicionar Novo".</p>
+                </details>
+
+                <details>
+                    <summary>💳 Como gerar uma fatura para um cliente?</summary>
+                    <p>No menu "Financeiro", acesse "Faturas" e clique em "Nova Fatura".</p>
+                </details>
+
+                <details>
+                    <summary>👥 Posso adicionar mais usuários?</summary>
+                    <p>Sim. Em "Configurações" → "Usuários", adicione colaboradores com diferentes permissões.</p>
+                </details>
+
+                <details>
+                    <summary>🌐 O sistema funciona offline?</summary>
+                    <p>Nosso sistema é 100% online, acessível de qualquer dispositivo conectado à internet.</p>
+                </details>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="section settings-container">
+            <h3>Envie uma Solicitação</h3>
+            <label>Nome:</label>
+            <input type="text" id="nome" placeholder="Seu nome completo"><br>
+
+            <label>E-mail:</label>
+            <input type="email" id="email" placeholder="email@exemplo.com"><br>
+
+            <label>Descreva sua dúvida ou problema:</label>
+            <textarea id="mensagem" placeholder="Digite sua mensagem..." rows="5" style="width:100%; border-radius: 8px; border: 1px solid #ccc; padding: 10px;"></textarea><br>
+
+            <div class="buttons">
+                <button onclick="enviar()" class="save-btn">Enviar</button>
+                <button onclick="limpar()" class="reset-btn">Limpar</button>
+            </div>
+        </div>
+    
+
+
+        <img id="logoavi" src="aviat.png">
+    </section>
+
+    
+
+    <!--Footer -->
+    <footer>
+        &copy; <span id="anoAtual"></span> Aurora Grand Hotels.
+    </footer>
+    <!-- /Footer -->
+
+        
+    <script src="script.js"></script>
+
+    <script>
+        document.getElementById('anoAtual').textContent = new Date().getFullYear();
+
+        function enviar() {
+            alert('Sua solicitação foi enviada. Nossa equipe responderá em breve.');
+            limpar();
+        }
+
+        function limpar() {
+            document.getElementById('nome').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('mensagem').value = '';
+        }
+
+        // Submenu toggle
+        document.querySelectorAll('.nav-link.has-submenu > a').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                const parent = this.parentElement;
+                document.querySelectorAll('.nav-link.has-submenu').forEach(item => {
+                    if (item !== parent) item.classList.remove('active');
+                });
+                parent.classList.toggle('active');
+            });
+        });
+    </script>
+
+</body>
+</html>

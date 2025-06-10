@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="fav.png">
+    
+    <!--CSS-->
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* ---Sorry page */
+        .sorry{
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            margin-top: 200px;
+        }
+        .sorry h1{
+            color: var(--tittle-color);
+            font-size: 70px;
+            font-weight: 900;
+        }
+        .sorry h3{
+            color: var(--text-color);
+            font-size: 25px;
+            font-weight: 500;
+        }
+        .sorry p{
+            color: var(--text-color);
+            font-size: 18px;
+            font-weight: 400;
+        }
+        /* ---/Sorry page */
+    </style>
+    <!--/CSS-->
+    
+    <!--Boxicons CSS-->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <!--/Boxicons CSS-->
+    
+    <title>Aurora Grand Hotels</title> 
+</head>
+<body>
+
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="logo.png" alt="">
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name" id="nome">Aurora Grand Hotels</span>
+                    <span class="profession">GRC Control</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu-scrollable">
+
+                <li class="search-box" id="search-box">
+                    <i class='bx bx-search icon'></i>
+                    <input type="text" placeholder="Search...">
+                </li>
+                <br>
+                <br>
+
+                <ul class="menu-links">
+
+                    <li class="nav-link">
+                        <a href="home.html">
+                            <i class='bx bxs-home icon' ></i>
+                            <span class="text nav-text">Home</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="dashboard.html">
+                            <i class='bx bxs-dashboard icon' ></i>
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+
+                    <li class="nav-link has-submenu">
+                        <a href="leads.html">
+                            <i class='bx bxs-user-detail icon' ></i>
+                            <span class="text nav-text">CRM <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="leads.html"><i class='bx bx-user icon' ></i>Negociações (Leads)</a></li>
+                            <li><a href="fup.html"><i class='bx bx-transfer icon' ></i>Follow Up log</a></li>
+                            <li><a href="clients.html"><i class='bx bxs-user-account icon' ></i>Carteira de Clientes</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="calendar.html">
+                            <i class='bx bxs-calendar icon'></i>
+                            <span class="text nav-text">Calendário</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link has-submenu">
+                        <a id="navselected" href="#">
+                            <i class='bx bxs-business icon'></i>
+                            <span class="text nav-text">Hotéis <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li id="subactive"><a href="#"><i class='bx bx-home-smile icon'></i> Aurora Golden</a></li>
+                            <li><a href="hotel-2.html"><i class='bx bxs-buildings icon'></i> Aurora Suites</a></li>
+                            <li><a href="hotel-3.html"><i class='bx bx-building icon'></i> Aurora Budget</a></li>
+                            <li><a href="hotel-4.html"><i class='bx bxs-arch icon'></i> Aurora Resorts</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="pricespy.html">
+                            <i class='bx bx-show-alt icon'></i>
+                            <span class="text nav-text">Price Spy</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="reminder.html">
+                            <i class='bx bxs-bell-ring icon' ></i>
+                            <span class="text nav-text">Lembretes</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <ul class="menu-links">
+                    <li class="nav-link has-submenu">
+                        <a href="#">
+                            <img id="profile-pic" src="profile_pic_F.png" alt="Filipe Oliveira">
+                            <span class="text nav-text">Filipe Oliveira <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="profile.html"><i class='bx bx-user icon'></i> Perfil</a></li>
+                            <li><a href="settings.html"><i class='bx bx-cog icon'></i> Configurações</a></li>
+                            <li><a href="help.html"><i class='bx bx-help-circle icon' ></i> Ajuda</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="logout" id="logout">
+                        <a href="index.html">
+                            <i class='bx bx-log-out icon' ></i>
+                            <span class="text nav-text">Logout</span>
+                        </a>
+                    </li>
+
+                    <li class="mode">
+                        <div class="sun-moon">
+                            <i class='bx bx-moon icon moon'></i>
+                            <i class='bx bx-sun icon sun'></i>
+                        </div>
+                        <span class="mode-text text">Dark mode</span>
+
+                        <div class="toggle-switch">
+                            <span class="switch"></span>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="home">
+        <div style="display: none;"> 
+            <h3 id="saudacao"></h3>
+            <p class="data-hora" id="dataHora"></p>
+        </div>
+
+        <!-- Sorry section -->
+        <div class="sorry">
+            <h1><i class='bx bx-confused'></i> DESCULPE!</h1>
+            <h3>Este conteúdo não está disponível no momento.</h3>
+            <p>Muito em breve esta página estará pronta!</p>
+        </div>
+        <!-- /Sorry Section -->
+         
+        <img id="logoavi" src="aviat.png">
+    </section>
+
+    <!--Footer -->
+    <footer>
+        &copy; <span id="anoAtual"></span> Aurora Grand Hotels.
+    </footer>
+    <!-- /Footer -->
+
+        
+    <script src="script.js"></script>
+
+    <script>
+        document.querySelectorAll('.nav-link.has-submenu > a').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                const parent = this.parentElement;
+
+                // Fecha outros submenus, se quiser comportamento exclusivo
+                document.querySelectorAll('.nav-link.has-submenu').forEach(item => {
+                    if (item !== parent) item.classList.remove('active');
+                });
+
+                parent.classList.toggle('active');
+            });
+        });
+    </script>
+
+</body>
+</html>

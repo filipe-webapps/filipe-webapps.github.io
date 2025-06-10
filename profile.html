@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="fav.png">
+    
+    <!--CSS-->
+    <link rel="stylesheet" href="styleset.css">
+
+    <style>
+        .profile-container {
+            zoom: 80%;
+            background: var(--icon-color);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 25px;
+            width: 100%;
+            max-width: auto;
+            max-height: auto;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            justify-content: center !important;
+            align-items: center !important;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .profile-header img {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #e1e5ea;
+        }
+
+        .profile-header h2 {
+            font-weight: 700;
+            font-size: 28px;
+            color: var(--menutext-color);
+        }
+
+        .profile-header p {
+            font-size: 14px;
+            color: #777;
+        }
+
+        .edit-pic {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background-color: #4f46e5;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+            border: 2px solid white;
+            transition: background-color 0.3s;
+        }
+
+        .edit-pic:hover {
+            background-color: #3730a3;
+        }
+
+
+        .profile-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .info-card {
+            background: #f9fafb9f;
+            padding: 20px;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            transition: 0.3s;
+        }
+
+        .info-card:hover {
+            background-color: #eef2f7;
+        }
+
+        .info-card span.label {
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--icon-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .info-card span.value {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--sidebar-color);
+        }
+
+        .actions {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .actions button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-edit {
+            background: #4f46e5;
+            color: #fff;
+        }
+
+        .btn-edit:hover {
+            background: #ff856a;
+        }
+
+        .btn-logout {
+            background: #c1c1c1;
+            color: #333;
+        }
+
+        .btn-logout:hover {
+            background: #ff856a;
+        }
+
+        /* Modal Styling */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color:rgba(0, 0, 0, 0.393);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0; transform: translateY(-20px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+
+            .modal-content h3 {
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .modal-content label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 13px;
+            color: #555;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        .modal-content input:focus {
+            border-color: #4f46e5;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .modal-actions button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-save {
+            background: #4f46e5;
+            color: #fff;
+        }
+
+        .btn-save:hover {
+            background: #3730a3;
+        }
+
+        .btn-cancel {
+            background: #f3f4f6;
+            color: #333;
+        }
+
+        .btn-cancel:hover {
+            background: #ff856a;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: transparent;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #777;
+        }
+
+        @media (max-width: 500px) {
+            .profile-info {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .profile-pic-wrapper {
+            position: relative;
+            width: 90px;
+            height: 90px;
+        }
+
+        #subactive a{
+            color: rgb(0, 173, 173) !important;
+        }
+        #subactive i{
+            color: rgb(0, 173, 173) !important;
+        }
+    </style>
+    <!--/CSS-->
+    
+    <!--Boxicons CSS-->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <!--/Boxicons CSS-->
+    
+    <title>Aurora Grand Hotels</title> 
+</head>
+<body>
+
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="logo.png" alt="">
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name" id="nome">Aurora Grand Hotels</span>
+                    <span class="profession">GRC Control</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu-scrollable">
+
+                <li class="search-box" id="search-box">
+                    <i class='bx bx-search icon'></i>
+                    <input type="text" placeholder="Search...">
+                </li>
+                <br>
+                <br>
+
+                <ul class="menu-links">
+
+                    <li class="nav-link">
+                        <a href="home.html">
+                            <i class='bx bxs-home icon' ></i>
+                            <span class="text nav-text">Home</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="dashboard.html">
+                            <i class='bx bxs-dashboard icon' ></i>
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+
+                    <li class="nav-link has-submenu">
+                        <a href="leads.html">
+                            <i class='bx bxs-user-detail icon' ></i>
+                            <span class="text nav-text">CRM <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="leads.html"><i class='bx bx-user icon' ></i>Negociações (Leads)</a></li>
+                            <li><a href="fup.html"><i class='bx bx-transfer icon' ></i>Follow Up log</a></li>
+                            <li><a href="clients.html"><i class='bx bxs-user-account icon' ></i>Carteira de Clientes</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="calendar.html">
+                            <i class='bx bxs-calendar icon'></i>
+                            <span class="text nav-text">Calendário</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link has-submenu">
+                        <a href="#">
+                            <i class='bx bxs-business icon'></i>
+                            <span class="text nav-text">Hotéis <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="hotel-1.html"><i class='bx bx-home-smile icon'></i> Aurora Golden</a></li>
+                            <li><a href="hotel-2.html"><i class='bx bxs-buildings icon'></i> Aurora Suites</a></li>
+                            <li><a href="hotel-3.html"><i class='bx bx-building icon'></i> Aurora Budget</a></li>
+                            <li><a href="hotel-4.html"><i class='bx bxs-arch icon'></i> Aurora Resorts</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="pricespy.html">
+                            <i class='bx bx-show-alt icon'></i>
+                            <span class="text nav-text">Price Spy</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="reminder.html">
+                            <i class='bx bxs-bell-ring icon' ></i>
+                            <span class="text nav-text">Lembretes</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <ul class="menu-links">
+                    <li class="nav-link has-submenu">
+                        <a id="navselected" href="#">
+                            <img id="profile-pic" src="profile_pic_F.png" alt="Filipe Oliveira">
+                            <span class="text nav-text">Filipe Oliveira <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li id="subactive"><a href="#"><i class='bx bx-user icon'></i> Perfil</a></li>
+                            <li><a href="settings.html"><i class='bx bx-cog icon'></i> Configurações</a></li>
+                            <li><a href="help.html"><i class='bx bx-help-circle icon' ></i> Ajuda</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="logout" id="logout">
+                        <a href="index.html">
+                            <i class='bx bx-log-out icon' ></i>
+                            <span class="text nav-text">Logout</span>
+                        </a>
+                    </li>
+
+                    <li class="mode">
+                        <div class="sun-moon">
+                            <i class='bx bx-moon icon moon'></i>
+                            <i class='bx bx-sun icon sun'></i>
+                        </div>
+                        <span class="mode-text text">Dark mode</span>
+
+                        <div class="toggle-switch">
+                            <span class="switch"></span>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="home">
+        <div class="headernav">
+            <div> 
+              <h2 id="saudacao"></h2>
+              <p class="data-hora" id="dataHora"></p>
+            </div>
+        </div>
+
+        <div class="profile-container">
+            <div class="profile-header">
+                <div class="profile-pic-wrapper">
+                    <img id="profile-img" src="https://i.pravatar.cc/150?img=32" alt="Profile Picture">
+                    <div class="edit-pic" onclick="document.getElementById('file-input').click()"><i class='bx bxs-edit'></i></div>
+                    <input type="file" id="file-input" accept="image/*" style="display: none;">
+                </div>
+
+                <div>
+                    <h2 id="username">Filipe Oliveira</h2>
+                    <p id="role">Analista de Vendas | Cluster BR</p>
+                </div>
+            </div>
+        
+
+            <div class="profile-info">
+                <div class="info-card">
+                    <span class="label">Cargo</span>
+                    <span class="value" id="position">Analista de Vendas</span>
+                </div>
+                <div class="info-card">
+                    <span class="label">Setor</span>
+                    <span class="value" id="setor">Comercial</span>
+                </div>
+                <div class="info-card">
+                    <span class="label">E-mail corporativo</span>
+                    <span class="value" id="email">filipe@example.com</span>
+                </div>
+                <div class="info-card">
+                    <span class="label">E-mail pessoal</span>
+                    <span class="value" id="alt-email">filipe.backup@example.com</span>
+                </div>
+                <div class="info-card">
+                    <span class="label">Telefone corporativo</span>
+                    <span class="value" id="phone">+55 (31) 99999-9999</span>
+                </div>
+                <div class="info-card">
+                    <span class="label">Telefone pessoal</span>
+                    <span class="value" id="alt-phone">+55 (31) 99999-9999</span>
+                </div>
+                <div class="info-card">
+                    <span class="label">Supervisor</span>
+                    <span class="value" id="supervisor">Marcos Almeida</span>
+                </div>
+                <div class="info-card">
+                    <span class="label">Senha</span>
+                    <span class="value" id="position">●●●●●●●●●●</span>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="btn-edit" onclick="openModal()">Edita Perfil</button>
+                <button class="btn-logout" onclick="logout()">Logout</button>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal" id="editModal">
+            <div class="modal-content">
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+                <h3>Edit Profile</h3>
+
+                <label>Full Name</label>
+                <input type="text" id="editName">
+
+                <label>E-mail corporativo</label>
+                <input type="email" id="editEmail">
+
+                <label>E-mail pessoal</label>
+                <input type="email" id="editAltEmail">
+
+                <label>Telefone corporativo</label>
+                <input type="text" id="editPhone">
+
+                <label>Telefone pessoal</label>
+                <input type="text" id="editAltPhone">
+
+                <label>Setor</label>
+                <input type="text" id="editSetor">
+
+                <label>Cargo</label>
+                <input type="text" id="editPosition">
+
+                <label>Supervisor</label>
+                <input type="text" id="editSupervisor">
+
+                <label>Foto de Perfil</label>
+                <input type="text" id="editProfileImg">
+
+                <label>Nova Senha</label>
+                <input type="password" id="editProfileImg">
+
+                <label>Confirme a Nova Senha</label>
+                <input type="password" id="editProfileImg">
+
+                <div class="modal-actions">
+                <button class="btn-save" onclick="saveProfile()">Salvar</button>
+                <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+
+        <img id="logoavi" src="aviat.png">
+
+    </section>
+
+    <!--Footer -->
+    <footer>
+        &copy; <span id="anoAtual"></span> Aurora Grand Hotels.
+    </footer>
+    <!-- /Footer -->
+        
+    <script src="script.js"></script>
+
+    <!-- Submenu script -->
+    <script>
+        document.querySelectorAll('.nav-link.has-submenu > a').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                const parent = this.parentElement;
+
+                // Fecha outros submenus, se quiser comportamento exclusivo
+                document.querySelectorAll('.nav-link.has-submenu').forEach(item => {
+                    if (item !== parent) item.classList.remove('active');
+                });
+
+                parent.classList.toggle('active');
+            });
+        });
+    </script>
+    <!-- /Submenu script -->
+
+    <!-- Profile Script -->
+    <script>
+        function openModal() {
+            document.getElementById('editModal').style.display = 'flex';
+
+            document.getElementById('editName').value = document.getElementById('username').innerText;
+            document.getElementById('editEmail').value = document.getElementById('email').innerText;
+            document.getElementById('editAltEmail').value = document.getElementById('alt-email').innerText;
+            document.getElementById('editPhone').value = document.getElementById('phone').innerText;
+            document.getElementById('editAltPhone').value = document.getElementById('alt-phone').innerText;
+            document.getElementById('editSetor').value = document.getElementById('setor').innerText;
+            document.getElementById('editPosition').value = document.getElementById('position').innerText;
+            document.getElementById('editSupervisor').value = document.getElementById('supervisor').innerText;
+            document.getElementById('editProfileImg').value = document.getElementById('profile-img').src;
+        }
+
+        function closeModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+        function saveProfile() {
+            document.getElementById('username').innerText = document.getElementById('editName').value;
+            document.getElementById('email').innerText = document.getElementById('editEmail').value;
+            document.getElementById('alt-email').innerText = document.getElementById('editAltEmail').value;
+            document.getElementById('phone').innerText = document.getElementById('editPhone').value;
+            document.getElementById('alt-phone').innerText = document.getElementById('editAltPhone').value;
+            document.getElementById('setor').innerText = document.getElementById('editSetor').value;
+            document.getElementById('position').innerText = document.getElementById('editPosition').value;
+            document.getElementById('supervisor').innerText = document.getElementById('editSupervisor').value;
+            document.getElementById('profile-img').src = document.getElementById('editProfileImg').value;
+
+            closeModal();
+        }
+
+        function logout() {
+            alert('Você saiu do sistema.');
+            window.location.href = 'home.html';
+        }
+
+        document.getElementById('file-input').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                document.getElementById('profile-img').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+    </script>
+    <!-- /Profile Script -->
+
+</body>
+</html>

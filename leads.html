@@ -1,0 +1,2519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="fav.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <!--CSS-->
+    <link rel="stylesheet" href="styleleads.css">
+
+    <style>        
+        /* Destacar linha selecionada */
+        #results-body tr.selected-row {
+            background-color: rgba(168, 241, 255, 0.332) !important;
+            border: 3px solid #ffbf0d !important;
+            border-radius: 15px !important;
+            box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1);
+        }
+        
+        /* Tooltip fixo à direita da linha */
+        #tooltip {
+            position: fixed;
+            background: #161616c5;
+            border: 3px solid var(--icon-color);
+            border-radius: 18px;
+            padding: 5px;
+            display: none;
+            z-index: 1000;
+            pointer-events: auto;
+        }
+
+        /* Botões do tooltip */
+        #tooltip button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            margin: 2px;
+            color: white;
+            transition: .2s;
+        }
+
+        #addFup:hover{
+            color:rgb(2, 236, 236);
+            transform: scale(1.4);
+        }
+
+        #editarBtn:hover {
+            color: #49dc70;
+            transform: scale(1.4);
+        }
+
+        #excluirBtn:hover {
+            color: #fd8787;
+            transform: scale(1.4);
+        }
+
+        .kanban {
+            display: none;
+            gap: 14px;
+            padding: 45px;
+            width: 150vh;
+            max-width: 100vw;
+            height: 80vh;
+            margin-top: 100px;
+            margin-left: -35px;
+            z-index: 100;
+            /* Scrollbar */
+            *::-webkit-scrollbar { width: 5px; }
+            *::-webkit-scrollbar-track { background-color: #eaeffa; border-radius: 8px; }
+            *::-webkit-scrollbar-thumb { background-color: #b7d3fb; border-radius: 20px; }
+        }
+        .kanban-column {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            height: 100%;
+            background-color: #f6f8fc;
+            border-radius: 12px;
+            box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1);
+            padding: 12px;
+            min-width: 252px;
+            position: relative;
+            overflow-y: auto;
+            overflow: hidden;
+        }
+        .kanban-column::after {
+            position: absolute;
+            content: '';
+            height: 5px;
+            width: 100%;
+            top: 0;
+            left: 0;
+        }
+        .kanban-column[data-id="1"]::after { background-color: #fed565; }
+        .kanban-column[data-id="2"]::after { background-color: #fea065; }
+        .kanban-column[data-id="3"]::after { background-color: #bed646; }
+        .kanban-column[data-id="4"]::after { background-color: #00c8ec; }
+        .kanban-column[data-id="5"]::after { background-color: #49dc70; }
+        .kanban-column[data-id="6"]::after { background-color: #e94646; }
+        .kanban-column[data-id="7"]::after { background-color: #373737; }
+        .kanban-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .kanban-title h2 {
+            font-size: 18px;
+            color: #4b5563;
+            font-weight: 600;
+        }
+        .add-card {
+            color: #525252;
+            font-size: 20px;
+            background-color: transparent;
+            cursor: pointer;
+            border: none;
+            z-index: 100;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .add-card:hover {
+            color: #fab600;
+            font-size: 21px;
+            font-weight: 900;
+        }
+        .kanban-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+            min-height: 30px;
+        }
+        .card-agencia {
+            font-size: 12px;
+            color: #939393;
+            margin: 2px 0 6px 0;
+        }
+
+        .kanban-card {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background-color: #fff;
+            border-radius: 14px;
+            padding: 10px;
+            box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.1);
+            cursor: grab;
+            position: relative;
+        }
+        .badge {
+            color: #fff;
+            width: fit-content;
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 12px;
+        }
+        .badge.high { background-color: #d573b6; }
+        .badge.medium { background-color: #fea065; }
+        .badge.low { background-color: #92a5fb; }
+        .card-infos {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .card-icons {
+            display: flex;
+            gap: 18px;
+        }
+        .card-icons i { color: #a8a8aa; }
+        .user img {
+            width: 32px;
+            height: 32px;
+            border-radius: 100%;
+            object-fit: cover;
+        }
+        .dragging { opacity: 0.5; }
+        .cards-hover { background-color: #eaeffa; border-radius: 8px; }
+        .card-actions {
+            position: absolute;
+            top: 6px;
+            right: 8px;
+            display: flex;
+            gap: 6px;
+            z-index: 2;
+        }
+        .card-actions button {
+            background: none;
+            border: none;
+            color: #b0b0b0;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 2px;
+        }
+        .card-actions button:hover { color: #d573b6; }
+        
+        /* ========= Modal ========= */
+        .modalz-bg {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+        }
+
+        .modalz-bg.active {
+            display: flex;
+        }
+
+        .modalz {
+            background: #fff;
+            padding: 24px;
+            border-radius: 16px;
+            width: 400px;
+            max-width: 90%;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95);}
+            to { opacity: 1; transform: scale(1);}
+        }
+
+        .modalz h2 {
+            margin-top: 0;
+            font-size: 20px;
+            color: #333;
+        }
+
+        .modalz label {
+            display: block;
+            margin-top: 12px;
+            font-weight: 600;
+            color: #444;
+        }
+
+        .modalz input,
+        .modalz select,
+        .modalz textarea {
+            width: 100%;
+            padding: 8px 12px;
+            margin-top: 4px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            outline-color: #007bff;
+            font-size: 14px;
+        }
+
+        .modalz-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .modalz-actions button {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .modalz-actions .save {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .modalz-actions .save:hover {
+            background-color: #218838;
+        }
+
+        .modalz-actions .cancel {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .modalz-actions .cancel:hover {
+            background-color: #c82333;
+        }
+
+        /* ========= Kanban ========= */
+        .kanban-board {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            padding: 16px;
+        }
+
+        .kanban-column {
+            background: #f4f4f4;
+            border-radius: 16px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            max-height: 85vh;
+        }
+
+        .kanban-column h3 {
+            text-align: center;
+            margin: 4px 0 12px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .kanban-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        .kanban-cards.cards-hover {
+            background-color: #d9edf7;
+            border-radius: 12px;
+            padding: 4px;
+        }
+
+        .kanban-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 8px 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: grab;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            transition: transform 0.2s ease;
+        }
+
+        .kanban-card:active {
+            cursor: grabbing;
+        }
+
+        .kanban-card .card-title {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .kanban-card .card-agencia {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .kanban-card .card-infos {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-icons {
+            display: flex;
+            gap: 8px;
+            font-size: 12px;
+            color: #777;
+        }
+
+        .user img {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+        }
+
+        .card-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .card-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #007bff;
+            font-size: 14px;
+        }
+
+        .card-actions button.delete {
+            color: #dc3545;
+        }
+
+        .card-actions button:hover {
+            opacity: 0.8;
+        }
+
+
+        /* ========= Responsividade ========= */
+        @media (max-width: 600px) {
+            .kanban-board {
+                grid-template-columns: 1fr;
+            }
+        }
+
+
+        #subactive a{
+            color: rgb(0, 173, 173) !important;
+        }
+        #subactive i{
+            color: rgb(0, 173, 173) !important;
+        }
+    </style>
+    <!--/CSS-->
+    
+    <!--Boxicons CSS-->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- Chart Js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+    
+    <title>Aurora Grand Hotels</title> 
+</head>
+<body>
+
+   <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="logo.png" alt="">
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name" id="nome">Aurora Grand Hotels</span>
+                    <span class="profession">GRC Control</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu-scrollable">
+
+                <li class="search-box" id="search-box">
+                    <i class='bx bx-search icon'></i>
+                    <input type="text" placeholder="Search...">
+                </li>
+                <br>
+                <br>
+
+                <ul class="menu-links">
+
+                    <li class="nav-link">
+                        <a href="home.html">
+                            <i class='bx bxs-home icon' ></i>
+                            <span class="text nav-text">Home</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="dashboard.html">
+                            <i class='bx bxs-dashboard icon' ></i>
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+
+                    <li class="nav-link has-submenu">
+                        <a id="navselected" href="leads.html">
+                            <i class='bx bxs-user-detail icon' ></i>
+                            <span class="text nav-text">CRM <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li id="subactive" ><a href="#"><i class='bx bx-user icon' ></i>Negociações (Leads)</a></li>
+                            <li><a href="fup.html"><i class='bx bx-transfer icon' ></i>Follow Up log</a></li>
+                            <li><a href="clients.html"><i class='bx bxs-user-account icon' ></i>Carteira de Clientes</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="calendar.html">
+                            <i class='bx bxs-calendar icon'></i>
+                            <span class="text nav-text">Calendário</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link has-submenu">
+                        <a href="#">
+                            <i class='bx bxs-business icon'></i>
+                            <span class="text nav-text">Hotéis <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="hotel-1.html"><i class='bx bx-home-smile icon'></i> Aurora Golden</a></li>
+                            <li><a href="hotel-2.html"><i class='bx bxs-buildings icon'></i> Aurora Suites</a></li>
+                            <li><a href="hotel-3.html"><i class='bx bx-building icon'></i> Aurora Budget</a></li>
+                            <li><a href="hotel-4.html"><i class='bx bxs-arch icon'></i> Aurora Resorts</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="pricespy.html">
+                            <i class='bx bx-show-alt icon'></i>
+                            <span class="text nav-text">Price Spy</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="reminder.html">
+                            <i class='bx bxs-bell-ring icon' ></i>
+                            <span class="text nav-text">Lembretes</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <ul class="menu-links">
+                    <li class="nav-link has-submenu">
+                        <a href="#">
+                            <img id="profile-pic" src="profile_pic_F.png" alt="Filipe Oliveira">
+                            <span class="text nav-text">Filipe Oliveira <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="profile.html"><i class='bx bx-user icon'></i> Perfil</a></li>
+                            <li><a href="settings.html"><i class='bx bx-cog icon'></i> Configurações</a></li>
+                            <li><a href="help.html"><i class='bx bx-help-circle icon' ></i> Ajuda</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="logout" id="logout">
+                        <a href="index.html">
+                            <i class='bx bx-log-out icon' ></i>
+                            <span class="text nav-text">Logout</span>
+                        </a>
+                    </li>
+
+                    <li class="mode">
+                        <div class="sun-moon">
+                            <i class='bx bx-moon icon moon'></i>
+                            <i class='bx bx-sun icon sun'></i>
+                        </div>
+                        <span class="mode-text text">Dark mode</span>
+
+                        <div class="toggle-switch">
+                            <span class="switch"></span>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="home">
+    
+        <div class="headernav">
+            <div style="display: none;"> 
+              <h3 id="saudacao"></h3>
+              <p class="data-hora" id="dataHora"></p>
+            </div> <br>
+    
+            <div class="fixedbar" id="fixedbar">
+                <div class="controls">
+                    <div class="search-container">
+                        <i id="lupa" class='bx bx-search-alt-2'></i>
+                        <input type="text" id="searchBox" placeholder="Buscar..." onkeyup="filtrarTabela()">
+                    </div>
+                    <div class="view-controls">
+                        <button id="newlead" onclick="abrirModal()"><i class='bx bx-add-to-queue'></i> Novo Lead</button>
+                    </div>                    
+                </div>
+               
+                <div id="footerline">
+                    <button id="toggleKanban" onclick="mostrarKanban()">
+                        <i class='bx bxl-trello'></i>
+                        <span class="btn-text">Workflow</span>
+                    </button>
+                    <button id="leadslist" onclick="mostrarTabela()">
+                        <i class='bx bx-list-ol icon-class'></i>
+                        <span class="btn-text">Leads</span>
+                    </button>
+                    <button id="toggleDashboard" onclick="mostrarDashboard()">
+                        <i class='bx bxs-pie-chart-alt-2'></i>
+                        <span class="btn-text">Dashboard</span>
+                    </button>
+                    <hr id="hrline">
+                </div>
+
+            </div>
+            
+        </div>
+
+        <!-- Loading indicator -->
+        <div class="loader" id="loader"></div>
+
+        <!-- Tooltip for row actions -->
+        <div class="tooltip" id="tooltip">
+            <button id="addFup"><i class='bx bx-message-rounded-add'></i></button>
+            <button id="editarBtn"><i class='bx bx-edit'></i></button>
+            <button class="btn-excluir" id="excluirBtn"> <i class='bx bx-trash' ></i></button>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal" id="modal">
+            <div class="modal-content">
+                <button class="close-btn" onclick="fecharModal()">&times;</button>
+                <h2 style="color: #b0b1b3;" id="modalTitle">Adicionar Registro</h2>
+
+                <div class="form-container">
+                    <form id="add-form">
+                        <!-- Campos correspondentes às colunas  statusProgresso -->
+                        <button id="submit" type="submit"><i class='bx bxs-save'></i></button>
+
+                        <label for="ID">ID</label>
+                        <input type="number" id="ID" name="ID" placeholder="ID">
+
+                        <label for="dataOrcamento">Data do Orçamento</label>
+                        <input type="date" name="dataOrcamento" id="dataOrcamento" placeholder="dataOrcamento">
+
+                        <label for="agencia">Agência/Solicitante</label>
+                        <input type="text" id="agencia" name="agencia" placeholder="agencia">
+
+                        <label for="responsavel">Responsável</label>
+                        <input type="text" id="responsavel" name="responsavel" placeholder="responsavel">
+
+                        <label for="telefoneSolicitante">Telefone Solicitante</label>
+                        <input type="text" id="telefoneSolicitante" name="telefoneSolicitante">
+
+                        <label for="emailSolicitante">E-mail Solicitante</label>
+                        <input type="email" id="emailSolicitante" name="emailSolicitante">
+
+                        <label for="hotel">Hotel</label>
+                        <input type="text" id="hotel" name="hotel">
+
+                        <label for="sala">Sala</label>
+                        <input type="text" id="sala" name="sala">
+
+                        <label for="montagem">Montagem</label>
+                        <input type="text" id="montagem" name="montagem">
+
+                        <label for="dataInicio">Data Início</label>
+                        <input type="date" id="dataInicio" name="dataInicio">
+
+                        <label for="dataFim">Data Fim</label>
+                        <input type="date" id="dataFim" name="dataFim">
+
+                        <label for="totalDiasUsados">Total dias usados</label>
+                        <input type="number" id="totalDiasUsados" min="0" name="totalDiasUsados">
+
+                        <label for="segmento">Segmento</label>
+                        <input type="text" id="segmento" name="segmento">
+
+                        <label for="segmentoMercado">Segmento de Mercado</label>
+                        <input type="text" id="segmentoMercado" name="segmentoMercado">
+
+                        <label for="responsavelAtlantica">Responsável Vendas - Atlantica</label>
+                        <input type="text" id="responsavelAtlantica" name="responsavelAtlantica">
+
+                        <label for="responsavelHotel">Responsável no Hotel</label>
+                        <input type="text" id="responsavelHotel" name="responsavelHotel">
+
+                        <label for="perfilEvento">Perfil do Evento</label>
+                        <input type="text" id="perfilEvento" name="perfilEvento">
+
+                        <label for="budgetCliente">Budget do Cliente</label>
+                        <input type="number" id="budgetCliente" min="0" name="budgetCliente">
+
+                        <label for="concorrentes">Concorrentes</label>
+                        <input type="text" id="concorrentes" name="concorrentes">
+
+                        <label for="fatorDecisivo">Fator Decisivo</label>
+                        <input type="text" id="fatorDecisivo" name="fatorDecisivo">
+
+                        <label for="qtdPAX">Qtd PAX Evento</label>
+                        <input type="number" id="qtdPAX" min="0" name="qtdPAX">
+
+                        <label for="eventoHospedagem">Evento | Hospedagem</label>
+                        <input type="text" id="eventoHospedagem" name="eventoHospedagem">
+
+                        <label for="nomeEvento">Nome Evento</label>
+                        <input type="text" id="nomeEvento" name="nomeEvento">
+
+                        <label for="status">Status</label>
+                        <input type="text" id="status" name="status">
+
+                        <label for="statusProgresso">Status Progresso</label>
+                        <input type="text" id="statusProgresso" name="statusProgresso">
+
+                        <label for="motivoCancelamento">Motivo Cancelamento</label>
+                        <input type="text" id="motivoCancelamento" name="motivoCancelamento">
+
+                        <label for="concorrenteEscolhido">Concorrente Escolhido</label>
+                        <input type="text" id="concorrenteEscolhido" name="concorrenteEscolhido">
+
+                        <label for="valorConcorrente">Valor Concorrente</label>
+                        <input type="number" id="valorConcorrente" min="0" name="valorConcorrente">
+
+                        <label for="deadlineConfirmacao">Deadline Confirmação</label>
+                        <input type="date" id="deadlineConfirmacao" name="deadlineConfirmacao">
+
+                        <label for="dataConfirmacao">Data de Confirmação</label>
+                        <input type="date" id="dataConfirmacao" name="dataConfirmacao">
+
+                        <label for="rns">RNs</label>
+                        <input type="number" id="rns" min="0" name="rns">
+
+                        <label for="adr">ADR</label>
+                        <input type="number" id="adr" min="0" step="0.01" name="adr">
+
+                        <label for="receitaHospedagem">Receita Hospedagem</label>
+                        <input type="number" id="receitaHospedagem" min="0" step="0.01" name="receitaHospedagem">
+
+                        <label for="diariasHospedagem">Diárias (Hospedagem)</label>
+                        <input type="number" id="diariasHospedagem" min="0" name="diariasHospedagem">
+
+                        <label for="valorHospedagem">Valor (Hospedagem)</label>
+                        <input type="number" id="valorHospedagem" min="0" step="0.01" name="valorHospedagem">
+
+                        <label for="receitaSalas">Receita Salas</label>
+                        <input type="number" id="receitaSalas" min="0" step="0.01" name="receitaSalas">
+
+                        <label for="diariasSalas">Diárias (Salas)</label>
+                        <input type="number" id="diariasSalas" min="0" name="diariasSalas">
+
+                        <label for="valorSalas">Valor (Salas)</label>
+                        <input type="number" id="valorSalas" min="0" step="0.01" name="valorSalas">
+
+                        <label for="receitaEquipamentos">Receita Equipamentos</label>
+                        <input type="number" id="receitaEquipamentos" min="0" step="0.01" name="receitaEquipamentos">
+
+                        <label for="receitaAB">Receita A&B</label>
+                        <input type="number" id="receitaAB" min="0" step="0.01" name="receitaAB">
+
+                        <label for="receitaTotal">Receita Total Prevista</label>
+                        <input type="number" id="receitaTotal" min="0" step="0.01" name="receitaTotal">
+
+                        <label for="pagamento">Pagamento</label>
+                        <input type="text" id="pagamento" name="pagamento">    
+
+                        <label for="obs">OBS</label>
+                        <textarea id="obs" name="obs"></textarea>    
+
+                        <label for="mes">Mês</label>
+                        <input type="text" id="mes" name="mes">
+
+                        <label for="ano">Ano</label>
+                        <input type="number" id="ano" min="0" name="ano">
+
+                        <label for="mes_">Mês_</label>
+                        <input type="text" id="mes_" name="mes_">
+
+                        <label for="ano_">Ano_</label>
+                        <input type="number" id="ano_" min="0" name="ano_">
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- /Modal -->
+        
+        <!-- Tabela Leads -->
+        <main class="tableboxx" id="tableboxx">
+            <div class="container">
+                <table id="tabela-registros">
+                    <thead>
+                        <tr id="header-row">
+                            <!-- Headers will be dynamically generated -->
+                        </tr>
+                    </thead>
+                    <tbody id="results-body"></tbody>
+                </table>
+            </div>
+        </main>
+        <!-- /Tabela Leads -->
+
+        <!-- Dashboard -->
+        <div class="dashboard-container" id="dashboard">
+            <h2>Dashboard <i class='bx bxs-report'></i></h2>
+            
+            <!-- Filtros -->
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="filterHotel">Hotel:</label>
+                    <select id="filterHotel"></select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterYear">Ano:</label>
+                    <select id="filterYear"></select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterMonth">Mês:</label>
+                    <select id="filterMonth">
+                        <option value="">Todos</option>
+                        <option value="1">Janeiro</option>
+                        <option value="2">Fevereiro</option>
+                        <option value="3">Março</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Maio</option>
+                        <option value="6">Junho</option>
+                        <option value="7">Julho</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Setembro</option>
+                        <option value="10">Outubro</option>
+                        <option value="11">Novembro</option>
+                        <option value="12">Dezembro</option>
+                    </select>
+                </div>
+                <button id="applyFilters">Aplicar Filtros</button>
+            </div>
+            
+            <!-- Cards de Métricas -->
+            <div class="metric-cards">
+                <div class="metric-card">
+                    <h3>Total de Negociações</h3>
+                    <p id="totalEventos">0</p>
+                </div>
+                <div class="metric-card">
+                    <h3>Receita Total</h3>
+                    <p id="receitaTotal">R$ 0,00</p>
+                </div>
+                <div class="metric-card">
+                    <h3>Taxa de Conversão</h3>
+                    <p id="taxaConversao">0%</p>
+                </div>
+                <div class="metric-card">
+                    <h3>Valor Médio</h3>
+                    <p id="valorMedio">R$ 0,00</p>
+                </div>
+            </div>
+            
+            <!-- Gráficos -->
+            <div class="charts-container">
+                <div class="chart-box">
+                    <h3>Receita por Mês</h3>
+                    <canvas id="receitaMesChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <h3>Negociações por Hotel</h3>
+                    <canvas id="eventosHotelChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <h3>Status das Negociações</h3>
+                    <canvas id="statusChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <h3>Distribuição por Segmento</h3>
+                    <canvas id="segmentoChart"></canvas>
+                </div>
+                <!-- <div class="chart-box">
+                    <h3>Distribuição por Segmento</h3>
+                    <canvas id="segmentoChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <h3>Distribuição por Segmento</h3>
+                    <canvas id="segmentoChart"></canvas>
+                </div> -->
+            </div>
+        </div>
+        <!-- /Dashboard -->
+
+        <!----------- Kanban ------------>
+        <div class="kanban" id="kanban">
+            <div class="kanban-column" data-id="1">
+                <div class="kanban-title">
+                    <h2>Tratativa Pendente <i style="color: #fab600;" class="fa-solid fa-triangle-exclamation"></i></h2>
+                    <button class="add-card" onclick="abrirModal()"><i class="fa-solid fa-plus"></i></button>
+                </div>
+                <div class="kanban-cards"></div>
+            </div>
+
+            <div class="kanban-column" data-id="2">
+                <div class="kanban-title">
+                    <h2>Tarifa RM-CSC <i style="color: #fea065;" class="fa-solid fa-hourglass-half"></i></h2>
+                    <!-- <button class="add-card"><i class="fa-solid fa-plus"></i></button> -->
+                </div>
+                <div class="kanban-cards"></div>
+            </div>
+
+            <div class="kanban-column" data-id="3">
+                <div class="kanban-title">
+                    <h2>Tarifa RM-CSC <i style="color: #bed646;" class="fa-solid fa-circle-check"></i></h2>
+                    <!-- <button class="add-card"><i class="fa-solid fa-plus"></i></button> -->
+                </div>
+                <div class="kanban-cards"></div>
+            </div>
+
+            <div class="kanban-column" data-id="4">
+                <div class="kanban-title">
+                    <h2>Proposta enviada <i style="color:  #00c8ec;" class="fa-solid fa-envelope-circle-check"></i></h2>
+                    <!-- <button class="add-card"><i class="fa-solid fa-plus"></i></button> -->
+                </div>
+                <div class="kanban-cards"></div>
+            </div>
+
+            <div class="kanban-column" data-id="5">
+                <div class="kanban-title">
+                    <h2>Proposta Aceita <i style="color:  #49dc70;" class="fa-regular fa-thumbs-up"></i></h2>
+                    <!-- <button class="add-card"><i class="fa-solid fa-plus"></i></button> -->
+                </div>
+                <div class="kanban-cards"></div>
+            </div>
+
+            <div class="kanban-column" data-id="6">
+                <div class="kanban-title">
+                    <h2>Proposta negada <i style="color: #e94646;" class="fa-regular fa-thumbs-down"></i></h2>
+                    <!-- <button class="add-card"><i class="fa-solid fa-plus"></i></button> -->
+                </div>
+                <div class="kanban-cards"></div>
+            </div>
+
+            <div class="kanban-column" data-id="7">
+                <div class="kanban-title">
+                    <h2>Sem Resposta <i style="color: #373737;" class="fa-solid fa-circle-xmark"></i></h2>
+                    <!-- <button class="add-card"><i class="fa-solid fa-plus"></i></button> -->
+                </div>
+                <div class="kanban-cards"></div>
+            </div>
+
+            <div class="lastcolum"></div>
+
+        </div>
+
+        <!-- Modal do Kanban -->
+        <div id="modalz-bg" class="modalz-bg">
+            <div class="modalz">
+                <h2 id="modalz-title-header">Adicionar / Editar Card</h2>
+                <form id="modalz-form">
+                    <input type="hidden" id="modalz-id">
+                    <input type="hidden" id="modalz-linha">
+
+                    <label>Nome do Evento:</label>
+                    <input type="text" id="modalz-title" required>
+
+                    <label>Agência:</label>
+                    <input type="text" id="modalz-agencia">
+
+                    <label>Responsável:</label>
+                    <input type="text" id="modalz-responsavel">
+
+                    <label>Status:</label>
+                    <select id="modalz-status" required>
+                        <option value="">Selecione...</option>
+                    </select>
+
+                    <label>Comentários:</label>
+                    <input type="text" id="modalz-comments">
+
+                    <label>Anexos:</label>
+                    <input type="number" id="modalz-attachments" min="0" value="0">
+
+                    <label>Avatar URL (opcional):</label>
+                    <input type="text" id="modalz-avatar">
+
+                    <label>Observações:</label>
+                    <textarea id="modalz-observacoes" rows="3"></textarea>
+
+                    <div class="modalz-actions">
+                        <button type="submit" class="save">Salvar</button>
+                        <button type="button" class="cancel">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!----------- /Kanban ----------->
+
+        <img id="logoavi" src="aviat.png">
+
+    </section>
+
+    <!--Footer -->
+    <footer>
+        &copy; <span id="anoAtual"></span> Aurora Grand Hotels.
+    </footer>
+    <!-- /Footer -->
+        
+    <script src="script.js"></script>
+
+    <!--Header Script  -->
+    <script>
+        // Função para obter a saudação dependendo da hora do dia
+        // function obterSaudacao() {
+        //     const agora = new Date();
+        //     const hora = agora.getHours(); // Obtém a hora atual (de 0 a 23)
+
+        //     let saudacao = "";
+            
+        //     if (hora >= 6 && hora < 12) {
+        //         saudacao = "Olá, Bom dia! Seja bem-vindo(a)!";
+        //     } else if (hora >= 12 && hora < 18) {
+        //         saudacao = "Olá, Boa tarde! Seja bem-vindo(a)!";
+        //     } else {
+        //         saudacao = "Olá, Boa noite! Seja bem-vindo(a)!";
+        //     }
+
+        //     return saudacao;
+        // }
+
+        // // Exibe a saudação no elemento com o id "saudacao"
+        // document.getElementById("saudacao").textContent = obterSaudacao();
+
+
+        // function updateDataHora() {
+        // const data = new Date();
+        // const options = {
+        //     weekday: "long",
+        //     day: "numeric",
+        //     month: "long",
+        //     year: "numeric",
+        //     hour: "2-digit",
+        //     minute: "2-digit",
+        // };
+        // const dataHoraFormatada = data.toLocaleString("pt-BR", options);
+        // document.getElementById("dataHora").textContent = dataHoraFormatada;
+        // }
+
+        // setInterval(updateDataHora, 1000);
+
+        document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("anoAtual").textContent = new Date().getFullYear();
+        });
+
+
+
+        // ----- Variáveis do modal -----
+        const modal = document.getElementById('modal');
+        let linhaSelecionadaParaEdicao = null; // Variável para armazenar a linha selecionada
+    
+        // Abrir modal
+        function abrirModal() {
+            modal.style.display = 'flex';
+        }
+    
+        // Fechar modal
+        function fecharModal() {
+            modal.style.display = 'none';
+            registroSelecionado = null; // Limpar o registro selecionado
+            document.getElementById('add-form').reset(); // Limpar o formulário
+            document.getElementById("modalTitle").textContent = "Adicionar Registro"; // Resetar o título
+        }
+    
+        window.onclick = function (event) {
+            if (event.target === modal) fecharModal();
+        };
+    
+        window.onkeydown = function (event) {
+            if (event.key === 'Escape') fecharModal();
+        };
+    
+        // Função auxiliar: Formatar data para o padrão brasileiro
+        function formatarDataParaBR(data) {
+            if (!data) return "";
+            const [ano, mes, dia] = data.split("-");
+            return `${dia}/${mes}/${ano}`;
+        }
+        // ----- /Variáveis do modal -----
+
+        // Tooltip Configuração
+        const tooltip = document.getElementById("tooltip");
+        const editarBtn = document.getElementById("editarBtn");
+        const excluirBtn = document.getElementById("excluirBtn");
+        let linhaSelecionada = null;
+    
+        document.querySelector("#results-body").addEventListener("click", function (event) {
+            const linha = event.target.closest("tr");
+            if (linha) {
+                // Remover a classe 'selected-row' de qualquer linha previamente selecionada
+                document.querySelectorAll("#results-body tr.selected-row").forEach(row => {
+                    row.classList.remove("selected-row");
+                });
+                
+                // Adicionar a classe 'selected-row' à linha atual
+                linha.classList.add("selected-row");
+    
+                linhaSelecionada = linha;
+                tooltip.style.display = "block";
+                tooltip.style.left = `${event.pageX + 10}px`;
+                tooltip.style.top = `${event.pageY + 10}px`;
+            } else {
+                tooltip.style.display = "none";
+            }
+        });
+    
+        editarBtn.addEventListener("click", function () {
+            if (linhaSelecionada) {
+                abrirModal();
+                preencherFormulario(linhaSelecionada);
+                tooltip.style.display = "none";
+            }
+        });
+    
+        excluirBtn.addEventListener("click", function () {
+            if (linhaSelecionada) {
+                const registro = obterDadosDaLinha(linhaSelecionada);
+                if (confirm(`Tem certeza que deseja excluir o registro "${registro.nomeEvento || registro.ID}"?`)) {
+                    excluirRegistro(registro.Linha);
+                    tooltip.style.display = "none";
+                }
+            }
+        });
+    
+        document.addEventListener("click", function (event) {
+            if (!tooltip.contains(event.target) && !event.target.closest("tr")) {
+                tooltip.style.display = "none";
+            }
+        });
+
+
+    </script>
+    <!-- /Header Script -->
+
+    <!-- Submenu script -->
+    <script>
+        document.querySelectorAll('.nav-link.has-submenu > a').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                const parent = this.parentElement;
+
+                // Fecha outros submenus, se quiser comportamento exclusivo
+                document.querySelectorAll('.nav-link.has-submenu').forEach(item => {
+                    if (item !== parent) item.classList.remove('active');
+                });
+
+                parent.classList.toggle('active');
+            });
+        });
+    </script>
+    <!-- /Submenu script -->
+
+    <!-- GRC Function -->
+    <script>
+        
+        const scriptURL = "https://script.google.com/macros/s/AKfycbzaNyfIDxe-FbnUpgygH6rkZXneUyKaF8wpq8AvZy6jOwgpH0Whv2sgiILSU6SFedpoMQ/exec";
+
+        let registroSelecionado = null;
+
+        // Função para extrair os dados de uma linha da tabela
+        function obterDadosDaLinha(linha) {
+            const celulas = linha.querySelectorAll("td");
+            const headers = document.querySelectorAll("#header-row th");
+
+            const registro = {};
+            for (let i = 0; i < celulas.length; i++) {
+                if (headers[i] && i < celulas.length - 1) {
+                    registro[headers[i].textContent] = celulas[i].textContent;
+                }
+            }
+
+            registro["Linha"] = linha.getAttribute("data-linha") || linha.dataset.linha || registro["ID"];
+            return registro;
+        }
+
+        function confirmarEExcluir(linha) {
+            const registro = obterDadosDaLinha(linha);
+            const nome = registro["nomeEvento"] || registro["ID"];
+            if (confirm(`Tem certeza que deseja excluir o registro "${nome}"?`)) {
+                excluirRegistro(registro["Linha"]); // ✅ Isso de fato executa a exclusão
+                tooltip.style.display = "none";
+            }
+        }
+
+        // Evento para mostrar tooltip e capturar linha selecionada (CORREÇÃO)
+        document.querySelector("#results-body").addEventListener("mouseclick", function(event) {
+            const linha = event.target.closest("tr");
+            if (linha) {
+                // Remover seleção anterior
+                document.querySelectorAll("#results-body tr.selected-row").forEach(row => {
+                    row.classList.remove("selected-row");
+                });
+                
+                // Marcar nova linha como selecionada
+                linha.classList.add("selected-row");
+                linhaSelecionada = linha;
+
+                // Posicionar tooltip corretamente
+                const tooltip = document.getElementById("tooltip");
+                const rect = linha.getBoundingClientRect();
+                tooltip.style.display = "block";
+                tooltip.style.left = `${rect.right + 10}px`; // Alinhar à direita da linha
+                tooltip.style.top = `${rect.top}px`;
+            }
+        });
+
+        // Função para formatar a data no formato dd/mm/aaaa
+        function formatarData(data) {
+            const dateObj = new Date(data);
+            const dia = String(dateObj.getDate()).padStart(2, '0');
+            const mes = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const ano = dateObj.getFullYear();
+            return `${dia}/${mes}/${ano}`;
+        }
+
+        // Função para verificar se o valor é uma data válida
+        function isData(val) {
+            if (typeof val === "string" && val.match(/\d{4}-\d{2}-\d{2}/)) {
+                const data = new Date(val);
+                return !isNaN(data.getTime());
+            }
+            return false;
+        }
+
+        async function carregarDados() {
+            try {
+                toggleLoader(true);
+                
+                const response = await fetch(scriptURL + '?action=leads');
+                const registros = await response.json();
+
+                console.log("Registros retornados:", registros);
+
+                if (!registros || registros.length === 0) {
+                    document.getElementById("tabela-registros").innerHTML = "Nenhum dado encontrado.";
+                    return;
+                }
+
+                const thead = document.getElementById("header-row");
+                const tbody = document.querySelector("#tabela-registros tbody");
+                tbody.innerHTML = "";
+
+                // Criar cabeçalhos
+                thead.innerHTML = "";
+                Object.keys(registros[0]).forEach(key => {
+                    const th = document.createElement("th");
+                    th.textContent = key;
+                    th.addEventListener("click", () => ordenarTabela(key));
+                    thead.appendChild(th);
+                });
+
+                // Adicionar cabeçalho para ações
+                const thAcoes = document.createElement("th");
+                thAcoes.textContent = "Ações";
+                thAcoes.style.textAlign = "center";
+                thAcoes.style.width = "120px";
+                thead.appendChild(thAcoes);
+
+                // Criar linhas da tabela com formatação condicional
+                registros.forEach(registro => {
+                    const tr = document.createElement("tr");
+                    let statusIndex = -1;
+                    let statusValue = "";
+                    
+                    Object.entries(registro).forEach(([key, valor], index) => {
+                        const td = document.createElement("td");
+                        
+                        if (valor && isData(valor)) {
+                            td.textContent = formatarData(valor);
+                        } else {
+                            td.textContent = valor;
+                        }
+                        
+                        if (key === "status") {
+                            statusIndex = index;
+                            statusValue = valor;
+                            
+                            switch (valor) {
+                                case "Definitivo":
+                                    td.style.backgroundColor = "#7ed957";
+                                    td.style.color = "#155724";
+                                    break;
+                                case "Cancelado":
+                                    td.style.backgroundColor = "#ff4545";
+                                    td.style.color = "#8f0505";
+                                    break;
+                                case "Tentativo":
+                                    td.style.backgroundColor = "#fdcc33";
+                                    td.style.color = "#846400";
+                                    break;
+                                case "Não confirmado":
+                                    td.style.backgroundColor = "#e2e3e5";
+                                    td.style.color = "#383d41";
+                                    break;
+                            }
+                        }
+                        
+                        tr.appendChild(td);
+                    });
+                    
+                    // Adicionar coluna de ações
+                    const tdAcoes = document.createElement("td");
+                    tdAcoes.innerHTML = `
+                        <div class="action-buttons" style="display: flex; gap: 8px; justify-content: center; align-items: center;">
+                            <button class="btn-editar" title="Editar registro" style="background: none; border: none; cursor: pointer; color: #007bff; padding: 5px;">
+                                <i class="fas fa-edit" style="font-size: 16px;"></i>
+                            </button>
+                            <button class="btn-excluir" title="Excluir registro" style="background: none; border: none; cursor: pointer; color: #dc3545; padding: 5px;">
+                                <i class="fas fa-trash" style="font-size: 16px;"></i>
+                            </button>
+                            <button class="btn-feedback" title="Adicionar feedback" style="background: none; border: none; cursor: pointer; color: #28a745; padding: 5px;">
+                                <i class="fas fa-comment" style="font-size: 16px;"></i>
+                            </button>
+                        </div>
+                    `;
+                    tr.appendChild(tdAcoes);
+                    
+                    // Adicionar eventos de clique nos botões
+                    const btnEditar = tdAcoes.querySelector('.btn-editar');
+                    const btnExcluir = tdAcoes.querySelector('.btn-excluir');
+                    const btnFeedback = tdAcoes.querySelector('.btn-feedback');
+                    
+                    btnEditar.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        preencherFormulario(tr);
+                    });
+                    
+
+                    btnExcluir.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        if (confirm("Tem certeza que deseja excluir este registro?")) {
+                            excluirRegistro(registro["Linha"]); // ← CORREÇÃO: Usar registro["Linha"]
+                        }
+                    });
+
+                    
+                    btnFeedback.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        // Função para adicionar feedback (implementar depois)
+                        console.log("Adicionar feedback para:", registro);
+                        alert("Funcionalidade de feedback será implementada em breve!");
+                    });
+                    
+                    // Aplicar cor da fonte baseada no status
+                    if (statusValue) {
+                        let textColor;
+                        switch (statusValue) {
+                            case "Definitivo":
+                                textColor = "#38b602";
+                                break;
+                            case "Cancelado":
+                                textColor = "#ff6d6d";
+                                break;
+                            case "Tentativo":
+                                textColor = "#ffb800";
+                                break;
+                            case "Não confirmado":
+                                textColor = "#101213";
+                                break;
+                            default:
+                                textColor = "#b0b1b3";
+                        }
+                        
+                        Array.from(tr.children).forEach((cell, index) => {
+                            if (index !== statusIndex && index !== tr.children.length - 1) {
+                                cell.style.color = textColor;
+                            }
+                        });
+                    }
+                    
+                    tbody.appendChild(tr);
+                });
+                
+                mostrarFeedback("✅ Dados carregados com sucesso!", "sucesso");
+                
+            } catch (error) {
+                console.error("Erro ao carregar os dados:", error);
+                mostrarFeedback("Erro ao carregar os dados.", "erro");
+            } finally {
+                toggleLoader(false);
+            }
+        }
+
+        function filtrarTabela() {
+            const filtro = document.getElementById("searchBox").value.toLowerCase();
+            const linhas = document.querySelectorAll("#tabela-registros tbody tr");
+            
+            document.querySelectorAll(".highlight-search").forEach(el => {
+                el.outerHTML = el.textContent;
+            });
+            
+            if (filtro.trim() === "") {
+                linhas.forEach(linha => {
+                    linha.style.display = "";
+                });
+                return;
+            }
+            
+            linhas.forEach(linha => {
+                let encontrado = false;
+                const celulas = linha.querySelectorAll("td");
+                
+                celulas.forEach(celula => {
+                    const conteudo = celula.textContent.toLowerCase();
+                    
+                    if (conteudo.includes(filtro)) {
+                        encontrado = true;
+                        
+                        const regex = new RegExp(filtro, 'gi');
+                        const textoOriginal = celula.textContent;
+                        const textoComHighlight = textoOriginal.replace(regex, match => 
+                            `<span class="highlight-search">${match}</span>`
+                        );
+                        
+                        celula.innerHTML = textoComHighlight;
+                    }
+                });
+                
+                linha.style.display = encontrado ? "" : "none";
+            });
+        }
+
+        // Função para preencher o formulário com os dados do registro selecionado
+        function preencherFormulario(linha) {
+            const celulas = linha.querySelectorAll("td");
+            const headers = document.querySelectorAll("#header-row th");
+            
+            const registro = {};
+            for (let i = 0; i < celulas.length; i++) {
+                if (headers[i] && i < celulas.length - 1) { // Excluir a última coluna (ações)
+                    registro[headers[i].textContent] = celulas[i].textContent;
+                }
+            }
+            
+            registroSelecionado = registro;
+            
+            document.getElementById("modalTitle").textContent = "Editar Registro";
+            
+            const form = document.getElementById("add-form");
+            const inputs = form.querySelectorAll("input, textarea");
+            
+            inputs.forEach(input => {
+                const fieldId = input.id;
+                if (registro[fieldId] !== undefined) {
+                    if (input.type === "date" && registro[fieldId]) {
+                        const parts = registro[fieldId].split('/');
+                        if (parts.length === 3) {
+                            input.value = `${parts[2]}-${parts[1]}-${parts[0]}`;
+                        } else {
+                            input.value = registro[fieldId];
+                        }
+                    } else {
+                        input.value = registro[fieldId];
+                    }
+                }
+            });
+            
+            // Abrir modal
+            const modal = document.getElementById("modal");
+            if (modal) modal.style.display = "block";
+        }
+
+        // Função para fechar modal
+        function fecharModal() {
+            const modal = document.getElementById("modal");
+            if (modal) modal.style.display = "none";
+            
+            const form = document.getElementById("add-form");
+            if (form) form.reset();
+            
+            registroSelecionado = null;
+            document.getElementById("modalTitle").textContent = "Adicionar Registro";
+        }
+
+        // Função para validar o formulário antes de enviar
+        function validarFormulario() {
+            const form = document.getElementById("add-form");
+            const camposObrigatorios = ["ID", "dataOrcamento", "agencia", "responsavel"];
+            
+            let valido = true;
+            let mensagemErro = "Por favor, preencha os seguintes campos obrigatórios:\n";
+            
+            camposObrigatorios.forEach(campo => {
+                const input = form.querySelector(`#${campo}`);
+                if (input && !input.value.trim()) {
+                    input.style.borderColor = "red";
+                    valido = false;
+                    const label = input.previousElementSibling;
+                    if (label) mensagemErro += `- ${label.textContent}\n`;
+                } else if (input) {
+                    input.style.borderColor = "#c87902";
+                }
+            });
+            
+            if (!valido) {
+                alert(mensagemErro);
+            }
+            
+            return valido;
+        }
+
+        async function excluirRegistro(linha) {
+            if (!linha) {
+                console.error("Linha não fornecida para exclusão");
+                return;
+            }
+            
+            console.log("Tentando excluir linha:", linha);
+            
+            toggleLoader(true);
+            
+            try {
+                const formData = new FormData();
+                formData.append("action", "leads");
+                formData.append("Linha", linha);
+                formData.append("_method", "DELETE");
+                
+                const response = await fetch(scriptURL, { 
+                    method: "POST", 
+                    body: formData 
+                });
+                
+                const result = await response.json();
+                console.log("Resposta da exclusão:", result);
+
+                // CORREÇÃO: Verificar resposta e recarregar dados IMEDIATAMENTE
+                if (result.status === "success" || result.result === "success") {
+                    mostrarFeedback("✅ Registro excluído com sucesso!", "sucesso");
+                    carregarDados(); // REMOVA O setTimeout
+                    document.getElementById("tooltip").style.display = "none";
+                } else {
+                    mostrarFeedback("Erro ao excluir o registro", "erro");
+                }
+            } catch (error) {
+                console.error("Erro ao excluir registro:", error);
+                mostrarFeedback("Erro de conexão ao excluir registro", "erro");
+            } finally {
+                toggleLoader(false);
+            }
+        }
+
+        // Função para mostrar/esconder o indicador de carregamento
+        function toggleLoader(show) {
+            const loader = document.getElementById("loader");
+            if (loader) loader.style.display = show ? "block" : "none";
+        }
+
+        // Função para mostrar mensagens de feedback
+        function mostrarFeedback(mensagem, tipo) {
+            let feedback = document.getElementById("feedback");
+            if (!feedback) {
+                feedback = document.createElement("div");
+                feedback.id = "feedback";
+                feedback.classList.add("feedback");
+                feedback.style.position = "fixed";
+                feedback.style.top = "20px";
+                feedback.style.right = "20px";
+                feedback.style.padding = "15px 20px";
+                feedback.style.color = "#0a9d00";
+                // feedback.style.borderRadius = "5px";
+                // feedback.style.boxShadow = "0 4px 8px rgba(0,0,0,0.2)";
+                feedback.style.zIndex = "2000";
+                feedback.style.transition = "opacity 0.5s ease-in-out";
+                document.body.appendChild(feedback);
+            }
+            
+            feedback.className = "feedback";
+            if (tipo === "sucesso") {
+                feedback.classList.add("sucesso");
+            } else if (tipo === "erro") {
+                feedback.classList.add("erro");
+            } else {
+                feedback.classList.add("info");
+            }
+            
+            feedback.textContent = mensagem;
+            feedback.style.opacity = "1";
+            
+            setTimeout(() => {
+                feedback.style.opacity = "0";
+            }, 3000);
+        }
+
+        // Variáveis para controlar a ordenação
+        let colunaOrdenacao = null;
+        let ordemAscendente = true;
+
+        // Função para ordenar a tabela
+        function ordenarTabela(coluna) {
+            const tbody = document.querySelector("#tabela-registros tbody");
+            const linhas = Array.from(tbody.querySelectorAll("tr"));
+            
+            if (coluna === colunaOrdenacao) {
+                ordemAscendente = !ordemAscendente;
+            } else {
+                colunaOrdenacao = coluna;
+                ordemAscendente = true;
+            }
+            
+            const headers = document.querySelectorAll("#header-row th");
+            let indiceColuna = -1;
+            
+            for (let i = 0; i < headers.length; i++) {
+                if (headers[i].textContent === coluna) {
+                    indiceColuna = i;
+                    break;
+                }
+            }
+            
+            if (indiceColuna === -1) return;
+            
+            linhas.sort((a, b) => {
+                const valorA = a.querySelectorAll("td")[indiceColuna].textContent.trim();
+                const valorB = b.querySelectorAll("td")[indiceColuna].textContent.trim();
+                
+                if (valorA.match(/^\d{2}\/\d{2}\/\d{4}$/) && valorB.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
+                    const [diaA, mesA, anoA] = valorA.split('/');
+                    const [diaB, mesB, anoB] = valorB.split('/');
+                    
+                    const dataA = new Date(`${anoA}-${mesA}-${diaA}`);
+                    const dataB = new Date(`${anoB}-${mesB}-${diaB}`);
+                    
+                    return ordemAscendente ? dataA - dataB : dataB - dataA;
+                }
+                
+                if (!isNaN(valorA) && !isNaN(valorB)) {
+                    return ordemAscendente ? 
+                        parseFloat(valorA) - parseFloat(valorB) : 
+                        parseFloat(valorB) - parseFloat(valorA);
+                }
+                
+                return ordemAscendente ? 
+                    valorA.localeCompare(valorB) : 
+                    valorB.localeCompare(valorA);
+            });
+            
+            tbody.innerHTML = "";
+            linhas.forEach(linha => tbody.appendChild(linha));
+            
+            headers.forEach(th => {
+                th.classList.remove("asc", "desc");
+            });
+            
+            const thAtual = Array.from(headers).find(th => th.textContent === coluna);
+            if (thAtual) thAtual.classList.add(ordemAscendente ? "asc" : "desc");
+        }
+
+        // Event Listeners
+        document.addEventListener("DOMContentLoaded", function() {
+            carregarDados();
+            
+            // Event listener para o formulário
+            const form = document.getElementById("add-form");
+            if (form) {
+                form.addEventListener("submit", async function(event) {
+                    event.preventDefault();
+                    
+                    if (!validarFormulario()) return;
+                    
+                    toggleLoader(true);
+                    
+                    // CORREÇÃO: coleta todos os campos automaticamente pelo atributo 'name'
+                    const formData = new FormData(this);
+                    formData.append("action", "leads");
+                    
+                    try {
+                        let response;
+
+                        if (registroSelecionado && registroSelecionado["Linha"]) {
+                            formData.append("Linha", registroSelecionado["Linha"]);
+                            formData.append("_method", "PUT");
+                            response = await fetch(scriptURL, { 
+                                method: "POST",
+                                body: formData 
+                            });
+                            mostrarFeedback("✅ Registro atualizado com sucesso!", "sucesso");
+                        } else {
+                            response = await fetch(scriptURL, { 
+                                method: "POST", 
+                                body: formData 
+                            });
+                            mostrarFeedback("✅ Registro adicionado com sucesso!", "sucesso");
+                        }
+
+                        fecharModal();
+                        setTimeout(carregarDados, 1500);
+                        
+                    } catch (error) {
+                        console.error("Erro:", error);
+                        mostrarFeedback("Ocorreu um erro ao salvar o registro.", "erro");
+                    } finally {
+                        toggleLoader(false);
+                    }
+                });
+
+            }
+            
+            // Event listener para fechar modal
+            const closeBtn = document.querySelector(".close");
+            if (closeBtn) {
+                closeBtn.addEventListener("click", fecharModal);
+            }
+            
+            // Event listener para botão de adicionar
+            const addBtn = document.getElementById("add-btn");
+            if (addBtn) {
+                addBtn.addEventListener("click", function() {
+                    registroSelecionado = null;
+                    const form = document.getElementById("add-form");
+                    if (form) form.reset();
+                    
+                    document.getElementById("modalTitle").textContent = "Adicionar Registro";
+                    
+                    const modal = document.getElementById("modal");
+                    if (modal) modal.style.display = "block";
+                });
+            }
+        });
+    </script>
+    <!-- /GRC Function -->
+
+    <!-- Dashboard Function -->
+    <script>
+        // Dashboard JavaScript
+        document.addEventListener("DOMContentLoaded", async function() {
+            await carregarDados();
+            setTimeout(inicializarDashboard, 1000); // Pequeno atraso para garantir que os dados estejam disponíveis
+      
+
+            
+            // Configurar evento para o botão de filtro
+            document.getElementById("applyFilters").addEventListener("click", atualizarDashboard);
+        });
+
+        // Variáveis globais para os gráficos
+        let receitaMesChart, eventosHotelChart, statusChart, segmentoChart;
+        let dadosCompletos = [];
+
+        // Inicializar o dashboard
+        async function inicializarDashboard() {
+            try {
+                // Buscar dados da API
+                const response = await fetch(scriptURL);
+                dadosCompletos = await response.json();
+                
+                // Preencher os filtros
+                preencherFiltros();
+                
+                // Criar gráficos iniciais
+                criarGraficos(dadosCompletos);
+                
+                // Atualizar métricas
+                atualizarMetricas(dadosCompletos);
+                
+            } catch (error) {
+                console.error("Erro ao inicializar dashboard:", error);
+            }
+        }
+
+        // Preencher os filtros com base nos dados
+        function preencherFiltros() {
+            // Filtro de Hotel
+            const hoteis = [...new Set(dadosCompletos.map(item => item.hotel).filter(Boolean))];
+            const selectHotel = document.getElementById("filterHotel");
+            selectHotel.innerHTML = '<option value="">Todos os Hotéis</option>';
+            hoteis.forEach(hotel => {
+                const option = document.createElement("option");
+                option.value = hotel;
+                option.textContent = hotel;
+                selectHotel.appendChild(option);
+            });
+            
+            // Filtro de Ano
+            const anos = [...new Set(dadosCompletos.map(item => {
+                if (item.dataOrcamento) {
+                    const data = new Date(converterDataParaISO(item.dataOrcamento));
+                    return data.getFullYear();
+                }
+                return null;
+            }).filter(Boolean))];
+            
+            const selectAno = document.getElementById("filterYear");
+            selectAno.innerHTML = '<option value="">Todos os Anos</option>';
+            anos.sort((a, b) => b - a).forEach(ano => {
+                const option = document.createElement("option");
+                option.value = ano;
+                option.textContent = ano;
+                selectAno.appendChild(option);
+            });
+        }
+
+        // Converter data do formato DD/MM/YYYY para YYYY-MM-DD
+        function converterDataParaISO(dataString) {
+            if (!dataString) return null;
+            
+            // Verificar se já está no formato ISO
+            if (dataString.match(/^\d{4}-\d{2}-\d{2}$/)) return dataString;
+            
+            // Verificar formato DD/MM/YYYY
+            const partes = dataString.split('/');
+            if (partes.length === 3) {
+                return `${partes[2]}-${partes[1]}-${partes[0]}`;
+            }
+            
+            // Tentar converter usando Date
+            try {
+                const data = new Date(dataString);
+                if (!isNaN(data.getTime())) {
+                    return data.toISOString().split('T')[0];
+                }
+            } catch (e) {
+                console.error("Erro ao converter data:", dataString);
+            }
+            
+            return null;
+        }
+
+
+        // Filtrar dados com base nos filtros selecionados
+        function filtrarDados() {
+            const hotelSelecionado = document.getElementById("filterHotel").value;
+            const anoSelecionado = document.getElementById("filterYear").value;
+            const mesSelecionado = document.getElementById("filterMonth").value;
+            
+            return dadosCompletos.filter(item => {
+                // Filtrar por hotel
+                if (hotelSelecionado && item.hotel !== hotelSelecionado) return false;
+                
+                // Converter a data para um objeto Date
+                if (!item.dataOrcamento) return true;
+                const data = new Date(converterDataParaISO(item.dataOrcamento));
+                
+                // Filtrar por ano
+                if (anoSelecionado && data.getFullYear() != anoSelecionado) return false;
+                
+                // Filtrar por mês
+                if (mesSelecionado && (data.getMonth() + 1) != mesSelecionado) return false;
+                
+                return true;
+            });
+        }
+
+        // Atualizar o dashboard com base nos filtros
+        function atualizarDashboard() {
+            const dadosFiltrados = filtrarDados();
+            
+            // Atualizar gráficos
+            atualizarGraficos(dadosFiltrados);
+            
+            // Atualizar métricas
+            atualizarMetricas(dadosFiltrados);
+        }
+
+        // Atualizar as métricas principais
+        function atualizarMetricas(dados) {
+            // Total de eventos
+            document.getElementById("totalEventos").textContent = dados.length;
+            
+            // Receita total
+            const receitaTotal = dados.reduce((total, item) => {
+                return total + (parseFloat(item.receitaTotal) || 0);
+            }, 0);
+            document.getElementById("receitaTotal").textContent = `R$ ${receitaTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            
+            // Taxa de conversão
+            const confirmados = dados.filter(item => item.status === "Confirmado").length;
+            const taxaConversao = dados.length > 0 ? (confirmados / dados.length) * 100 : 0;
+            document.getElementById("taxaConversao").textContent = `${taxaConversao.toFixed(1)}%`;
+            
+            // Valor médio
+            const valorMedio = dados.length > 0 ? receitaTotal / dados.length : 0;
+            document.getElementById("valorMedio").textContent = `R$ ${valorMedio.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        }
+
+        // Criar os gráficos iniciais
+        function criarGraficos(dados) {
+            // Configuração de cores
+            const cores = [
+                '#FF9F40', '#FFCD56', '#4BC0C0', '#36A2EB', '#9966FF', 
+                '#FF6384', '#C9CBCF', '#7FD8BE', '#B2F7EF', '#E2B4BD'
+            ];
+            
+            // 1. Gráfico de Receita por Mês
+            const dadosReceitaMes = processarDadosReceitaPorMes(dados);
+            const ctxReceitaMes = document.getElementById('receitaMesChart').getContext('2d');
+            receitaMesChart = new Chart(ctxReceitaMes, {
+                type: 'bar',
+                data: {
+                    labels: dadosReceitaMes.labels,
+                    datasets: [{
+                        label: 'Receita Total (R$)',
+                        data: dadosReceitaMes.valores,
+                        backgroundColor: cores[0],
+                        borderColor: cores[0],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#b0b1b3'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#b0b1b3'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#b0b1b3'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 2. Gráfico de Eventos por Hotel
+            const dadosEventosHotel = processarDadosEventosPorHotel(dados);
+            const ctxEventosHotel = document.getElementById('eventosHotelChart').getContext('2d');
+            eventosHotelChart = new Chart(ctxEventosHotel, {
+                type: 'pie',
+                data: {
+                    labels: dadosEventosHotel.labels,
+                    datasets: [{
+                        data: dadosEventosHotel.valores,
+                        backgroundColor: cores,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                color: '#b0b1b3'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 3. Gráfico de Status dos Eventos
+            const dadosStatus = processarDadosPorStatus(dados);
+            const ctxStatus = document.getElementById('statusChart').getContext('2d');
+            statusChart = new Chart(ctxStatus, {
+                type: 'doughnut',
+                data: {
+                    labels: dadosStatus.labels,
+                    datasets: [{
+                        data: dadosStatus.valores,
+                        backgroundColor: [cores[2], cores[3], cores[5]],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                color: '#b0b1b3'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 4. Gráfico de Distribuição por Segmento
+            const dadosSegmento = processarDadosPorSegmento(dados);
+            const ctxSegmento = document.getElementById('segmentoChart').getContext('2d');
+            segmentoChart = new Chart(ctxSegmento, {
+                type: 'bar',
+                data: {
+                    labels: dadosSegmento.labels,
+                    datasets: [{
+                        label: 'Número de Eventos',
+                        data: dadosSegmento.valores,
+                        backgroundColor: cores[2],
+                        borderColor: cores[2],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#b0b1b3'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            ticks: {
+                                color: '#b0b1b3'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#b0b1b3'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        
+        // Atualizar os gráficos com novos dados
+        function atualizarGraficos(dados) {
+            // Verificar se os gráficos foram inicializados
+            if (!receitaMesChart || !eventosHotelChart || !statusChart || !segmentoChart) {
+                // Se os gráficos não existirem, crie-os primeiro
+                criarGraficos(dados);
+                return;
+            }
+
+            // 1. Atualizar gráfico de Receita por Mês
+            const dadosReceitaMes = processarDadosReceitaPorMes(dados);
+            receitaMesChart.data.labels = dadosReceitaMes.labels;
+            receitaMesChart.data.datasets[0].data = dadosReceitaMes.valores;
+            receitaMesChart.update();
+            
+            // 2. Atualizar gráfico de Eventos por Hotel
+            const dadosEventosHotel = processarDadosEventosPorHotel(dados);
+            eventosHotelChart.data.labels = dadosEventosHotel.labels;
+            eventosHotelChart.data.datasets[0].data = dadosEventosHotel.valores;
+            eventosHotelChart.update();
+            
+            // 3. Atualizar gráfico de Status dos Eventos
+            const dadosStatus = processarDadosPorStatus(dados);
+            statusChart.data.labels = dadosStatus.labels;
+            statusChart.data.datasets[0].data = dadosStatus.valores;
+            statusChart.update();
+            
+            // 4. Atualizar gráfico de Distribuição por Segmento
+            const dadosSegmento = processarDadosPorSegmento(dados);
+            segmentoChart.data.labels = dadosSegmento.labels;
+            segmentoChart.data.datasets[0].data = dadosSegmento.valores;
+            segmentoChart.update();
+        }
+
+        // Função para processar dados para o gráfico de Receita por Mês
+        function processarDadosReceitaPorMes(dados) {
+            const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
+                        'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+            const receitaPorMes = Array(12).fill(0);
+            
+            dados.forEach(item => {
+                if (item.dataOrcamento) {
+                    const data = new Date(converterDataParaISO(item.dataOrcamento));
+                    const mes = data.getMonth(); // 0-11
+                    receitaPorMes[mes] += parseFloat(item.receitaTotal) || 0;
+                }
+            });
+            
+            return {
+                labels: meses,
+                valores: receitaPorMes
+            };
+        }
+
+        // Função para processar dados para o gráfico de Eventos por Hotel
+        function processarDadosEventosPorHotel(dados) {
+            const hoteisMap = new Map();
+            
+            dados.forEach(item => {
+                if (item.hotel) {
+                    if (hoteisMap.has(item.hotel)) {
+                        hoteisMap.set(item.hotel, hoteisMap.get(item.hotel) + 1);
+                    } else {
+                        hoteisMap.set(item.hotel, 1);
+                    }
+                }
+            });
+            
+            return {
+                labels: Array.from(hoteisMap.keys()),
+                valores: Array.from(hoteisMap.values())
+            };
+        }
+
+        // Função para processar dados para o gráfico de Status dos Eventos
+        function processarDadosPorStatus(dados) {
+            const statusMap = new Map();
+            
+            dados.forEach(item => {
+                if (item.status) {
+                    if (statusMap.has(item.status)) {
+                        statusMap.set(item.status, statusMap.get(item.status) + 1);
+                    } else {
+                        statusMap.set(item.status, 1);
+                    }
+                }
+            });
+            
+            return {
+                labels: Array.from(statusMap.keys()),
+                valores: Array.from(statusMap.values())
+            };
+        }
+
+        // Função para processar dados para o gráfico de Distribuição por Segmento
+        function processarDadosPorSegmento(dados) {
+            const segmentoMap = new Map();
+            
+            dados.forEach(item => {
+                if (item.segmento) {
+                    if (segmentoMap.has(item.segmento)) {
+                        segmentoMap.set(item.segmento, segmentoMap.get(item.segmento) + 1);
+                    } else {
+                        segmentoMap.set(item.segmento, 1);
+                    }
+                }
+            });
+            
+            // Ordenar por quantidade (do maior para o menor)
+            const segmentosOrdenados = [...segmentoMap.entries()]
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 10); // Limitar aos 10 principais segmentos
+            
+            return {
+                labels: segmentosOrdenados.map(item => item[0]),
+                valores: segmentosOrdenados.map(item => item[1])
+            };
+        }
+
+        // Funções para alternar entre tabela e dashboard
+        function mostrarTabela() {
+            document.getElementById("tableboxx").style.display = "block";
+            document.getElementById("dashboard").style.display = "none";
+            document.getElementById("kanban").style.display = "none";
+
+            // Alternar classe ativa
+            document.getElementById("leadslist").classList.add("ativo");
+            document.getElementById("toggleDashboard").classList.remove("ativo");
+            document.getElementById("toggleKanban").classList.remove("ativo");
+        }
+
+        function mostrarDashboard() {
+            document.getElementById("tableboxx").style.display = "none";
+            document.getElementById("kanban").style.display = "none";
+            document.getElementById("dashboard").style.display = "block";
+
+            // Alternar classe ativa
+            document.getElementById("toggleDashboard").classList.add("ativo");
+            document.getElementById("leadslist").classList.remove("ativo");
+            document.getElementById("toggleKanban").classList.remove("ativo");
+        }
+        function mostrarKanban() {
+            document.getElementById("tableboxx").style.display = "none";
+            document.getElementById("dashboard").style.display = "none";
+            document.getElementById("kanban").style.display = "flex";
+
+            // Alternar classe ativa
+            document.getElementById("toggleKanban").classList.add("ativo");
+            document.getElementById("leadslist").classList.remove("ativo");
+            document.getElementById("toggleDashboard").classList.remove("ativo");
+        }
+
+        // Mostrar a tabela por padrão ao carregar a página
+        document.addEventListener("DOMContentLoaded", function () {
+            mostrarKanban();
+        });
+        
+
+        const hrLine = document.getElementById("hrline");
+        const buttons = document.querySelectorAll("#leadslist, #toggleDashboard, #toggleKanban");
+
+        buttons.forEach(button => {
+            button.addEventListener("click", () => {
+            // Remove 'active' de todos os botões
+            buttons.forEach(btn => btn.classList.remove("active"));
+
+            // Adiciona 'active' ao botão clicado
+            button.classList.add("active");
+
+            // Pega a cor de fundo computada
+            const bgColor = window.getComputedStyle(button).backgroundColor;
+
+            // Atualiza a cor do hrline
+            hrLine.style.background = `linear-gradient(to right, ${bgColor} 50%, transparent)`;
+            });
+        });
+    </script>   
+    <!-- /Dashboard Function -->
+
+    <!-- Kanban Function -->   
+    <script>
+    
+        const defaultAvatars = [
+            "https://i.pravatar.cc/150?img=1",
+            "https://i.pravatar.cc/150?img=2",
+            "https://i.pravatar.cc/150?img=3",
+            "https://i.pravatar.cc/150?img=4",
+            "https://i.pravatar.cc/150?img=5"
+        ];
+
+        const columns = [
+            { id: 1, name: "Tratativa Pendente" },
+            { id: 2, name: "Tarifa RM-CSC encaminhado" },
+            { id: 3, name: "Tarifa RM-CSC feito!" },
+            { id: 4, name: "Proposta enviada" },
+            { id: 5, name: "Proposta aceita" },
+            { id: 6, name: "Proposta negada" },
+            { id: 7, name: "Sem Resposta" },
+        ];
+
+        let cards = [];
+
+        // Utilitários
+        function colIdToStatus(id) {
+            const col = columns.find(c => c.id == id);
+            return col ? col.name : "";
+        }
+        function statusToColId(status) {
+            const col = columns.find(c => c.name === status);
+            return col ? col.id : 1;
+        }
+
+        // Carregar do backend
+        async function loadCards() {
+            const res = await fetch(`${scriptURL}?action=kanban`);
+            const data = await res.json();
+            cards = [];
+
+            Object.keys(data).forEach(status => {
+                const leads = data[status];
+                leads.forEach(item => {
+                    cards.push({
+                        id: item.ID,
+                        title: item["Nome Evento"] || item.ID,
+                        agencia: item.agencia || "",
+                        responsavel: item.responsavelNegociar || "",
+                        column: statusToColId(status),
+                        comments: 0,
+                        attachments: 0,
+                        avatar: "https://i.pravatar.cc/150?u=" + item.ID,
+                        observacoes: item.observacoes || "",
+                        linha: item.Linha
+                    });
+                });
+            });
+
+            renderCards();
+        }
+
+        // Renderizar
+        function renderCards() {
+            document.querySelectorAll('.kanban-cards').forEach(col => col.innerHTML = "");
+
+            columns.forEach(col => {
+                const colEl = document.querySelector(`.kanban-column[data-id="${col.id}"] .kanban-cards`);
+                const colCards = cards.filter(card => card.column === col.id);
+                colCards.forEach(card => {
+                    const cardEl = createCardElement(card);
+                    colEl.appendChild(cardEl);
+                });
+            });
+        }
+
+        // Criar card visual
+        function createCardElement(card) {
+            const div = document.createElement("div");
+            div.className = "kanban-card";
+            div.setAttribute("draggable", "true");
+            div.dataset.id = card.id;
+            div.dataset.linha = card.linha; // 👈 ESSENCIAL PARA UPDATE
+
+            div.innerHTML = `
+                <p class="card-title">#${card.title}</p>
+                <p class="card-agencia"><i class="fa-solid fa-building"></i> ${card.agencia}</p>
+                <div class="card-infos">
+                    <div class="card-icons">
+                        <p><i class="fa-regular fa-comment"></i> ${card.comments}</p>
+                        <p><i class="fa-solid fa-paperclip"></i> ${card.attachments}</p>
+                    </div>
+                    <div class="user">
+                        <img src="${card.avatar}" alt="Avatar">
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button class="edit" title="Editar"><i class="fa-regular fa-pen-to-square"></i></button>
+                    <button class="delete" title="Excluir"><i class="fa-regular fa-trash-can"></i></button>
+                </div>
+            `;
+
+            // Editar
+            div.querySelector(".edit").onclick = () => openModal(card.id);
+
+            // Excluir
+            div.querySelector(".delete").onclick = async () => {
+                if (confirm("Tem certeza que deseja excluir este card?")) {
+                    await fetch(`${scriptURL}?action=leads`, {
+                        method: "POST",
+                        body: new URLSearchParams({
+                            _method: "DELETE",
+                            Linha: card.linha
+                        })
+                    });
+                    loadCards();
+                }
+            };
+
+            // Drag events
+            div.addEventListener('dragstart', () => div.classList.add('dragging'));
+            div.addEventListener('dragend', () => div.classList.remove('dragging'));
+
+            return div;
+        }
+
+        // Drag & Drop
+        document.querySelectorAll('.kanban-cards').forEach(column => {
+            column.addEventListener('dragover', e => {
+                e.preventDefault();
+                column.classList.add('cards-hover');
+            });
+
+            column.addEventListener('dragleave', () => {
+                column.classList.remove('cards-hover');
+            });
+
+            column.addEventListener('drop', async (e) => {
+                e.preventDefault();
+                column.classList.remove('cards-hover');
+
+                const draggingCard = document.querySelector('.kanban-card.dragging');
+                if (!draggingCard) return;
+
+                const cardId = draggingCard.dataset.id;
+                const linha = draggingCard.dataset.linha;
+                const colId = column.closest('.kanban-column').dataset.id;
+                const novoStatus = colIdToStatus(colId);
+
+                if (!cardId || !linha || !novoStatus) {
+                    console.error("Dados insuficientes para atualizar status.");
+                    return;
+                }
+
+                // Atualizar visualmente
+                column.appendChild(draggingCard);
+
+                // Atualizar no backend
+                try {
+                    const formData = new FormData();
+                    formData.append('action', 'updateStatus');
+                    formData.append('id', cardId);
+                    formData.append('linha', linha);
+                    formData.append('novoStatus', novoStatus);
+                    formData.append('usuario', 'Filipe'); // ✅ Colocar usuário dinâmico se quiser
+
+                    const res = await fetch(scriptURL, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const result = await res.json();
+                    console.log('Status atualizado:', result);
+
+                    loadCards();
+                } catch (error) {
+                    console.error('Erro ao atualizar status:', error);
+                }
+            });
+        });
+
+        // Modal
+        const modalBg = document.getElementById("modalz-bg");
+        const modalForm = document.getElementById("modalz-form");
+        const modalId = document.getElementById("modalz-id");
+        const modalLinha = document.getElementById("modalz-linha");
+        const modalTitle = document.getElementById("modalz-title");
+        const modalAgencia = document.getElementById("modalz-agencia");
+        const modalResponsavel = document.getElementById("modalz-responsavel");
+        const modalStatus = document.getElementById("modalz-status");
+        const modalComments = document.getElementById("modalz-comments");
+        const modalAttachments = document.getElementById("modalz-attachments");
+        const modalAvatar = document.getElementById("modalz-avatar");
+        const modalObservacoes = document.getElementById("modalz-observacoes");
+
+        // Popular status no select
+        columns.forEach(col => {
+            const opt = document.createElement("option");
+            opt.value = col.name;
+            opt.textContent = col.name;
+            modalStatus.appendChild(opt);
+        });
+
+        function openModal(id = null, columnId = null) {
+            modalBg.classList.add("active");
+
+            if (id) {
+                const card = cards.find(c => c.id === id);
+                if (!card) return;
+
+                modalId.value = card.id;
+                modalLinha.value = card.linha;
+                modalTitle.value = card.title;
+                modalAgencia.value = card.agencia;
+                modalResponsavel.value = card.responsavel;
+                modalStatus.value = colIdToStatus(card.column);
+                modalComments.value = card.comments;
+                modalAttachments.value = card.attachments;
+                modalAvatar.value = card.avatar;
+                modalObservacoes.value = card.observacoes;
+            } else {
+                modalId.value = "";
+                modalLinha.value = "";
+                modalTitle.value = "";
+                modalAgencia.value = "";
+                modalResponsavel.value = "";
+                modalStatus.value = colIdToStatus(columnId);
+                modalComments.value = 0;
+                modalAttachments.value = 0;
+                modalAvatar.value = "";
+                modalObservacoes.value = "";
+            }
+        }
+
+        function closeModal() {
+            modalBg.classList.remove("active");
+        }
+
+        modalBg.onclick = function (e) {
+            if (e.target === modalBg) closeModal();
+        };
+
+        modalForm.querySelector(".cancel").onclick = (e) => {
+            e.preventDefault();
+            closeModal();
+        };
+
+        modalForm.onsubmit = async function (e) {
+            e.preventDefault();
+
+            const id = modalId.value || crypto.randomUUID();
+            const linha = modalLinha.value;
+            const title = modalTitle.value.trim();
+            const agencia = modalAgencia.value.trim();
+            const responsavel = modalResponsavel.value.trim();
+            const novoStatus = modalStatus.value;
+            const avatar = modalAvatar.value.trim();
+            const observacoes = modalObservacoes.value.trim();
+            const comments = modalComments.value.trim();
+
+            // Buscar status antigo se for edição
+            const cardAntigo = cards.find(c => c.id === id);
+            const statusAntigo = cardAntigo ? colIdToStatus(cardAntigo.column) : novoStatus;
+
+            // 1. SALVAR OU ATUALIZAR LEAD NA ABA LEADS
+            const formData = new URLSearchParams({
+                ID: id,
+                "Nome Evento": title,
+                agencia: agencia,
+                responsavelNegociar: responsavel,
+                statusProgresso: novoStatus,
+                observacoes: observacoes,
+            });
+
+            if (linha) {
+                formData.append("_method", "PUT");
+                formData.append("Linha", linha);
+            }
+
+            await fetch(`${scriptURL}?action=leads`, {
+                method: "POST",
+                body: formData
+            });
+
+            // 2. REGISTRAR MOVIMENTAÇÃO DE STATUS NA FUP (SE HOUVE MUDANÇA)
+            if (statusAntigo !== novoStatus) {
+                const moveData = new URLSearchParams({
+                    action: "addFup",
+                    id,
+                    usuario: "Filipe", // ou dinâmico
+                    origem: statusAntigo,
+                    destino: novoStatus,
+                    observacao: "Movimentação via edição",
+                    customer: agencia,
+                    comments: ""
+                });
+
+                await fetch(scriptURL, {
+                    method: "POST",
+                    body: moveData
+                });
+            }
+
+            // 3. REGISTRAR COMENTÁRIO (SE PREENCHIDO)
+            if (comments) {
+                const commentData = new URLSearchParams({
+                    action: "addFup",
+                    id,
+                    usuario: "Filipe", // ou dinâmico
+                    origem: novoStatus,
+                    destino: novoStatus,
+                    observacao: "Comentário via edição",
+                    customer: agencia,
+                    comments: comments
+                });
+
+                await fetch(scriptURL, {
+                    method: "POST",
+                    body: commentData
+                });
+
+                modalComments.value = ""; // Limpar campo
+            }
+
+            closeModal();
+            loadCards();
+        };
+
+        loadCards();
+    </script>
+    <!-- /Kanban Function --> 
+
+</body>
+</html>
