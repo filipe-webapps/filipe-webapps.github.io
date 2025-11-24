@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administração de Licenças | SellaStay</title>
+    <link rel="icon" type="image/x-icon" href="img/favicon.png">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin-login-body">
+    <div class="admin-login-shell">
+        <div class="admin-login-box" role="main">
+            <h1>Portal Administrativo</h1>
+            <p>Área exclusiva para liberar licenças, acompanhar pacotes contratados e controlar renovações de 30 dias.</p>
+            <form class="admin-login-form" action="admin-panel.html" method="post">
+                <label for="adminEmail">Usuário administrativo</label>
+                <input type="email" id="adminEmail" name="adminEmail" placeholder="admin@syncia.com.br" required>
+
+                <label for="adminPassword">Senha de acesso</label>
+                <input type="password" id="adminPassword" name="adminPassword" placeholder="••••••••••" required>
+
+                <button type="submit">Entrar no painel</button>
+            </form>
+            <div class="admin-login-footer">
+                <p>O login acima redenriza diretamente o painel; na prática deve integrar com o backend de autenticação, confirmar 2FA e ativar logs de auditoria.</p>
+                <p><a href="login.html">Voltar para o acesso principal</a></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>SellaStay | Painel Central</title>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="img/favicon.png">
+    
+    <!--CSS-->
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .clients-page{
+            padding:40px;
+            margin-top:40px;
+        }
+        .clients-header{
+            display:flex;
+            justify-content:space-between;
+            align-items:flex-start;
+            gap:24px;
+            flex-wrap:wrap;
+            margin-bottom:20px;
+        }
+        .clients-header h1{
+            margin:6px 0;
+            color:var(--tittle-color);
+        }
+        .clients-header p{
+            color:var(--text-color);
+        }
+        .overline{
+            color:var(--text-color);
+            text-transform:uppercase;
+            letter-spacing:.12em;
+            font-size:11px;
+            font-weight:600;
+        }
+        .clients-actions{
+            display:flex;
+            gap:12px;
+            align-items:center;
+            flex-wrap:wrap;
+        }
+        .btn-primary{
+            border:none;
+            background:var(--sidebar-color);
+            color:#fff;
+            padding:10px 20px;
+            border-radius:10px;
+            font-weight:600;
+            cursor:pointer;
+            transition:transform .2s ease, box-shadow .2s ease;
+        }
+        .btn-primary:hover{
+            transform:translateY(-1px);
+            box-shadow:0 10px 20px rgba(19,45,97,.2);
+        }
+        .btn-secondary{
+            border:1px solid rgba(0,0,0,.1);
+            background:#fff;
+            color:var(--sidebar-color);
+            padding:8px 14px;
+            border-radius:8px;
+            font-weight:600;
+            cursor:pointer;
+        }
+        .clients-toolbar{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:16px;
+            flex-wrap:wrap;
+            margin-bottom:18px;
+        }
+        .clients-toolbar .search-field{
+            flex:1;
+            min-width:220px;
+            position:relative;
+        }
+        .clients-toolbar input[type="search"]{
+            width:100%;
+            padding:10px 14px 10px 38px;
+            border-radius:12px;
+            border:1px solid rgba(0,0,0,.1);
+            background:#fff;
+            color:var(--tittle-color);
+        }
+        .clients-toolbar i{
+            position:absolute;
+            top:50%;
+            left:12px;
+            transform:translateY(-50%);
+            color:var(--text-color);
+        }
+        .clients-counter{
+            color:var(--text-color);
+            font-weight:600;
+        }
+        .table-wrapper{
+            background:var(--calc-color);
+            border-radius:18px;
+            padding:20px;
+            border:1px solid rgba(0,0,0,.05);
+            box-shadow:0 15px 30px rgba(0,0,0,.08);
+        }
+        table{
+            width:100%;
+            border-collapse:collapse;
+        }
+        thead{
+            background:rgba(19,45,97,.08);
+        }
+        th,td{
+            padding:12px 10px;
+            text-align:left;
+            font-size:14px;
+        }
+        th{
+            color:var(--sidebar-color);
+            font-weight:600;
+            text-transform:uppercase;
+            font-size:12px;
+        }
+        tbody tr:nth-child(every){
+            background:#fff;
+        }
+        tbody tr{
+            border-bottom:1px solid rgba(0,0,0,.05);
+        }
+        tbody tr:last-child{
+            border-bottom:none;
+        }
+        .empty-state{
+            text-align:center;
+            padding:30px 10px;
+            color:var(--text-color);
+        }
+        .badge{
+            display:inline-flex;
+            align-items:center;
+            gap:6px;
+            padding:4px 10px;
+            border-radius:999px;
+            background:rgba(19,45,97,.1);
+            color:var(--sidebar-color);
+            font-size:12px;
+            font-weight:600;
+        }
+        .action-buttons{
+            display:flex;
+            gap:6px;
+        }
+        .action-buttons button{
+            border:none;
+            background:transparent;
+            cursor:pointer;
+            padding:4px 6px;
+            border-radius:6px;
+            color:var(--sidebar-color);
+            transition:background .2s ease;
+        }
+        .action-buttons button:hover{
+            background:rgba(19,45,97,.1);
+        }
+        .modal-overlay{
+            position:fixed;
+            inset:0;
+            background:rgba(0,0,0,.45);
+            display:none;
+            align-items:center;
+            justify-content:center;
+            padding:20px;
+            z-index:9999;
+        }
+        .modal-overlay.open{
+            display:flex;
+        }
+        .modal-card{
+            background:var(--calc-color);
+            width:100%;
+            max-width:520px;
+            border-radius:18px;
+            padding:24px;
+            box-shadow:0 25px 60px rgba(0,0,0,.25);
+            border:1px solid rgba(0,0,0,.05);
+            max-height:90vh;
+            overflow-y:auto;
+        }
+        .modal-card header{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:16px;
+        }
+        .modal-card h3{
+            margin:0;
+            color:var(--tittle-color);
+        }
+        .modal-card form{
+            display:grid;
+            gap:12px;
+        }
+        .modal-card label{
+            font-size:13px;
+            color:var(--text-color);
+            text-transform:uppercase;
+            letter-spacing:.08em;
+        }
+        .modal-card input{
+            width:100%;
+            padding:10px 12px;
+            border-radius:10px;
+            border:1px solid rgba(0,0,0,.15);
+            background:#fff;
+        }
+        .modal-actions{
+            display:flex;
+            justify-content:flex-end;
+            gap:8px;
+            margin-top:8px;
+        }
+        .modal-card button{
+            border:none;
+            cursor:pointer;
+            border-radius:10px;
+            padding:10px 18px;
+            font-weight:600;
+        }
+        .btn-ghost{
+            background:rgba(0,0,0,.05);
+            color:var(--tittle-color);
+        }
+        .btn-ghost:hover{
+            background:rgba(0,0,0,.1);
+        }
+        .btn-submit{
+            background:var(--sidebar-color);
+            color:#fff;
+        }
+        .btn-submit:disabled{
+            opacity:.5;
+            cursor:not-allowed;
+        }
+        @media(max-width:768px){
+            .clients-page{
+                padding:20px;
+            }
+            .table-wrapper{
+                padding:12px;
+                overflow-x:auto;
+            }
+            th,td{
+                white-space:nowrap;
+            }
+        }
+    </style>
+    <!--/CSS-->
+    
+    <!--Boxicons CSS-->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <!--/Boxicons CSS-->
+     
+</head>
+<body>
+
+    <!-- Menu -->
+    <nav class="sidebar close">
+
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="img/logo.png" alt="">
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name" id="nome">SellaStay</span>
+                    <span class="profession">EGRC Control</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu-scrollable">
+
+                <ul class="menu-links">
+
+                    <br>
+                    <br>
+
+                    <li class="nav-link">
+                        <a href="home.html">
+                            <i class='bx bxs-home icon' ></i>
+                            <span class="text nav-text">Home</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="dashboard.html">
+                            <i class='bx bxs-dashboard icon' ></i>
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link has-submenu">
+                        <a href="leads.html" id="navselected">
+                            <i class='bx bxs-grid icon' ></i>
+                            <span class="text nav-text">Operacional <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="leads.html"><i class='bx bxs-chevrons-right icon' ></i>Negociações</a></li>
+                            <li><a href="follow-up.html"><i class='bx bx-transfer icon' ></i>Follow Up log</a></li>
+                            <li id="subactive"><a href="clients.html"><i class='bx bx-id-card icon' ></i>Carteira de Clientes</a></li>
+                            <li><a href="vendas.html"><i class='bx bx-history icon'></i></i>Histórico de Vendas</a></li>
+                            <li><a href="tasks.html"><i class='bx bx-task icon'></i></i>Gestor de Tarefas</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="calendar.html">
+                            <i class='bx bxs-calendar-event icon'></i>
+                            <span class="text nav-text">Mapa de Eventos</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="pricespy.html">
+                            <i class='bx bx-radar icon'></i>
+                            <span class="text nav-text">Radar de Preços</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="reminder.html">
+                            <i class='bx bxs-bell-ring icon' ></i>
+                            <span class="text nav-text">Lembretes</span>
+                        </a>
+                    </li>
+
+                    <!-- ::::::: VERIFICAR NECESSIDADE ::::::::-->
+                    <!-- <li class="nav-link">
+                        <a href="contratos.html">
+                            <i class='bx bx-briefcase icon' ></i>
+                            <span class="text nav-text">Contratos</span>
+                        </a>
+                    </li> -->
+
+                    <li class="nav-link">
+                        <a href="relatorios.html">
+                            <i class='bx bx-line-chart icon'></i>
+                            <span class="text nav-text">Relatórios</span>
+                        </a>
+                    </li>
+
+                    <!-- ::::::: REALOCAR PARA OUTRO LUGAR ::::::::-->
+                    <!-- <li class="nav-link"> 
+                        <a href="doc.html">
+                            <i class='bx bx-help-circle icon' ></i>
+                            <span class="text nav-text">Ajuda</span>
+                        </a>
+                    </li> -->
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <ul class="menu-links">
+                    <li class="nav-link has-submenu">
+                        <a href="#">
+                            <img id="profile-pic" src="img/profile_pic_F.png" alt="Usuário logado">
+                            <span class="text nav-text"><span id="menuUserName">Usuário</span> <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="profile.html"><i class='bx bx-user icon'></i> Perfil</a></li>
+                            <li class="has-submenu">
+                                <a href="empresas.html">
+                                    <i class='bx bxs-building icon'></i> Empresa <i class='bx bx-chevron-down arrow'></i>
+                                </a>
+                                <ul class="submenu">
+                                    <li><a href="#empresa-config"><i class='bx bx-briefcase icon'></i> Configurações da Empresa</a></li>
+                                    <li><a href="#hoteis-config"><i class='bx bx-hotel icon'></i> Cadastro de Hotéis</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="settings.html"><i class='bx bx-cog icon'></i> Configurações</a></li>
+                            <li><a href="help.html"><i class='bx bx-support icon'></i> Suporte</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="logout" id="logout">
+                        <a href="index.html">
+                            <i class='bx bx-log-out icon' ></i>
+                            <span class="text nav-text">Logout</span>
+                        </a>
+                    </li>
+
+                    <li class="mode">
+                        <div class="sun-moon">
+                            <i class='bx bx-moon icon moon'></i>
+                            <i class='bx bx-sun icon sun'></i>
+                        </div>
+                        <span class="mode-text text">Dark mode</span>
+
+                        <div class="toggle-switch">
+                            <span class="switch"></span>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- /Menu -->
+
+    <section class="home">
+        <div style="display: none;"> 
+            <h3 id="saudacao"></h3>
+            <p class="data-hora" id="dataHora"></p>
+        </div>
+
+        <div class="clients-page">
+            <div class="clients-header">
+                <div>
+                    <p class="overline">CRM • Carteira</p>
+                    <h1>Clientes cadastrados</h1>
+                    <p>Gerencie todos os contatos comerciais em um só lugar.</p>
+                </div>
+                <div class="clients-actions">
+                    <button id="addClientBtn" class="btn-primary" type="button">
+                        <i class='bx bx-plus'></i> Novo cliente
+                    </button>
+                </div>
+            </div>
+
+            <div class="clients-toolbar">
+                <div class="search-field">
+                    <i class='bx bx-search'></i>
+                    <input type="search" id="clientSearch" placeholder="Buscar por nome, empresa ou CNPJ">
+                </div>
+                <span class="clients-counter" id="clientsCounter">0 clientes</span>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Empresa</th>
+                            <th>CNPJ</th>
+                            <th>Telefone</th>
+                            <th>WhatsApp</th>
+                            <th>E-mail</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientsTableBody">
+                        <tr>
+                            <td colspan="7" class="empty-state">Carregando clientes...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <div class="modal-overlay" id="clientModal">
+        <div class="modal-card">
+            <header>
+                <div>
+                    <p class="overline">Cadastro</p>
+                    <h3 id="modalTitle">Novo cliente</h3>
+                </div>
+                <button type="button" class="btn-ghost" id="closeModalBtn" aria-label="Fechar formulário">
+                    <i class='bx bx-x'></i>
+                </button>
+            </header>
+            <form id="clientForm">
+                <input type="hidden" id="clientId">
+
+                <label for="clientName">Nome completo</label>
+                <input type="text" id="clientName" placeholder="Digite o nome do responsável" required>
+
+                <label for="clientCompany">Empresa</label>
+                <input type="text" id="clientCompany" placeholder="Empresa / Time" required>
+
+                <label for="clientCnpj">CNPJ</label>
+                <input type="text" id="clientCnpj" placeholder="00.000.000/0000-00" required>
+
+                <label for="clientPhone">Telefone</label>
+                <input type="tel" id="clientPhone" placeholder="(00) 0000-0000">
+
+                <label for="clientWhatsapp">WhatsApp</label>
+                <input type="tel" id="clientWhatsapp" placeholder="(00) 00000-0000">
+
+                <label for="clientEmail">E-mail</label>
+                <input type="email" id="clientEmail" placeholder="contato@empresa.com" required>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-ghost" id="cancelBtn">Cancelar</button>
+                    <button type="submit" class="btn-submit" id="saveClientBtn">Salvar cliente</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+     <!--Rodapé -->
+    <footer style="line-height: 15px;">
+        &copy; <span id="anoAtual"></span> SellaStay - Gestão para Hotéis. <br> <span style="font-size: 10px; cursor: pointer;">Desenvolvido por <a href="https://www.syncsoftware.com.br" style="text-decoration: none; color: var(--text-color);" onmouseover="this.style.color='#ff914d';" onmouseout="this.style.color='var(--text-color)';" target="_blank"> <b>Sync Software LTDA</b></a></span>
+    </footer>
+    <!-- Rodapé -->
+
+        
+    <script src="js/script.js"></script>
+
+    <script>
+        /*
+            Tabela: clientes
+            Campos sugeridos:
+            - id (INT AUTO_INCREMENT, PRIMARY KEY)
+            - nome (VARCHAR 150, NOT NULL)
+            - empresa (VARCHAR 150, NOT NULL)
+            - cnpj (CHAR 18, NOT NULL, UNIQUE)
+            - telefone (VARCHAR 20)
+            - whatsapp (VARCHAR 20)
+            - email (VARCHAR 160, NOT NULL)
+            - created_at (TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
+        */
+        (function(){
+            const storageKey = 'sellastay_clients';
+            const tableBody = document.getElementById('clientsTableBody');
+            const counter = document.getElementById('clientsCounter');
+            const searchInput = document.getElementById('clientSearch');
+            const addBtn = document.getElementById('addClientBtn');
+            const modal = document.getElementById('clientModal');
+            const form = document.getElementById('clientForm');
+            const modalTitle = document.getElementById('modalTitle');
+            const cancelBtn = document.getElementById('cancelBtn');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const saveBtn = document.getElementById('saveClientBtn');
+            const fields = {
+                id: document.getElementById('clientId'),
+                name: document.getElementById('clientName'),
+                company: document.getElementById('clientCompany'),
+                cnpj: document.getElementById('clientCnpj'),
+                phone: document.getElementById('clientPhone'),
+                whatsapp: document.getElementById('clientWhatsapp'),
+                email: document.getElementById('clientEmail')
+            };
+
+            let clients = [];
+            let currentMode = 'add';
+            let editingId = null;
+
+            function loadClients(){
+                try{
+                    const stored = JSON.parse(localStorage.getItem(storageKey));
+                    if(Array.isArray(stored) && stored.length){
+                        clients = stored;
+                        return;
+                    }
+                }catch(e){}
+                clients = [
+                    { id: crypto.randomUUID?.() || 'c1', name:'Julia Martins', company:'Agência Horizonte', cnpj:'12.345.678/0001-90', phone:'(11) 3333-4567', whatsapp:'(11) 98888-4567', email:'julia@horizonte.com' },
+                    { id: crypto.randomUUID?.() || 'c2', name:'Thiago Souza', company:'Eventos Orbit', cnpj:'98.765.432/0001-10', phone:'(21) 4002-8922', whatsapp:'(21) 97777-2211', email:'thiago@orbit.com.br' }
+                ];
+                saveClients();
+            }
+
+            function saveClients(){
+                localStorage.setItem(storageKey, JSON.stringify(clients));
+            }
+
+            function formatCnpj(value){
+                if(!value) return '-';
+                return value.replace(/[^0-9]/g,'').replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,"$1.$2.$3/$4-$5") || value;
+            }
+
+            function formatPhone(value){
+                if(!value) return '-';
+                const digits = value.replace(/[^0-9]/g,'');
+                if(digits.length === 11){
+                    return digits.replace(/(\d{2})(\d{1})(\d{4})(\d{4})/,"($1) $2$3-$4");
+                }
+                if(digits.length === 10){
+                    return digits.replace(/(\d{2})(\d{4})(\d{4})/,"($1) $2-$3");
+                }
+                return value;
+            }
+
+            function renderClients(filterText = ''){
+                const filter = filterText.trim().toLowerCase();
+                const filtered = clients.filter(client => {
+                    if(!filter) return true;
+                    return [client.name, client.company, client.cnpj].some(field => field.toLowerCase().includes(filter));
+                });
+
+                counter.textContent = `${filtered.length} ${filtered.length === 1 ? 'cliente' : 'clientes'}`;
+
+                if(!filtered.length){
+                    tableBody.innerHTML = '<tr><td colspan="7" class="empty-state">Nenhum cliente encontrado.</td></tr>';
+                    return;
+                }
+
+                tableBody.innerHTML = filtered.map(client => `
+                    <tr data-id="${client.id}">
+                        <td>${client.name}</td>
+                        <td><span class="badge"><i class='bx bx-briefcase'></i>${client.company}</span></td>
+                        <td>${client.cnpj}</td>
+                        <td>${formatPhone(client.phone)}</td>
+                        <td>${formatPhone(client.whatsapp)}</td>
+                        <td>${client.email}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button data-action="view" title="Visualizar"><i class='bx bx-show'></i></button>
+                                <button data-action="edit" title="Editar"><i class='bx bx-edit'></i></button>
+                                <button data-action="delete" title="Excluir"><i class='bx bx-trash'></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            function openModal(mode, clientId = null){
+                currentMode = mode;
+                editingId = clientId;
+                form.reset();
+                saveBtn.style.display = mode === 'view' ? 'none' : 'inline-flex';
+                cancelBtn.textContent = mode === 'view' ? 'Fechar' : 'Cancelar';
+                Object.values(fields).forEach(field => field.disabled = (mode === 'view'));
+
+                if(mode === 'add'){
+                    modalTitle.textContent = 'Novo cliente';
+                } else {
+                    const client = clients.find(item => item.id === clientId);
+                    if(!client) return;
+                    modalTitle.textContent = mode === 'edit' ? 'Editar cliente' : 'Visualizar cliente';
+                    fields.id.value = client.id;
+                    fields.name.value = client.name;
+                    fields.company.value = client.company;
+                    fields.cnpj.value = client.cnpj;
+                    fields.phone.value = client.phone;
+                    fields.whatsapp.value = client.whatsapp;
+                    fields.email.value = client.email;
+                }
+
+                modal.classList.add('open');
+            }
+
+            function closeModal(){
+                modal.classList.remove('open');
+                editingId = null;
+                Object.values(fields).forEach(field => field.disabled = false);
+                saveBtn.style.display = 'inline-flex';
+                cancelBtn.textContent = 'Cancelar';
+            }
+
+            function upsertClient(payload){
+                if(currentMode === 'edit'){
+                    clients = clients.map(client => client.id === payload.id ? payload : client);
+                } else {
+                    clients.push(payload);
+                }
+                saveClients();
+                renderClients(searchInput.value || '');
+            }
+
+            addBtn.addEventListener('click', () => openModal('add'));
+            cancelBtn.addEventListener('click', closeModal);
+            closeModalBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (event) => {
+                if(event.target === modal) closeModal();
+            });
+
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+                if(currentMode === 'view') return;
+                const payload = {
+                    id: editingId || fields.id.value || (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString()),
+                    name: fields.name.value.trim(),
+                    company: fields.company.value.trim(),
+                    cnpj: fields.cnpj.value.trim(),
+                    phone: fields.phone.value.trim(),
+                    whatsapp: fields.whatsapp.value.trim(),
+                    email: fields.email.value.trim()
+                };
+                upsertClient(payload);
+                closeModal();
+            });
+
+            searchInput.addEventListener('input', (event) => {
+                renderClients(event.target.value);
+            });
+
+            tableBody.addEventListener('click', (event) => {
+                const action = event.target.closest('button')?.dataset?.action;
+                if(!action) return;
+                const row = event.target.closest('tr');
+                const clientId = row?.dataset?.id;
+                if(!clientId) return;
+                if(action === 'delete'){
+                    if(confirm('Deseja realmente excluir este cliente?')){
+                        clients = clients.filter(client => client.id !== clientId);
+                        saveClients();
+                        renderClients(searchInput.value || '');
+                    }
+                } else if(action === 'edit'){
+                    openModal('edit', clientId);
+                } else if(action === 'view'){
+                    openModal('view', clientId);
+                }
+            });
+
+            loadClients();
+            renderClients();
+        })();
+    </script>
+
+</body>
+</html>

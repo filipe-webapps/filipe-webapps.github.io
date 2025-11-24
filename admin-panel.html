@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo | Licenças SellaStay</title>
+    <link rel="icon" type="image/x-icon" href="img/favicon.png">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin-panel-body">
+    <div class="admin-panel-shell">
+        <div class="admin-panel" role="main">
+            <header class="admin-panel-header">
+                <div>
+                    <h1>Painel Administrativo de Licenças</h1>
+                    <p>Gerencie manualmente cada pacote, aprove pedidos e garanta que a licença principal seja liberada apenas após o vínculo de pagamento.</p>
+                </div>
+                <div class="admin-header-actions">
+                    <button type="button" onclick="createTrialCompany()">Cadastrar nova conta (teste grátis)</button>
+                </div>
+            </header>
+
+            <div class="admin-overview" aria-label="Resumo de licenças e status">
+                <article class="admin-overview-card">
+                    <strong id="pending-count">0</strong>
+                    <span class="overview-label">Pendentes para aprovação</span>
+                </article>
+                <article class="admin-overview-card">
+                    <strong id="test-count">0</strong>
+                    <span class="overview-label">Em período teste (30 dias)</span>
+                </article>
+                <article class="admin-overview-card">
+                    <strong id="active-count">0</strong>
+                    <span class="overview-label">Licenças ativas</span>
+                </article>
+                <article class="admin-overview-card">
+                    <strong id="blocked-count">0</strong>
+                    <span class="overview-label">Clientes bloqueados</span>
+                </article>
+            </div>
+
+            <section class="admin-table-wrapper" aria-label="Lista de clientes e status de licença">
+                <table class="admin-table" aria-describedby="table-description">
+                    <caption id="table-description" style="text-align:left; font-size:0.9rem; padding-bottom:0.5rem;">
+                        Clique em um cliente para abrir o painel de detalhes, revisar histórico mínimo das últimas liberação de licenças e conectar o meio de pagamento obrigatório ao aprovar.
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Pacote</th>
+                            <th>Validade</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="client-table-body"></tbody>
+                </table>
+            </section>
+
+            <div class="admin-note">
+                Cada nova conta recebe automaticamente 30 dias de acesso gratuito com status <strong>Período teste</strong>. Após o ciclo, revisite o cadastro, acione a renovação manual e vincule o meio de pagamento para liberar novamente o acesso ao sistema principal.
+            </div>
+
+            <div class="admin-note" style="margin-top:1rem; border-color: rgba(59, 130, 246, 0.4); background:#eff6ff; color:#1d4ed8;">
+                Dica de integração: conecte o botão <strong>Liberar licença</strong> a `admin/licenses` para registrar o pagamento (Pix ou Cartão) e mantenha um job que impeça o login principal quando `renewalDue` expirar.
+            </div>
+        </div>
+    </div>
+
+    <div id="client-detail-popup" class="admin-popup" aria-hidden="true">
+        <div class="admin-popup-content">
+            <button class="popup-close" onclick="closeClientPopup()" aria-label="Fechar detalhes">&times;</button>
+            <h2 id="popup-client-name">Cliente</h2>
+            <p id="popup-client-status-text" style="margin-bottom:0.25rem; color: rgba(31,41,51,0.75);"></p>
+            <div class="popup-detail-grid">
+                <div>
+                    <strong>ID</strong>
+                    <span id="popup-client-id">---</span>
+                </div>
+                <div>
+                    <strong>Pacote</strong>
+                    <span id="popup-client-package">---</span>
+                </div>
+                <div>
+                    <strong>Contato</strong>
+                    <span id="popup-client-contact">---</span>
+                </div>
+                <div>
+                    <strong>Email</strong>
+                    <span id="popup-client-email">---</span>
+                </div>
+                <div>
+                    <strong>Validade</strong>
+                    <span id="popup-client-validity">---</span>
+                </div>
+                <div>
+                    <strong>Solicitado em</strong>
+                    <span id="popup-client-requested">---</span>
+                </div>
+            </div>
+            <div>
+                <strong>Observações</strong>
+                <p id="popup-client-notes" style="margin-top:0.25rem; color: rgba(31,41,51,0.7);">Sem observações adicionais.</p>
+            </div>
+
+            <div class="popup-plan-section">
+                <h3>Planos disponíveis</h3>
+                <div id="popup-plan-list" class="plan-cards" aria-live="polite"></div>
+            </div>
+
+            <div class="popup-history">
+                <h3>Histórico das últimas licenças</h3>
+                <ul id="popup-history-list" class="popup-history-list"></ul>
+            </div>
+
+            <div class="popup-actions">
+                <button class="primary" type="button" onclick="openPaymentPopup()">Liberar licença</button>
+                <button class="outline" type="button" onclick="blockClient(selectedClientIndex)">Bloquear acesso</button>
+                <button class="outline" type="button" onclick="renewClient(selectedClientIndex)">Renovar licença</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="payment-popup" class="payment-popup" aria-hidden="true">
+        <div class="payment-popup-content">
+            <button class="popup-close" onclick="closePaymentPopup()" aria-label="Fechar pagamento">&times;</button>
+            <h2>Vincular meio de pagamento</h2>
+            <p>Selecione o canal utilizado para liberar ou renovar a licença. Após confirmar, a validade é atualizada para +30 dias.</p>
+            <div class="payment-methods">
+                <label class="payment-method">
+                    <input type="radio" name="paymentMethod" value="cartao" checked>
+                    Cartão de crédito
+                </label>
+                <label class="payment-method">
+                    <input type="radio" name="paymentMethod" value="pix">
+                    Pix
+                </label>
+            </div>
+            <div class="payment-popup-actions">
+                <button type="button" class="outline" onclick="closePaymentPopup()">Cancelar</button>
+                <button type="button" class="primary" onclick="confirmPayment()">Confirmar e liberar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const planOptions = [
+            {
+                id: "starter",
+                name: "Starter",
+                price: "R$ 490/mês",
+                description: "Plano básico pago com 30 dias gratuitos para avaliar o sistema.",
+                detail: "Ideal para operações pequenas com 1 ou 2 unidades."
+            },
+            {
+                id: "essentials",
+                name: "Essentials + Support",
+                price: "R$ 750/mês",
+                description: "Suporte prioritário e automações, válido com 30 dias de cortesia.",
+                detail: "Equipe de sucesso dedicada e dashboards avançados."
+            },
+            {
+                id: "growth",
+                name: "Growth",
+                price: "R$ 1.250/mês",
+                description: "Consultoria e inteligência operacional com 30 dias iniciais grátis.",
+                detail: "Para redes em expansão e integrações personalizadas."
+            }
+        ];
+
+        const clients = [
+            {
+                id: "ST-209",
+                name: "Hotel Aurora",
+                planId: "growth",
+                requestedOn: "2025-11-05T08:30:00Z",
+                status: "pending",
+                renewalDue: null,
+                contact: "(11) 98877-1122",
+                email: "contato@hotelaurora.com",
+                notes: "Aguardando contrato assinado.",
+                history: [
+                    {
+                        date: "2025-08-05T10:00:00Z",
+                        method: "Cartão de crédito",
+                        note: "Primeira licença"
+                    }
+                ]
+            },
+            {
+                id: "ST-312",
+                name: "Pousada Maré Alta",
+                planId: "essentials",
+                requestedOn: "2025-11-12T14:15:00Z",
+                status: "active",
+                renewalDue: "2025-12-12T00:00:00Z",
+                contact: "(47) 99988-3322",
+                email: "gerente@marealta.com",
+                notes: "Deseja incluir módulos na próxima renovação.",
+                history: [
+                    {
+                        date: "2025-09-12T14:20:00Z",
+                        method: "Pix",
+                        note: "Renovação antecipada"
+                    },
+                    {
+                        date: "2025-08-12T09:15:00Z",
+                        method: "Cartão de crédito",
+                        note: "Licença inicial"
+                    }
+                ]
+            },
+            {
+                id: "ST-418",
+                name: "Residencial Bahia",
+                planId: "growth",
+                requestedOn: "2025-10-19T16:45:00Z",
+                status: "blocked",
+                renewalDue: "2025-11-18T00:00:00Z",
+                contact: "(21) 98765-4321",
+                email: "admin@residencialbahia.com",
+                notes: "Sem renovação; aguarda renegociação de pacote.",
+                history: [
+                    {
+                        date: "2025-07-18T08:12:00Z",
+                        method: "Cartão de crédito",
+                        note: "Bloqueado por falta de renovação"
+                    }
+                ]
+            }
+        ];
+
+        const tableBody = document.getElementById("client-table-body");
+        const pendingCountEl = document.getElementById("pending-count");
+        const testCountEl = document.getElementById("test-count");
+        const activeCountEl = document.getElementById("active-count");
+        const blockedCountEl = document.getElementById("blocked-count");
+        const detailPopup = document.getElementById("client-detail-popup");
+        const paymentPopup = document.getElementById("payment-popup");
+        const popupHistoryList = document.getElementById("popup-history-list");
+        const paymentMethodInputs = document.querySelectorAll('input[name="paymentMethod"]');
+        const planListContainer = document.getElementById("popup-plan-list");
+
+        let selectedClientIndex = null;
+        let paymentForClient = null;
+        let trialCounter = 1;
+
+        const statusLabelMap = {
+            pending: "Aguardando aprovação",
+            test: "Período teste",
+            active: "Licença autorizada",
+            blocked: "Acesso bloqueado"
+        };
+
+        function getPlanById(planId) {
+            return planOptions.find((plan) => plan.id === planId) || { name: "Plano personalizado" };
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return "Sem validade definida";
+            const date = new Date(dateString);
+            if (Number.isNaN(date.getTime())) return "Sem validade definida";
+            return date.toLocaleDateString("pt-BR");
+        }
+
+        function calculateRenewalDate(baseDate = new Date()) {
+            const date = new Date(baseDate);
+            date.setDate(date.getDate() + 30);
+            return date.toISOString();
+        }
+
+        function renderPlanCards(client) {
+            if (!planListContainer) return;
+            planListContainer.innerHTML = "";
+            planOptions.forEach((plan) => {
+                const card = document.createElement("div");
+                card.className = `plan-card${client.planId === plan.id ? " selected" : ""}`;
+                card.innerHTML = `
+                    <strong>${plan.name}</strong>
+                    <div class="plan-price">${plan.price}</div>
+                    <p>${plan.description}</p>
+                    <small>${plan.detail}</small>
+                    <small style="display:block; color: #0ea5e9;">30 dias grátis de ativação</small>
+                `;
+                planListContainer.appendChild(card);
+            });
+        }
+
+        function renderClients() {
+            tableBody.innerHTML = "";
+            clients.forEach((client, index) => {
+                const plan = getPlanById(client.planId);
+                const tr = document.createElement("tr");
+                tr.className = "client-row";
+                tr.dataset.index = index;
+                tr.innerHTML = `
+                    <td>
+                        <strong>${client.name}</strong><br>
+                        <small>${client.id}</small>
+                    </td>
+                    <td>${plan.name}</td>
+                    <td>${formatDate(client.renewalDue)}</td>
+                    <td><span class="status-pill ${client.status}">${statusLabelMap[client.status] || "Sob revisão"}</span></td>
+                `;
+                tr.addEventListener("click", () => openClientDetails(index));
+                tableBody.appendChild(tr);
+            });
+            updateSummary();
+        }
+
+        function updateSummary() {
+            const counts = clients.reduce(
+                (acc, client) => {
+                    acc[client.status] = (acc[client.status] || 0) + 1;
+                    return acc;
+                },
+                { pending: 0, test: 0, active: 0, blocked: 0 }
+            );
+            pendingCountEl.textContent = counts.pending;
+            testCountEl.textContent = counts.test;
+            activeCountEl.textContent = counts.active;
+            blockedCountEl.textContent = counts.blocked;
+        }
+
+        function openClientDetails(index) {
+            const client = clients[index];
+            if (!client) return;
+            selectedClientIndex = index;
+            const planLabel = getPlanById(client.planId).name;
+            document.getElementById("popup-client-name").textContent = client.name;
+            document.getElementById("popup-client-id").textContent = client.id;
+            document.getElementById("popup-client-package").textContent = planLabel;
+            document.getElementById("popup-client-contact").textContent = client.contact || "—";
+            document.getElementById("popup-client-email").textContent = client.email || "—";
+            document.getElementById("popup-client-validity").textContent = formatDate(client.renewalDue);
+            document.getElementById("popup-client-requested").textContent = formatDate(client.requestedOn);
+            document.getElementById("popup-client-notes").textContent = client.notes || "Sem observações.";
+            document.getElementById("popup-client-status-text").textContent = statusLabelMap[client.status] || "Sob revisão";
+            renderPopupHistory(client.history || []);
+            renderPlanCards(client);
+            detailPopup.classList.add("open");
+            detailPopup.setAttribute("aria-hidden", "false");
+        }
+
+        function renderPopupHistory(history = []) {
+            popupHistoryList.innerHTML = "";
+            if (!history.length) {
+                const empty = document.createElement("li");
+                empty.className = "popup-history-entry";
+                empty.textContent = "Nenhuma licença registrada até o momento.";
+                popupHistoryList.appendChild(empty);
+                return;
+            }
+            history.slice(0, 3).forEach((entry) => {
+                const li = document.createElement("li");
+                li.className = "popup-history-entry";
+                li.innerHTML = `
+                    <strong>${new Date(entry.date).toLocaleDateString("pt-BR")}</strong>
+                    <span>${entry.method} — ${entry.note}</span>
+                `;
+                popupHistoryList.appendChild(li);
+            });
+        }
+
+        function closeClientPopup() {
+            detailPopup.classList.remove("open");
+            detailPopup.setAttribute("aria-hidden", "true");
+            selectedClientIndex = null;
+        }
+
+        function blockClient(index) {
+            if (index === null || index === undefined) return;
+            clients[index].status = "blocked";
+            clients[index].notes = "Acesso bloqueado manualmente.";
+            renderClients();
+            closeClientPopup();
+        }
+
+        function renewClient(index) {
+            if (index === null || index === undefined) return;
+            openPaymentPopup(index);
+        }
+
+        function openPaymentPopup(index = selectedClientIndex) {
+            if (index === null || index === undefined) return;
+            paymentForClient = index;
+            paymentPopup.classList.add("open");
+            paymentPopup.setAttribute("aria-hidden", "false");
+        }
+
+        function closePaymentPopup() {
+            paymentPopup.classList.remove("open");
+            paymentPopup.setAttribute("aria-hidden", "true");
+            paymentForClient = null;
+        }
+
+        function confirmPayment() {
+            if (paymentForClient === null) return;
+            const methodInput = Array.from(paymentMethodInputs).find((input) => input.checked);
+            const methodLabel = methodInput?.value === "pix" ? "Pix" : "Cartão de crédito";
+            const client = clients[paymentForClient];
+            const wasTrial = client.status === "test";
+            client.status = "active";
+            client.trial = false;
+            client.renewalDue = calculateRenewalDate(client.renewalDue ? new Date(client.renewalDue) : new Date());
+            client.notes = "Licença liberada após confirmação de pagamento.";
+            client.history = client.history || [];
+            client.history.unshift({
+                date: new Date().toISOString(),
+                method: methodLabel,
+                note: wasTrial ? "Renovação após período teste" : "Pagamento registrado"
+            });
+            renderClients();
+            openClientDetails(paymentForClient);
+            closePaymentPopup();
+        }
+
+        function createTrialCompany() {
+            const now = new Date();
+            const trialClient = {
+                id: `TRIAL-${String(now.getTime()).slice(-5)}`,
+                name: `Cliente Teste ${trialCounter++}`,
+                planId: "starter",
+                requestedOn: now.toISOString(),
+                status: "test",
+                renewalDue: calculateRenewalDate(now),
+                contact: "(61) 99555-0000",
+                email: `teste${trialCounter}@exemplo.com`,
+                notes: "Validação automática: 30 dias gratuitos.",
+                history: [
+                    {
+                        date: now.toISOString(),
+                        method: "Teste grátis",
+                        note: "Ativação automática com 30 dias"
+                    }
+                ]
+            };
+            clients.unshift(trialClient);
+            renderClients();
+        }
+
+        createTrialCompany();
+        renderClients();
+    </script>
+</body>
+</html>

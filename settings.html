@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="img/favicon.png">
+    
+    <!--CSS-->
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .settings-hero{
+            margin-top:20px;
+            background:linear-gradient(135deg,#0a1f44,#132d61 70%,#1f3b81);
+            border-radius:30px;
+            padding:32px;
+            color:#fff;
+            display:flex;
+            flex-direction:column;
+            gap:18px;
+        }
+        .settings-hero header{
+            display:flex;
+            flex-wrap:wrap;
+            gap:16px;
+            justify-content:space-between;
+        }
+        .settings-hero h1{
+            margin:0;
+            font-size:2rem;
+        }
+        .hero-meta p{
+            margin:6px 0 0;
+            opacity:.85;
+        }
+        .plan-badge{
+            display:inline-flex;
+            align-items:center;
+            gap:6px;
+            padding:6px 14px;
+            border-radius:999px;
+            background:rgba(255,255,255,0.15);
+            font-weight:600;
+        }
+        .hero-actions{
+            display:flex;
+            gap:12px;
+            flex-wrap:wrap;
+        }
+        .hero-actions button{
+            border:none;
+            border-radius:12px;
+            padding:12px 18px;
+            font-weight:600;
+            cursor:pointer;
+            display:flex;
+            align-items:center;
+            gap:8px;
+        }
+        .btn-white{
+            background:#fff;
+            color:#132d61;
+        }
+        .btn-ghost{
+            background:rgba(255,255,255,0.15);
+            color:#fff;
+        }
+        .settings-stats{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+            gap:16px;
+        }
+        .settings-stat{
+            background:rgba(255,255,255,0.15);
+            border-radius:18px;
+            padding:16px;
+        }
+        .settings-stat span{
+            font-size:12px;
+            letter-spacing:0.2em;
+            text-transform:uppercase;
+            display:block;
+            margin-bottom:4px;
+        }
+        .settings-stat strong{
+            font-size:26px;
+        }
+        .settings-content{
+            margin-top:24px;
+            display:grid;
+            gap:20px;
+        }
+        .settings-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+            gap:20px;
+        }
+        .settings-card{
+            border:1px solid rgba(19,45,97,0.08);
+            border-radius:22px;
+            padding:22px;
+            background:var(--calc-color);
+            display:flex;
+            flex-direction:column;
+            gap:16px;
+        }
+        .settings-card header{
+            display:flex;
+            justify-content:space-between;
+            align-items:flex-start;
+        }
+        .settings-card header h3{
+            margin:0;
+            color:var(--tittle-color);
+        }
+        .settings-card header span{
+            font-size:12px;
+            color:var(--text-color);
+        }
+        .settings-card label{
+            font-size:13px;
+            color:var(--text-color);
+            font-weight:600;
+        }
+        .settings-card input,
+        .settings-card select,
+        .settings-card textarea{
+            width:100%;
+            border:1px solid rgba(0,0,0,0.1);
+            border-radius:12px;
+            padding:10px 12px;
+            font-size:14px;
+            background:#fff;
+            margin-bottom:16px;
+        }
+        .settings-note{
+            margin-top:-6px;
+            margin-bottom:16px;
+            font-size:0.85rem;
+            color:var(--text-color);
+        }
+        .roles-modal .modal {
+            max-width: 560px;
+            width: 100%;
+        }
+        .roles-modal .modal header {
+            display:flex;
+            justify-content: space-between;
+            align-items:center;
+        }
+        .roles-modal .roles-grid {
+            display:grid;
+            grid-template-columns: repeat(auto-fit,minmax(140px,1fr));
+            gap:10px;
+        }
+        .roles-modal .module-item {
+            display:flex;
+            gap:6px;
+            align-items:center;
+            padding:8px;
+            border-radius:8px;
+            background:rgba(255,255,255,0.1);
+        }
+        .roles-modal .roles-summary {
+            margin-top:18px;
+            font-size:0.85rem;
+            color:var(--text-color);
+        }
+        .category-row {
+            display:flex;
+            gap:8px;
+            align-items:center;
+            margin-bottom:8px;
+        }
+        .category-row input {
+            flex:1;
+            border-radius:12px;
+            border:1px solid rgba(0,0,0,0.1);
+            padding:10px 12px;
+        }
+        .categories-list {
+            display:flex;
+            flex-wrap:wrap;
+            gap:10px;
+        }
+        .categories-list .category-chip {
+            padding:6px 12px;
+            border-radius:999px;
+            background:rgba(14,165,233,0.15);
+            color:#0b3d91;
+            font-size:0.85rem;
+            border:1px solid rgba(14,165,233,0.4);
+        }
+        .toggle-row{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:16px;
+        }
+        .toggle-row span{
+            color:var(--tittle-color);
+            font-weight:600;
+        }
+        .switcher{
+            position:relative;
+            width:48px;
+            height:24px;
+        }
+        .switcher input{
+            opacity:0;
+            width:0;
+            height:0;
+        }
+        .switcher span{
+            position:absolute;
+            inset:0;
+            border-radius:999px;
+            background:rgba(19,45,97,0.2);
+            transition:.3s;
+        }
+        .switcher span::after{
+            content:'';
+            position:absolute;
+            width:20px;
+            height:20px;
+            border-radius:50%;
+            background:#fff;
+            top:2px;
+            left:3px;
+            transition:.3s;
+            box-shadow:0 2px 6px rgba(0,0,0,0.2);
+        }
+        .switcher input:checked + span{
+            background:#132d61;
+        }
+        .switcher input:checked + span::after{
+            transform:translateX(20px);
+        }
+        .integration-list,
+        .automation-list{
+            display:flex;
+            flex-direction:column;
+            gap:12px;
+        }
+        .integration-item{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:12px;
+            border:1px solid rgba(19,45,97,0.08);
+            border-radius:16px;
+        }
+        .integration-item button{
+            border:none;
+            border-radius:999px;
+            padding:8px 14px;
+            cursor:pointer;
+            background:rgba(19,45,97,0.08);
+            color:var(--sidebar-color);
+            font-weight:600;
+        }
+        .automation-row{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+        .settings-actions{
+            display:flex;
+            gap:10px;
+            flex-wrap:wrap;
+        }
+        .settings-actions button{
+            border:none;
+            border-radius:12px;
+            padding:10px 16px;
+            font-weight:600;
+            cursor:pointer;
+        }
+        .settings-actions .primary{
+            background:#132d61;
+            color:#fff;
+        }
+        .settings-actions .secondary{
+            background:rgba(19,45,97,0.08);
+            color:var(--sidebar-color);
+        }
+        .settings-apply{
+            margin-top:24px;
+            display:flex;
+            justify-content:flex-end;
+        }
+        .btn-apply{
+            border:none;
+            border-radius:12px;
+            padding:12px 24px;
+            font-size:0.95rem;
+            font-weight:600;
+            background:#0f9d58;
+            color:#fff;
+            display:inline-flex;
+            align-items:center;
+            gap:8px;
+            cursor:pointer;
+            box-shadow:0 10px 20px rgba(15,157,88,0.3);
+        }
+        .btn-apply-secondary{
+            background:#1363c1;
+            box-shadow:0 10px 20px rgba(19,99,193,0.35);
+        }
+        @media(max-width:768px){
+            .settings-hero{
+                padding:24px;
+            }
+        }
+    </style>
+    <!--/CSS-->
+    
+    <!--Boxicons CSS-->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <!--/Boxicons CSS-->
+    
+    <title>SellaStay | Configurações</title> 
+</head>
+<body>
+
+    <!-- Menu -->
+    <nav class="sidebar close">
+
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="img/logo.png" alt="">
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name" id="nome">SellaStay</span>
+                    <span class="profession">EGRC Control</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu-scrollable">
+
+                <ul class="menu-links">
+
+                    <br>
+                    <br>
+
+                    <li class="nav-link" id="navselected">
+                        <a href="home.html">
+                            <i class='bx bxs-home icon' ></i>
+                            <span class="text nav-text">Home</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="dashboard.html">
+                            <i class='bx bxs-dashboard icon' ></i>
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link has-submenu">
+                        <a href="leads.html">
+                            <i class='bx bxs-grid icon' ></i>
+                            <span class="text nav-text">Operacional <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="leads.html"><i class='bx bxs-chevrons-right icon' ></i>Negociações</a></li>
+                            <li><a href="follow-up.html"><i class='bx bx-transfer icon' ></i>Follow Up log</a></li>
+                            <li><a href="clients.html"><i class='bx bx-id-card icon' ></i>Carteira de Clientes</a></li>
+                            <li><a href="vendas.html"><i class='bx bx-history icon'></i></i>Histórico de Vendas</a></li>
+                            <li><a href="tasks.html"><i class='bx bx-task icon'></i></i>Gestor de Tarefas</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="calendar.html">
+                            <i class='bx bxs-calendar-event icon'></i>
+                            <span class="text nav-text">Mapa de Eventos</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="pricespy.html">
+                            <i class='bx bx-radar icon'></i>
+                            <span class="text nav-text">Radar de Preços</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="reminder.html">
+                            <i class='bx bxs-bell-ring icon' ></i>
+                            <span class="text nav-text">Lembretes</span>
+                        </a>
+                    </li>
+
+                    <!-- ::::::: VERIFICAR NECESSIDADE ::::::::-->
+                    <!-- <li class="nav-link">
+                        <a href="contratos.html">
+                            <i class='bx bx-briefcase icon' ></i>
+                            <span class="text nav-text">Contratos</span>
+                        </a>
+                    </li> -->
+
+                    <li class="nav-link">
+                        <a href="relatorios.html">
+                            <i class='bx bx-line-chart icon'></i>
+                            <span class="text nav-text">Relatórios</span>
+                        </a>
+                    </li>
+
+                    <!-- ::::::: REALOCAR PARA OUTRO LUGAR ::::::::-->
+                    <!-- <li class="nav-link"> 
+                        <a href="doc.html">
+                            <i class='bx bx-help-circle icon' ></i>
+                            <span class="text nav-text">Ajuda</span>
+                        </a>
+                    </li> -->
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <ul class="menu-links">
+                    <li class="nav-link has-submenu">
+                        <a href="#" id="navselected">
+                            <img id="profile-pic" src="img/profile_pic_F.png" alt="Usuário logado">
+                            <span class="text nav-text"><span id="menuUserName">Usuário</span> <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="profile.html"><i class='bx bx-user icon'></i> Perfil</a></li>
+                            <li class="has-submenu">
+                                <a href="empresas.html">
+                                    <i class='bx bxs-building icon'></i> Empresa <i class='bx bx-chevron-down arrow'></i>
+                                </a>
+                                <ul class="submenu">
+                                    <li id="subactive"><a href="#empresa-config"><i class='bx bx-briefcase icon'></i> Configurações da Empresa</a></li>
+                                    <li><a href="#hoteis-config"><i class='bx bx-hotel icon'></i> Cadastro de Hotéis</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="settings.html"><i class='bx bx-cog icon'></i> Configurações</a></li>
+                            <li><a href="help.html"><i class='bx bx-support icon'></i> Suporte</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="logout" id="logout">
+                        <a href="index.html">
+                            <i class='bx bx-log-out icon' ></i>
+                            <span class="text nav-text">Logout</span>
+                        </a>
+                    </li>
+
+                    <li class="mode">
+                        <div class="sun-moon">
+                            <i class='bx bx-moon icon moon'></i>
+                            <i class='bx bx-sun icon sun'></i>
+                        </div>
+                        <span class="mode-text text">Dark mode</span>
+
+                        <div class="toggle-switch">
+                            <span class="switch"></span>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- /Menu -->
+
+    <section class="home">
+        <div class="settings-hero">
+            <header>
+                <div class="hero-meta">
+                    <span class="plan-badge"><i class='bx bx-diamond'></i> Plano Enterprise</span>
+                    <h1>Configurações gerais</h1>
+                    <p>Personalize sua conta, alinhe notificações e mantenha integrações essenciais sob controle.</p>
+                </div>
+            <div class="hero-actions">
+                <button class="btn-white" id="upgradePlan"><i class='bx bx-upload'></i>Atualizar plano</button>
+                <button class="btn-ghost" id="viewAudit"><i class='bx bx-history'></i>Histórico de alterações</button>
+            </div>
+            </header>
+            <div class="settings-stats">
+                <div class="settings-stat">
+                    <span>equipes ativas</span>
+                    <strong id="statTeams">6</strong>
+                    <p>divisões conectadas ao CRM</p>
+                </div>
+                <div class="settings-stat">
+                    <span>integrações</span>
+                    <strong id="statIntegrations">9</strong>
+                    <p>conectores sincronizados</p>
+                </div>
+                <div class="settings-stat">
+                    <span>usuários</span>
+                    <strong id="statUsers">42</strong>
+                    <p>contas licenciadas</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="settings-content">
+            <div class="settings-grid">
+                <article class="settings-card">
+                    <header>
+                        <div>
+                            <h3>Conta e organização</h3>
+                            <span>Informações da sua identidade no SellaStay.</span>
+                        </div>
+                    </header>
+                    <form id="accountSettingsForm">
+                        <label>Nome completo</label>
+                        <input type="text" id="settingsName" placeholder="Seu nome completo">
+                        <label>E-mail principal</label>
+                        <input type="email" id="settingsEmail" placeholder="email@empresa.com">
+                        <label>Telefone corporativo</label>
+                        <input type="tel" id="settingsPhone" placeholder="(00) 00000-0000">
+                        <label>Fuso horário</label>
+                        <select id="settingsTimezone">
+                            <option value="America/Sao_Paulo">GMT-3 – São Paulo</option>
+                            <option value="America/Bogota">GMT-5 – Bogotá</option>
+                            <option value="Europe/Lisbon">GMT+1 – Lisboa</option>
+                        </select>
+                        <div class="settings-actions">
+                            <button type="submit" class="primary">Salvar dados</button>
+                            <button type="button" class="secondary" id="resetAccount">Redefinir</button>
+                        </div>
+                    </form>
+                </article>
+
+                <article class="settings-card">
+                    <header>
+                        <div>
+                            <h3>Preferências da plataforma</h3>
+                            <span>Linguagem, dashboards e comunicação.</span>
+                        </div>
+                    </header>
+                    <label>Idioma padrão</label>
+                    <select id="settingsLanguage">
+                        <option value="pt">Português</option>
+                        <option value="en">Inglês</option>
+                        <option value="es">Espanhol</option>
+                    </select>
+                    <label>Dashboard inicial</label>
+                    <select id="settingsHome">
+                        <option value="home">Home</option>
+                        <option value="dashboard">Dashboard</option>
+                        <option value="leads">CRM - Leads</option>
+                    </select>
+                    <div class="toggle-row">
+                        <div>
+                            <span>Modo escuro automático</span>
+                            <p style="margin:0;color:var(--text-color);">Ativa conforme horário definido.</p>
+                        </div>
+                        <label class="switcher">
+                            <input type="checkbox" id="toggleDarkAuto">
+                            <span></span>
+                        </label>
+                    </div>
+                    <div class="toggle-row">
+                        <div>
+                            <span>Resumo diário no e-mail</span>
+                            <p style="margin:0;color:var(--text-color);">Receba eventos e alertas toda manhã.</p>
+                        </div>
+                        <label class="switcher">
+                            <input type="checkbox" id="toggleDailyDigest">
+                            <span></span>
+                        </label>
+                    </div>
+                </article>
+
+                <article class="settings-card">
+                    <header>
+                        <div>
+                            <h3>Alertas & notificações</h3>
+                            <span>Controle de canais e gatilhos.</span>
+                        </div>
+                    </header>
+                    <div class="toggle-row">
+                        <div>
+                            <span>Push no app</span>
+                            <p style="margin:0;color:var(--text-color);">Receber alertas imediatos no mobile.</p>
+                        </div>
+                        <label class="switcher">
+                            <input type="checkbox" id="togglePush">
+                            <span></span>
+                        </label>
+                    </div>
+                    <div class="toggle-row">
+                        <div>
+                            <span>Alertas de tarifa</span>
+                            <p style="margin:0;color:var(--text-color);">Quando concorrentes alterarem preços.</p>
+                        </div>
+                        <label class="switcher">
+                            <input type="checkbox" id="toggleTariffs">
+                            <span></span>
+                        </label>
+                    </div>
+                    <div class="toggle-row">
+                        <div>
+                            <span>Alertas CRM críticos</span>
+                            <p style="margin:0;color:var(--text-color);">Incluir equipe por e-mail.</p>
+                        </div>
+                        <label class="switcher">
+                            <input type="checkbox" id="toggleCrmCritical">
+                            <span></span>
+                        </label>
+                    </div>
+                </article>
+
+                <article class="settings-card">
+                    <header>
+                        <div>
+                            <h3>Integrações conectadas</h3>
+                            <span>Gerencie conectores e planos.</span>
+                        </div>
+                    </header>
+                    <div class="integration-list">
+                        <div class="integration-item">
+                            <div>
+                                <strong>Gestor PMS</strong>
+                                <p style="margin:0;color:var(--text-color);">Conectado • Atualizado há 2 dias</p>
+                            </div>
+                            <button type="button">Sincronizar</button>
+                        </div>
+                        <div class="integration-item">
+                            <div>
+                                <strong>Suite Financeira</strong>
+                                <p style="margin:0;color:var(--text-color);">Requer atenção</p>
+                            </div>
+                            <button type="button">Resolver</button>
+                        </div>
+                        <div class="integration-item">
+                            <div>
+                                <strong>Chat interno</strong>
+                                <p style="margin:0;color:var(--text-color);">Ativo • 14 usuários</p>
+                            </div>
+                            <button type="button">Gerenciar</button>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="settings-card">
+                    <header>
+                        <div>
+                            <h3>Automação & fluxos</h3>
+                            <span>Defina regras para follow-up e escalas.</span>
+                        </div>
+                    </header>
+                    <div class="automation-list">
+                        <div class="automation-row">
+                            <div>
+                                <strong>Follow-up automático</strong>
+                                <p style="margin:0;color:var(--text-color);">Enviar lembretes após 48h sem resposta.</p>
+                            </div>
+                            <label class="switcher">
+                                <input type="checkbox" id="toggleFollowup">
+                                <span></span>
+                            </label>
+                        </div>
+                        <div class="automation-row">
+                            <div>
+                                <strong>Escalar leads VIP</strong>
+                                <p style="margin:0;color:var(--text-color);">Norifica supervisor quando valor > R$ 50k.</p>
+                            </div>
+                            <label class="switcher">
+                                <input type="checkbox" id="toggleVip">
+                                <span></span>
+                            </label>
+                        </div>
+                        <div class="automation-row">
+                            <div>
+                                <strong>Checklist onboarding</strong>
+                                <p style="margin:0;color:var(--text-color);">Checklist automático para novos hotéis.</p>
+                            </div>
+                            <label class="switcher">
+                                <input type="checkbox" id="toggleOnboarding">
+                                <span></span>
+                            </label>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="settings-card">
+                    <header>
+                        <div>
+                            <h3>Segurança e conformidade</h3>
+                            <span>Proteção da conta e requisitos LGPD.</span>
+                        </div>
+                    </header>
+                    <p style="color:var(--text-color);">Última alteração de senha há 90 dias.</p>
+                    <div class="settings-actions">
+                        <button class="primary" id="changePasswordBtn">Alterar senha</button>
+                        <button class="secondary" id="activate2faBtn">Ativar 2FA</button>
+                        <button class="secondary" id="downloadPolicyBtn">Política LGPD</button>
+                    </div>
+                </article>
+
+
+
+                <article class="settings-card">
+                    <header>
+                        <div>
+                            <h3>Lembretes</h3>
+                            <span>Encerramento automático e histórico.</span>
+                        </div>
+                    </header>
+                    <label for="reminderAutoCloseDays">Dias para mover ao histórico</label>
+                    <input type="number" id="reminderAutoCloseDays" min="1" placeholder="7">
+                    <p class="settings-note">Lembretes vencidos são concluídos automaticamente depois desse período.</p>
+                </article>
+            </div>
+        </div>
+
+        <div class="settings-grid">
+            <article class="settings-card">
+                <header>
+                    <div>
+                        <h3>Funções e permissões</h3>
+                    </div>
+                </header>
+                <div class="settings-actions">
+                    <button class="primary" id="openRolesModal">Configurar níveis de acesso</button>
+                </div>
+            </article>
+        </div>
+
+        <div class="settings-grid">
+            <article class="settings-card">
+                <header>
+                    <div>
+                        <h3>Exportação e auditoria</h3>
+                        <span>Controle de logs e backups.</span>
+                    </div>
+                </header>
+                <label>Exportar dados da conta</label>
+                <select id="exportScope">
+                    <option value="30">Últimos 30 dias</option>
+                    <option value="90">Últimos 90 dias</option>
+                    <option value="365">Último ano</option>
+                </select>
+                <div class="settings-actions">
+                    <button class="primary" id="exportDataBtn">Exportar agora</button>
+                    <button class="secondary" id="scheduleExportBtn">Agendar backup</button>
+                </div>
+            </article>
+        </div>
+
+        <div class="settings-apply">
+            <button class="btn-apply" id="applyReminderSettings"><i class='bx bx-wrench'></i>Aplicar configurações</button>
+        </div>
+    </section>
+
+    <!--Rodapé -->
+    <footer style="line-height: 15px;">
+        &copy; <span id="anoAtual"></span> SellaStay - Gestão para Hotéis. <br> <span style="font-size: 10px; cursor: pointer;">Desenvolvido por <a href="https://www.syncsoftware.com.br" style="text-decoration: none; color: var(--text-color);" onmouseover="this.style.color='#ff914d';" onmouseout="this.style.color='var(--text-color)';" target="_blank"> <b>Sync Software LTDA</b></a></span>
+    </footer>
+    <!-- Rodapé -->
+
+    <div class="modal-overlay roles-modal" id="rolesModal">
+        <div class="modal">
+            <header>
+                <div>
+                    <h2>Configurar funções</h2>
+                    <p>Crie perfis com diferentes visões dentro do sistema (veja <a href="doc.html" target="_blank">doc.html</a>).</p>
+                </div>
+                <button type="button" class="close" data-close-roles>&times;</button>
+            </header>
+            <form id="rolesForm">
+                <label for="roleUser">Usuário</label>
+                <input type="text" id="roleUser" placeholder="Nome ou e-mail">
+
+                <label for="roleSelect">Perfil</label>
+                <select id="roleSelect">
+                    <option value="administrator">Administrador (todos módulos)</option>
+                    <option value="partial">Parcial</option>
+                    <option value="operational">Operacional reduzido</option>
+                    <option value="leads">Leads somente</option>
+                </select>
+
+                <label>Permissões por módulo</label>
+                <div class="roles-grid" id="modulesGrid"></div>
+
+                <label for="categoryInput">Configurar categorias</label>
+                <div class="category-row">
+                    <input type="text" id="categoryInput" placeholder="Ex.: Financeiro">
+                    <button type="button" class="secondary" id="addCategoryBtn">Adicionar categoria</button>
+                </div>
+                <div class="categories-list" id="categoriesList"></div>
+
+                <div class="roles-summary" id="rolesSummary"></div>
+
+                <div class="settings-actions">
+                    <button type="submit" class="primary">Salvar função</button>
+                    <button type="button" class="secondary" data-close-roles>Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+
+    <!-- Settings script -->
+    <script>
+        document.getElementById('anoAtual').textContent = new Date().getFullYear();
+
+        document.querySelectorAll('.nav-link.has-submenu > a').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                const parent = this.parentElement;
+                document.querySelectorAll('.nav-link.has-submenu').forEach(item => {
+                    if (item !== parent) item.classList.remove('active');
+                });
+                parent.classList.toggle('active');
+            });
+        });
+
+        const accountForm = document.getElementById('accountSettingsForm');
+        const resetAccountBtn = document.getElementById('resetAccount');
+
+        function loadAccountDefaults(){
+            document.getElementById('settingsName').value = 'Filipe Oliveira';
+            document.getElementById('settingsEmail').value = 'filipe@sellastay.com';
+            document.getElementById('settingsPhone').value = '+55 (31) 99999-9999';
+            document.getElementById('settingsTimezone').value = 'America/Sao_Paulo';
+            document.getElementById('settingsLanguage').value = 'pt';
+            document.getElementById('settingsHome').value = 'home';
+            document.getElementById('toggleDarkAuto').checked = true;
+            document.getElementById('toggleDailyDigest').checked = true;
+            document.getElementById('togglePush').checked = true;
+            document.getElementById('toggleTariffs').checked = false;
+            document.getElementById('toggleCrmCritical').checked = true;
+            document.getElementById('toggleFollowup').checked = true;
+            document.getElementById('toggleVip').checked = true;
+            document.getElementById('toggleOnboarding').checked = false;
+        }
+
+        loadAccountDefaults();
+
+        accountForm?.addEventListener('submit', (event) => {
+            event.preventDefault();
+            alert('Configurações salvas com sucesso!');
+        });
+
+        resetAccountBtn?.addEventListener('click', () => {
+            loadAccountDefaults();
+            alert('Configurações redefinidas.');
+        });
+
+        const heroButtons = [
+            { id: 'upgradePlan', message: 'Nossa equipe comercial entrará em contato para atualizar seu plano.' },
+            { id: 'viewAudit', message: 'Abrindo o log de alterações recentes...' },
+            { id: 'changePasswordBtn', message: 'Um link seguro foi enviado para redefinir sua senha.' },
+            { id: 'activate2faBtn', message: '2FA habilitado. Configure pelo app autenticador.' },
+            { id: 'downloadPolicyBtn', message: 'Baixando política LGPD em PDF.' },
+            { id: 'exportDataBtn', message: 'Gerando exportação de dados solicitada...' },
+            { id: 'scheduleExportBtn', message: 'Backup semanal agendado.' }
+        ];
+
+        heroButtons.forEach(action => {
+            const btn = document.getElementById(action.id);
+            btn?.addEventListener('click', () => alert(action.message));
+        });
+
+        const toggleIds = [
+            'toggleDarkAuto',
+            'toggleDailyDigest',
+            'togglePush',
+            'toggleTariffs',
+            'toggleCrmCritical',
+            'toggleFollowup',
+            'toggleVip',
+            'toggleOnboarding'
+        ];
+
+        toggleIds.forEach(id => {
+            const el = document.getElementById(id);
+            el?.addEventListener('change', () => {
+                console.log(`Toggle ${id} ->`, el.checked);
+            });
+        });
+
+        const reminderAutoCloseInput = document.getElementById('reminderAutoCloseDays');
+        const reminderAutoCloseKey = 'reminder_auto_close_days';
+        const reminderAutoCloseDefault = 7;
+
+        function loadReminderAutoCloseDays() {
+            const stored = parseInt(localStorage.getItem(reminderAutoCloseKey), 10);
+            reminderAutoCloseInput.value = Number.isNaN(stored) ? reminderAutoCloseDefault : stored;
+        }
+
+        reminderAutoCloseInput?.addEventListener('change', () => {
+            const raw = parseInt(reminderAutoCloseInput.value, 10);
+            const value = Number.isNaN(raw) ? reminderAutoCloseDefault : Math.max(1, raw);
+            localStorage.setItem(reminderAutoCloseKey, value);
+            reminderAutoCloseInput.value = value;
+            alert(`Lembretes serão encerrados automaticamente após ${value} dias.`);
+        });
+
+        loadReminderAutoCloseDays();
+
+        const modulesGrid = document.getElementById('modulesGrid');
+        const rolesSummary = document.getElementById('rolesSummary');
+        const roleSelect = document.getElementById('roleSelect');
+        const roleForm = document.getElementById('rolesForm');
+        const roleUserInput = document.getElementById('roleUser');
+        const rolesModal = document.getElementById('rolesModal');
+        const roleAssignmentsKey = 'system_role_assignments';
+
+        const modulesList = [
+            { id: 'home', label: 'Home' },
+            { id: 'dashboard', label: 'Dashboard' },
+            { id: 'leads', label: 'CRM - Leads' },
+            { id: 'calendar', label: 'Calendário' },
+            { id: 'reminder', label: 'Lembretes' },
+            { id: 'profile', label: 'Perfil' },
+            { id: 'settings', label: 'Configurações' }
+        ];
+
+        const rolePresets = {
+            administrator: modulesList.map(m => m.id),
+            partial: ['home', 'dashboard', 'calendar', 'reminder'],
+            operational: ['home', 'dashboard', 'reminder'],
+            leads: ['leads']
+        };
+
+        function openRolesModal() {
+            rolesModal.classList.add('active');
+            applyPreset(roleSelect.value);
+            updateSummary();
+        }
+
+        function closeRolesModal() {
+            rolesModal.classList.remove('active');
+        }
+
+        function renderModules() {
+            if (!modulesGrid) return;
+            modulesGrid.innerHTML = modulesList.map(module => `
+                <label class="module-item">
+                    <input type="checkbox" value="${module.id}" data-module="${module.id}">
+                    ${module.label}
+                </label>
+            `).join('');
+        }
+
+        function setModulesSelection(toSelect) {
+            modulesGrid.querySelectorAll('input[type="checkbox"]').forEach(box => {
+                box.checked = toSelect.includes(box.value);
+            });
+        }
+
+        function updateSummary() {
+            const selected = Array.from(modulesGrid.querySelectorAll('input[type="checkbox"]:checked')).map(i => i.dataset.module);
+            rolesSummary.textContent = selected.length ? `Módulos habilitados: ${selected.join(', ')}` : 'Selecione ao menos um módulo.';
+        }
+
+        renderModules();
+
+        modulesGrid?.addEventListener('change', () => updateSummary());
+        roleSelect?.addEventListener('change', () => {
+            applyPreset(roleSelect.value);
+            updateSummary();
+        });
+        document.getElementById('openRolesModal')?.addEventListener('click', openRolesModal);
+        document.querySelectorAll('[data-close-roles]').forEach(btn => btn.addEventListener('click', closeRolesModal));
+
+        function applyPreset(roleKey) {
+            const preset = rolePresets[roleKey] || [];
+            setModulesSelection(preset);
+        }
+
+        roleForm?.addEventListener('submit', event => {
+            event.preventDefault();
+            const user = roleUserInput?.value.trim();
+            if (!user) {
+                alert('Informe o usuário para aplicar a função.');
+                return;
+            }
+            const selection = Array.from(modulesGrid.querySelectorAll('input[type="checkbox"]:checked')).map(box => box.value);
+            if (!selection.length) {
+                alert('Selecione ao menos um módulo.');
+                return;
+            }
+            const stored = JSON.parse(localStorage.getItem(roleAssignmentsKey) || '{}');
+            stored[user] = {
+                role: roleSelect?.value,
+                modules: selection
+            };
+            localStorage.setItem(roleAssignmentsKey, JSON.stringify(stored));
+            alert(`Função salva para ${user}: ${selection.join(', ')}`);
+            closeRolesModal();
+        });
+
+        document.getElementById('exportDataBtn')?.addEventListener('click', () => {
+            const scope = document.getElementById('exportScope').value;
+            alert(`Exportação solicitada para os últimos ${scope} dias.`);
+        });
+
+        document.getElementById('applyReminderSettings')?.addEventListener('click', () => {
+            const raw = parseInt(reminderAutoCloseInput?.value, 10);
+            if (Number.isNaN(raw) || raw < 1) {
+                alert('Informe um valor válido para os dias de encerramento.');
+                return;
+            }
+            const value = Math.max(1, raw);
+            localStorage.setItem(reminderAutoCloseKey, value);
+            reminderAutoCloseInput.value = value;
+            alert('Configurações aplicadas e sincronizadas com o sistema.');
+        });
+
+
+        const modulesGrid = document.getElementById('modulesGrid');
+        const rolesSummary = document.getElementById('rolesSummary');
+        const roleSelect = document.getElementById('roleSelect');
+        const roleForm = document.getElementById('rolesForm');
+        const roleUserInput = document.getElementById('roleUser');
+        const rolesModal = document.getElementById('rolesModal');
+        const addCategoryBtn = document.getElementById('addCategoryBtn');
+        const categoryInput = document.getElementById('categoryInput');
+        const categoriesList = document.getElementById('categoriesList');
+
+        const modulesList = [
+            { id: 'home', label: 'Home' },
+            { id: 'dashboard', label: 'Dashboard' },
+            { id: 'leads', label: 'CRM - Leads' },
+            { id: 'calendar', label: 'Calendário' },
+            { id: 'reminder', label: 'Lembretes' },
+            { id: 'profile', label: 'Perfil' },
+            { id: 'settings', label: 'Configurações' }
+        ];
+
+        const rolePresets = {
+            administrator: modulesList.map(m => m.id),
+            partial: ['home', 'dashboard', 'calendar', 'reminder'],
+            operational: ['home', 'dashboard', 'reminder'],
+            leads: ['leads']
+        };
+
+        const categoryKey = 'roles_categories';
+
+        function openRolesModal() {
+            renderModules();
+            applyPreset(roleSelect?.value);
+            renderCategories();
+            updateSummary();
+            rolesModal.classList.add('active');
+        }
+
+        function closeRolesModal() {
+            rolesModal.classList.remove('active');
+        }
+
+        function renderModules() {
+            if (!modulesGrid) return;
+            modulesGrid.innerHTML = modulesList.map(module => `
+                <label class="module-item">
+                    <input type="checkbox" value="${module.id}" data-module="${module.id}">
+                    ${module.label}
+                </label>
+            `).join('');
+        }
+
+        function setModulesSelection(selection) {
+            modulesGrid.querySelectorAll('input[type="checkbox"]').forEach(box => {
+                box.checked = selection.includes(box.value);
+            });
+        }
+
+        function updateSummary() {
+            const selection = Array.from(modulesGrid.querySelectorAll('input[type="checkbox"]:checked')).map(box => box.dataset.module);
+            rolesSummary.textContent = selection.length ? `Módulos habilitados: ${selection.join(', ')}` : 'Selecione ao menos um módulo.';
+        }
+
+        function applyPreset(key) {
+            const preset = rolePresets[key] || [];
+            setModulesSelection(preset);
+        }
+
+        function getStoredCategories() {
+            try {
+                return JSON.parse(localStorage.getItem(categoryKey)) || [];
+            } catch {
+                return [];
+            }
+        }
+
+        function saveCategory(value) {
+            const categories = getStoredCategories();
+            if (!categories.includes(value)) {
+                categories.push(value);
+                localStorage.setItem(categoryKey, JSON.stringify(categories));
+            }
+        }
+
+        function renderCategories() {
+            if (!categoriesList) return;
+            const categories = getStoredCategories();
+            categoriesList.innerHTML = categories.map(cat => `<span class="category-chip">${cat}</span>`).join('');
+        }
+
+        addCategoryBtn?.addEventListener('click', () => {
+            const value = (categoryInput?.value || '').trim();
+            if (!value) return;
+            saveCategory(value);
+            categoryInput.value = '';
+            renderCategories();
+        });
+
+        modulesGrid?.addEventListener('change', () => updateSummary());
+        roleSelect?.addEventListener('change', () => {
+            applyPreset(roleSelect.value);
+            updateSummary();
+        });
+
+        document.getElementById('openRolesModal')?.addEventListener('click', openRolesModal);
+        document.querySelectorAll('[data-close-roles]').forEach(btn => btn.addEventListener('click', closeRolesModal));
+
+        roleForm?.addEventListener('submit', event => {
+            event.preventDefault();
+            const user = roleUserInput?.value.trim();
+            if (!user) {
+                alert('Informe o usuário.');
+                return;
+            }
+            const selectedModules = Array.from(modulesGrid.querySelectorAll('input[type="checkbox"]:checked')).map(box => box.value);
+            if (!selectedModules.length) {
+                alert('Selecione ao menos um módulo.');
+                return;
+            }
+            const storage = JSON.parse(localStorage.getItem('system_role_assignments') || '{}');
+            storage[user] = { role: roleSelect?.value || 'partial', modules: selectedModules };
+            localStorage.setItem('system_role_assignments', JSON.stringify(storage));
+            alert(`Função salva para ${user}: ${selectedModules.join(', ')}`);
+            closeRolesModal();
+        });
+
+        renderModules();
+        renderCategories();
+    </script>
+    <!-- /Settings script -->
+
+</body>
+</html>

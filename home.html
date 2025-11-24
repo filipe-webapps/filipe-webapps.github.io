@@ -1,0 +1,2898 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <title>SellaStay | Página Inicial</title>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="img/favicon.png">
+
+    <!-- Json manifest for mobile icon App -->
+    <link rel="manifest" href="js/manifest.json">
+    <meta name="theme-color" content="#000">
+    
+    <!--CSS-->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!--Boxicons CSS-->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    
+    <style>
+        /* submenu style */
+         .submenu .submenu {
+            padding-left: 1rem;
+        }
+        .config-section {
+            margin: 24px auto;
+            max-width: 1100px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            border: 1px solid rgba(15,23,42,0.08);
+        }
+        .config-section h2 {
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            font-size: 1rem;
+        }
+        .config-section p {
+            margin-bottom: 20px;
+            color: #555;
+        }
+        .config-form {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+        .config-form .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+            gap: 16px;
+        }
+        .config-form label {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            color: #333;
+        }
+        .config-form input,
+        .config-form textarea,
+        .config-form select {
+            border: 1px solid rgba(15,23,42,0.2);
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-size: 0.95rem;
+            background: #fff;
+        }
+        .config-form small {
+            font-size: 0.7rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .config-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .config-actions button {
+            border: none;
+            border-radius: 999px;
+            padding: 12px 24px;
+            font-weight: 600;
+            cursor: pointer;
+            background: linear-gradient(135deg,#050712,#13182b,#ff914d);
+            color: #fff;
+        }
+
+        /* ??????????????????????????????????? */
+        #configToast {
+            position: fixed;
+            bottom: 26px;
+            right: 26px;
+            background: #10163b;
+            color: #fff;
+            padding: 12px 18px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+        .config-form .full-width {
+            grid-column: 1 / -1;
+        }
+
+        /* cards style */
+        .floating-chat {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 12px;
+        }
+
+        .floating-chat-toggle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            border: none;
+            border-radius: 999px;
+            padding: 0.9rem 1.4rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            position: relative;
+            background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 40%, #ff6b00 65%, #ff914d 100%);
+            background-size: 220% 220%;
+            animation: floatingChatGradient 5s ease infinite;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            overflow: hidden;
+            isolation: isolate;
+        }
+
+        .floating-chat-toggle span,
+        .floating-chat-toggle i {
+            position: relative;
+            z-index: 1;
+        }
+
+        .floating-chat-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .floating-chat-toggle.active {
+            box-shadow: 0 18px 34px rgba(0, 0, 0, 0.35);
+        }
+
+        .floating-chat-toggle i {
+            font-size: 1.4rem;
+        }
+
+        .floating-chat-window {
+            width: min(560px, calc(100vw - 32px));
+            background: var(--body-color, #fff);
+            border-radius: 20px;
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            box-shadow: 0 25px 50px rgba(15, 23, 42, 0.35);
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+        }
+
+        .floating-chat-window.open {
+            display: flex;
+        }
+
+        .floating-chat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.8rem;
+            padding: 1rem 1.25rem;
+            background: #fff;
+            color: #101827;
+        }
+
+        .ia-header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+        }
+
+        .ia-header-left img {
+            width: 72px;
+            height: 72px;
+            border-radius: 18px;
+            background: #fff;
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            box-shadow: 0 10px 25px rgba(0,0,0,.2);
+        }
+
+        .floating-chat-header h3 {
+            margin: 0;
+            font-size: 1.05rem;
+            color: #101827;
+        }
+
+        .ia-subtitle {
+            font-size: 0.8rem;
+            color: #4b5563;
+        }
+
+        .floating-chat-close {
+            background: transparent;
+            border: none;
+            color: inherit;
+            font-size: 1.5rem;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0;
+        }
+
+        .floating-chat-close.syncia-exit {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            border: none;
+            background: rgba(229, 62, 62, 0.9);
+            color: #fff;
+            font-size: 1.3rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 15px rgba(229, 62, 62, 0.35);
+        }
+
+        @keyframes synciaGradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .floating-chat-window .ia-chat {
+            padding: 1rem 1.25rem 1.25rem;
+            background: linear-gradient(120deg, #0ea5e9, #85d7ff 45%, #ff8c42 85%);
+            background-size: 300% 300%;
+            animation: synciaGradient 10s ease infinite;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .floating-chat-window .chat-container {
+            max-height: 280px;
+            min-height: 180px;
+        }
+
+        .ia-internal-info {
+            margin-top: 6px;
+            padding: 6px 8px;
+            border-radius: 10px;
+            background: rgba(15, 23, 42, 0.08);
+            color: #0f172a;
+            font-size: 0.78rem;
+            line-height: 1.4;
+        }
+
+        .home-overview {
+            display: flex;
+            flex-direction: column;
+            gap: 10px !important;
+            width: 100%;
+        }
+
+        .home-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .home-header-text h1 {
+            margin: 0;
+            font-size: clamp(2rem, 4vw, 2.6rem);
+        }
+
+        .home-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 18px;
+        }
+
+        .home-card {
+            background: var(--sidebar-color);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            color: #ffffff;
+        }
+
+        .home-card p,
+        .home-card span,
+        .home-card h3,
+        .home-card small,
+        .home-card strong,
+        .home-card .card-link {
+            color: #ffffff;
+        }
+
+        .home-card header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .home-card h3 {
+            margin: 4px 0 0;
+        }
+
+        .home-card .card-link {
+            color: #ffeed4;
+        }
+
+        .revenue-spotlight {
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 22px;
+            padding: 18px;
+            margin-top: 14px;
+            background: linear-gradient(145deg, rgba(5, 7, 18, 0.9), rgba(14, 20, 38, 0.75));
+            box-shadow: 0 24px 46px rgba(0, 0, 0, 0.35);
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .revenue-spotlight:focus-visible,
+        .revenue-spotlight:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255, 145, 77, 0.65);
+            box-shadow: 0 32px 58px rgba(0, 0, 0, 0.45);
+        }
+
+        .revenue-spotlight:focus-visible {
+            outline: 2px solid rgba(255, 145, 77, 0.8);
+            outline-offset: 4px;
+        }
+
+        .progress-track {
+            position: relative;
+            width: 100%;
+            height: 14px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+            margin: 16px 0 10px;
+        }
+
+        .progress-track span {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(120deg, #ff6b00, #ffb347, #ffd973);
+            box-shadow: 0 0 18px rgba(255, 145, 77, 0.45);
+            transition: width 0.3s ease;
+        }
+
+        .progress-stats {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .progress-stats strong {
+            font-size: 1.8rem;
+            letter-spacing: 0.02em;
+        }
+
+        .progress-stats span {
+            font-size: 0.95rem;
+            opacity: 0.8;
+        }
+
+        .lembrete-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .lembrete-list li {
+            list-style: none;
+        }
+
+        .reminder-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(6, 8, 20, 0.4);
+            backdrop-filter: blur(6px);
+            transition: transform 0.15s ease, border-color 0.2s ease, background 0.2s ease;
+            cursor: pointer;
+        }
+
+        .reminder-card:hover,
+        .reminder-card:focus-visible {
+            transform: translateY(-2px);
+            border-color: rgba(255, 145, 77, 0.6);
+            background: rgba(10, 12, 28, 0.65);
+        }
+
+        .reminder-card:focus-visible {
+            outline: 2px solid rgba(255, 145, 77, 0.7);
+            outline-offset: 3px;
+        }
+
+        .reminder-card-text {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .reminder-card-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            line-height: 1.3;
+        }
+
+        .reminder-card-meta {
+            font-size: 0.78rem;
+            opacity: 0.7;
+            line-height: 1.2;
+        }
+
+        .reminder-empty {
+            text-align: center;
+            font-size: 0.95rem;
+            opacity: 0.7;
+            padding: 16px;
+            border-radius: 16px;
+            border: 1px dashed rgba(255, 255, 255, 0.15);
+            background: rgba(15, 18, 32, 0.35);
+        }
+
+        .reminder-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(3, 5, 15, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1200;
+        }
+
+        .reminder-modal-backdrop.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .reminder-modal {
+            width: min(420px, 100%);
+            border-radius: 24px;
+            padding: 28px 24px 24px;
+            background: rgba(20, 24, 46, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
+            position: relative;
+            backdrop-filter: blur(20px);
+            color: #fff;
+        }
+
+        .reminder-modal-close {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            border: none;
+            background: transparent;
+            color: #fff;
+            font-size: 1.6rem;
+            cursor: pointer;
+        }
+
+        .reminder-modal-close:focus-visible {
+            outline: 2px solid rgba(255, 145, 77, 0.7);
+            outline-offset: 4px;
+        }
+
+        .reminder-modal-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.06);
+            margin-bottom: 12px;
+        }
+
+        .reminder-modal h4 {
+            margin: 0 0 8px;
+            font-size: 1.25rem;
+        }
+
+        .reminder-modal-datetime {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin: 0 0 12px;
+        }
+
+        .reminder-modal-description {
+            margin: 0 0 20px;
+            line-height: 1.4;
+            opacity: 0.95;
+        }
+
+        .reminder-modal-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            border: none;
+            border-radius: 999px;
+            padding: 0.85rem 1.2rem;
+            font-weight: 600;
+            color: #050712;
+            background: linear-gradient(120deg, #ffb347, #ff6b00);
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .reminder-modal-action:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(255, 145, 77, 0.4);
+        }
+
+        .crm-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(5, 7, 18, 0.82);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1150;
+        }
+
+        .crm-modal-backdrop.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .crm-modal {
+            width: min(420px, 100%);
+            border-radius: 28px;
+            padding: 30px 26px 26px;
+            background: rgba(14, 20, 38, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.48);
+            backdrop-filter: blur(18px);
+            color: #fff;
+            position: relative;
+        }
+
+        .crm-modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            border: none;
+            background: transparent;
+            color: #fff;
+            font-size: 1.6rem;
+            cursor: pointer;
+        }
+
+        .crm-modal-close:focus-visible {
+            outline: 2px solid rgba(255, 145, 77, 0.65);
+            outline-offset: 4px;
+        }
+
+        .crm-modal-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            background: rgba(255, 255, 255, 0.05);
+            margin-bottom: 12px;
+        }
+
+        .crm-modal h4 {
+            margin: 0 0 6px;
+            font-size: 1.3rem;
+        }
+
+        .crm-modal-caption {
+            margin: 0 0 10px;
+            opacity: 0.75;
+            font-size: 0.9rem;
+        }
+
+        .crm-modal-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0 0 14px;
+        }
+
+        .crm-modal-description {
+            margin: 0 0 22px;
+            line-height: 1.45;
+            opacity: 0.95;
+        }
+
+        .crm-modal-action {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: none;
+            border-radius: 999px;
+            padding: 0.85rem 1.2rem;
+            color: #050712;
+            font-weight: 600;
+            background: linear-gradient(120deg, #ffd89b, #ff914d);
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .crm-modal-action:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 26px rgba(255, 145, 77, 0.4);
+        }
+
+        .revenue-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(3, 5, 15, 0.82);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1100;
+        }
+
+        .revenue-modal-backdrop.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .revenue-modal {
+            width: min(900px, 95vw);
+            border-radius: 28px;
+            padding: 28px 26px 24px;
+            background: rgba(12, 18, 34, 0.92);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.55);
+            color: #ffffff;
+            backdrop-filter: blur(18px);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .revenue-modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            border: none;
+            background: transparent;
+            color: #ffffff;
+            font-size: 1.6rem;
+            cursor: pointer;
+        }
+
+        .revenue-modal-close:focus-visible {
+            outline: 2px solid rgba(255, 145, 77, 0.65);
+            outline-offset: 4px;
+        }
+
+        .revenue-modal h3 {
+            margin: 0 0 6px;
+            font-size: 1.4rem;
+        }
+
+        .revenue-modal p {
+            margin: 0 0 18px;
+            opacity: 0.85;
+        }
+
+        .revenue-modal-company-list {
+            width: 100%;
+            display: grid;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .company-progress-card {
+            border-radius: 18px;
+            padding: 16px;
+            background: rgba(15, 20, 40, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        .company-progress-card.general {
+            background: linear-gradient(140deg, rgba(8, 12, 40, 0.95), rgba(59, 130, 246, 0.6));
+            border-color: rgba(59, 130, 246, 0.6);
+            box-shadow: 0 18px 40px rgba(8, 12, 40, 0.7);
+        }
+
+        .company-progress-card header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .company-progress-card h4 {
+            margin: 0;
+            font-size: 1rem;
+            color: #fff;
+        }
+
+        .company-progress-card span {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .company-progress-chart {
+            margin: 12px 0;
+            width: 100%;
+            height: 8px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+        }
+
+        .company-progress-chart span {
+            display: block;
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(120deg, #ff914d, #ff6b00);
+            transition: width 0.25s ease;
+        }
+
+        .company-progress-meta {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.75);
+            margin: 0;
+        }
+
+        .company-chart-wrapper {
+            width: 100%;
+            height: 140px;
+        }
+
+        .company-chart-wrapper canvas {
+            width: 100%;
+            height: 140px;
+        }
+
+        .daily-values {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .daily-values span {
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        .revenue-modal-days {
+            list-style: none;
+            margin: 16px 0 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .revenue-modal-days { display: none; }
+
+        .revenue-modal-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 18px;
+            padding: 0.8rem 1.2rem;
+            border-radius: 999px;
+            border: none;
+            background: linear-gradient(120deg, #ffb347, #ff6b00);
+            color: #050712;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .revenue-modal-action:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 24px rgba(255, 145, 77, 0.4);
+        }
+
+        .pulse-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .pulse-dot::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            border: 2px solid currentColor;
+            opacity: 0.6;
+            animation: pulse 1.8s infinite;
+        }
+
+        .reminder-description {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .reminder-text {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .reminder-datetime {
+            font-size: 0.82rem;
+            opacity: 0.7;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0.6;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1.8);
+                opacity: 0;
+            }
+        }
+
+        @keyframes floatingChatGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .chart-wrapper {
+            width: 100%;
+            height: 160px;
+        }
+
+        .chart-wrapper canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .crm-metrics {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+        }
+
+        .crm-metric-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 16px;
+            border-radius: 20px;
+            background: rgba(11, 16, 31, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 12px 26px rgba(6, 10, 20, 0.35);
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+        }
+
+        .crm-metric-card:hover,
+        .crm-metric-card:focus-visible {
+            transform: translateY(-2px);
+            border-color: rgba(255, 145, 77, 0.65);
+            box-shadow: 0 16px 34px rgba(10, 15, 32, 0.45);
+        }
+
+        .crm-metric-card:focus-visible {
+            outline: 2px solid rgba(255, 145, 77, 0.65);
+            outline-offset: 3px;
+        }
+
+        .crm-metric-card-text {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .crm-metric-label {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .crm-metric-caption {
+            font-size: 0.78rem;
+            opacity: 0.7;
+        }
+
+        .crm-metric-card-value {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: flex-end;
+            font-weight: 700;
+            color: #fff;
+            gap: 2px;
+        }
+
+        .crm-metric-value {
+            font-size: 1.55rem;
+            line-height: 1.1;
+        }
+
+        .crm-metric-card-value i {
+            font-size: 1.1rem;
+            opacity: 0.65;
+        }
+
+        .market-panels {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .market-card {
+            background: var(--sidebar-color);
+            border-radius: 24px;
+            padding: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.3);
+            color: #ffffff;
+        }
+
+        .market-card p,
+        .market-card span,
+        .market-card h3,
+        .market-card small {
+            color: #ffffff;
+        }
+
+        .market-card header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .market-statuses {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            text-align: right;
+        }
+        .market-statuses small {
+            font-size: 0.75rem;
+            opacity: 0.75;
+        }
+
+        .market-content {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+
+        .currency-block,
+        .news-block {
+            flex: 1;
+        }
+
+        .news-block {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 18px;
+            padding: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .news-block-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .news-block h4 {
+            margin: 0;
+            font-size: 1rem;
+            color: #e2e8ff;
+        }
+
+        .currency-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+        }
+
+        .currency-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .currency-summary {
+            margin-top: 18px;
+            font-size: 0.92rem;
+            color: #e2e8ff;
+            line-height: 1.4;
+        }
+
+        .currency-live-news-card {
+            margin-top: 18px;
+            padding: 18px;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(0, 0, 0, 0.25);
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .currency-live-news-card h4 {
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .currency-live-news-card p {
+            margin: 0;
+            line-height: 1.45;
+            opacity: 0.85;
+        }
+
+        .currency-live-news-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .currency-live-news-meta span {
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        .currency-live-news-meta button {
+            border: none;
+            border-radius: 999px;
+            padding: 0.5rem 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: #050712;
+            background: linear-gradient(120deg, #ffd89b, #ff6b00);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .currency-live-news-meta button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 18px rgba(255, 145, 77, 0.4);
+        }
+
+        .currency-item strong {
+            font-size: 1.2rem;
+        }
+
+        .currency-change {
+            font-size: 0.85rem;
+        }
+
+        .currency-change.positive {
+            color: #4ade80;
+        }
+
+        .currency-change.negative {
+            color: #f87171;
+        }
+
+        .travel-info-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .travel-info-list li {
+            padding-left: 12px;
+            border-left: 2px solid rgba(255, 255, 255, 0.15);
+            color: #f0f5ff;
+        }
+
+        .travel-info-list h4 {
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .daily-briefing {
+            background: var(--sidebar-color);
+            border-radius: 24px;
+            padding: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.4);
+            color: #edf2ff;
+        }
+
+        .news-list {
+            list-style: none;
+            margin: 18px 0 0;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+        }
+
+        .news-list li {
+            padding: 16px;
+            border-radius: 18px;
+            background: rgba(15, 23, 42, 0.45);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .news-list a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .news-list a:hover {
+            color: #ff914d;
+        }
+
+        .news-list time {
+            font-size: 0.78rem;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            .home {
+                padding: 10px 10px 140px;
+                left: 0;
+                width: 100%;
+                top: 60px;
+            }
+
+            .home-overview {
+                gap: 12px !important;
+                margin: 0;
+                width: 100%;
+                padding: 0;
+            }
+
+            .home-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+
+            .home-header-text h1 {
+                font-size: 1.25rem;
+                line-height: 1.15;
+                margin: 6px 0;
+            }
+
+            .home-cards {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                width: 100%;
+            }
+
+            .home-card {
+                padding: 14px;
+                gap: 12px;
+                width: 100%;
+            }
+
+            .market-card {
+                padding: 14px;
+                width: 100%;
+            }
+
+            .progress-stats {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+
+            .chart-wrapper {
+                height: 140px;
+            }
+
+            .crm-metrics {
+                grid-template-columns: 1fr;
+            }
+
+            .crm-metric-card {
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .home-card h3 {
+                font-size: 1.05rem;
+            }
+
+            .home-card-value {
+                font-size: 1.8rem;
+            }
+
+            .home-card .card-link {
+                font-size: 0.9rem;
+            }
+
+            .floating-chat {
+                left: auto;
+                right: 14px;
+                bottom: 14px;
+                width: auto;
+            }
+
+            .floating-chat-toggle {
+                width: 58px;
+                height: 58px;
+                border-radius: 50%;
+                padding: 0;
+                justify-content: center;
+                gap: 0;
+            }
+
+            .floating-chat-toggle span {
+                display: none;
+            }
+
+            .floating-chat-toggle i {
+                font-size: 1.6rem;
+            }
+
+            .floating-chat-window {
+                width: calc(100vw - 28px);
+                max-width: none;
+                right: 14px;
+                left: 14px;
+                bottom: 78px;
+            }
+
+            .config-section {
+                padding: 18px;
+                border-radius: 16px;
+            }
+
+            .config-form .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .config-actions {
+                justify-content: center;
+            }
+
+            #configToast {
+                right: 14px;
+                bottom: 14px;
+            }
+
+            /* Saudação menor e preenchimento total dos cards */
+            .home-greeting {
+                font-size: 1.3rem;
+                line-height: 1.1;
+            }
+
+            .home-clock {
+                font-size: 0.85rem;
+            }
+
+            .home-overview,
+            .home-cards,
+            .home-card,
+            .market-card {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .home-header-text h1 {
+                font-size: 1.4rem;
+            }
+
+            .home-card {
+                padding: 14px;
+            }
+
+            .home-card h3 {
+                font-size: 1rem;
+            }
+
+            .home-card-value {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Menu -->
+    <nav class="sidebar close">
+
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="img/logo.png" alt="">
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name" id="nome">SellaStay</span>
+                    <span class="profession">EGRC Control</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu-scrollable">
+
+                <ul class="menu-links">
+
+                    <br>
+                    <br>
+
+                    <li class="nav-link" id="navselected">
+                        <a href="home.html">
+                            <i class='bx bxs-home icon' ></i>
+                            <span class="text nav-text">Home</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="dashboard.html">
+                            <i class='bx bxs-dashboard icon' ></i>
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link has-submenu">
+                        <a href="leads.html">
+                            <i class='bx bxs-grid icon' ></i>
+                            <span class="text nav-text">Operacional <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="leads.html"><i class='bx bxs-chevrons-right icon' ></i>Negociações</a></li>
+                            <li><a href="follow-up.html"><i class='bx bx-transfer icon' ></i>Follow Up log</a></li>
+                            <li><a href="clients.html"><i class='bx bx-id-card icon' ></i>Carteira de Clientes</a></li>
+                            <li><a href="vendas.html"><i class='bx bx-history icon'></i></i>Histórico de Vendas</a></li>
+                            <li><a href="tasks.html"><i class='bx bx-task icon'></i></i>Gestor de Tarefas</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="calendar.html">
+                            <i class='bx bxs-calendar-event icon'></i>
+                            <span class="text nav-text">Mapa de Eventos</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="pricespy.html">
+                            <i class='bx bx-radar icon'></i>
+                            <span class="text nav-text">Radar de Preços</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="reminder.html">
+                            <i class='bx bxs-bell-ring icon' ></i>
+                            <span class="text nav-text">Lembretes</span>
+                        </a>
+                    </li>
+
+                    <!-- ::::::: VERIFICAR NECESSIDADE ::::::::-->
+                    <!-- <li class="nav-link">
+                        <a href="contratos.html">
+                            <i class='bx bx-briefcase icon' ></i>
+                            <span class="text nav-text">Contratos</span>
+                        </a>
+                    </li> -->
+
+                    <li class="nav-link">
+                        <a href="relatorios.html">
+                            <i class='bx bx-line-chart icon'></i>
+                            <span class="text nav-text">Relatórios</span>
+                        </a>
+                    </li>
+
+                    <!-- ::::::: REALOCAR PARA OUTRO LUGAR ::::::::-->
+                    <!-- <li class="nav-link"> 
+                        <a href="doc.html">
+                            <i class='bx bx-help-circle icon' ></i>
+                            <span class="text nav-text">Ajuda</span>
+                        </a>
+                    </li> -->
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <ul class="menu-links">
+                    <li class="nav-link has-submenu">
+                        <a href="#">
+                            <img id="profile-pic" src="img/profile_pic_F.png" alt="Usuário logado">
+                            <span class="text nav-text"><span id="menuUserName">Usuário</span> <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="profile.html"><i class='bx bx-user icon'></i> Perfil</a></li>
+                            <li class="has-submenu">
+                                <a href="empresas.html">
+                                    <i class='bx bxs-building icon'></i> Empresa <i class='bx bx-chevron-down arrow'></i>
+                                </a>
+                                <ul class="submenu">
+                                    <li><a href="#empresa-config"><i class='bx bx-briefcase icon'></i> Configurações da Empresa</a></li>
+                                    <li><a href="#hoteis-config"><i class='bx bx-hotel icon'></i> Cadastro de Hotéis</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="settings.html"><i class='bx bx-cog icon'></i> Configurações</a></li>
+                            <li><a href="help.html"><i class='bx bx-support icon'></i> Suporte</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="logout" id="logout">
+                        <a href="index.html">
+                            <i class='bx bx-log-out icon' ></i>
+                            <span class="text nav-text">Logout</span>
+                        </a>
+                    </li>
+
+                    <li class="mode">
+                        <div class="sun-moon">
+                            <i class='bx bx-moon icon moon'></i>
+                            <i class='bx bx-sun icon sun'></i>
+                        </div>
+                        <span class="mode-text text">Dark mode</span>
+
+                        <div class="toggle-switch">
+                            <span class="switch"></span>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- /Menu -->
+
+    <section class="home">
+        <div id="content-chat" class="home-overview">
+            <div class="home-header">
+                <div class="home-header-text">
+                    <p class="home-eyebrow">Página inicial</p>
+                    <h1 id="saudacao" class="home-greeting">Bem-vindo</h1>
+                    <p id="dataHora" class="home-clock"></p>
+                </div>
+            </div>
+
+            <div class="home-cards">
+                <article class="home-card home-card-reminders">
+                    <header>
+                        <div>
+                            <p class="card-eyebrow">Hoje</p>
+                            <h3>Lembretes</h3>
+                        </div>
+                        <span class="home-pill"><span id="total-lembretes">0</span> tarefas urgente</span>
+                    </header>
+                    <ul id="lembrete-list" class="lembrete-list"></ul>
+                    <a href="reminder.html" class="card-link">Ver todos os lembretes</a>
+                </article>
+
+                <article class="home-card home-card-receita">
+                    <header>
+                        <div>
+                            <p class="card-eyebrow">Receitas</p>
+                            <h3>Visão Diária</h3>
+                        </div>
+                        <span class="home-pill">Meta Mensal</span>
+                    </header>
+                    <p class="home-card-value" id="receita-total">R$ 0,00</p>
+                    <p class="home-card-meta">Meta do Mês <strong id="meta-mensal">R$ 0,00</strong></p>
+                    <div class="revenue-spotlight" id="revenue-spotlight" role="button" tabindex="0" aria-label="Abrir visao geral de receitas">
+                        <div class="chart-wrapper" aria-hidden="false">
+                            <canvas id="receitaChart" width="420" height="140" role="img" aria-label="Desempenho diario de receitas"></canvas>
+                        </div>
+                        <div class="progress-track">
+                            <span id="receita-progress"></span>
+                        </div>
+                    </div>
+                    <div class="progress-stats">
+                        <strong id="receita-percent-strong">0%</strong>
+                    <span id="receita-remaining">Faltam R$ 0,00</span>
+                    </div>
+                    <p class="progress-label" id="receita-percent"></p>
+                    <a href="dashboard.html" class="card-link">Ver detalhes financeiros</a>
+                </article>
+
+                <article class="home-card home-card-crm">
+                    <header>
+                        <div>
+                            <p class="card-eyebrow">CRM</p>
+                            <h3>Pipeline Ativo</h3>
+                        </div>
+                        <span class="home-pill">Foco em Fechamento</span>
+                    </header>
+                    <ul class="crm-metrics" id="crm-metrics">
+                        <li class="crm-metric-card" data-crm-metric="ativos" role="button" tabindex="0" aria-label="Leads ativos no funil geral">
+                            <div class="crm-metric-card-text">
+                                <span class="crm-metric-label">Leads Ativos</span>
+                                <span class="crm-metric-caption">no funil geral</span>
+                            </div>
+                            <div class="crm-metric-card-value">
+                                <span class="crm-metric-value" id="leads-ativos">0</span>
+                                <i class='bx bx-chevron-right'></i>
+                            </div>
+                        </li>
+                        <li class="crm-metric-card" data-crm-metric="novos" role="button" tabindex="0" aria-label="Novos leads na semana">
+                            <div class="crm-metric-card-text">
+                                <span class="crm-metric-label">Novos na Semana</span>
+                                <span class="crm-metric-caption">origem inbound/outbound</span>
+                            </div>
+                            <div class="crm-metric-card-value">
+                                <span class="crm-metric-value" id="leads-novos">0</span>
+                                <i class='bx bx-chevron-right'></i>
+                            </div>
+                        </li>
+                        <li class="crm-metric-card" data-crm-metric="quentes" role="button" tabindex="0" aria-label="Leads quase fechando">
+                            <div class="crm-metric-card-text">
+                                <span class="crm-metric-label">Quase Fechando</span>
+                                <span class="crm-metric-caption">follow-up final</span>
+                            </div>
+                            <div class="crm-metric-card-value">
+                                <span class="crm-metric-value" id="leads-quentes">0</span>
+                                <i class='bx bx-chevron-right'></i>
+                            </div>
+                        </li>
+                        <li class="crm-metric-card" data-crm-metric="propostas" role="button" tabindex="0" aria-label="Propostas enviadas">
+                            <div class="crm-metric-card-text">
+                                <span class="crm-metric-label">Propostas Enviadas</span>
+                                <span class="crm-metric-caption">aguardando assinatura</span>
+                            </div>
+                            <div class="crm-metric-card-value">
+                                <span class="crm-metric-value" id="leads-propostas">0</span>
+                                <i class='bx bx-chevron-right'></i>
+                            </div>
+                        </li>
+                        <li class="crm-metric-card" data-crm-metric="checkins" role="button" tabindex="0" aria-label="Check-ins previstos">
+                            <div class="crm-metric-card-text">
+                                <span class="crm-metric-label">Check-ins Previstos</span>
+                                <span class="crm-metric-caption">em implementacao</span>
+                            </div>
+                            <div class="crm-metric-card-value">
+                                <span class="crm-metric-value" id="leads-fechando">0</span>
+                                <i class='bx bx-chevron-right'></i>
+                            </div>
+                        </li>
+                    </ul>
+                    <a href="leads.html" class="card-link">Abrir funil completo</a>
+                </article>
+            </div>
+
+            <div class="market-panels">
+                <section class="market-card market-quote-news-card">
+                    <header>
+                        <div>
+                            <p class="card-eyebrow">Mercado</p>
+                            <h3>Cotações & Notícias Cambiais</h3>
+                        </div>
+                        <div class="market-statuses">
+                            <small id="currency-updated">Atualizando...</small>
+                            <small id="currency-live-news-status">Buscando notícias...</small>
+                        </div>
+                    </header>
+                    <div class="market-content">
+                        <div class="currency-block">
+                            <div class="currency-grid">
+                                <article class="currency-item">
+                                    <p>Dólar</p>
+                                    <strong id="usd-rate">--</strong>
+                                    <span class="currency-change" id="usd-change">--</span>
+                                </article>
+                                <article class="currency-item">
+                                    <p>Euro</p>
+                                    <strong id="eur-rate">--</strong>
+                                    <span class="currency-change" id="eur-change">--</span>
+                                </article>
+                                <article class="currency-item">
+                                    <p>Libra</p>
+                                    <strong id="gbp-rate">--</strong>
+                                    <span class="currency-change" id="gbp-change">--</span>
+                                </article>
+                            </div>
+                           <!-- <p id="currency-summary" class="currency-summary">Monitorando os principais movimentos cambiais...</p> -->
+                        </div>
+                        <div class="news-block">
+                            <div class="news-block-header">
+                                <h4>Notícias em destaque</h4>
+                            </div>
+                            <div class="currency-live-news-card" id="currency-live-news">
+                                <h4 id="currency-live-news-title">Buscando notícias financeiras...</h4>
+                                <p id="currency-live-news-description">Conectando com os principais portais sobre dólar, real e euro.</p>
+                                <div class="currency-live-news-meta">
+                                    <span id="currency-live-news-source">--</span>
+                                    <button type="button" id="currency-live-news-button">Abrir notícia</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="market-card">
+                    <header>
+                        <div>
+                            <p class="card-eyebrow">Turismo</p>
+                            <h3>Radar de viagens</h3>
+                        </div>
+                    </header>
+                    <ul id="travel-insights" class="travel-info-list"></ul>
+                </section>
+            </div>
+
+            <section class="daily-briefing">
+                <header>
+                    <div>
+                        <p class="card-eyebrow">Resumo do dia</p>
+                        <h3>Noticiario de cultura, eventos e viagens</h3>
+                    </div>
+                </header>
+                <p id="daily-summary">Conectando com os principais veiculos de noticias...</p>
+                <ul id="news-list" class="news-list">
+                    <li class="news-empty">Carregando noticias atualizadas...</li>
+                </ul>
+            </section>
+
+        </div>
+
+        <img id="logoavi" src="img/aviat.png" alt="Aviat">
+
+    </section>
+
+    <div class="reminder-modal-backdrop" id="reminder-modal" aria-hidden="true">
+        <div class="reminder-modal" role="dialog" aria-modal="true" aria-labelledby="reminder-modal-title">
+            <button type="button" class="reminder-modal-close" id="reminder-modal-close" aria-label="Fechar detalhes do lembrete">&times;</button>
+            <span class="reminder-modal-badge" id="reminder-modal-urgency">Lembrete</span>
+            <h4 id="reminder-modal-title">Detalhes do lembrete</h4>
+            <p class="reminder-modal-datetime" id="reminder-modal-datetime">--</p>
+            <p class="reminder-modal-description" id="reminder-modal-description">Selecione um lembrete para visualizar as informacoes completas.</p>
+            <a href="reminder.html" class="reminder-modal-action" id="reminder-modal-action">Ir ate o lembrete</a>
+        </div>
+    </div>
+
+    <div class="crm-modal-backdrop" id="crm-metric-modal" aria-hidden="true">
+        <div class="crm-modal" role="dialog" aria-modal="true" aria-labelledby="crm-modal-title">
+            <button type="button" class="crm-modal-close" id="crm-modal-close" aria-label="Fechar detalhes da metrica">&times;</button>
+            <span class="crm-modal-pill">CRM</span>
+            <h4 id="crm-modal-title">Resumo da metrica</h4>
+            <p class="crm-modal-caption" id="crm-modal-caption">Atualizacao em tempo real</p>
+            <p class="crm-modal-value" id="crm-modal-value">0</p>
+            <p class="crm-modal-description" id="crm-modal-description">Clique em uma metrica para ver suas notas e contexto.</p>
+            <a href="leads.html" class="crm-modal-action" id="crm-modal-action">
+                <span id="crm-modal-action-label">Abrir visao geral</span>
+                <i class='bx bx-arrow-back'></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="revenue-modal-backdrop" id="revenue-modal" aria-hidden="true">
+        <div class="revenue-modal" role="dialog" aria-modal="true" aria-labelledby="revenue-modal-title">
+            <button type="button" class="revenue-modal-close" id="revenue-modal-close" aria-label="Fechar visao geral de receitas">&times;</button>
+            <h3 id="revenue-modal-title">Visao geral de receitas</h3>
+            <p id="revenue-modal-summary">Acompanhe o desempenho diario e conecte-se ao leads.html para detalhar a origem das vendas.</p>
+            <a href="leads.html" class="revenue-modal-action" id="revenue-modal-action" target="_blank" rel="noopener">
+                Ver detalhado no leads
+                <i class='bx bx-line-chart'></i>
+            </a>
+        </div>
+    </div>
+
+
+    <!--Footer -->
+    <!-- <Footer style="line-height: 15px;">
+        &copy; <span id="anoAtual"></span> SellaStay - Gestão para Hotéis. <br> <span style="font-size: 10px; cursor: pointer;">Desenvolvido por <a href="https://www.syncsoftware.com.br" style="text-decoration: none; color: var(--text-color);" onmouseover="this.style.color='#ff914d';" onmouseout="this.style.color='var(--text-color)';" target="_blank"> <b>Sync Software LTDA</b></a></span>
+    </Footer> -->
+    
+    <div class="floating-chat" aria-live="polite">
+        <button type="button" class="floating-chat-toggle" id="floatingChatToggle" aria-expanded="false" aria-controls="floating-chat-window">
+            <i class='bx bxs-message-rounded-dots'></i>
+            <span>Converse com a SyncIA</span>
+        </button>
+        <section class="floating-chat-window" id="floating-chat-window" aria-labelledby="ia-illama-title" hidden>
+            <div class="floating-chat-header">
+                <div class="ia-header-left">
+                   <!-- <img src="img/syncia-logo.png" alt="SyncIA logo"> -->
+                    <div>
+                        <h3 id="ia-illama-title">SyncIA</h3>
+                        <small class="ia-subtitle">Assistente inteligente</small>
+                    </div>
+                </div>
+                <button type="button" class="floating-chat-close syncia-exit" id="floatingChatClose" aria-label="Minimizar chat">&times;</button>
+            </div>
+            <div class="ia-chat">
+                <div class="chat-container" id="chat" aria-live="polite"></div>
+                <div class="input-container">
+                    <input type="text" id="userInput" placeholder="Digite sua mensagem..." aria-label="Mensagem para a SyncIA">
+                    <button type="button" aria-label="Enviar mensagem"><i class='bx bxs-send isend'></i></button>
+                </div>
+            </div>
+        </section>
+    </div>
+        
+    <script src="js/script.js"></script>
+    <!-- <script src="assets/script.js"></script>  ::::::::::::::::::::: Só por enquanto ...   :::::::::::::::::::::::::::::::::::-->
+
+    <script>
+        (function () {
+            // Os detalhes da arquitetura da SyncIA (comandos, treinamento e integrações) está em docs/backend-syncia.md
+        const userNameSource = document.getElementById("user-name");
+
+        const EMPRESAS_STORAGE_KEY = "empresas_data";
+        const resumoReceita = { total: 28500, meta: 35000 };
+        const receitaHistorico = [
+            { dia: "Seg", valor: 3200 },
+            { dia: "Ter", valor: 4100 },
+            { dia: "Qua", valor: 3800 },
+            { dia: "Qui", valor: 4650 },
+            { dia: "Sex", valor: 5200 },
+            { dia: "Sab", valor: 4100 },
+            { dia: "Dom", valor: 2500 }
+        ];
+        function readEmpresasData() {
+            try {
+                const raw = localStorage.getItem(EMPRESAS_STORAGE_KEY);
+                if (!raw) return [];
+                const parsed = JSON.parse(raw);
+                if (Array.isArray(parsed)) return parsed;
+            } catch (error) {
+                console.error("Erro ao ler empresas", error);
+            }
+            return [];
+        }
+
+        function getTotalMetaFromEmpresas() {
+            return readEmpresasData().reduce((sum, company) => sum + (Number(company.meta) || 0), 0);
+        }
+
+        function applyMetaFromStorage() {
+            const totalMeta = getTotalMetaFromEmpresas();
+            if (totalMeta > 0) {
+                resumoReceita.meta = totalMeta;
+            }
+        }
+        const resumoLeads = { ativos: 128, novos: 7, quentes: 21, propostas: 14, fechando: 9 };
+        const travelInsightsData = [
+            { titulo: "Fluxo nacional", descricao: "Destinos de natureza cresceram 18% na ultima semana, impulsionados por feriados regionais." },
+            { titulo: "Mercado internacional", descricao: "Demanda para EUA e Europa subiu 9% com dolar mais estavel e tax free em foco." },
+            { titulo: "Eventos corporativos", descricao: "Congressos medicos e de tecnologia representam 32% das novas reservas captadas." },
+            { titulo: "Tendencias", descricao: "Viajantes buscam estadias com experiencia cultural e gastronomica regional incluida." }
+        ];
+        const currencyLiveNewsEndpointz = "backend/market_news.php"; // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   Tirar o Z depois   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        const newsEndpoint = "https://r.jina.ai/https://news.google.com/rss/search?q=turismo+cultura+viagens+eventos+mercado+de+viagens&hl=pt-BR&gl=BR&ceid=BR:pt-419";
+        const currencyLiveNewsEndpoint = "https://r.jina.ai/https://news.google.com/rss/search?q=dolar+real+euro&hl=pt-BR&gl=BR&ceid=BR:pt-419";
+        const crmMetricDetails = {
+            ativos: {
+                title: "Leads ativos no funil",
+                caption: "Monitoramento geral",
+                description: "Representa todo o volume de oportunidades acompanhadas pelo time comercial. Use esta visão para priorizar follow-ups e manter o ritmo do pipeline.",
+                unit: "leads ativos",
+                actionLink: "leads.html#ativos"
+            },
+            novos: {
+                title: "Novos leads na semana",
+                caption: "Entradas por inbound/outbound",
+                description: "Acompanhe o ritmo de geração de demanda dos últimos dias e identifique quais canais precisam de reforço.",
+                unit: "novos leads",
+                actionLink: "leads.html#novos"
+            },
+            quentes: {
+                title: "Leads quase fechando",
+                caption: "Follow-up final",
+                description: "Foca nas oportunidades que estão em negociação avançada e exigem ações rápidas para converter receita.",
+                unit: "oportunidades prontas",
+                actionLink: "leads.html#quentes"
+            },
+            propostas: {
+                title: "Propostas enviadas",
+                caption: "Aguardando assinatura",
+                description: "Mostra quantas propostas estão na mesa do cliente aguardando retorno. Útil para prevenir gargalos antes da assinatura.",
+                unit: "propostas",
+                actionLink: "leads.html#propostas"
+            },
+            checkins: {
+                title: "Check-ins previstos",
+                caption: "Implantações em andamento",
+                description: "Controla os hotéis que estão entrando em operação. Ajuda o time de implantação a alinhar prazos e expectativas.",
+                unit: "check-ins",
+                actionLink: "leads.html#implementacao"
+            }
+        };
+
+        const lembreteList = document.getElementById("lembrete-list");
+        const totalLembretes = document.getElementById("total-lembretes");
+        const normalizedUser = (userNameSource?.textContent || "default-user")
+            .replace(/\s*<.*?>/g, "")
+            .trim()
+            .toLowerCase()
+            .replace(/[^a-z0-9]/g, "_");
+        const reminderStorageKey = `reminders_${normalizedUser}`;
+        const receitaChartCanvas = document.getElementById("receitaChart");
+        const travelInsightsEl = document.getElementById("travel-insights");
+        const currencyStatusEl = document.getElementById("currency-updated");
+        const currencySummaryEl = document.getElementById("currency-summary");
+        const newsListEl = document.getElementById("news-list");
+        const dailySummaryEl = document.getElementById("daily-summary");
+        const currencyMap = {
+            USD: { rate: document.getElementById("usd-rate"), change: document.getElementById("usd-change") },
+            EUR: { rate: document.getElementById("eur-rate"), change: document.getElementById("eur-change") },
+            GBP: { rate: document.getElementById("gbp-rate"), change: document.getElementById("gbp-change") }
+        };
+        const currencyData = {};
+        const currencyLiveNewsCardEl = document.getElementById("currency-live-news");
+        const currencyLiveNewsTitleEl = document.getElementById("currency-live-news-title");
+        const currencyLiveNewsDescriptionEl = document.getElementById("currency-live-news-description");
+        const currencyLiveNewsSourceEl = document.getElementById("currency-live-news-source");
+        const currencyLiveNewsButtonEl = document.getElementById("currency-live-news-button");
+        const currencyLiveNewsStatusEl = document.getElementById("currency-live-news-status");
+        const receitaPercentStrongEl = document.getElementById("receita-percent-strong");
+        const receitaRemainingEl = document.getElementById("receita-remaining");
+        const revenueSpotlightEl = document.getElementById("revenue-spotlight");
+        const revenueModalEl = document.getElementById("revenue-modal");
+        const revenueModalCloseEl = document.getElementById("revenue-modal-close");
+        const revenueModalSummaryEl = document.getElementById("revenue-modal-summary");
+        const revenueModalActionEl = document.getElementById("revenue-modal-action");
+        let revenueModalCompanyListEl = document.getElementById("revenue-modal-company-list");
+        const reminderModalEl = document.getElementById("reminder-modal");
+        const reminderModalTitleEl = document.getElementById("reminder-modal-title");
+        const reminderModalDatetimeEl = document.getElementById("reminder-modal-datetime");
+        const reminderModalDescriptionEl = document.getElementById("reminder-modal-description");
+        const reminderModalUrgencyEl = document.getElementById("reminder-modal-urgency");
+        const reminderModalActionEl = document.getElementById("reminder-modal-action");
+        const reminderModalCloseEl = document.getElementById("reminder-modal-close");
+        const crmMetricModalEl = document.getElementById("crm-metric-modal");
+        const crmMetricModalTitleEl = document.getElementById("crm-modal-title");
+        const crmMetricModalCaptionEl = document.getElementById("crm-modal-caption");
+        const crmMetricModalValueEl = document.getElementById("crm-modal-value");
+        const crmMetricModalDescriptionEl = document.getElementById("crm-modal-description");
+        const crmMetricModalActionEl = document.getElementById("crm-modal-action");
+        const crmMetricModalActionLabelEl = document.getElementById("crm-modal-action-label");
+        const crmMetricModalCloseEl = document.getElementById("crm-modal-close");
+        let currencyLiveNewsItems = [];
+        let currencyLiveNewsIndex = 0;
+        let currencyLiveNewsTimer = null;
+
+        function readReminderData() {
+            try {
+                return JSON.parse(localStorage.getItem(reminderStorageKey)) || [];
+            } catch (error) {
+                console.error("Erro ao carregar lembretes", error);
+                return [];
+            }
+        }
+
+        function determineUrgency(reminder) {
+            const now = new Date();
+            const dueString = reminder.dueDateTime || reminder.dueDate || reminder.due_at;
+            if (!dueString) return "low";
+            const due = new Date(dueString);
+            const diffHours = (due - now) / 36e5;
+            if (diffHours <= 0) return "high";
+            if (diffHours <= 24) return "high";
+            if (diffHours <= 72) return "medium";
+            return "low";
+        }
+
+        function urgencyPriority(urgency) {
+            return { high: 0, medium: 1, low: 2 }[urgency] ?? 2;
+        }
+
+        function formatReminderDate(reminder) {
+            const dueString = reminder.dueDateTime || reminder.dueDate || reminder.due_at;
+            if (!dueString) return "--";
+            const date = new Date(dueString);
+            if (Number.isNaN(date.getTime())) return "--";
+            return date.toLocaleString("pt-BR", {
+                day: "2-digit",
+                month: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit"
+            });
+        }
+
+        function resolveReminderTitle(reminder = {}) {
+            return reminder.title || reminder.descricao || reminder.description || "Lembrete";
+        }
+
+        function resolveReminderDescription(reminder = {}) {
+            return reminder.notes || reminder.description || reminder.descricao || reminder.detalhes || "Esse lembrete ainda nao possui descricao detalhada.";
+        }
+
+        function resolveReminderLink(reminder = {}) {
+            if (reminder.link) return reminder.link;
+            if (reminder.url) return reminder.url;
+            if (reminder.id) return `reminder.html#${reminder.id}`;
+            return "reminder.html";
+        }
+
+        function reminderUrgencyLabel(urgency) {
+            if (urgency === "high") return "Alta prioridade";
+            if (urgency === "medium") return "Em andamento";
+            return "Planejamento";
+        }
+
+        function openReminderModal(reminder, meta = {}) {
+            if (!reminderModalEl) return;
+            if (reminderModalTitleEl) {
+                reminderModalTitleEl.textContent = resolveReminderTitle(reminder);
+            }
+            if (reminderModalDatetimeEl) {
+                reminderModalDatetimeEl.textContent = formatReminderDate(reminder);
+            }
+            if (reminderModalDescriptionEl) {
+                reminderModalDescriptionEl.textContent = resolveReminderDescription(reminder);
+            }
+            if (reminderModalUrgencyEl) {
+                reminderModalUrgencyEl.textContent = meta.label || reminderUrgencyLabel(determineUrgency(reminder));
+                const badgeColor = meta.color || "var(--primary-color, #ff914d)";
+                reminderModalUrgencyEl.style.color = badgeColor;
+                reminderModalUrgencyEl.style.borderColor = badgeColor;
+            }
+            if (reminderModalActionEl) {
+                reminderModalActionEl.href = resolveReminderLink(reminder);
+            }
+            reminderModalEl.classList.add("open");
+            reminderModalEl.setAttribute("aria-hidden", "false");
+        }
+
+        function closeReminderModal() {
+            if (!reminderModalEl) return;
+            reminderModalEl.classList.remove("open");
+            reminderModalEl.setAttribute("aria-hidden", "true");
+        }
+
+        if (reminderModalCloseEl) {
+            reminderModalCloseEl.addEventListener("click", () => closeReminderModal());
+        }
+        if (reminderModalEl) {
+            reminderModalEl.addEventListener("click", (event) => {
+                if (event.target === reminderModalEl) {
+                    closeReminderModal();
+                }
+            });
+            document.addEventListener("keydown", (event) => {
+                if (event.key === "Escape") {
+                    closeReminderModal();
+                }
+            });
+        }
+
+        function openCrmMetricModal(card) {
+            if (!crmMetricModalEl || !card) return;
+            const metricKey = card.dataset.crmMetric;
+            const label = card.querySelector(".crm-metric-label")?.textContent?.trim() || "Metrica CRM";
+            const caption = card.querySelector(".crm-metric-caption")?.textContent?.trim() || "Atualizacao em tempo real";
+            const rawValue = card.querySelector(".crm-metric-value")?.textContent?.trim() || "--";
+            const config = crmMetricDetails[metricKey] || {};
+            const unit = config.unit || "leads";
+            const displayValue = rawValue === "--"
+                ? rawValue
+                : (config.valueFormatter ? config.valueFormatter(rawValue) : `${rawValue} ${unit}`.trim());
+            if (crmMetricModalTitleEl) crmMetricModalTitleEl.textContent = config.title || label;
+            if (crmMetricModalCaptionEl) crmMetricModalCaptionEl.textContent = config.caption || caption;
+            if (crmMetricModalValueEl) crmMetricModalValueEl.textContent = displayValue;
+            if (crmMetricModalDescriptionEl) crmMetricModalDescriptionEl.textContent = config.description || "Acompanhe os indicadores do funil comercial.";
+            if (crmMetricModalActionEl) crmMetricModalActionEl.href = config.actionLink || "leads.html";
+            if (crmMetricModalActionLabelEl) crmMetricModalActionLabelEl.textContent = config.actionText || "Abrir visao geral";
+            crmMetricModalEl.classList.add("open");
+            crmMetricModalEl.setAttribute("aria-hidden", "false");
+        }
+
+        function closeCrmMetricModal() {
+            if (!crmMetricModalEl) return;
+            crmMetricModalEl.classList.remove("open");
+            crmMetricModalEl.setAttribute("aria-hidden", "true");
+        }
+
+        if (crmMetricModalCloseEl) {
+            crmMetricModalCloseEl.addEventListener("click", () => closeCrmMetricModal());
+        }
+        if (crmMetricModalEl) {
+            crmMetricModalEl.addEventListener("click", (event) => {
+                if (event.target === crmMetricModalEl) {
+                    closeCrmMetricModal();
+                }
+            });
+            document.addEventListener("keydown", (event) => {
+                if (event.key === "Escape") {
+                    closeCrmMetricModal();
+                }
+            });
+        }
+
+        const crmMetricCards = document.querySelectorAll(".crm-metric-card");
+        if (crmMetricCards.length) {
+            crmMetricCards.forEach((card) => {
+                card.addEventListener("click", () => openCrmMetricModal(card));
+                card.addEventListener("keydown", (event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        openCrmMetricModal(card);
+                    }
+                });
+            });
+        }
+
+        if (revenueSpotlightEl) {
+            revenueSpotlightEl.addEventListener("click", () => openRevenueModal());
+            revenueSpotlightEl.addEventListener("keydown", (event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    openRevenueModal();
+                }
+            });
+        }
+        if (revenueModalCloseEl) {
+            revenueModalCloseEl.addEventListener("click", () => closeRevenueModal());
+        }
+        if (revenueModalEl) {
+            revenueModalEl.addEventListener("click", (event) => {
+                if (event.target === revenueModalEl) {
+                    closeRevenueModal();
+                }
+            });
+            document.addEventListener("keydown", (event) => {
+                if (event.key === "Escape" && revenueModalEl.classList.contains("open")) {
+                    closeRevenueModal();
+                }
+            });
+        }
+
+        if (lembreteList && totalLembretes) {
+            const data = readReminderData();
+            const pendentes = data.filter(item => !item.completed);
+            const urgentPendentes = pendentes.filter(item => determineUrgency(item) === "high");
+            const sorted = [...pendentes]
+                .sort((a, b) => {
+                    const urgDiff = urgencyPriority(determineUrgency(a)) - urgencyPriority(determineUrgency(b));
+                    if (urgDiff !== 0) return urgDiff;
+                    const aDate = new Date(a.dueDateTime || a.dueDate || a.due_at || 0);
+                    const bDate = new Date(b.dueDateTime || b.dueDate || b.due_at || 0);
+                    return aDate - bDate;
+                })
+            lembreteList.innerHTML = "";
+
+            if (!sorted.length) {
+                const li = document.createElement("li");
+                li.className = "reminder-empty";
+                li.textContent = "Nenhum lembrete pendente no momento.";
+                lembreteList.appendChild(li);
+            } else {
+                sorted.forEach((item) => {
+                    const urgency = determineUrgency(item);
+                    const color = urgency === "high" ? "#dc2626" : urgency === "medium" ? "#facc15" : "#16a34a";
+                    const badgeLabel = reminderUrgencyLabel(urgency);
+                    const li = document.createElement("li");
+                    li.className = "reminder-card";
+                    li.tabIndex = 0;
+                    li.setAttribute("role", "button");
+                    li.setAttribute("aria-label", `${badgeLabel}: ${resolveReminderTitle(item)}`);
+
+                    const pulse = document.createElement("span");
+                    pulse.className = "pulse-dot";
+                    pulse.style.background = color;
+                    pulse.style.color = color;
+
+                    const textWrapper = document.createElement("div");
+                    textWrapper.className = "reminder-card-text";
+
+                    const titleEl = document.createElement("span");
+                    titleEl.className = "reminder-card-title";
+                    titleEl.textContent = resolveReminderTitle(item);
+
+                    const datetimeEl = document.createElement("span");
+                    datetimeEl.className = "reminder-card-meta";
+                    datetimeEl.textContent = formatReminderDate(item);
+
+                    textWrapper.append(titleEl, datetimeEl);
+
+                    li.append(pulse, textWrapper);
+
+                    const meta = { color, label: badgeLabel };
+                    li.addEventListener("click", () => openReminderModal(item, meta));
+                    li.addEventListener("keydown", (event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                            event.preventDefault();
+                            openReminderModal(item, meta);
+                        }
+                    });
+
+                    lembreteList.appendChild(li);
+                });
+            }
+
+            totalLembretes.textContent = urgentPendentes.length;
+        }
+
+        const receitaTotalEl = document.getElementById("receita-total");
+        const metaMensalEl = document.getElementById("meta-mensal");
+        const receitaPercentEl = document.getElementById("receita-percent");
+        const receitaProgressEl = document.getElementById("receita-progress");
+
+        function updateRevenueCard() {
+            if (!receitaTotalEl || !metaMensalEl || !receitaProgressEl) return;
+            const metaTarget = resumoReceita.meta && resumoReceita.meta > 0 ? resumoReceita.meta : 1;
+            const percent = Math.min(100, Math.round((resumoReceita.total / metaTarget) * 100));
+            receitaTotalEl.textContent = formatCurrency(resumoReceita.total);
+            metaMensalEl.textContent = formatCurrency(resumoReceita.meta || 0);
+            receitaProgressEl.style.width = `${percent}%`;
+            if (receitaPercentEl) {
+                receitaPercentEl.textContent = `${percent}% da meta`;
+            }
+            if (receitaPercentStrongEl) {
+                receitaPercentStrongEl.textContent = `${percent}%`;
+            }
+            if (receitaRemainingEl) {
+                const restante = Math.max((resumoReceita.meta || 0) - resumoReceita.total, 0);
+                receitaRemainingEl.textContent = restante > 0
+                    ? `Faltam ${formatCurrency(restante)}`
+                    : "Meta batida!";
+            }
+        }
+
+        applyMetaFromStorage();
+        updateRevenueCard();
+        window.addEventListener("storage", (event) => {
+            if (event.key === EMPRESAS_STORAGE_KEY) {
+                applyMetaFromStorage();
+                updateRevenueCard();
+            }
+        });
+
+        if (receitaChartCanvas && receitaHistorico.length) {
+            drawReceitaChart(receitaChartCanvas, receitaHistorico);
+        }
+
+        const leadsAtivosEl = document.getElementById("leads-ativos");
+        const leadsNovosEl = document.getElementById("leads-novos");
+        const leadsQuentesEl = document.getElementById("leads-quentes");
+        const leadsPropostasEl = document.getElementById("leads-propostas");
+        const leadsFechandoEl = document.getElementById("leads-fechando");
+        if (leadsAtivosEl) leadsAtivosEl.textContent = resumoLeads.ativos;
+        if (leadsNovosEl) leadsNovosEl.textContent = resumoLeads.novos;
+        if (leadsQuentesEl) leadsQuentesEl.textContent = resumoLeads.quentes;
+        if (leadsPropostasEl) leadsPropostasEl.textContent = resumoLeads.propostas;
+        if (leadsFechandoEl) leadsFechandoEl.textContent = resumoLeads.fechando;
+
+        renderTravelInsights();
+        loadCurrencyQuotes();
+        loadTravelNews();
+        loadCurrencyLiveNews();
+
+        function formatCurrency(valor) {
+            const amount = typeof valor === "number" ? valor : Number(valor) || 0;
+            return `R$ ${amount.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        }
+
+        function ensureCompanyListContainer() {
+            if (revenueModalCompanyListEl) return revenueModalCompanyListEl;
+            if (!revenueModalActionEl) return null;
+            const placeholder = document.createElement("div");
+            placeholder.id = "revenue-modal-company-list";
+            placeholder.className = "revenue-modal-company-list";
+            revenueModalActionEl.parentElement?.insertBefore(placeholder, revenueModalActionEl);
+            revenueModalCompanyListEl = placeholder;
+            return revenueModalCompanyListEl;
+        }
+
+        function renderCompanyProgressCards() {
+            const container = ensureCompanyListContainer();
+            if (!container) return;
+            const companies = readEmpresasData();
+            if (!companies.length) {
+                container.innerHTML = "<p class=\"company-progress-meta\">Nenhuma empresa cadastrada.</p>";
+                return;
+            }
+            const totalMeta = companies.reduce((sum, company) => sum + (Number(company.meta) || 0), 0) || 1;
+            const generalPercent = totalMeta ? Math.min(100, Math.round((resumoReceita.total / totalMeta) * 100)) : 0;
+            const generalRemaining = Math.max(totalMeta - resumoReceita.total, 0);
+            const generalDailyValuesHtml = receitaHistorico
+                .map((entry) => `<span>${entry.dia}: ${formatCurrency(entry.valor)}</span>`)
+                .join("");
+            const generalCard = `
+                <article class="company-progress-card general" aria-label="Meta geral">
+                    <header>
+                        <h4>Meta geral</h4>
+                        <span>${formatCurrency(totalMeta)}</span>
+                    </header>
+                    <div class="company-chart-wrapper">
+                        <canvas id="company-chart-general" width="320" height="140"></canvas>
+                    </div>
+                    <div class="company-progress-chart" aria-hidden="true">
+                        <span style="width:${generalPercent}%;"></span>
+                    </div>
+                    <p class="company-progress-meta">
+                        ${generalPercent}% da meta · ${generalRemaining > 0 ? `Faltam ${formatCurrency(generalRemaining)}` : "Meta batida"}
+                    </p>
+                    <div class="daily-values" aria-label="Faturamento diário geral">
+                        ${generalDailyValuesHtml}
+                    </div>
+                </article>
+            `;
+            const fragments = companies.map((company, index) => {
+                const meta = Number(company.meta) || 0;
+                const ratio = totalMeta ? meta / totalMeta : 0;
+                const companyDaily = receitaHistorico.map((item) => ({
+                    dia: item.dia,
+                    valor: Math.round(item.valor * ratio)
+                }));
+                const collected = companyDaily.reduce((sum, entry) => sum + entry.valor, 0);
+                const percent = meta ? Math.min(100, Math.round((collected / meta) * 100)) : 0;
+                const remaining = Math.max(meta - collected, 0);
+                const canvasId = `company-chart-${index}`;
+                const dailyValuesHtml = companyDaily
+                    .map((entry) => `<span>${entry.dia}: ${formatCurrency(entry.valor)}</span>`)
+                    .join("");
+                return `
+                    <article class="company-progress-card" aria-label="Meta da ${company.name}">
+                        <header>
+                            <h4>${company.name}</h4>
+                            <span>${formatCurrency(meta)}</span>
+                        </header>
+                        <div class="company-chart-wrapper">
+                            <canvas id="${canvasId}" width="320" height="140"></canvas>
+                        </div>
+                        <div class="company-progress-chart" aria-hidden="true">
+                            <span style="width:${percent}%;"></span>
+                        </div>
+                        <p class="company-progress-meta">
+                            ${percent}% da meta · ${remaining > 0 ? `Faltam ${formatCurrency(remaining)}` : "Meta batida"}
+                        </p>
+                        <div class="daily-values" aria-label="Valores diários da empresa">
+                            ${dailyValuesHtml}
+                        </div>
+                    </article>
+                `;
+            });
+            container.innerHTML = generalCard + fragments.join("");
+            const generalCanvas = document.getElementById("company-chart-general");
+            if (generalCanvas) {
+                drawReceitaChart(generalCanvas, receitaHistorico, { color: "#36d4b7" });
+            }
+            companies.forEach((company, index) => {
+                const canvas = document.getElementById(`company-chart-${index}`);
+                if (!canvas) return;
+                const ratio = totalMeta ? (Number(company.meta) || 0) / totalMeta : 0;
+                const companyDaily = receitaHistorico.map((item) => ({
+                    dia: item.dia,
+                    valor: Math.round(item.valor * ratio)
+                }));
+                drawReceitaChart(canvas, companyDaily);
+            });
+        }
+
+        function openRevenueModal() {
+            if (!revenueModalEl) return;
+            const restante = Math.max(resumoReceita.meta - resumoReceita.total, 0);
+            if (revenueModalSummaryEl) {
+                revenueModalSummaryEl.textContent = `Total acumulado de ${formatCurrency(resumoReceita.total)} vs meta de ${formatCurrency(resumoReceita.meta)}. Falta ${formatCurrency(restante)} para atingir 100%.`;
+            }
+            renderCompanyProgressCards();
+            revenueModalEl.classList.add("open");
+            revenueModalEl.setAttribute("aria-hidden", "false");
+        }
+
+        function closeRevenueModal() {
+            if (!revenueModalEl) return;
+            revenueModalEl.classList.remove("open");
+            revenueModalEl.setAttribute("aria-hidden", "true");
+        }
+
+        function shuffleArray(list = []) {
+            const clone = [...list];
+            for (let i = clone.length - 1; i > 0; i -= 1) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [clone[i], clone[j]] = [clone[j], clone[i]];
+            }
+            return clone;
+        }
+
+        function sanitizeText(text = "") {
+            return text
+                .replace(/<[^>]+>/g, " ")
+                .replace(/&.{1,5};/g, " ")
+                .replace(/\s+/g, " ")
+                .trim();
+        }
+
+        function drawReceitaChart(canvas, serie, options = {}) {
+            const ctx = canvas.getContext("2d");
+            if (!ctx || !serie.length) return;
+            const color = options.color || "#ff914d";
+            const fillColor = options.fillColor || "rgba(255, 145, 77, 0.18)";
+            const pointColor = options.pointColor || "#ffb347";
+            const dpr = window.devicePixelRatio || 1;
+            const width = canvas.clientWidth * dpr;
+            const height = canvas.clientHeight * dpr;
+            if (canvas.width !== width) canvas.width = width;
+            if (canvas.height !== height) canvas.height = height;
+            ctx.clearRect(0, 0, width, height);
+
+            const max = Math.max(...serie.map((item) => item.valor));
+            const min = Math.min(...serie.map((item) => item.valor));
+            const range = Math.max(1, max - min);
+            const padding = 16 * dpr;
+            const usableWidth = width - padding * 2;
+            const usableHeight = height - padding * 2;
+            const step = serie.length > 1 ? usableWidth / (serie.length - 1) : usableWidth;
+
+            const points = serie.map((item, index) => {
+                const x = padding + step * index;
+                const normalized = (item.valor - min) / range;
+                const y = padding + (1 - normalized) * usableHeight;
+                return [x, y];
+            });
+
+            ctx.lineWidth = 2 * dpr;
+            ctx.strokeStyle = color;
+            ctx.beginPath();
+            points.forEach(([x, y], index) => {
+                if (index === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            });
+            ctx.stroke();
+
+            ctx.beginPath();
+            points.forEach(([x, y], index) => {
+                if (index === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            });
+            ctx.lineTo(points[points.length - 1][0], height - padding);
+            ctx.lineTo(points[0][0], height - padding);
+            ctx.closePath();
+            ctx.fillStyle = fillColor;
+            ctx.fill();
+
+            ctx.fillStyle = pointColor;
+            points.forEach(([x, y]) => {
+                ctx.beginPath();
+                ctx.arc(x, y, 3.5 * dpr, 0, Math.PI * 2);
+                ctx.fill();
+            });
+        }
+
+        function renderTravelInsights() {
+            if (!travelInsightsEl) return;
+            travelInsightsEl.innerHTML = "";
+            travelInsightsData.forEach((item) => {
+                const li = document.createElement("li");
+                li.innerHTML = `<h4>${item.titulo}</h4><p>${item.descricao}</p>`;
+                travelInsightsEl.appendChild(li);
+            });
+        }
+
+        async function loadCurrencyQuotes() {
+            if (!window.fetch) return;
+            try {
+                const response = await fetch(currencyEndpoint);
+                if (!response.ok) throw new Error("Falha ao consultar cotacoes");
+                const data = await response.json();
+                updateCurrency("USD", data.USDBRL);
+                updateCurrency("EUR", data.EURBRL);
+                updateCurrency("GBP", data.GBPBRL);
+                if (currencyStatusEl) {
+                    currencyStatusEl.textContent = `Atualizado em ${new Date().toLocaleString("pt-BR", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}`;
+                }
+            } catch (error) {
+                console.error("Erro ao buscar cotacoes", error);
+                if (currencyStatusEl) {
+                    currencyStatusEl.textContent = "Nao foi possivel atualizar agora.";
+                }
+                if (currencySummaryEl) {
+                    currencySummaryEl.textContent = "Nao foi possivel atualizar as moedas no momento.";
+                }
+            }
+        }
+
+        function updateCurrency(code, payload) {
+            const target = currencyMap[code];
+            if (!target || !payload) return;
+            const bid = Number(payload.bid);
+            if (target.rate) {
+                target.rate.textContent = bid
+                    ? bid.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })
+                    : "--";
+            }
+            const pct = Number(payload.pctChange);
+            if (target.change) {
+                target.change.textContent = Number.isFinite(pct) ? `${pct.toFixed(2)}%` : "--";
+                target.change.classList.toggle("positive", pct >= 0);
+                target.change.classList.toggle("negative", pct < 0);
+            }
+            if (Number.isFinite(bid) && Number.isFinite(pct)) {
+                currencyData[code] = { rate: bid, pctChange: pct };
+            }
+            updateCurrencySummary();
+        }
+
+        function updateCurrencySummary() {
+            if (!currencySummaryEl) return;
+            const entries = Object.entries(currencyData);
+            if (entries.length < 3) {
+                currencySummaryEl.textContent = "Aguardando atualizacao completa das moedas para gerar o resumo.";
+                return;
+            }
+            const ordered = entries.map(([code, info]) => ({ code, ...info }));
+            const mover = ordered.reduce((prev, curr) => Math.abs(curr.pctChange) > Math.abs(prev.pctChange) ? curr : prev, ordered[0]);
+            const average = ordered.reduce((sum, curr) => sum + curr.pctChange, 0) / ordered.length;
+            const tendencia = mover.pctChange >= 0 ? "alta" : "queda";
+            currencySummaryEl.textContent = `${mover.code} lidera o movimento do dia com ${tendencia} de ${Math.abs(mover.pctChange).toFixed(2)}%, enquanto a media das moedas acompanha ${average >= 0 ? "alta" : "leve recuo"} de ${Math.abs(average).toFixed(2)}%.`;
+        }
+
+        async function loadTravelNews() {
+            if (!newsListEl || !dailySummaryEl || !window.fetch) return;
+            dailySummaryEl.textContent = "Carregando noticias...";
+            try {
+                const response = await fetch(newsEndpoint);
+                if (!response.ok) throw new Error("Falha ao consultar noticias");
+                const xmlText = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(xmlText, "application/xml");
+                const items = Array.from(doc.querySelectorAll("item")).slice(0, 4);
+                if (!items.length) throw new Error("Sem noticias recentes");
+                newsListEl.innerHTML = "";
+                const summaryPieces = [];
+                items.forEach((item) => {
+                    const title = item.querySelector("title")?.textContent?.trim() || "Atualizacao do setor de viagens";
+                    const link = item.querySelector("link")?.textContent?.trim() || "#";
+                    const pubDate = item.querySelector("pubDate")?.textContent;
+                    const formatted = pubDate
+                        ? new Date(pubDate).toLocaleString("pt-BR", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })
+                        : "";
+                    const li = document.createElement("li");
+                    li.innerHTML = `
+                        <a href="${link}" target="_blank" rel="noopener">
+                            <strong>${title}</strong>
+                        </a>
+                        <time>${formatted}</time>
+                    `;
+                    newsListEl.appendChild(li);
+                    summaryPieces.push(title.split(" - ")[0]);
+                });
+                dailySummaryEl.textContent = summaryPieces.slice(0, 3).join(" | ");
+            } catch (error) {
+                console.error("Erro ao buscar noticias", error);
+                dailySummaryEl.textContent = "Nao foi possivel carregar o resumo de noticias agora.";
+                newsListEl.innerHTML = `<li class="news-empty">Tente novamente mais tarde.</li>`;
+            }
+        }
+
+        async function loadCurrencyLiveNews() {
+            if (!currencyLiveNewsCardEl || !window.fetch) return;
+            if (currencyLiveNewsTimer) {
+                clearInterval(currencyLiveNewsTimer);
+                currencyLiveNewsTimer = null;
+            }
+            currencyLiveNewsItems = [];
+            currencyLiveNewsIndex = 0;
+            if (currencyLiveNewsStatusEl) {
+                currencyLiveNewsStatusEl.textContent = "Atualizando...";
+            }
+            if (currencyLiveNewsTitleEl) {
+                currencyLiveNewsTitleEl.textContent = "Buscando noticias financeiras...";
+            }
+            try {
+                const response = await fetch(currencyLiveNewsEndpoint);
+                if (!response.ok) throw new Error("Falha ao carregar noticias cambiais");
+                const xmlText = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(xmlText, "application/xml");
+                const items = Array.from(doc.querySelectorAll("item")).slice(0, 10);
+                if (!items.length) throw new Error("Sem noticias retornadas");
+                const mapped = items.map((item) => {
+                    const link = item.querySelector("link")?.textContent?.trim() || "#";
+                    const description = sanitizeText(item.querySelector("description")?.textContent || "");
+                    const summary = description.length > 180 ? `${description.slice(0, 177)}...` : description;
+                    const title = item.querySelector("title")?.textContent?.trim() || "Atualizacao cambial";
+                    const source = item.querySelector("source")?.textContent?.trim() || extractDomain(link) || "Fonte desconhecida";
+                    const dateText = item.querySelector("pubDate")?.textContent;
+                    const published = dateText ? new Date(dateText).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }) : "--:--";
+                    return { title, summary, link, source, published };
+                }).filter(item => item.summary);
+                if (!mapped.length) throw new Error("Nao foi possivel extrair noticias validas");
+                currencyLiveNewsItems = shuffleArray(mapped);
+                currencyLiveNewsIndex = 0;
+                displayCurrencyLiveNews(currencyLiveNewsItems[currencyLiveNewsIndex]);
+                currencyLiveNewsTimer = setInterval(() => {
+                    if (!currencyLiveNewsItems.length) return;
+                    currencyLiveNewsIndex = (currencyLiveNewsIndex + 1) % currencyLiveNewsItems.length;
+                    displayCurrencyLiveNews(currencyLiveNewsItems[currencyLiveNewsIndex]);
+                }, 7000);
+                if (currencyLiveNewsStatusEl) {
+                    currencyLiveNewsStatusEl.textContent = `Atualizado às ${new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}`;
+                }
+            } catch (error) {
+                console.error("Erro ao carregar noticias cambiais", error);
+                if (currencyLiveNewsTitleEl) {
+                    currencyLiveNewsTitleEl.textContent = "Nao foi possivel atualizar as noticias agora.";
+                }
+                if (currencyLiveNewsDescriptionEl) {
+                    currencyLiveNewsDescriptionEl.textContent = "Verifique sua conexao para obter os ultimos destaques sobre dolar, real e euro.";
+                }
+                if (currencyLiveNewsSourceEl) {
+                    currencyLiveNewsSourceEl.textContent = "";
+                }
+                if (currencyLiveNewsStatusEl) {
+                    currencyLiveNewsStatusEl.textContent = "Offline";
+                }
+            }
+        }
+
+        function displayCurrencyLiveNews(item) {
+            if (!item) return;
+            if (currencyLiveNewsTitleEl) {
+                currencyLiveNewsTitleEl.textContent = item.title;
+            }
+            if (currencyLiveNewsDescriptionEl) {
+                currencyLiveNewsDescriptionEl.textContent = item.summary;
+            }
+            if (currencyLiveNewsSourceEl) {
+                currencyLiveNewsSourceEl.textContent = `${item.source} · ${item.published}`;
+            }
+            if (currencyLiveNewsButtonEl) {
+                const link = item.link && item.link !== "#" ? item.link : null;
+                currencyLiveNewsButtonEl.disabled = !link;
+                currencyLiveNewsButtonEl.style.opacity = link ? "1" : "0.6";
+                currencyLiveNewsButtonEl.onclick = () => {
+                    if (link) window.open(link, "_blank", "noopener");
+                };
+            }
+        }
+
+        function extractDomain(link = "") {
+            try {
+                const url = new URL(link);
+                return url.hostname.replace(/^www\./i, "");
+            } catch (error) {
+                return "";
+            }
+        }
+
+        const chat = document.getElementById("chat");
+        const input = document.getElementById("userInput");
+        const profilePic = document.getElementById("profile-pic");
+        const floatingChatWindow = document.getElementById("floating-chat-window");
+        const floatingChatToggle = document.getElementById("floatingChatToggle");
+        const floatingChatClose = document.getElementById("floatingChatClose");
+        const sendButton = document.querySelector("[aria-label='Enviar mensagem']");
+
+        function addInternalResult(bubble, internalResult) {
+            if (!bubble || !internalResult) return;
+            const info = document.createElement("div");
+            info.className = "ia-internal-info";
+            const status = internalResult.status || "info";
+            const message = internalResult.message || "Acao concluida.";
+            const label = status === "success" ? "Acao executada: " : "Acao interna: ";
+            info.textContent = label + message;
+            bubble.appendChild(info);
+        }
+
+        function addMessage(text, sender = "bot") {
+            if (!chat) return null;
+            const wrapper = document.createElement("div");
+            wrapper.className = `message ${sender}`;
+
+            const avatar = document.createElement("div");
+            avatar.className = `avatar ${sender}`;
+
+            if (sender === "user" && profilePic) {
+                const userImg = document.createElement("img");
+                userImg.src = profilePic.src;
+                userImg.alt = "Usuário";
+                avatar.appendChild(userImg);
+            } else {
+                avatar.innerHTML = "<i class='bx bxs-bot'></i>";
+            }
+
+            const bubble = document.createElement("div");
+            bubble.className = "bubble";
+            bubble.textContent = text;
+
+            wrapper.appendChild(avatar);
+            wrapper.appendChild(bubble);
+            chat.appendChild(wrapper);
+            chat.scrollTop = chat.scrollHeight;
+            return bubble;
+        }
+
+        async function sendMessageHandler() {
+            if (!input) return;
+            const text = input.value.trim();
+            if (!text) return;
+            addMessage(text, "user");
+            input.value = "";
+            const loadingBubble = addMessage("Acionando a Ibexy...", "bot");
+
+            try {
+                const response = await fetch("ibexy/backend/chat.php", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        message: text
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok || data.error) {
+                    throw new Error(data.error || "Erro ao se comunicar com a Ibexy.");
+                }
+                const answer = data.reply?.trim() || data.message?.trim() || "A SyncIA não retornou resposta.";
+                if (loadingBubble) {
+                    loadingBubble.textContent = answer;
+                    if (data.internal_result) {
+                        addInternalResult(loadingBubble, data.internal_result);
+                    }
+                }
+            } catch (error) {
+                console.error(error);
+                if (loadingBubble) {
+                    loadingBubble.textContent = "Não foi possível responder agora. Tente novamente.";
+                }
+            }
+        }
+
+        function toggleFloatingChat(open) {
+            if (!floatingChatWindow) return;
+            const shouldOpen = typeof open === "boolean" ? open : !floatingChatWindow.classList.contains("open");
+            floatingChatWindow.classList.toggle("open", shouldOpen);
+            floatingChatWindow.hidden = !shouldOpen;
+            if (floatingChatToggle) {
+                floatingChatToggle.setAttribute("aria-expanded", shouldOpen ? "true" : "false");
+                floatingChatToggle.classList.toggle("active", shouldOpen);
+            }
+
+            if (shouldOpen && chat && chat.childElementCount === 0) {
+                addMessage("Olá! Eu sou a SyncIA. Como posso ajudar hoje?", "bot");
+            }
+        }
+
+        if (sendButton) {
+            sendButton.addEventListener("click", sendMessageHandler);
+        }
+
+        if (input) {
+            input.addEventListener("keydown", (event) => {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    sendMessageHandler();
+                }
+            });
+        }
+
+        if (floatingChatToggle) {
+            floatingChatToggle.addEventListener("click", () => toggleFloatingChat());
+        }
+
+        if (floatingChatClose) {
+            floatingChatClose.addEventListener("click", () => toggleFloatingChat(false));
+        }
+    })();
+    </script>
+
+    <section id="empresa-config" class="config-section" style="display: none;">
+        <h2>Configurações da Empresa</h2>
+        <p>Todas as configurações aplicadas aqui são persistidas em <code>localStorage</code> para que qualquer trecho do sistema possa ler e aplicar os valores imediatamente.</p>
+        <form id="companyConfigForm" class="config-form" autocomplete="off">
+            <div class="form-grid">
+                <div>
+                    <label for="companyCNPJ">CNPJ <small>companies.cnpj</small></label>
+                    <input type="text" id="companyCNPJ" name="cnpj" data-db-field="companies.cnpj" placeholder="12.345.678/0001-95" required>
+                </div>
+                <div>
+                    <label for="companyName">Nome da empresa <small>companies.name</small></label>
+                    <input type="text" id="companyName" name="name" data-db-field="companies.name" placeholder="Sync Mais Hospedagem" required>
+                </div>
+                <div>
+                    <label for="companyEmail">E-mail corporativo <small>companies.email</small></label>
+                    <input type="email" id="companyEmail" name="email" data-db-field="companies.email" placeholder="contato@empresa.com">
+                </div>
+                <div>
+                    <label for="companyPhone">Telefone <small>companies.phone</small></label>
+                    <input type="tel" id="companyPhone" name="phone" data-db-field="companies.phone" placeholder="+55 (11) 4002-8922">
+                </div>
+                <div>
+                    <label for="companyTimezone">Fuso horário <small>companies.timezone</small></label>
+                    <input type="text" id="companyTimezone" name="timezone" data-db-field="companies.timezone" placeholder="America/Sao_Paulo">
+                </div>
+                <div>
+                    <label for="companyCurrency">Moeda padrão <small>companies.currency</small></label>
+                    <input type="text" id="companyCurrency" name="currency" data-db-field="companies.currency" placeholder="BRL">
+                </div>
+                <div class="full-width">
+                    <label for="companyAddress">Endereço completo <small>companies.address</small></label>
+                    <textarea id="companyAddress" name="address" data-db-field="companies.address" rows="3" placeholder="Av. Paulista, 1578, 11º andar, São Paulo - SP"></textarea>
+                </div>
+                <div>
+                    <label for="companyLogo">Logo URL <small>companies.logo_url</small></label>
+                    <input type="url" id="companyLogo" name="logo_url" data-db-field="companies.logo_url" placeholder="https://.../logo.png">
+                </div>
+            </div>
+            <div class="config-actions">
+                <button type="submit">Aplicar configurações</button>
+            </div>
+        </form>
+    </section>
+
+    <section id="hoteis-config" class="config-section" style="display: none;">
+        <h2>Cadastro de Hotéis</h2>
+        <p>Os hotéis configurados aqui compartilham o mesmo esquema de <code>hoteis.html</code> e podem ser sincronizados com qualquer script que leia <code>localStorage.hotelConfig</code>.</p>
+        <form id="hotelConfigForm" class="config-form" autocomplete="off">
+            <div class="form-grid">
+                <div>
+                    <label for="hotelNameConfig">Nome do hotel <small>hotels.name</small></label>
+                    <input type="text" id="hotelNameConfig" name="name" data-db-field="hotels.name" placeholder="Aurora Grand Plaza" required>
+                </div>
+                <div>
+                    <label for="hotelCodeConfig">Código interno <small>hotels.code</small></label>
+                    <input type="text" id="hotelCodeConfig" name="code" data-db-field="hotels.code" placeholder="AGR-001">
+                </div>
+                <div>
+                    <label for="hotelCityConfig">Cidade <small>hotels.city</small></label>
+                    <input type="text" id="hotelCityConfig" name="city" data-db-field="hotels.city" placeholder="Rio de Janeiro">
+                </div>
+                <div>
+                    <label for="hotelStateConfig">Estado <small>hotels.state</small></label>
+                    <input type="text" id="hotelStateConfig" name="state" data-db-field="hotels.state" placeholder="RJ">
+                </div>
+                <div>
+                    <label for="hotelCountryConfig">País <small>hotels.country</small></label>
+                    <input type="text" id="hotelCountryConfig" name="country" data-db-field="hotels.country" placeholder="Brasil">
+                </div>
+                <div>
+                    <label for="hotelWebsiteConfig">Site oficial <small>hotels.website</small></label>
+                    <input type="url" id="hotelWebsiteConfig" name="website" data-db-field="hotels.website" placeholder="https://hotel.com">
+                </div>
+                <div class="full-width">
+                    <label for="hotelAddressConfig">Endereço completo <small>hotels.address</small></label>
+                    <textarea id="hotelAddressConfig" name="address" data-db-field="hotels.address" rows="3" placeholder="Rua das Flores, 123, Copacabana"></textarea>
+                </div>
+                <div>
+                    <label for="hotelRoomsConfig">Número de quartos <small>hotels.rooms</small></label>
+                    <input type="number" id="hotelRoomsConfig" name="rooms" data-db-field="hotels.rooms" min="0">
+                </div>
+                <div>
+                    <label for="hotelRateConfig">Tarifa padrão <small>hotels.default_rate</small></label>
+                    <input type="number" step="0.01" id="hotelRateConfig" name="default_rate" data-db-field="hotels.default_rate" min="0">
+                </div>
+                <div class="full-width">
+                    <label for="hotelChannelsConfig">Gerenciador de canais (JSON) <small>hotels.channel_manager</small></label>
+                    <textarea id="hotelChannelsConfig" name="channel_manager" data-db-field="hotels.channel_manager" rows="3" placeholder='{"booking":true,"airbnb":false}'></textarea>
+                </div>
+            </div>
+            <div class="config-actions">
+                <button type="submit">Salvar cadastro do hotel</button>
+            </div>
+        </form>
+    </section>
+
+    <div id="configToast" aria-live="polite"></div>
+
+    <script>
+        function showConfigToast(message) {
+            const toast = document.getElementById("configToast");
+            toast.textContent = message;
+            toast.style.opacity = "1";
+            setTimeout(() => {
+                toast.style.opacity = "0";
+            }, 3200);
+        }
+
+        function populateFormFromStorage(form, storageKey) {
+            if (!form) return;
+            const raw = localStorage.getItem(storageKey);
+            if (!raw) return;
+            try {
+                const parsed = JSON.parse(raw);
+                Object.entries(parsed).forEach(([key, value]) => {
+                    const control = form.querySelector(`[name="${key}"]`);
+                    if (control) {
+                        control.value = value;
+                    }
+                });
+            } catch {
+                localStorage.removeItem(storageKey);
+            }
+        }
+
+        function handleConfigSubmit(form, storageKey, successMessage) {
+            if (!form) return;
+            form.addEventListener("submit", (event) => {
+                event.preventDefault();
+                const data = {};
+                const formData = new FormData(form);
+                formData.forEach((value, key) => {
+                    data[key] = value;
+                });
+                localStorage.setItem(storageKey, JSON.stringify(data));
+                showConfigToast(successMessage);
+                document.documentElement.dataset.companyName = data.name || "";
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const companyForm = document.getElementById("companyConfigForm");
+            const hotelForm = document.getElementById("hotelConfigForm");
+            populateFormFromStorage(companyForm, "companyConfig");
+            populateFormFromStorage(hotelForm, "hotelConfig");
+            handleConfigSubmit(companyForm, "companyConfig", "Configurações da empresa aplicadas.");
+            handleConfigSubmit(hotelForm, "hotelConfig", "Cadastro do hotel atualizado.");
+        });
+    </script>
+
+</body>
+</html>

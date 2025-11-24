@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SellaStay | Histórico de Vendas</title>
+    <link rel="icon" type="image/x-icon" href="img/favicon.png">
+
+    <!--CSS-->
+    <link rel="stylesheet" href="css/style.css">
+    <!--/CSS-->
+
+    <!--Boxicons CSS-->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <!--/Boxicons CSS-->
+
+    <style>
+        .home-overview {
+            gap: 28px;
+        }
+
+        .sales-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .sales-header h1 {
+            margin: 0;
+            font-size: 2.1rem;
+        }
+
+        .sales-header p {
+            margin: 8px 0 0;
+            max-width: 620px;
+            color: var(--text-color);
+        }
+
+        .sales-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .sales-actions button {
+            border: none;
+            border-radius: 999px;
+            padding: 12px 22px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: .2s;
+            background: var(--sidebar-color);
+            color: #fff;
+        }
+
+        .sales-actions button.primary {
+            background: linear-gradient(120deg, #ff914d, #ffb347);
+            color: #0f172a;
+        }
+
+        .sales-actions button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .sales-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+        }
+
+        .sales-card {
+            background: var(--sidebar-color);
+            border-radius: 18px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .sales-card span {
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.18em;
+            color: var(--text-color);
+        }
+
+        .sales-card strong {
+            font-size: 1.9rem;
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+        }
+
+        .filters-grid label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .filters-grid select,
+        .filters-grid input {
+            width: 100%;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.12);
+            padding: 12px;
+            background: var(--body-color);
+            color: var(--text-color);
+        }
+
+        .sales-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 251, 251, 0.05);
+        }
+
+        .sales-table thead {
+            background: var(--sidebar-color);
+        }
+
+        .sales-table th,
+        .sales-table td {
+            padding: 14px 16px;
+            text-align: left;
+        }
+
+        .sales-table tbody tr:nth-child(even) {
+            background: rgba(255,255,255,0.02);
+        }
+
+        .sales-table tbody tr:hover {
+            background: rgba(255,255,255,0.04);
+        }
+
+        .closing-note {
+            margin: 16px 0 0;
+            font-size: 0.95rem;
+            color: var(--text-color);
+        }
+
+        .audit-pills {
+            display: inline-flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .audit-pills span {
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.08);
+            font-size: 0.78rem;
+        }
+
+        @media (max-width: 640px) {
+            .sales-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Menu -->
+    <nav class="sidebar close">
+
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="img/logo.png" alt="">
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name" id="nome">SellaStay</span>
+                    <span class="profession">EGRC Control</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu-scrollable">
+
+                <ul class="menu-links">
+
+                    <br>
+                    <br>
+
+                    <li class="nav-link">
+                        <a href="home.html">
+                            <i class='bx bxs-home icon' ></i>
+                            <span class="text nav-text">Home</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="dashboard.html">
+                            <i class='bx bxs-dashboard icon' ></i>
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link has-submenu">
+                        <a href="leads.html"  id="navselected">
+                            <i class='bx bxs-grid icon' ></i>
+                            <span class="text nav-text">Operacional <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="leads.html"><i class='bx bxs-chevrons-right icon' ></i>Negociações</a></li>
+                            <li><a href="follow-up.html"><i class='bx bx-transfer icon' ></i>Follow Up log</a></li>
+                            <li><a href="clients.html"><i class='bx bx-id-card icon' ></i>Carteira de Clientes</a></li>
+                            <li id="subactive"><a href="vendas.html"><i class='bx bx-history icon'></i></i>Histórico de Vendas</a></li>
+                            <li><a href="tasks.html"><i class='bx bx-task icon'></i></i>Gestor de Tarefas</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="calendar.html">
+                            <i class='bx bxs-calendar-event icon'></i>
+                            <span class="text nav-text">Mapa de Eventos</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="pricespy.html">
+                            <i class='bx bx-radar icon'></i>
+                            <span class="text nav-text">Radar de Preços</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="reminder.html">
+                            <i class='bx bxs-bell-ring icon' ></i>
+                            <span class="text nav-text">Lembretes</span>
+                        </a>
+                    </li>
+
+                    <!-- ::::::: VERIFICAR NECESSIDADE ::::::::-->
+                    <!-- <li class="nav-link">
+                        <a href="contratos.html">
+                            <i class='bx bx-briefcase icon' ></i>
+                            <span class="text nav-text">Contratos</span>
+                        </a>
+                    </li> -->
+
+                    <li class="nav-link">
+                        <a href="relatorios.html">
+                            <i class='bx bx-line-chart icon'></i>
+                            <span class="text nav-text">Relatórios</span>
+                        </a>
+                    </li>
+
+                    <!-- ::::::: REALOCAR PARA OUTRO LUGAR ::::::::-->
+                    <!-- <li class="nav-link"> 
+                        <a href="doc.html">
+                            <i class='bx bx-help-circle icon' ></i>
+                            <span class="text nav-text">Ajuda</span>
+                        </a>
+                    </li> -->
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <ul class="menu-links">
+                    <li class="nav-link has-submenu">
+                        <a href="#">
+                            <img id="profile-pic" src="img/profile_pic_F.png" alt="Usuário logado">
+                            <span class="text nav-text"><span id="menuUserName">Usuário</span> <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="profile.html"><i class='bx bx-user icon'></i> Perfil</a></li>
+                            <li class="has-submenu">
+                                <a href="empresas.html">
+                                    <i class='bx bxs-building icon'></i> Empresa <i class='bx bx-chevron-down arrow'></i>
+                                </a>
+                                <ul class="submenu">
+                                    <li><a href="#empresa-config"><i class='bx bx-briefcase icon'></i> Configurações da Empresa</a></li>
+                                    <li><a href="#hoteis-config"><i class='bx bx-hotel icon'></i> Cadastro de Hotéis</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="settings.html"><i class='bx bx-cog icon'></i> Configurações</a></li>
+                            <li><a href="help.html"><i class='bx bx-support icon'></i> Suporte</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="logout" id="logout">
+                        <a href="index.html">
+                            <i class='bx bx-log-out icon' ></i>
+                            <span class="text nav-text">Logout</span>
+                        </a>
+                    </li>
+
+                    <li class="mode">
+                        <div class="sun-moon">
+                            <i class='bx bx-moon icon moon'></i>
+                            <i class='bx bx-sun icon sun'></i>
+                        </div>
+                        <span class="mode-text text">Dark mode</span>
+
+                        <div class="toggle-switch">
+                            <span class="switch"></span>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- /Menu -->
+
+    <section class="home">
+        <div class="home-overview">
+
+            <header class="sales-header">
+                <div>
+                    <p class="home-eyebrow">Logs de vendas</p>
+                    <h1>Histórico completo de fechamentos</h1>
+                    <p>Este painel armazena automaticamente cada oportunidade marcada como ganho no kanban, mantendo o ciclo completo com fontes, motivações e anexos do fechamento.</p>
+                </div>
+                <div class="sales-actions">
+                    <button class="primary"><i class='bx bx-export'></i> Exportar vendas</button>
+                    <button><i class='bx bx-archive'></i> Gerar dossiê</button>
+                </div>
+            </header>
+
+            <section class="sales-card-grid">
+                <article class="sales-card">
+                    <span>Receita acumulada</span>
+                    <strong id="totalRevenue">R$ 0</strong>
+                    <small>Somatório das vendas confirmadas.</small>
+                </article>
+                <article class="sales-card">
+                    <span>Ticket médio</span>
+                    <strong id="avgTicket">R$ 0</strong>
+                    <small>Valor médio por fechamento no período.</small>
+                </article>
+                <article class="sales-card">
+                    <span>Taxa de ganho</span>
+                    <strong id="winRate">0%</strong>
+                    <small>Conversão sobre propostas apresentadas.</small>
+                </article>
+                <article class="sales-card">
+                    <span>Última venda</span>
+                    <strong id="lastSale">--</strong>
+                    <small>Data/hora do registro mais recente.</small>
+                </article>
+            </section>
+
+            <section class="filters-grid">
+                <div>
+                    <label for="filterHotel">Hotel</label>
+                    <select id="filterHotel">
+                        <option value="all">Todos</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="filterSegment">Segmento</label>
+                    <select id="filterSegment">
+                        <option value="all">Todos</option>
+                        <option value="Corporativo">Corporativo</option>
+                        <option value="Social">Social</option>
+                        <option value="Eventos">Eventos</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="filterPeriod">Período</label>
+                    <select id="filterPeriod">
+                        <option value="30">Últimos 30 dias</option>
+                        <option value="90">Últimos 90 dias</option>
+                        <option value="365">Últimos 12 meses</option>
+                        <option value="all">Todo histórico</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="filterSearch">Buscar</label>
+                    <input type="text" id="filterSearch" placeholder="lead, agência, responsável...">
+                </div>
+            </section>
+
+            <section>
+                <h2>Resumo de fechamentos</h2>
+                <table class="sales-table">
+                    <thead>
+                        <tr>
+                            <th>ID Lead</th>
+                            <th>Hotel</th>
+                            <th>Cliente / Agência</th>
+                            <th>Segmento</th>
+                            <th>Responsável</th>
+                            <th>Valor</th>
+                            <th>Data Fechamento</th>
+                            <th>Notas</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sales-table-body"></tbody>
+                </table>
+                <p class="closing-note">Cada registro traz a trilha de aprovação, anexos e justificativas do RM. Dados integrais também são enviados para o data lake a cada 30 minutos.</p>
+            </section>
+
+            <section>
+                <h2>Dossiê rápido</h2>
+                <div class="timeline" id="sales-timeline"></div>
+            </section>
+        </div>
+    </section>
+
+    <!--Rodapé -->
+    <footer style="line-height: 15px;">
+        &copy; <span id="anoAtual"></span> SellaStay - Gestão para Hotéis. <br> <span style="font-size: 10px; cursor: pointer;">Desenvolvido por <a href="https://www.syncsoftware.com.br" style="text-decoration: none; color: var(--text-color);" onmouseover="this.style.color='#ff914d';" onmouseout="this.style.color='var(--text-color)';" target="_blank"> <b>Sync Software LTDA</b></a></span>
+    </footer>
+    <!-- Rodapé -->
+
+    <script src="js/script.js"></script>
+    <script>
+        const yearEl = document.getElementById("anoAtual");
+        yearEl.textContent = new Date().getFullYear();
+
+        const sales = [
+            {
+                leadId: "LEAD-2078",
+                hotel: "Aurora Suites",
+                client: "Agência Horizonte",
+                segment: "Corporativo",
+                owner: "Leonardo Prado",
+                value: 185000,
+                closeDate: "2025-11-14T18:11:00",
+                notes: "Contrato versão 2 anexado, margem preservada e checklists concluídos.",
+                tags: ["checklist", "contrato", "sala plenária"]
+            },
+            {
+                leadId: "LEAD-2065",
+                hotel: "Aurora Golden",
+                client: "Congresso Evolve",
+                segment: "Eventos",
+                owner: "Marina Sato",
+                value: 242500,
+                closeDate: "2025-11-10T15:38:00",
+                notes: "Pacote com coffee break premium e bloqueio de 120 apartamentos.",
+                tags: ["evento", "bloqueio", "coffee break"]
+            },
+            {
+                leadId: "LEAD-2049",
+                hotel: "Aurora Resorts",
+                client: "Destination Brasil",
+                segment: "Social",
+                owner: "Fernanda Ruiz",
+                value: 98000,
+                closeDate: "2025-11-03T11:02:00",
+                notes: "Wedding weekend + hospedagem estendida, pagamento confirmada.",
+                tags: ["social", "wedding"]
+            },
+            {
+                leadId: "LEAD-2033",
+                hotel: "Aurora Budget",
+                client: "Startup Hub",
+                segment: "Corporativo",
+                owner: "Raul Bettini",
+                value: 45200,
+                closeDate: "2025-10-26T09:47:00",
+                notes: "Fechamento após renegociação de ADR, integrando vouchers digitais.",
+                tags: ["adr", "voucher"]
+            }
+        ];
+
+        const filterHotel = document.getElementById("filterHotel");
+        const filterSegment = document.getElementById("filterSegment");
+        const filterPeriod = document.getElementById("filterPeriod");
+        const filterSearch = document.getElementById("filterSearch");
+        const tableBody = document.getElementById("sales-table-body");
+        const timeline = document.getElementById("sales-timeline");
+
+        const hotels = [...new Set(sales.map(sale => sale.hotel))];
+        hotels.forEach(hotel => {
+            const option = document.createElement("option");
+            option.value = hotel;
+            option.textContent = hotel;
+            filterHotel.appendChild(option);
+        });
+
+        function currency(value) {
+            return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+        }
+
+        function formatDate(value) {
+            return new Date(value).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
+        }
+
+        function updateStats(items) {
+            const total = items.reduce((sum, sale) => sum + sale.value, 0);
+            document.getElementById("totalRevenue").textContent = currency(total);
+
+            const average = items.length ? total / items.length : 0;
+            document.getElementById("avgTicket").textContent = currency(average);
+
+            // Placeholder win rate: assume items length out of 10 propostas
+            document.getElementById("winRate").textContent = `${Math.round((items.length / 10) * 100)}%`;
+
+            const last = [...items].sort((a, b) => new Date(b.closeDate) - new Date(a.closeDate))[0];
+            document.getElementById("lastSale").textContent = last ? formatDate(last.closeDate) : "--";
+        }
+
+        function renderTable(items) {
+            tableBody.innerHTML = "";
+            items.forEach(sale => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${sale.leadId}</td>
+                    <td>${sale.hotel}</td>
+                    <td>${sale.client}</td>
+                    <td>${sale.segment}</td>
+                    <td>${sale.owner}</td>
+                    <td>${currency(sale.value)}</td>
+                    <td>${formatDate(sale.closeDate)}</td>
+                    <td>
+                        ${sale.notes}
+                        <div class="audit-pills">${sale.tags.map(tag => `<span>${tag}</span>`).join("")}</div>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function renderTimeline(items) {
+            timeline.innerHTML = "";
+            items
+                .sort((a, b) => new Date(b.closeDate) - new Date(a.closeDate))
+                .forEach(sale => {
+                    const article = document.createElement("article");
+                    article.className = "timeline-item";
+                    article.innerHTML = `
+                        <time>${formatDate(sale.closeDate)}</time>
+                        <div>
+                            <h4>${sale.hotel} • ${sale.leadId}</h4>
+                            <p>${sale.client} | ${sale.segment}</p>
+                            <p class="log-source">${sale.notes}</p>
+                            <div class="audit-pills">
+                                ${sale.tags.map(tag => `<span>${tag}</span>`).join("")}
+                            </div>
+                        </div>
+                    `;
+                    timeline.appendChild(article);
+                });
+        }
+
+        function applyFilters() {
+            const hotel = filterHotel.value;
+            const segment = filterSegment.value;
+            const period = filterPeriod.value;
+            const search = filterSearch.value.toLowerCase();
+            const now = Date.now();
+
+            const filtered = sales.filter(sale => {
+                const matchesHotel = hotel === "all" || sale.hotel === hotel;
+                const matchesSegment = segment === "all" || sale.segment === segment;
+                const matchesPeriod = period === "all" || (now - new Date(sale.closeDate).getTime()) <= Number(period) * 24 * 60 * 60 * 1000;
+                const matchesSearch = [sale.leadId, sale.client, sale.owner, sale.notes]
+                    .join(" ")
+                    .toLowerCase()
+                    .includes(search);
+                return matchesHotel && matchesSegment && matchesPeriod && matchesSearch;
+            });
+
+            renderTable(filtered);
+            renderTimeline(filtered);
+            updateStats(filtered);
+        }
+
+        filterHotel.addEventListener("change", applyFilters);
+        filterSegment.addEventListener("change", applyFilters);
+        filterPeriod.addEventListener("change", applyFilters);
+        filterSearch.addEventListener("input", applyFilters);
+
+        renderTable(sales);
+        renderTimeline(sales);
+        updateStats(sales);
+    </script>
+</body>
+</html>

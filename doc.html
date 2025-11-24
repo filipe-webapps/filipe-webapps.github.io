@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Manual SellaStay | Sync Softwares LTDA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Boxicons -->
+    <link href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
+    <style>
+        :root{
+            --bg:#020617;
+            --sidebar:#020617;
+            --sidebar-border:#1e293b;
+            --card:#020617;
+            --card-soft:#020617;
+            --text:#e5e7eb;
+            --muted:#94a3b8;
+            --accent:#38bdf8;
+            --accent-strong:#0ea5e9;
+            --accent-soft:rgba(56,189,248,0.18);
+            --danger:#f97316;
+        }
+        *{box-sizing:border-box;margin:0;padding:0;}
+        body{
+            font-family:"Segoe UI",system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+            background:radial-gradient(circle at 0 0,#1d243b 0,#0b1120 40%,#020617 75%);
+            color:var(--text);
+            min-height:100vh;
+            display:flex;
+        }
+        a{color:inherit;text-decoration:none;}
+        .layout{
+            display:flex;
+            width:100%;
+            min-height:100vh;
+        }
+
+        /* SIDEBAR DOCUMENTAÇÃO */
+        .doc-sidebar{
+            width:290px;
+            max-width:90vw;
+            background:linear-gradient(165deg,#020617,#020617 40%,#020617 80%);
+            border-right:1px solid var(--sidebar-border);
+            padding:20px 20px 18px;
+            display:flex;
+            flex-direction:column;
+            gap:18px;
+            position:sticky;
+            top:0;
+            height:100vh;
+        }
+        .doc-logo-area{
+            display:flex;
+            gap:12px;
+            align-items:center;
+        }
+        .doc-logo-box{
+            width:46px;
+            height:46px;
+            border-radius:18px;
+            border:1px dashed rgba(148,163,184,.5);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:10px;
+            text-align:center;
+            color:var(--muted);
+        }
+        .doc-title-group h1{
+            font-size:17px;
+            letter-spacing:.08em;
+            text-transform:uppercase;
+        }
+        .doc-title-group p{
+            font-size:12px;
+            color:var(--muted);
+        }
+        .doc-meta{
+            font-size:11px;
+            color:var(--muted);
+            line-height:1.5;
+        }
+        .doc-meta strong{color:var(--accent);}
+        .nav-title{
+            text-transform:uppercase;
+            font-size:11px;
+            letter-spacing:.18em;
+            color:var(--muted);
+            margin:4px 0 6px;
+        }
+        .doc-nav{
+            flex:1;
+            overflow-y:auto;
+            padding-right:4px;
+            scrollbar-width:thin;
+            scrollbar-color:var(--accent) transparent;
+        }
+        .doc-nav ul{
+            list-style:none;
+            display:flex;
+            flex-direction:column;
+            gap:4px;
+        }
+        .doc-nav li{
+            font-size:13px;
+        }
+        .doc-nav a{
+            display:flex;
+            align-items:center;
+            gap:8px;
+            padding:7px 9px;
+            border-radius:8px;
+            color:var(--muted);
+            transition:.2s;
+        }
+        .doc-nav a i{
+            font-size:16px;
+        }
+        .doc-nav a:hover{
+            background:rgba(15,23,42,.8);
+            color:var(--text);
+        }
+        .doc-nav a.active{
+            background:var(--accent-soft);
+            color:var(--accent-strong);
+        }
+        .doc-nav .nav-group{
+            margin:8px 0 2px;
+            font-size:11px;
+            text-transform:uppercase;
+            letter-spacing:.16em;
+            color:var(--muted);
+        }
+        .doc-nav .nav-sub{
+            padding-left:24px;
+        }
+        .doc-footer{
+            border-top:1px solid rgba(15,23,42,.9);
+            padding-top:10px;
+            font-size:11px;
+            color:var(--muted);
+        }
+
+        /* CONTEÚDO PRINCIPAL */
+        .doc-main{
+            flex:1;
+            padding:26px 32px 32px;
+            overflow-y:auto;
+            scrollbar-width:thin;
+            scrollbar-color:var(--accent) transparent;
+        }
+
+        /* SCROLLBAR MODERNA (WEBKIT) */
+        .doc-nav::-webkit-scrollbar,
+        .doc-main::-webkit-scrollbar{
+            width:8px;
+        }
+        .doc-nav::-webkit-scrollbar-track,
+        .doc-main::-webkit-scrollbar-track{
+            background:transparent;
+        }
+        .doc-nav::-webkit-scrollbar-thumb,
+        .doc-main::-webkit-scrollbar-thumb{
+            background:linear-gradient(180deg,var(--accent),var(--accent-strong));
+            border-radius:999px;
+        }
+        .doc-nav::-webkit-scrollbar-thumb:hover,
+        .doc-main::-webkit-scrollbar-thumb:hover{
+            background:linear-gradient(180deg,var(--accent-strong),var(--accent));
+        }
+
+        @media(max-width:900px){
+            body{flex-direction:column;}
+            .doc-sidebar{
+                position:relative;
+                height:auto;
+                flex-direction:column;
+            }
+            .doc-main{
+                padding:20px;
+            }
+        }
+
+        /* INTRO / BLOCOS */
+        .intro-card{
+            background:radial-gradient(circle at 0 0,rgba(56,189,248,.35),transparent 55%),
+                       radial-gradient(circle at 100% 0,rgba(245,158,11,.3),transparent 55%),
+                       #020617;
+            border-radius:24px;
+            padding:24px 24px 22px;
+            border:1px solid rgba(148,163,184,.3);
+            box-shadow:0 32px 80px rgba(15,23,42,0.8);
+            margin-bottom:18px;
+        }
+        .intro-headline{
+            display:flex;
+            justify-content:space-between;
+            align-items:flex-start;
+            gap:16px;
+            flex-wrap:wrap;
+        }
+        .intro-headline h2{
+            font-size:24px;
+        }
+        .intro-headline p{
+            max-width:520px;
+            color:#e2e8f0;
+            font-size:14px;
+        }
+        .intro-tags{
+            display:flex;
+            flex-wrap:wrap;
+            gap:8px;
+            margin-top:12px;
+        }
+        .intro-tag{
+            font-size:11px;
+            text-transform:uppercase;
+            letter-spacing:.16em;
+            padding:5px 10px;
+            border-radius:999px;
+            border:1px solid rgba(148,163,184,.5);
+            color:var(--muted);
+        }
+        .intro-actions{
+            display:flex;
+            flex-direction:column;
+            gap:8px;
+            align-items:flex-end;
+        }
+        .btn-primary{
+            border:none;
+            border-radius:999px;
+            padding:9px 15px;
+            display:inline-flex;
+            align-items:center;
+            gap:8px;
+            font-size:13px;
+            font-weight:600;
+            background:linear-gradient(135deg,#38bdf8,#0ea5e9);
+            color:#0b1120;
+            cursor:pointer;
+            box-shadow:0 16px 40px rgba(8,47,73,.8);
+        }
+        .btn-primary i{font-size:16px;}
+        .intro-note{
+            font-size:11px;
+            color:rgba(226,232,240,.8);
+            max-width:220px;
+            text-align:right;
+        }
+
+        /* espaço de logo dentro da introdução */
+        .intro-logo-slot{
+            max-width:240px;
+            margin-bottom:14px;
+        }
+
+        /* TOOLBAR DE DOCUMENTAÇÃO */
+        .doc-toolbar{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:12px;
+            margin-bottom:20px;
+            flex-wrap:wrap;
+        }
+        .toolbar-left{
+            display:flex;
+            flex-wrap:wrap;
+            gap:6px;
+        }
+        .toolbar-pill{
+            font-size:11px;
+            padding:4px 9px;
+            border-radius:999px;
+            border:1px solid rgba(148,163,184,.5);
+            background:rgba(15,23,42,.9);
+            color:var(--muted);
+            display:inline-flex;
+            align-items:center;
+            gap:6px;
+        }
+        .toolbar-pill i{font-size:13px;color:var(--accent);}
+        .toolbar-right{
+            display:flex;
+            flex-wrap:wrap;
+            gap:8px;
+        }
+        .btn-ghost{
+            border-radius:999px;
+            padding:7px 12px;
+            font-size:12px;
+            border:1px solid rgba(148,163,184,.45);
+            background:rgba(15,23,42,.9);
+            color:var(--muted);
+            display:inline-flex;
+            align-items:center;
+            gap:6px;
+            cursor:pointer;
+        }
+        .btn-ghost i{font-size:14px;color:var(--accent);}
+        .btn-ghost:hover{
+            border-color:var(--accent);
+            color:var(--text);
+        }
+
+        /* SEÇÕES */
+        .doc-section{
+            background:rgba(15,23,42,.95);
+            border-radius:22px;
+            padding:20px 22px 18px;
+            border:1px solid rgba(30,64,175,.7);
+            margin-bottom:20px;
+            box-shadow:0 28px 60px rgba(15,23,42,0.9);
+        }
+        .doc-section header{
+            display:flex;
+            justify-content:space-between;
+            align-items:flex-start;
+            flex-wrap:wrap;
+            gap:10px;
+        }
+        /* TÍTULO DAS SEÇÕES (AUMENTADO) */
+        .doc-section h3{
+            font-size:22px;
+            font-weight:600;
+            display:flex;
+            align-items:center;
+            gap:10px;
+        }
+        .doc-section h3 i{
+            font-size:24px; /* ícone um pouco maior */
+        }
+        .doc-section h3 span.badge{
+            font-size:11px;
+            text-transform:uppercase;
+            letter-spacing:.14em;
+            padding:3px 8px;
+            border-radius:999px;
+            border:1px solid rgba(148,163,184,.6);
+            color:var(--muted);
+        }
+        .section-desc{
+            margin-top:6px;
+            color:var(--muted);
+            font-size:16px;       /* aumentado */
+            line-height:1.55;     /* melhor leitura */
+
+
+        }
+        .section-grid{
+            display:grid;
+            grid-template-columns:minmax(0,2.1fr) minmax(0,1.4fr);
+            gap:18px;
+            margin-top:14px;
+        }
+        @media(max-width:900px){
+            .section-grid{grid-template-columns:1fr;}
+        }
+        .doc-block-title{
+            font-size:13px;
+            text-transform:uppercase;
+            letter-spacing:.18em;
+            color:var(--muted);
+            margin-bottom:6px;
+        }
+/* descrição do card maior e mais legível */
+.doc-list small{
+    display:block;
+    margin-top:6px;
+    margin-left:0;
+    font-size:15px;
+    line-height:1.7;
+    color:var(--muted);
+}
+
+        .doc-list li::before{
+            content:"•";
+            margin-right:6px;
+            color:var(--accent);
+        }
+        .doc-list li{
+            color:#e5e7eb;
+        }
+        .doc-list small{
+            display:block;
+            font-size:11px;
+            color:var(--muted);
+            margin-left:12px;
+        }
+        .image-placeholder{
+            border-radius:16px;
+            border:1px dashed rgba(148,163,184,.7);
+            padding:10px 11px;
+            font-size:12px;
+            color:var(--muted);
+            background:radial-gradient(circle at 0 0,rgba(56,189,248,.16),transparent 55%);
+        }
+
+        .pill{
+            display:inline-flex;
+            align-items:center;
+            gap:6px;
+            padding:4px 10px;
+            border-radius:999px;
+            font-size:11px;
+            background:rgba(15,23,42,.9);
+            border:1px solid rgba(148,163,184,.6);
+            color:var(--muted);
+        }
+        .pill i{font-size:14px;color:var(--accent);}
+
+        .danger-note{
+            margin-top:8px;
+            display:flex;
+            gap:6px;
+            align-items:flex-start;
+            font-size:12px;
+            color:#fed7aa;
+        }
+        .danger-note i{color:var(--danger);margin-top:2px;}
+
+        .subsection-title{
+            margin-top:8px;
+            font-size:14px;
+            font-weight:600;
+            display:flex;
+            align-items:center;
+            gap:6px;
+        }
+        .subsection-title i{font-size:15px;color:var(--accent);}
+
+        .see-also{
+            margin-top:10px;
+            border-top:1px dashed rgba(148,163,184,.4);
+            padding-top:6px;
+            font-size:11px;
+            color:var(--muted);
+        }
+        .see-also a{
+            color:var(--accent);
+            text-decoration:none;
+            margin-right:6px;
+        }
+        .doc-list{
+            list-style:none;
+            display:flex;
+            flex-direction:column;
+            gap:10px; /* mais espaço entre os cards */
+        }
+
+        /* cada descrição vira um card individual */
+        .doc-list li{
+            position:relative;
+            padding:12px 14px;
+            border-radius:14px;
+            border:1px solid rgba(148,163,184,0.35);
+            background:rgba(15,23,42,0.96);
+            color:#e5e7eb;
+            font-size:15px;           /* descrição maior */
+            line-height:1.7;
+            box-shadow:0 8px 20px rgba(15,23,42,0.75);
+            transition:all 0.22s ease;
+            display:block;
+        }
+
+        /* bolinha lateral mais discreta, dentro do card */
+        /* remove a bolinha dos itens */
+        .doc-list li::before{
+            content:none !important;
+
+        }
+
+        /* texto explicativo (small) acompanha o tamanho da imagem */
+        .doc-list small{
+            display:block;
+            margin-top:6px;
+            margin-left:0;            /* alinha com o texto principal */
+            font-size:14px;           /* maior */
+            line-height:1.7;
+            color:var(--muted);
+        }
+
+        /* destaque ao passar o mouse em cada card de descrição */
+        .doc-list li:hover{
+            border-color:var(--accent);
+            box-shadow:0 18px 40px rgba(15,23,42,0.95);
+            transform:translateY(-3px);
+            background:radial-gradient(circle at 0 0,
+                    rgba(56,189,248,0.18),
+                    rgba(15,23,42,1));
+        }
+                /* Botão de ocultar a barra */
+        .sidebar-toggle{
+            position:absolute;
+            top:18px;
+            right:-16px;
+            width:32px;
+            height:32px;
+            border-radius:50%;
+            border:1px solid rgba(148,163,184,.4);
+            background:#020617;
+            color:var(--text);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:20px;
+            cursor:pointer;
+            transition:.25s;
+            z-index:9999;
+        }
+        .sidebar-toggle:hover{
+            border-color:var(--accent);
+            color:var(--accent);
+        }
+
+        /* Sidebar recolhida */
+        .doc-sidebar.collapsed{
+            width:70px !important;
+            padding:20px 10px;
+        }
+        .doc-sidebar.collapsed .doc-title-group,
+        .doc-sidebar.collapsed .doc-meta,
+        .doc-sidebar.collapsed .doc-nav,
+        .doc-sidebar.collapsed .doc-footer,
+        .doc-sidebar.collapsed .nav-title{
+            display:none !important;
+        }
+
+        .doc-sidebar.collapsed .sidebar-toggle i{
+            transform:rotate(180deg);
+        }
+
+        /* Deixa o logo visível e centralizado na sidebar recolhida */
+        .doc-sidebar.collapsed .doc-logo-area{
+            justify-content:center;
+        }
+        .doc-sidebar.collapsed .doc-logo-area img{
+            margin:auto;
+        }
+
+
+    </style>
+</head>
+<body>
+<div class="layout">
+    <!-- SIDEBAR DO MANUAL -->
+    <aside class="doc-sidebar">
+    <button class="sidebar-toggle">
+    <i class='bx bx-chevrons-left'></i>
+    </button>
+
+        <div class="doc-logo-area">
+            <div class="logo">
+                <img src="img/sync_branco.png" alt="Descrição da imagem" style="max-width: 220px; width: 100%; height: auto; border-radius: 8px;">
+            </div>
+            <div class="doc-title-group">
+               <!-- <h1>Sell a Stay</h1> -->
+                
+            </div>
+        </div>
+        <!-- <p>Documentação do Software</p> -->
+       <!-- <div class="doc-meta">
+            Desenvolvido por <strong>Sync Softwares LTDA</strong>.<br>
+            Este guia descreve cada tela, botão e função do Sell a Stay.
+        </div> -->
+
+        <div class="nav-title">Sumário</div>
+        <nav class="doc-nav">
+            <ul>
+                <li><a href="#sec-visao-geral" class="active"><i class='bx bxs-info-circle'></i> Visão geral do sistema</a></li>
+
+                <li class="nav-group">Navegação principal</li>
+                <li><a href="#sec-menu-lateral"><i class='bx bx-menu-alt-left'></i> Menu lateral & pesquisa</a></li>
+                <li><a href="#sec-home"><i class='bx bxs-home'></i> Home</a></li>
+                <li><a href="#sec-dashboard"><i class='bx bxs-dashboard'></i> Dashboard</a></li>
+
+                <li class="nav-group">Negociações / CRM</li>
+                <li><a href="#sec-negociacoes"><i class='bx bxs-user-detail'></i> Negociações</a></li>
+                <li class="nav-sub"><a href="#sec-leads"><i class='bx bx-user'></i> Leads</a></li>
+                <li class="nav-sub"><a href="#sec-followup"><i class='bx bx-transfer'></i> Follow Up log</a></li>
+                <li class="nav-sub"><a href="#sec-carteira"><i class='bx bxs-user-account'></i> Carteira de Clientes</a></li>
+                <li class="nav-sub"><a href="#sec-historico-vendas"><i class='bx bx-history'></i> Histórico de Vendas</a></li>
+
+                <li class="nav-group">Planejamento & preços</li>
+                <li><a href="#sec-calendario"><i class='bx bxs-calendar'></i> Calendário</a></li>
+                <li><a href="#sec-radar-precos"><i class='bx bx-radar'></i> Radar de Preços</a></li>
+                <li><a href="#sec-radar-eventos"><i class='bx bx-calendar-event'></i> Mapa de Eventos</a></li>
+                <li><a href="#sec-lembretes"><i class='bx bxs-bell-ring'></i> Lembretes</a></li>
+
+                <li class="nav-group">Documentos & análises</li>
+                <li><a href="#sec-contratos"><i class='bx bx-briefcase'></i> Contratos</a></li>
+                <li><a href="#sec-relatorios"><i class='bx bx-line-chart'></i> Relatórios</a></li>
+
+                <li class="nav-group">Suporte & empresa</li>
+                <li><a href="#sec-ajuda"><i class='bx bx-help-circle'></i> Ajuda & FAQ</a></li>
+                <li><a href="#sec-empresa"><i class='bx bxs-building'></i> Empresa / Hotéis</a></li>
+                <li><a href="#sec-perfil-config"><i class='bx bx-cog'></i> Perfil & Configurações</a></li>
+                <li><a href="#sec-fale-sync"><i class='bx bx-support'></i> Fale com a Sync / Especialista</a></li>
+
+                <li class="nav-group">Sessão & tema</li>
+                <li><a href="#sec-logout"><i class='bx bx-log-out'></i> Logout</a></li>
+                <li><a href="#sec-darkmode"><i class='bx bx-moon'></i> Modo escuro / claro</a></li>
+            </ul>
+        </nav>
+
+        <div class="doc-footer">
+            Versão do manual: 1.1.0<br>
+            Atualize este documento a cada release relevante do Sell a Stay.
+        </div>
+    </aside>
+
+    <!-- CONTEÚDO DO MANUAL -->
+    <main class="doc-main">
+
+        <!-- INTRODUÇÃO / VISÃO GERAL -->
+        <section id="sec-visao-geral" class="intro-card">
+            <div class="intro-headline">
+                <div>
+                    <div class="intro-logo-slot">
+                        <img src="img/aviat_.png" alt="Descrição da imagem" style="max-width: 240px; width: 100%; height: auto; border-radius: 8px;">
+                    </div>
+                    <h2>Sobre o SellaStay</h2>
+                    <p>
+                        O <strong>SellaStay</strong> é um painel de inteligência comercial para gestão de vendas de hospedagens em grupo,
+                        desenvolvido pela <strong>Sync Softwares LTDA</strong>.  
+                        Integra CRM, radar de tarifas, calendário de eventos, lembretes, contratos e relatórios em uma única plataforma.
+                    </p>
+                    <div class="intro-tags">
+                        <span class="intro-tag">Gestão de hotéis e hospedagens</span>
+                        <span class="intro-tag">CRM + Tarifas + Eventos</span>
+                        <span class="intro-tag">Ambiente web responsivo</span>
+                    </div>
+                </div>
+                <div class="intro-actions">
+                    <button class="btn-primary">
+                        <i class='bx bxs-user-voice'></i>
+                        Fale com um Especialista
+                    </button>
+                    <p class="intro-note">
+                        Fale com a Sync sobre implantação, integrações, treinamentos e melhores práticas.
+                    </p>
+                </div>
+            </div>
+            <div style="margin-top:16px; font-size:14px; line-height:1.6;" class="image-placeholder">
+                <img src="img/home.jpg" alt="Descrição da imagem" style="max-width: 1080px; width: 100%; height: auto; border-radius: 8px;">
+            </div>
+        </section>
+
+        <!-- TOOLBAR DE DOCS -->
+        <div class="doc-toolbar">
+            <div class="toolbar-left">
+                <span class="toolbar-pill">
+                    <i class='bx bx-git-branch'></i> Versão 1.0.0
+                </span>
+                <span class="toolbar-pill">
+                    <i class='bx bx-shield-quarter'></i> Ambiente: Produção
+                </span>
+                <span class="toolbar-pill">
+                    <i class='bx bx-layer'></i> Nível: Intermediário
+                </span>
+            </div>
+            <div class="toolbar-right">
+                <button class="btn-ghost">
+                    <i class='bx bx-time'></i> Tempo médio de leitura: ~10 min
+                </button>
+                <button class="btn-ghost">
+                    <i class='bx bx-git-commit'></i> Ver changelog
+                </button>
+            </div>
+        </div>
+
+        <!-- MENU LATERAL & PESQUISA -->
+        <section id="sec-menu-lateral" class="doc-section">
+            <header>
+                <div>
+                    <h3><i class='bx bx-menu-alt-left'></i> Menu lateral & caixa de busca <span class="badge">Navegação</span></h3>
+                    <p class="section-desc">
+                        O menu lateral organiza todas as telas do Sell a Stay. No topo, a pesquisa permite localizar opções digitando parte do nome.
+                    </p>
+                </div>
+                <div class="pill"><i class='bx bx-keyboard'></i> Atalho: digite para filtrar opções</div>
+            </header>
+            <div class="section-grid">
+                <div>
+                    <div class="doc-block-title">Principais elementos</div>
+                    <ul class="doc-list">
+                        <li><strong>Logo e nome do sistema</strong>  
+                            <small>Identifica a aplicação Sell a Stay / GRC Control.</small>
+                        </li>
+                        <li><strong>Caixa de pesquisa</strong> (ícone <i class='bx bx-search'></i>)  
+                            <small>Permite filtrar as opções do menu conforme o texto digitado.</small>
+                        </li>
+                        <li><strong>Itens principais do menu</strong>  
+                            <small>Home, Dashboard, Negociações, Calendário, Radar de Preços, Mapa de Eventos, Lembretes, Contratos, Relatórios, Ajuda.</small>
+                        </li>
+                        <li><strong>Submenus de Negociações</strong>  
+                            <small>Expandem as telas de Leads, Follow Up, Carteira de Clientes e Histórico de Vendas.</small>
+                        </li>
+                        <li><strong>Área do usuário</strong>  
+                            <small>Foto, nome, acesso a Perfil, Empresa, Configurações e Fale com a Sync.</small>
+                        </li>
+                    </ul>
+                </div>
+                <div class="image-placeholder" style="font-size:14px; line-height:1.6;">
+                    <img src="img/menu.jpg" alt="Descrição da imagem" style="max-width: 200px; width: 100%; height: auto; border-radius: 8px;">
+                </div>
+            </div>
+            <div class="see-also">
+                Ver também: <a href="#sec-home">Home</a> · <a href="#sec-dashboard">Dashboard</a>
+            </div>
+        </section>
+
+        <!-- HOME -->
+        <section id="sec-home" class="doc-section">
+            <header>
+                <div>
+                    <h3><i class='bx bxs-home'></i> Home</h3>
+                    <p class="section-desc">
+                        Tela inicial com visão geral de lembretes, receita, CRM e insights. É o “painel rápido” do Sell a Stay.
+                    </p>
+                </div>
+                <div class="pill"><i class='bx bx-calendar-check'></i> Uso diário recomendado</div>
+            </header>
+            <div class="section-grid">
+                <div>
+                    <div class="doc-block-title">Blocos principais</div>
+                    <ul class="doc-list">
+                        <li><strong>Card “Lembretes – Hoje”</strong>  
+                            <small>Mostra tarefas urgentes. Link “Ver todos os lembretes” vai para a tela completa de Lembretes.</small>
+                        </li>
+                        <li><strong>Card de Receita</strong>  
+                            <small>Resumo de receita do dia/mês, metas e gráfico de desempenho.</small>
+                        </li>
+                        <li><strong>Resumo CRM</strong>  
+                            <small>Quantidade de leads em cada etapa do funil e status das negociações.</small>
+                        </li>
+                        <li><strong>Notícias / Insights</strong>  
+                            <small>Bloco com informações de mercado, viagens e turismo.</small>
+                        </li>
+                    </ul>
+                    <div class="subsection-title"><i class='bx bx-mouse-alt'></i> Ações na Home</div>
+                    <ul class="doc-list">
+                        <li><strong>Links dos cards</strong>  
+                            <small>Levam para as telas detalhadas (Lembretes, Dashboard, Negociações).</small>
+                        </li>
+                        <li><strong>Interação com gráficos</strong>  
+                            <small>Em algumas implementações, passar o mouse mostra valores detalhados do dia.</small>
+                        </li>
+                    </ul>
+                </div>
+                <div class="image-placeholder" style="font-size:14px; line-height:1.6;">
+                    <img src="img/home1.jpg" alt="Descrição da imagem" style="max-width: 10800px; width: 100%; height: auto; border-radius: 8px;">
+                </div>
+            </div>
+        </section>
+
+        <!-- DASHBOARD -->
+        <section id="sec-dashboard" class="doc-section">
+            <header>
+                <div>
+                    <h3><i class='bx bxs-dashboard'></i> Dashboard</h3>
+                    <p class="section-desc">
+                        Painel analítico com indicadores financeiros, metas e gráficos da operação comercial.
+                    </p>
+                </div>
+                <div class="pill"><i class='bx bx-bar-chart-alt-2'></i> Indicadores gerenciais</div>
+            </header>
+            <div class="section-grid">
+                <div>
+                    <div class="doc-block-title">Funções principais</div>
+                    <ul class="doc-list">
+                        <li><strong>Filtros de período e hotel</strong>  
+                            <small>Definem o recorte de tempo e o hotel para análise.</small>
+                        </li>
+                        <li><strong>Cards de métricas</strong>  
+                            <small>Receita, diária média, ocupação, ticket médio, entre outros.</small>
+                        </li>
+                        <li><strong>Gráficos</strong>  
+                            <small>Evolução de reservas, canais de venda, mix de tarifas, etc.</small>
+                        </li>
+                        <li><strong>Ranking de vendedores</strong>  
+                            <small>Comparação de performance por usuário ou equipe.</small>
+                        </li>
+                    </ul>
+                    <div class="subsection-title"><i class='bx bx-filter-alt'></i> Botões</div>
+                    <ul class="doc-list">
+                        <li><strong>“Aplicar filtros”</strong>  
+                            <small>Recarrega os dados do dashboard com o período/hotel selecionados.</small>
+                        </li>
+                        <li><strong>Abas de visão</strong> (se existirem)  
+                            <small>Ex.: visão Financeira, Comercial, Canais.</small>
+                        </li>
+                    </ul>
+                </div>
+                <div class="image-placeholder" style="font-size:14px; line-height:1.6;">
+                    <img src="img/dashboard.jpg" alt="Descrição da imagem" style="max-width: 10800px; width: 100%; height: auto; border-radius: 8px;">
+                </div>
+            </div>
+        </section>
+
+        <!-- NEGOCIAÇÕES (VISÃO GERAL) -->
+        <section id="sec-negociacoes" class="doc-section">
+            <header>
+                <div>
+                    <h3><i class='bx bxs-user-detail'></i> Negociações (menu principal)</h3>
+                    <p class="section-desc">
+                        Módulo que concentra o funil de vendas: leads, follow ups, carteira de clientes e histórico de vendas.
+                    </p>
+                </div>
+                <div class="pill"><i class='bx bx-git-branch'></i> Funil completo</div>
+            </header>
+            <div class="section-grid">
+                <div>
+                    <div class="doc-block-title">Submenus</div>
+                    <ul class="doc-list">
+                        <li><strong>Leads</strong> – cadastro e acompanhamento de oportunidades.</li>
+                        <li><strong>Follow Up log</strong> – histórico de contatos com leads/clientes.</li>
+                        <li><strong>Carteira de Clientes</strong> – clientes ativos, recorrentes e estratégicos.</li>
+                        <li><strong>Histórico de Vendas</strong> – negócios concretizados, com valores e datas.</li>
+                    </ul>
+                    <div class="danger-note">
+                        <i class='bx bxs-error'></i>
+                        <span>
+                            Recomenda-se definir um fluxo interno (ex.: Novo → Em negociação → Fechado ganho/perdido) 
+                            e padronizar o uso dos status entre toda a equipe.
+                        </span>
+                    </div>
+                </div>
+                <div class="image-placeholder" style="font-size:14px; line-height:1.6%;">
+                    <img src="img/menu2.jpg" alt="Descrição da imagem" style="max-width: 10800px; width: 100%; height: auto; border-radius: 8px;">
+                </div>
+            </div>
+        </section>
+
+        <!-- LEADS -->
+        <section id="sec-leads" class="doc-section">
+            <header>
+                <div>
+                    <h3><i class='bx bx-user'></i> Leads</h3>
+                    <p class="section-desc">
+                        Tela para registrar novas oportunidades de venda (agências, empresas, parceiros, grupos).
+                    </p>
+                </div>
+            </header>
+            <div class="section-grid">
+                <div>
+                    <div class="doc-block-title">Funções e botões</div>
+                    <ul class="doc-list">
+                        <li><strong>Botão “Novo lead”</strong>  
+                            <small>Abre formulário com campos de contato, origem, interesse, responsável, etc.</small>
+                        </li>
+                        <li><strong>Filtros de pesquisa</strong>  
+                            <small>Filtram leads por status, origem, responsável, período e hotel.</small>
+                        </li>
+                        <li><strong>Ações na linha</strong>  
+                            <small>Editar, ver histórico, arquivar/excluir (se permitido).</small>
+                        </li>
+                        <li><strong>Associação ao hotel/carteira</strong>  
+                            <small>Define a qual operação aquele lead está vinculado.</small>
+                        </li>
+                    </ul>
+                </div>
+                <div class="image-placeholder" style="font-size:14px; line-height:1.6;">
+                    <img src="img/leads.jpg" alt="Descrição da imagem" style="max-width: 10800px; width: 100%; height: auto; border-radius: 8px;">
+                </div>
+            </div>
+        </section>
+
+        <!-- FOLLOW UP -->
+        <section id="sec-followup" class="doc-section">
+            <header>
+                <div>
+                    <h3><i class='bx bx-transfer'></i> Follow Up log</h3>
+                    <p class="section-desc">
+                        Log cronológico dos contatos realizados com cada lead ou cliente.
+                    </p>
+                </div>
+            </header>
+            <div class="section-grid">
+                <div>
+                    <div class="doc-block-title">Principais botões</div>
+                    <ul class="doc-list">
+                        <li><strong>“Novo follow up”</strong>  
+                            <small>Registra data, canal, resumo do contato e próxima ação.</small>
+                        </li>
+                        <li><strong>Filtros de busca</strong>  
+                            <small>Por responsável, cliente/lead, período ou tipo de contato.</small>
+                        </li>
+                        <li><strong>Vincular à venda</strong>  
+                            <small>Algumas implementações permitem vincular o follow up a uma oportunidade/venda específica.</small>
+                        </li>
+                    </ul>
+                </div>
+                <div class="image-placeholder" style="font-size:14px; line-height:1.6;">
+                    <img src="img/follow.jpg" alt="Descrição da imagem" style="max-width: 10800px; width: 100%; height: auto; border-radius: 8px;">
+                </div>
+            </div>
+        </section>
+
+        <!-- CARTEIRA -->
+        <section id="sec-carteira" class="doc-section">
+            <header>
+                <div>
+                    <h3><i class='bx bxs-user-account'></i> Carteira de Clientes</h3>
+                    <p class="section-desc">
+                        Base de clientes ativos, organizados por categoria, responsável e potencial.
+                    </p>
+                </div>
+            </header>
+            <div class="section-grid">
+                <div>
+                    <div class="doc-block-title">Funções</div>
+                    <ul class="doc-list">
+                        <li><strong>Cadastro/edição de clientes</strong>  
+                            <small>Dados completos para relacionamento e faturamento.</small>
+                        </li>
+                        <li><strong>Atribuição de responsável</strong>  
+                            <small>Define o dono da conta para fins de metas e acompanhamento.</small>
+                        </li>
+                        <li><strong>Indicadores da carteira</strong>  
+                            <small>Último contato, próximos passos, produção histórica, etc.</small>
+                        </li>
+                    </ul>
+                </div>
+                <div class="image-placeholder" style="font-size:14px; line-height:1.6;">
+                    <img src="img/clientes.jpg" alt="Descrição da imagem" style="max-width: 10800px; width: 100%; height: auto; border-radius: 8px;">
+                </div>
+            </div>
+        </section>
+
+        <!-- HISTÓRICO DE VENDAS -->
+        <section id="sec-historico-vendas" class="doc-section">
+            <header>
+                <div>
+                    <h3><i class='bx bx-history'></i> Histórico de Vendas</h3>
+                    <p class="section-desc">
+                        Registro das vendas concluídas, com datas, valores e clientes envolvidos.
+                    </p>
+                </div>
+            </header>
+            <div class="section-grid">
+                <div>
+                    <div class="doc-block-title">Botões principais</div>
+                    <ul class="doc-list">
+                        <li><strong>Filtros por período/hotel</strong>  
+                            <small>Mostram apenas as vendas do intervalo desejado.</small>
+                        </li>
+                        <li><strong>Exportar</strong> (se configurado)  
+                            <small>Gera download em planilha ou relatório.</small>
+                        </li>
+                        <li><strong>“Ver detalhes”</strong>  
+                            <small>Abre resumo da venda com mais informações.</small>
+                        </li>
+                    </ul>
+                </div>
+                <div class="image-placeholder" style="font-size:14px; line-height:1.6;">
+                    <img src="img/historico.jpg" alt="Descrição da imagem" style="max-width: 10800px; width: 100%; height: auto; border-radius: 8px;">
+                </div>
+            </div>
+        </section>
+
+        <!-- CALENDÁRIO -->
+        <section id="sec-calendario" class="doc-section">
+            <header>
+                <div>
+                    <h3><i class='bx bxs-calendar'></i> Calendário</h3>
+                    <p class="section-desc">
+                        Visualização de feriados, datas-chave e eventos em formato mensal/semanal/anual.
+                    </p>
+                </div>
+                <div class="pill"><i class='bx bx-calendar'></i> Planejamento anual</div>
+            </header>
+            <div class="section-grid">
+                <div>
+                    <div class="doc-block-title">Controles</div>
+                    <ul class="doc-list">
+                        <li><strong>Botões “Anterior / Próximo / Hoje”</strong>  
+                            <small>Navegam entre períodos e retornam para o mês atual.</small>
+                        </li>
+                        <li><strong>Visualizações</strong>  
+                            <small>Mês, Semana, Ano (quando disponíveis).</small>
+                        </li>
+                        <li><strong>Filtros de tipo de evento</strong>  
+                            <small>Permitem exibir apenas eventos relevantes à operação.</small>
+                        </li>
+                        <li><strong>Clique em um dia</strong>  
+                            <small>Abre detalhes dos eventos daquele dia.</small>
+                        </li>
+                    </ul>
+                </div>
+                <div class="image-placeholder" style="font-size:14px; line-height:1.6;">
+                    <img src="img/calendario.jpg" alt="Descrição da imagem" style="max-width: 10800px; width: 100%; height: auto; border-radius: 8px;">
+                </div>
+            </div>
+        </section>
+
+        <!-- RADAR DE PREÇOS -->
+        <section id="sec-radar-precos" class="doc-section">
+            <header>
+                <div>
+                    <h3><i class='bx bx-radar'></i> Radar de Preços</h3>
+                    <p class="section-desc">
+                        Módulo para pesquisar tarifas de hospedagem por cidade e período, em formato de simulação.
+                    </p>
+                </div>
+                <div class="pill"><i class='bx bx-signal-4'></i> Monitoramento de tarifas</div>
+            </header>
+            <div class="section-grid">
+                <div>
+                    <div class="doc-block-title">Campos e botão principal</div>
+                    <ul class="doc-list">
+                        <li><strong>Cidade</strong>  
+                            <small>Destino a ser analisado.</small>
+                        </li>
+                        <li><strong>Check-in / Check-out</strong>  
+                            <small>Período da hospedagem pesquisada.</small>
+                        </li>
+                        <li><strong>Pessoas</strong>  
+                            <small>Define a ocupação simulada.</small>
+                        </li>
+                        <li><strong>Botão “Pesquisar preços”</strong>  
+                            <small>Executa a busca e abre os resultados.</small>
+                        </li>
+                    </ul>
+                    <div class="subsection-title"><i class='bx bx-window-alt'></i> Resultado em popup</div>
+                    <ul class="doc-list">
+                        <li><strong>Lista de hotéis e tarifas</strong>  
+                            <small>Mostra valores, canais e observações.</small>
+                        </li>
+                        <li><strong>Abas de visualização</strong>  
+                            <small>Últimas tarifas, favoritos, etc. (conforme implementação).</small>
+                        </li>
+                    </ul>
+                    <div class="danger-note">
+                        <i class='bx bxs-error'></i>
+                        <span>
+                            Em muitas implantações há um aviso (disclaimer) sobre uso responsável das informações e limites de terceiros.
+                        </span>
+                    </div>
+                </div>
+                <div class="image-placeholder" style="font-size:14px; line-height:1.6;">
+                    <img src="img/radar.jpg" alt="Descrição da imagem" style="max-width: 10800px; width: 100%; height: auto; border-radius: 8px;">
+                </div>
+            </div>
+        </section>
+
+        <!-- MAPA DE EVENTOS -->
+        <section id="sec-radar-eventos" class="doc-section">
+            <header>
+                <div>
+                    <h3><i class='bx bx-calendar-event'></i> Mapa de Eventos</h3>
+                    <p class="section-desc">
+                        Consulta de eventos que podem impactar a demanda hoteleira em cada cidade.
+                    </p>
+                </div>
+                <div class="pill"><i class='bx bx-map-alt'></i> Demanda por eventos</div>
+            </header>
+            <div class="section-grid">
+                <div>
+                    <div class="doc-block-title">Filtros e lista</div>
+                    <ul class="doc-list">
+                        <li><strong>Filtros de cidade, período e categoria</strong>  
+                            <small>Refinam os eventos exibidos.</small>
+                        </li>
+                        <li><strong>Botão “Buscar eventos”</strong>  
+                            <small>Atualiza a lista com base nos filtros.</small>
+                        </li>
+                        <li><strong>Cards de eventos</strong>  
+                            <small>Exibem nome, data, local, tipo de evento e notas estratégicas.</small>
+                        </li>
+                    </ul>
+                </div>
+                <div class="image-placeholder" style="font-size:14px; line-height:1.6;">
+                    <img src="img/mapa.jpg" alt="Descrição da imagem" style="max-width: 10800px; width: 100%; height: auto; border-radius: 8px;">
+                </div>
+            </div>
+        </section>
+
+        <!-- LEMBRETES -->
+        <section id="sec-lembretes" class="doc-section">
+            <header>
+                <div>
+                    <h3><i class='bx bxs-bell-ring'></i> Lembretes</h3>
+                    <p class="section-desc">
+                        Sistema de tarefas categorizadas por cor (urgente, crítico, no prazo).
+                    </p>
+                </div>
+                <div class="pill"><i class='bx bx-task'></i> Organização de atividades</div>
+            </header>
+            <div class="section-grid">
+                <div>
+                    <div class="doc-block-title">Botões e legendas</div>
+                    <ul class="doc-list">
+                        <li><strong>“Adicionar novo”</strong>  
+                            <small>Cria um lembrete com título, descrição, data, urgência e responsável.</small>
+                        </li>
+                        <li><strong>Legendas por cor</strong>  
+                            <small>Vermelho = urgente; Amarelo = crítico; Verde = no prazo.</small>
+                        </li>
+                        <li><strong>Histórico de lembretes</strong>  
+                            <small>Exibe lembretes concluídos/arquivados.</small>
+                        </li>
+                        <li><strong>Ações em cada cartão</strong>  
+                            <small>Editar, marcar como concluído, alterar urgência, conforme permissões.</small>
+                        </li>
+                    </ul>
+                </div>
+                <div class="image-placeholder" style="font-size:14px; line-height:1.6;">
+                    <img src="img/lembretes.jpg" alt="Descrição da imagem" style="max-width: 10800px; width: 100%; height: auto; border-radius: 8px;">
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTRATOS -->
+        <section id="sec-contratos" class="doc-section">
+            <header>
+                <div>
+                    <h3><i class='bx bx-briefcase'></i> Contratos</h3>
+                    <p class="section-desc">
+                        Central para visualizar e gerenciar contratos de parceria, acordos comerciais e produção.
+                    </p>
+                </div>
+                <div class="pill"><i class='bx bx-file'></i> Gestão contratual</div>
+            </header>
+            <div class="section-grid">
+                <div>
+                    <div class="doc-block-title">Funcionalidades</div>
+                    <ul class="doc-list">
+                        <li><strong>Cards de resumo</strong>  
+                            <small>Total de contratos ativos, contratos a vencer, valor total, etc.</small>
+                        </li>
+                        <li><strong>Lista de contratos</strong>  
+                            <small>Exibe nome, tipo, vigência, valor, status e ações.</small>
+                        </li>
+                        <li><strong>Filtros</strong>  
+                            <small>Filtragem por status, hotel, tipo de contrato.</small>
+                        </li>
+                        <li><strong>Detalhe do contrato</strong>  
+                            <small>Abre informações completas e anexos (quando disponíveis).</small>
+                        </li>
+                    </ul>
+                </div>
+                <div class="image-placeholder" style="font-size:14px; line-height:1.6;">
+                    <img src="img/contratos.jpg" alt="Descrição da imagem" style="max-width: 10800px; width: 100%; height: auto; border-radius: 8px;">
+                </div>
+            </div>
+        </section>
+
+        <!-- RELATÓRIOS -->
+        <section id="sec-relatorios" class="doc-section">
+            <header>
+                <div>
+                    <h3><i class='bx bx-line-chart'></i> Relatórios</h3>
+                    <p class="section-desc">
+                        Módulo avançado para geração de relatórios comerciais e operacionais.
+                    </p>
+                </div>
+                <div class="pill"><i class='bx bx-pie-chart-alt'></i> Análises avançadas</div>
+            </header>
+            <div class="section-grid">
+                <div>
+                    <div class="doc-block-title">Componentes principais</div>
+                    <ul class="doc-list">
+                        <li><strong>Cards de relatórios em destaque</strong>  
+                            <small>Atalhos para relatórios mais utilizados (por canal, por cliente, por hotel).</small>
+                        </li>
+                        <li><strong>Gráficos complementares</strong>  
+                            <small>Visão visual das principais métricas.</small>
+                        </li>
+                        <li><strong>Lista de tipos de relatório</strong>  
+                            <small>Permite escolher o formato e o eixo principal da análise.</small>
+                        </li>
+                    </ul>
+                    <div class="subsection-title"><i class='bx bx-spreadsheet'></i> Modal “Gerar relatório”</div>
+                    <ul class="doc-list">
+                        <li><strong>Seleção do tipo de relatório</strong></li>
+                        <li><strong>Filtros (período, hotel, canal, cliente)</strong></li>
+                        <li><strong>Botão “Gerar”</strong> – monta o relatório na tela ou para download.</li>
+                    </ul>
+                </div>
+                <div class="image-placeholder" style="font-size:14px; line-height:1.6;">
+                    <img src="img/relatorios.jpg" alt="Descrição da imagem" style="max-width: 10800px; width: 100%; height: auto; border-radius: 8px;">
+                </div>
+            </div>
+        </section>
+
+        <!-- AJUDA -->
+        <section id="sec-ajuda" class="doc-section">
+            <header>
+                <div>
+                    <h3><i class='bx bx-help-circle'></i> Ajuda & FAQ</h3>
+                    <p class="section-desc">
+                        Central de ajuda com perguntas frequentes, links de suporte e contato com a Sync.
+                    </p>
+                </div>
+                <div class="pill"><i class='bx bx-support'></i> Central de suporte</div>
+            </header>
+            <div class="section-grid">
+                <div>
+                    <div class="doc-block-title">Blocos de ajuda</div>
+                    <ul class="doc-list">
+                        <li><strong>Atalhos rápidos</strong>  
+                            <small>Abrir ticket, ver base de conhecimento, falar com um especialista.</small>
+                        </li>
+                        <li><strong>FAQ</strong>  
+                            <small>Questões comuns sobre uso, acesso, permissões e relatórios.</small>
+                        </li>
+                        <li><strong>Formulário de contato</strong>  
+                            <small>Envio direto de dúvidas para o suporte da Sync.</small>
+                        </li>
+                    </ul>
+                    <div class="subsection-title"><i class='bx bx-user-voice'></i> Botão “Fale com um especialista”</div>
+                    <ul class="doc-list">
+                        <li>Abre canal voltado para dúvidas estratégicas, implantação e consultoria.</li>
+                    </ul>
+                </div>
+                <div class="image-placeholder" style="font-size:14px; line-height:1.6;">
+                    <img src="img/ajuda1.jpg" alt="Descrição da imagem" style="max-width: 10800px; width: 100%; height: auto; border-radius: 8px;">
+                </div>
+            </div>
+        </section>
+
+        <!-- EMPRESA / HOTÉIS -->
+        <section id="sec-empresa" class="doc-section">
+            <header>
+                <div>
+                    <h3><i class='bx bxs-building'></i> Empresa & Hotéis</h3>
+                    <p class="section-desc">
+                        Configurações da empresa e cadastro dos hotéis atendidos pelo Sell a Stay.
+                    </p>
+                </div>
+            </header>
+            <div class="section-grid">
+                <div>
+                    <div class="doc-block-title">Submenus</div>
+                    <ul class="doc-list">
+                        <li><strong>Configurações da Empresa</strong>  
+                            <small>Dados da empresa e parâmetros gerais.</small>
+                        </li>
+                        <li><strong>Cadastro de Hotéis</strong>  
+                            <small>Inclusão e manutenção de hotéis, com dados básicos e comerciais.</small>
+                        </li>
+                    </ul>
+                </div>
+                <div class="image-placeholder" style="font-size:14px; line-height:1.6;">
+                    <img src="img/hoteis.jpg" alt="Descrição da imagem" style="max-width: 10800px; width: 100%; height: auto; border-radius: 8px;">
+                </div>
+            </div>
+        </section>
+
+        <!-- PERFIL & CONFIG -->
+        <section id="sec-perfil-config" class="doc-section">
+            <header>
+                <div>
+                    <h3><i class='bx bx-cog'></i> Perfil & Configurações</h3>
+                    <p class="section-desc">
+                        Ajustes ligados ao usuário: dados pessoais, senha e preferências.
+                    </p>
+                </div>
+            </header>
+            <div class="section-grid">
+                <div>
+                    <div class="doc-block-title">Opções</div>
+                    <ul class="doc-list">
+                        <li><strong>Perfil</strong>  
+                            <small>Nome, foto, e-mail, telefone, alteração de senha.</small>
+                        </li>
+                        <li><strong>Configurações</strong>  
+                            <small>Idioma, moeda, notificações e parâmetros específicos (se existirem).</small>
+                        </li>
+                    </ul>
+                </div>
+                <div class="image-placeholder" style="font-size:14px; line-height:1.6;">
+                    <img src="img/config.jpg" alt="Descrição da imagem" style="max-width: 10800px; width: 100%; height: auto; border-radius: 8px;">
+                </div>
+            </div>
+        </section>
+
+        <!-- FALE COM A SYNC -->
+        <section id="sec-fale-sync" class="doc-section">
+            <header>
+                <div>
+                    <h3><i class='bx bx-support'></i> Fale com a Sync / Especialista</h3>
+                    <p class="section-desc">
+                        Atalhos para contato com o time da Sync Softwares LTDA.
+                    </p>
+                </div>
+            </header>
+            <div class="section-grid">
+                <div>
+                    <div class="doc-block-title">Caminhos de contato</div>
+                    <ul class="doc-list">
+                        <li><strong>Menu Ajuda &gt; Fale com a Sync</strong>  
+                            <small>Canal oficial de suporte.</small>
+                        </li>
+                        <li><strong>Botão “Fale com um especialista”</strong>  
+                            <small>Voltado para dúvidas de implantação, expansão e consultoria.</small>
+                        </li>
+                    </ul>
+                </div>
+                <div class="image-placeholder" style="font-size:14px; line-height:1.6;">
+                    <img src="img/sync.jpg" alt="Descrição da imagem" style="max-width: 10800px; width: 100%; height: auto; border-radius: 8px;">
+                </div>
+            </div>
+        </section>
+
+        <!-- LOGOUT -->
+        <section id="sec-logout" class="doc-section">
+            <header>
+                <div>
+                    <h3><i class='bx bx-log-out'></i> Logout</h3>
+                    <p class="section-desc">
+                        Botão que encerra a sessão do usuário e leva de volta à tela de login.
+                    </p>
+                </div>
+            </header>
+            <div class="section-grid">
+                <div>
+                    <div class="doc-block-title">Como usar</div>
+                    <ul class="doc-list">
+                        <li><strong>Local</strong>  
+                            <small>Base do menu lateral, com ícone <i class='bx bx-log-out'></i> e texto “Logout”.</small>
+                        </li>
+                        <li><strong>Recomendação</strong>  
+                            <small>Utilizar sempre ao terminar o expediente, especialmente em máquinas compartilhadas.</small>
+                        </li>
+                    </ul>
+                </div>
+                <div class="image-placeholder" style="font-size:14px; line-height:1.6;">
+                    <img src="img/sair.jpg" alt="Descrição da imagem" style="max-width: 10800px; width: 100%; height: auto; border-radius: 8px;">
+                </div>
+            </div>
+        </section>
+
+        <!-- DARK MODE -->
+        <section id="sec-darkmode" class="doc-section">
+            <header>
+                <div>
+                    <h3><i class='bx bx-moon'></i> Modo escuro / claro</h3>
+                    <p class="section-desc">
+                        Alterna o tema visual do sistema entre claro e escuro usando o switch na base do menu.
+                    </p>
+                </div>
+            </header>
+            <div class="section-grid">
+                <div>
+                    <div class="doc-block-title">Botão de tema</div>
+                    <ul class="doc-list">
+                        <li><strong>Switch com ícones de lua/sol</strong>  
+                            <small>Texto “Dark mode” ao lado do toggle.</small>
+                        </li>
+                        <li><strong>Clique</strong>  
+                            <small>Aplica o tema imediatamente em todas as telas.</small>
+                        </li>
+                        <li><strong>Persistência</strong>  
+                            <small>Preferência pode ser salva para as próximas sessões, dependendo da implementação.</small>
+                        </li>
+                    </ul>
+                </div>
+                <div class="image-placeholder" style="font-size:14px; line-height:1.6;">
+                    <img src="img/dark.jpg" alt="Descrição da imagem" style="max-width: 10800px; width: 100%; height: auto; border-radius: 8px;">
+                </div>
+            </div>
+        </section>
+
+    </main>
+</div>
+<script>
+    const sidebar = document.querySelector(".doc-sidebar");
+    const toggleBtn = document.querySelector(".sidebar-toggle");
+
+    toggleBtn.addEventListener("click", () => {
+        sidebar.classList.toggle("collapsed");
+    });
+</script>
+
+</body>
+</html>

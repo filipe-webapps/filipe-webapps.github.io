@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SellaStay | Modulo de Auditoria</title>
+    <link rel="icon" type="image/x-icon" href="img/favicon.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        body {
+            background: var(--body-color, #050712);
+            color: #000000;
+        }
+
+        .home-overview {
+            gap: 28px;
+            color: #000000;
+        }
+
+        .audit-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .audit-header p {
+            margin: 6px 0 0;
+            max-width: 560px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .audit-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .audit-actions a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.68rem 1.4rem;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .audit-actions a:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .audit-summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 14px;
+        }
+
+        .audit-summary-cards article {
+            padding: 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(12, 18, 34, 0.7);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+            color: #ffffff;
+        }
+
+        .audit-summary-cards span {
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        .audit-summary-cards strong {
+            display: block;
+            margin-top: 8px;
+            font-size: 1.9rem;
+        }
+
+        .audit-history h2 {
+            margin-bottom: 6px;
+        }
+
+        .audit-empty {
+            margin: 12px 0 0;
+            padding: 18px;
+            border-radius: 16px;
+            border: 1px dashed rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        .audit-records {
+            list-style: none;
+            margin: 18px 0 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .audit-card {
+            border-radius: 24px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(14, 20, 38, 0.8);
+            box-shadow: 0 16px 38px rgba(0, 0, 0, 0.35);
+            color: #ffffff;
+        }
+
+        .audit-card header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .audit-card header h3 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        .audit-card header span {
+            opacity: 0.7;
+            font-size: 0.85rem;
+        }
+
+        .audit-card p {
+            margin: 8px 0;
+            line-height: 1.4;
+        }
+
+        .audit-card strong {
+            font-size: 1.4rem;
+        }
+
+        .audit-owners {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 10px 0;
+        }
+
+        .audit-owners span {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 999px;
+            padding: 4px 12px;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 600px) {
+            .audit-card header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="home">
+        <div class="home-overview">
+            <header class="audit-header">
+                <div>
+                    <p class="home-eyebrow">Registros guardados</p>
+                    <h1>Modulo de auditoria</h1>
+                    <p>Todo periodo salvo via "Guardar em auditoria" fica disponivel aqui com o contexto principal do pipeline e pode ser consultado quando necessario.</p>
+                </div>
+                <div class="audit-actions">
+                    <a href="follow-up.html"><i class='bx bx-log-out-circle'></i> Voltar para follow up</a>
+                </div>
+            </header>
+
+            <section class="audit-summary-cards">
+                <article>
+                    <span>Registros salvos</span>
+                    <strong id="audit-total">0</strong>
+                </article>
+                <article>
+                    <span>Movimentacoes consolidadas</span>
+                    <strong id="audit-movements">0</strong>
+                </article>
+                <article>
+                    <span>Ultimo backup</span>
+                    <strong id="audit-last">--</strong>
+                </article>
+            </section>
+
+            <section class="audit-history">
+                <h2>Historico</h2>
+                <p class="audit-empty" id="audit-empty" hidden>Nenhum periodo foi armazenado ainda. Use o botao "Guardar em auditoria" no follow up para iniciar.</p>
+                <ul class="audit-records" id="audit-records"></ul>
+            </section>
+        </div>
+    </section>
+
+    <footer style="line-height: 15px;">
+        &copy; <span id="anoAtual"></span> SellaStay - Hospitality Commerce Solutions. <br> <span style="font-size: 10px; cursor: pointer;">Developed by <a href="https://www.yailup.com" style="text-decoration: none; color: var(--text-color);" onmouseover="this.style.color='#ff914d';" onmouseout="this.style.color='var(--text-color)';" target="_blank"> <b>Yailup</b></a></span>
+    </footer>
+
+    <script>
+        const AUDIT_STORAGE_KEY = "sella_audit_records";
+        const totalEl = document.getElementById("audit-total");
+        const movementsEl = document.getElementById("audit-movements");
+        const lastEl = document.getElementById("audit-last");
+        const listEl = document.getElementById("audit-records");
+        const emptyEl = document.getElementById("audit-empty");
+        const yearNow = new Date().getFullYear();
+        document.getElementById("anoAtual").textContent = yearNow;
+
+        function loadAuditRecords() {
+            try {
+                return JSON.parse(localStorage.getItem(AUDIT_STORAGE_KEY)) || [];
+            } catch (error) {
+                console.error("Falha ao ler registros de auditoria", error);
+                return [];
+            }
+        }
+
+        function formatDateTime(value) {
+            return new Date(value).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
+        }
+
+        function formatPeriod(period = {}) {
+            if (!period.start || !period.end) return "--";
+            const start = new Date(period.start).toLocaleDateString("pt-BR");
+            const end = new Date(period.end).toLocaleDateString("pt-BR");
+            return `${start} -> ${end}`;
+        }
+
+        function renderRecords(records = []) {
+            listEl.innerHTML = "";
+            if (!records.length) {
+                emptyEl.hidden = false;
+                return;
+            }
+            emptyEl.hidden = true;
+
+            records.forEach((record) => {
+                const li = document.createElement("li");
+                li.className = "audit-card";
+                const owners = (record.ownerHighlights || []).map(item => `<span>${item.owner}: ${item.total}</span>`).join("") || "<span>Sem responsaveis destacados</span>";
+                li.innerHTML = `
+                    <header>
+                        <h3>${formatPeriod(record.period)}</h3>
+                        <span>Salvo em ${formatDateTime(record.savedAt)}</span>
+                    </header>
+                    <p>Movimentacoes capturadas: <strong>${record.totalLogs ?? 0}</strong></p>
+                    <div class="audit-owners">${owners}</div>
+                    <p><strong>Resumo:</strong> ${record.sampleSummary || "Sem descricao disponivel."}</p>
+                    <p><strong>Notas:</strong> ${record.notes || "Sem observacoes adicionais."}</p>
+                `;
+                listEl.appendChild(li);
+            });
+        }
+
+        function renderSummary(records = []) {
+            totalEl.textContent = records.length;
+            const totalMovements = records.reduce((acc, record) => acc + (record.totalLogs || 0), 0);
+            movementsEl.textContent = totalMovements;
+            lastEl.textContent = records[0] ? formatDateTime(records[0].savedAt) : "--";
+        }
+
+        const auditRecords = loadAuditRecords();
+        renderSummary(auditRecords);
+        renderRecords(auditRecords);
+    </script>
+</body>
+</html>

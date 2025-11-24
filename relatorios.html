@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatórios | SellaStay</title>
+    <link rel="icon" type="image/x-icon" href="img/favicon.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
+    <style>
+        
+        .home {
+            min-height: 100vh;
+            padding: 56px 48px 96px;
+            margin-left: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            background: transparent;
+        }
+        .reports-panel {
+            background: rgba(8, 10, 30, 0.92);
+            border-radius: 28px;
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 28px 30px 30px;
+            box-shadow:
+                0 20px 60px rgba(0,0,0,0.4),
+                inset 0 1px 0 rgba(255,255,255,0.08);
+            backdrop-filter: blur(12px);
+        }
+        .reports-panel header {
+            margin-bottom: 10px;
+        }
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            padding: 12px 0;
+        }
+        .report-card {
+            background: linear-gradient(145deg, rgba(7,10,30,0.95), rgba(15,23,42,0.9));
+            border-radius: 24px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.15);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            min-height: 200px;
+            box-shadow: 0 18px 50px rgba(0,0,0,0.55);
+        }
+        .report-card h3 {
+            margin: 0;
+            font-size: 1.15rem;
+            color: #fff;
+        }
+        .report-card p {
+            margin: 0;
+            color: #fff;
+            font-size: 0.9rem;
+        }
+        .report-card strong {
+            font-size: 2rem;
+            color: #fff;
+        }
+        .chart-wrapper {
+            margin-top: 8px;
+            height: 140px;
+        }
+        .chart-wrapper canvas {
+            width: 100%;
+            height: 100%;
+        }
+        .crm-panel {
+            background: rgba(7, 9, 27, 0.96);
+            border-radius: 32px;
+            border: 1px solid rgba(255,255,255,0.12);
+            padding: 30px;
+            box-shadow:
+                0 25px 65px rgba(0,0,0,0.65),
+                inset 0 2px 0 rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+        }
+        .crm-panel header {
+            display:flex;
+            justify-content:space-between;
+            align-items:flex-end;
+            flex-wrap:wrap;
+            margin-bottom:16px;
+        }
+        .crm-grid {
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+            gap:16px;
+        }
+        .crm-card {
+            background: rgba(255,255,255,0.03);
+            border-radius: 20px;
+            border:1px solid rgba(255,255,255,0.1);
+            padding:18px;
+            display:flex;
+            flex-direction:column;
+            gap:10px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.55);
+        }
+        .crm-card ul{
+            list-style:none;
+            padding:0;
+            margin:0;
+            display:flex;
+            flex-direction:column;
+            gap:6px;
+        }
+        .crm-card li{
+            display:flex;
+            justify-content:space-between;
+            font-size:0.9rem;
+            color:#fff;
+        }
+        .crm-card strong{
+            font-size:1.6rem;
+        }
+        .reports-meta{
+            display:flex;
+            gap:24px;
+            flex-wrap:wrap;
+        }
+        .reports-meta span{
+            background:rgba(255,255,255,0.05);
+            padding:8px 14px;
+            border-radius:999px;
+            font-size:0.85rem;
+            color:rgba(255,255,255,0.8);
+        }
+        @media(max-width:768px){
+            .home{
+                margin-left:0;
+                padding:40px 20px 60px;
+            }
+        }
+        .report-type-list {
+            margin-top: 24px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+        .report-type-card {
+            background: rgba(7, 11, 32, 0.95);
+            border-radius: 22px;
+            border: 1px solid rgba(255,255,255,0.12);
+            padding: 20px;
+            display:flex;
+            flex-direction:column;
+            gap:12px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+            transition: transform 0.25s ease, border-color 0.25s ease;
+            color:#fff;
+        }
+        .report-type-card:hover {
+            transform: translateY(-4px);
+            border-color: #38bdf8;
+        }
+        .report-type-card h3,
+        .report-type-card p,
+        .report-type-card span {
+            color: #fff;
+        }
+        .report-type-card button {
+            border:none;
+            border-radius:12px;
+            padding:10px 14px;
+            background:linear-gradient(135deg,#ff6b00,#ff914d);
+            color:#fff;
+            font-weight:600;
+            cursor:pointer;
+            align-self:flex-start;
+        }
+        .modal-overlay {
+            position:fixed;
+            inset:0;
+            background:rgba(2,6,23,0.7);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            padding:20px;
+            z-index:1500;
+            opacity:0;
+            pointer-events:none;
+            transition:opacity 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity:1;
+            pointer-events:auto;
+        }
+        .modal {
+            background: linear-gradient(180deg, rgba(6,10,30,0.95), rgba(3,5,20,0.95));
+            border-radius:28px;
+            padding:26px 30px;
+            border:1px solid rgba(255,255,255,0.18);
+            width:min(460px,100%);
+            display:flex;
+            flex-direction:column;
+            gap:16px;
+            box-shadow:
+                0 25px 70px rgba(0,0,0,0.65),
+                inset 0 1px 0 rgba(255,255,255,0.08);
+        }
+        .modal header{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+        .modal header h2{
+            margin:0;
+        }
+        .modal form select,
+        .modal form input{
+            width:100%;
+            border-radius:10px;
+            border:none;
+            padding:10px 12px;
+        }
+        .modal form .radio-group{
+            display:flex;
+            gap:14px;
+        }
+        .modal form button{
+            border:none;
+            border-radius:14px;
+            padding:12px;
+            background:linear-gradient(135deg,#ff6b00,#ff914d);
+            color:#fff;
+            font-weight:600;
+            cursor:pointer;
+            box-shadow:0 10px 25px rgba(0,0,0,0.35);
+        }
+        .modal-note{
+            font-size:0.85rem;
+            color:rgba(255,255,255,0.7);
+        }
+        .modal-actions{
+            display:flex;
+            gap:10px;
+            flex-wrap:wrap;
+        }
+        .modal-actions .btn{
+            border:none;
+            border-radius:12px;
+            padding:10px 16px;
+            cursor:pointer;
+            font-weight:600;
+        }
+        .modal-actions .btn-success{
+            background:linear-gradient(135deg,#ff6b00,#ff914d);
+        }
+        .modal-actions .btn-secondary{
+            background:linear-gradient(135deg,#fdba74,#fb7600);
+        }
+        .btn-success{
+            background:#16a34a;
+            color:#fff;
+        }
+        .btn-secondary{
+            background:rgba(255,255,255,0.08);
+            color:#fff;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Menu -->
+    <nav class="sidebar close">
+
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="img/logo.png" alt="">
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name" id="nome">SellaStay</span>
+                    <span class="profession">EGRC Control</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu-scrollable">
+
+                <ul class="menu-links">
+
+                    <br>
+                    <br>
+
+                    <li class="nav-link">
+                        <a href="home.html">
+                            <i class='bx bxs-home icon' ></i>
+                            <span class="text nav-text">Home</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="dashboard.html">
+                            <i class='bx bxs-dashboard icon' ></i>
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link has-submenu">
+                        <a href="leads.html">
+                            <i class='bx bxs-grid icon' ></i>
+                            <span class="text nav-text">Operacional <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="leads.html"><i class='bx bxs-chevrons-right icon' ></i>Negociações</a></li>
+                            <li><a href="follow-up.html"><i class='bx bx-transfer icon' ></i>Follow Up log</a></li>
+                            <li><a href="clients.html"><i class='bx bx-id-card icon' ></i>Carteira de Clientes</a></li>
+                            <li><a href="vendas.html"><i class='bx bx-history icon'></i></i>Histórico de Vendas</a></li>
+                            <li><a href="tasks.html"><i class='bx bx-task icon'></i></i>Gestor de Tarefas</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="calendar.html">
+                            <i class='bx bxs-calendar-event icon'></i>
+                            <span class="text nav-text">Mapa de Eventos</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="pricespy.html">
+                            <i class='bx bx-radar icon'></i>
+                            <span class="text nav-text">Radar de Preços</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="reminder.html">
+                            <i class='bx bxs-bell-ring icon' ></i>
+                            <span class="text nav-text">Lembretes</span>
+                        </a>
+                    </li>
+
+                    <!-- ::::::: VERIFICAR NECESSIDADE ::::::::-->
+                    <!-- <li class="nav-link">
+                        <a href="contratos.html">
+                            <i class='bx bx-briefcase icon' ></i>
+                            <span class="text nav-text">Contratos</span>
+                        </a>
+                    </li> -->
+
+                    <li class="nav-link" id="navselected">
+                        <a href="relatorios.html">
+                            <i class='bx bx-line-chart icon'></i>
+                            <span class="text nav-text">Relatórios</span>
+                        </a>
+                    </li>
+
+                    <!-- ::::::: REALOCAR PARA OUTRO LUGAR ::::::::-->
+                    <!-- <li class="nav-link"> 
+                        <a href="doc.html">
+                            <i class='bx bx-help-circle icon' ></i>
+                            <span class="text nav-text">Ajuda</span>
+                        </a>
+                    </li> -->
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <ul class="menu-links">
+                    <li class="nav-link has-submenu">
+                        <a href="#">
+                            <img id="profile-pic" src="img/profile_pic_F.png" alt="Usuário logado">
+                            <span class="text nav-text"><span id="menuUserName">Usuário</span> <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="profile.html"><i class='bx bx-user icon'></i> Perfil</a></li>
+                            <li class="has-submenu">
+                                <a href="empresas.html">
+                                    <i class='bx bxs-building icon'></i> Empresa <i class='bx bx-chevron-down arrow'></i>
+                                </a>
+                                <ul class="submenu">
+                                    <li><a href="#empresa-config"><i class='bx bx-briefcase icon'></i> Configurações da Empresa</a></li>
+                                    <li><a href="#hoteis-config"><i class='bx bx-hotel icon'></i> Cadastro de Hotéis</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="settings.html"><i class='bx bx-cog icon'></i> Configurações</a></li>
+                            <li><a href="help.html"><i class='bx bx-support icon'></i> Suporte</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="logout" id="logout">
+                        <a href="index.html">
+                            <i class='bx bx-log-out icon' ></i>
+                            <span class="text nav-text">Logout</span>
+                        </a>
+                    </li>
+
+                    <li class="mode">
+                        <div class="sun-moon">
+                            <i class='bx bx-moon icon moon'></i>
+                            <i class='bx bx-sun icon sun'></i>
+                        </div>
+                        <span class="mode-text text">Dark mode</span>
+
+                        <div class="toggle-switch">
+                            <span class="switch"></span>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- /Menu -->
+
+    <section class="home">
+        <div class="section-head">
+            <div>
+                <p class="home-eyebrow">Visões</p>
+                <h1>Relatórios analíticos & sintéticos</h1>
+                <p class="home-subtitle">Consolide KPIs do ecossistema centralizado, focando em receita e CRM.</p>
+            </div>
+            <div class="reports-meta">
+                <span>Atualização: 05/Jun 08:25</span>
+                <span>Responsável: Sync Analytics</span>
+            </div>
+        </div>
+
+        <div class="reports-panel">
+            <div class="reports-grid">
+                <article class="report-card">
+                    <span class="pill">Analítico</span>
+                    <h3>Receita consolidada</h3>
+                    <strong id="revenueValue">R$ 0</strong>
+                    <p>Pareamento do acumulado mensal versus meta geral.</p>
+                    <div class="chart-wrapper">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </article>
+                <article class="report-card">
+                    <span class="pill">Sintético</span>
+                    <h3>Ocupação média</h3>
+                    <strong id="occupancyValue">0%</strong>
+                    <p>Visão simplificada do mês atual contra histórico.</p>
+                </article>
+                <article class="report-card">
+                    <span class="pill">Analítico</span>
+                    <h3>Ticket médio</h3>
+                    <strong id="ticketValue">R$ 0</strong>
+                    <p>Foco em ADR e influência das campanhas promocionais.</p>
+                </article>
+            </div>
+            <div class="reports-grid">
+                <article class="report-card">
+                    <span class="pill">Sintético</span>
+                    <h3>Leads em pipeline</h3>
+                    <strong id="leadsValue">0</strong>
+                    <p>Top line dos leads ativos com tendência semanal.</p>
+                    <div class="chart-wrapper">
+                        <canvas id="leadChart"></canvas>
+                    </div>
+                </article>
+                <article class="report-card">
+                    <span class="pill">Analítico</span>
+                    <h3>DSP & Yield</h3>
+                    <strong id="dspValue">+0%</strong>
+                    <p>Posicionamento dos canais pagos e resultado em ADR.</p>
+                </article>
+            </div>
+        </div>
+
+        <div class="crm-panel">
+            <header>
+                <div>
+                    <span class="tag">CRM</span>
+                    <h2>Relatórios focados em processos comerciais</h2>
+                </div>
+                <p class="home-pill">Atualização recente</p>
+            </header>
+            <div class="crm-grid">
+                <article class="crm-card">
+                    <h4>Funil de propostas</h4>
+                    <strong id="crmFunnel">78 oportunidades</strong>
+                    <ul>
+                        <li><span>Contestadas:</span><span id="crmContested">14</span></li>
+                        <li><span>Negociação:</span><span id="crmNegotiation">37</span></li>
+                        <li><span>Fechando:</span><span id="crmClosing">9</span></li>
+                    </ul>
+                </article>
+                <article class="crm-card">
+                    <h4>Lead scoring</h4>
+                    <strong>Prioridade</strong>
+                    <ul>
+                        <li><span>Alta:</span><span id="crmHigh">22</span></li>
+                        <li><span>Média:</span><span id="crmMedium">34</span></li>
+                        <li><span>Baixa:</span><span id="crmLow">19</span></li>
+                    </ul>
+                </article>
+                <article class="crm-card">
+                    <h4>Ações de follow-up</h4>
+                    <strong>Automação ativa</strong>
+                    <ul>
+                        <li><span>Propostas enviadas:</span><span id="crmProposals">12</span></li>
+                        <li><span>WhatsApp:</span><span id="crmWhatsapp">6</span></li>
+                        <li><span>alertas urgentes:</span><span id="crmAlerts">3</span></li>
+                    </ul>
+                </article>
+            </div>
+        </div>
+        <section class="reports-panel">
+            <header>
+                <div>
+                    <small>Seleção de relatórios</small>
+                    <h2>Escolha a visão e parâmetros</h2>
+                </div>
+            </header>
+            <div class="report-type-list" id="reportTypeList"></div>
+        </section>
+    </section>
+
+    <div class="modal-overlay" id="reportSetupModal">
+        <div class="modal">
+            <header>
+                <h2 id="reportSetupTitle">Configurar relatório</h2>
+                <button class="close" data-close>&times;</button>
+            </header>
+            <form id="reportSetupForm">
+                <label for="reportCompany">Empresa</label>
+                <select id="reportCompany">
+                    <option value="aurora">Aurora Grand</option>
+                    <option value="viva">Viva Suítes</option>
+                    <option value="skyline">SkyLine Resorts</option>
+                </select>
+                <label for="reportPeriod">Período</label>
+                <input type="month" id="reportPeriod" required>
+                <label>Visão</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="reportView" value="analitico" checked> Analítico</label>
+                    <label><input type="radio" name="reportView" value="sintetico"> Sintético</label>
+                </div>
+                <button type="submit">Gerar relatório</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="reportResultModal">
+        <div class="modal">
+            <header>
+                <h2>Relatório pronto</h2>
+                <button class="close" data-close>&times;</button>
+            </header>
+            <p id="reportSummary">Preparando o relatório.</p>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-success" id="downloadExcel">Download Excel</button>
+                <button type="button" class="btn btn-secondary" id="downloadPdf">Download PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+    <script>
+        (function () {
+            const revenueChartEl = document.getElementById("revenueChart");
+            const leadChartEl = document.getElementById("leadChart");
+            const data = {
+                revenue: [22000, 23500, 24800, 27100, 28900, 31200],
+                leads: [18, 22, 29, 34, 37, 42]
+            };
+
+            function drawSparkline(canvas, serie, color = "#ff914d") {
+                const ctx = canvas.getContext("2d");
+                const dpr = window.devicePixelRatio || 1;
+                const width = canvas.clientWidth * dpr;
+                const height = canvas.clientHeight * dpr;
+                canvas.width = width;
+                canvas.height = height;
+                ctx.clearRect(0,0,width,height);
+                const max = Math.max(...serie);
+                const min = Math.min(...serie);
+                const range = Math.max(1, max - min);
+                const padding = 12 * dpr;
+                const usableWidth = width - padding * 2;
+                const usableHeight = height - padding * 2;
+                const step = serie.length > 1 ? usableWidth / (serie.length - 1) : usableWidth;
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 2.5 * dpr;
+                ctx.beginPath();
+                serie.forEach((value, index) => {
+                    const x = padding + step * index;
+                    const normalized = (value - min) / range;
+                    const y = padding + (1 - normalized) * usableHeight;
+                    if (index === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                });
+                ctx.stroke();
+            }
+
+            if (revenueChartEl) {
+                drawSparkline(revenueChartEl, data.revenue);
+                document.getElementById("revenueValue").textContent = `R$ ${data.revenue.at(-1).toLocaleString("pt-BR")}`;
+            }
+            if (leadChartEl) {
+                drawSparkline(leadChartEl, data.leads, "#36d4b7");
+                document.getElementById("leadsValue").textContent = data.leads.at(-1);
+            }
+
+            document.getElementById("occupancyValue").textContent = "82%";
+            document.getElementById("ticketValue").textContent = "R$ 748,00";
+            document.getElementById("dspValue").textContent = "+4,2% vs. última semana";
+            document.getElementById("crmFunnel").textContent = "78 oportunidades";
+            document.getElementById("crmHigh").textContent = "22";
+            document.getElementById("crmMedium").textContent = "34";
+            document.getElementById("crmLow").textContent = "19";
+            document.getElementById("crmContested").textContent = "14";
+            document.getElementById("crmNegotiation").textContent = "37";
+            document.getElementById("crmClosing").textContent = "9";
+            document.getElementById("crmProposals").textContent = "12";
+            document.getElementById("crmWhatsapp").textContent = "6";
+        document.getElementById("crmAlerts").textContent = "3";
+        const reportTypes = [
+            { id: "revenue", title: "Receita consolidada", description: "Analítico comparando acumulado mensal vs meta.", view: "Analítico", singleCompany: false },
+            { id: "crmFunnel", title: "Funil comercial", description: "Sintético com distribuição por etapa do funil.", view: "Sintético", singleCompany: true },
+            { id: "leadQuality", title: "Qualidade de leads", description: "Analítico com scoring e origem dos leads.", view: "Analítico", singleCompany: false },
+            { id: "followup", title: "Follow-up ativo", description: "Sintético das ações humanas na última semana.", view: "Sintético", singleCompany: true }
+        ];
+        const listElement = document.getElementById("reportTypeList");
+        const setupModal = document.getElementById("reportSetupModal");
+        const resultModal = document.getElementById("reportResultModal");
+        const reportTitle = document.getElementById("reportSetupTitle");
+        const reportCompany = document.getElementById("reportCompany");
+        const reportSummary = document.getElementById("reportSummary");
+        let activeReport = null;
+
+        function renderReportTypes() {
+            if (!listElement) return;
+            listElement.innerHTML = reportTypes.map(report => `
+                <article class="report-type-card">
+                    <span class="pill">${report.view}</span>
+                    <h3>${report.title}</h3>
+                    <p>${report.description}</p>
+                    <button type="button" data-report="${report.id}">Selecionar relatório</button>
+                </article>
+            `).join("");
+            listElement.querySelectorAll("button[data-report]").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    const reportId = btn.getAttribute("data-report");
+                    openSetupModal(reportTypes.find(item => item.id === reportId));
+                });
+            });
+        }
+
+        function openSetupModal(report) {
+            if (!report) return;
+            activeReport = report;
+            reportTitle.textContent = `Configurar ${report.title}`;
+            reportCompany.disabled = report.singleCompany;
+            setupModal.classList.add("active");
+            setupModal.setAttribute("aria-hidden", "false");
+        }
+
+        function closeModal(modal) {
+            modal?.classList.remove("active");
+            modal?.setAttribute("aria-hidden", "true");
+        }
+
+        document.querySelectorAll(".modal .close").forEach(btn => {
+            btn.addEventListener("click", () => {
+                closeModal(btn.closest(".modal-overlay"));
+            });
+        });
+        setupModal.addEventListener("click", (event) => {
+            if (event.target === setupModal) closeModal(setupModal);
+        });
+        resultModal.addEventListener("click", (event) => {
+            if (event.target === resultModal) closeModal(resultModal);
+        });
+
+        document.getElementById("reportSetupForm").addEventListener("submit", (event) => {
+            event.preventDefault();
+            if (!activeReport) return;
+            const companyName = reportCompany.options[reportCompany.selectedIndex].text;
+            const period = document.getElementById("reportPeriod").value || "período selecionado";
+            const view = document.querySelector("input[name='reportView']:checked").value;
+            reportSummary.textContent = `${activeReport.title} (${view}) para ${companyName} – ${period}.`;
+            closeModal(setupModal);
+            resultModal.classList.add("active");
+            resultModal.setAttribute("aria-hidden", "false");
+        });
+
+        document.getElementById("downloadExcel").addEventListener("click", () => {
+            alert("Download em Excel iniciado.");
+        });
+        document.getElementById("downloadPdf").addEventListener("click", () => {
+            alert("Download em PDF iniciado.");
+        });
+
+        renderReportTypes();
+        })();
+    </script>
+</body>
+</html>

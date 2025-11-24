@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SellaStay | Gestor de tarefas</title>
+    <link rel="icon" type="image/x-icon" href="img/favicon.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        :root {
+            --kanban-surface: var(--calc-color);
+            --kanban-border: rgba(0, 0, 0, 0.08);
+            --kanban-inkMa: var(--tittle-colorMa);
+            --kanban-inkMe: var(--tittle-colorMe);
+            --kanban-muted: var(--text-color);
+            --kanban-gradient: linear-gradient(135deg, #0ea5e9 0%, #2563eb 45%, #ff6b00 100%);
+        }
+
+        .kanban-shell {
+            background: var(--kanban-surface);
+            border-radius: 28px;
+            padding: 28px 26px 22px;
+            box-shadow: 0 28px 64px rgba(0, 0, 0, 0.12);
+            border: 1px solid var(--kanban-border);
+            max-width: 1400px;
+            margin: 26px auto;
+        }
+
+        .kanban-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+        .kanban-header h1 {
+            margin: 0;
+            font-size: clamp(2rem, 4vw, 2.6rem);
+            color: var(--kanban-ink);
+        }
+
+        .kanban-header p {
+            margin: 4px 0 0;
+            color: var(--kanban-muted);
+        }
+
+        .kanban-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: 1px solid var(--kanban-border);
+            background: var(--body-color);
+            color: var(--kanban-ink);
+            padding: 10px 14px;
+            border-radius: 14px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.2s ease;
+        }
+
+        .icon-button:hover {
+            transform: translateY(-1px);
+            border-color: rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .icon-button i {
+            font-size: 1.2rem;
+        }
+
+        .kanban-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            align-items: start;
+        }
+
+        .kanban-column {
+            background: linear-gradient(170deg, rgba(255, 255, 255, 0.94), rgba(229,232,240,0.78));
+            border-radius: 18px;
+            padding: 14px 14px 10px;
+            border: 1px solid var(--kanban-border);
+            min-height: 260px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .kanban-column:hover,
+        .kanban-column.active-drop {
+            border-color: rgba(241, 237, 237, 0.18);
+            box-shadow: 0 14px 32px rgba(0, 0, 0, 0.12);
+        }
+
+        .kanban-column header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            border-radius: 12px;
+            padding: 10px;
+            color: #fff;
+        }
+
+        .kanban-column h3 {
+            margin: 0;
+            font-size: 1rem;
+            color: var(--kanban-ink);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            background: rgba(0,0,0,0.05);
+            color: var(--kanban-ink);
+        }
+
+        .kanban-dropzone {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-height: 170px;
+            background: rgba(0,0,0,0.02);
+            border-radius: 12px;
+            padding: 8px;
+        }
+
+        .kanban-empty {
+            padding: 10px;
+            border: 1px dashed var(--kanban-border);
+            border-radius: 12px;
+            color: var(--kanban-muted);
+            text-align: center;
+        }
+
+        .kanban-card {
+            border-radius: 14px;
+            padding: 12px;
+            border: 2px solid rgba(0,0,0,0.08);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            background: #fff;
+            cursor: grab;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+        }
+
+        .kanban-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+        }
+
+        .kanban-card.dragging {
+            opacity: 0.8;
+            cursor: grabbing;
+        }
+
+        .kanban-card header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .kanban-card-title {
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .kanban-card-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            font-size: 0.82rem;
+        }
+
+        .meta-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border-radius: 10px;
+            padding: 6px 10px;
+            background: rgba(255,255,255,0.6);
+            color: #0f172a;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .drag-hint {
+            margin-top: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--kanban-muted);
+            font-size: 0.95rem;
+        }
+
+        .floating-add {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 1500;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #ff6b00, #ff914d 50%, #ffb347);
+            color: #fff;
+            padding: 14px 18px;
+            border-radius: 999px;
+            border: none;
+            font-weight: 700;
+            box-shadow: 0 16px 36px rgba(0,0,0,0.25);
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.2s ease;
+        }
+
+        .floating-add:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 18px 40px rgba(0,0,0,0.28);
+        }
+
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(5,7,18,0.65);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            z-index: 1600;
+        }
+
+        .modal-backdrop.open {
+            display: flex;
+        }
+
+        .modal-card {
+            background: var(--kanban-surface);
+            border-radius: 22px;
+            padding: 24px;
+            border: 1px solid var(--kanban-border);
+            width: min(520px, 100%);
+            box-shadow: 0 26px 60px rgba(255, 255, 255, 1);
+            color: var(--kanban-ink);
+        }
+
+        .modal-card header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .modal-card h2 {
+            margin: 0;
+            font-size: 1.4rem;
+        }
+
+        .close-btn {
+            background: transparent;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--kanban-ink);
+        }
+
+        .form-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .form-grid label {
+            display: block;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--kanban-muted);
+            margin-bottom: 6px;
+        }
+
+        .form-grid input,
+        .form-grid textarea,
+        .form-grid select {
+            width: 100%;
+            padding: 11px 12px;
+            border-radius: 12px;
+            border: 1px solid var(--kanban-border);
+            background: var(--body-color);
+            color: var(--kanban-ink);
+        }
+
+        .form-grid textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 6px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 12px;
+            padding: 11px 14px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-primary { background: var(--kanban-gradient); color: #fff; }
+        .btn-ghost { background: transparent; border: 1px dashed var(--kanban-border); color: var(--kanban-ink); }
+        .btn-danger { background: #dc2626; color: #fff; }
+        .btn-success { background: #22c55e; color: #0f172a; }
+
+        .column-row {
+            display: grid;
+            grid-template-columns: 1fr 120px 110px 34px;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .column-row input[type="color"] {
+            padding: 0;
+            height: 42px;
+            cursor: pointer;
+        }
+
+        .column-row input[type="text"] {
+            height: 42px;
+        }
+
+        .column-row input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+        }
+
+        .small-note {
+            font-size: 0.85rem;
+            color: var(--kanban-muted);
+            margin: 4px 0 0;
+        }
+
+        @media (max-width: 768px) {
+            .kanban-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+            .column-row { grid-template-columns: 1fr 100px 100px 34px; }
+            .kanban-header { align-items: center; }
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Menu -->
+    <nav class="sidebar close">
+
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="img/logo.png" alt="">
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name" id="nome">SellaStay</span>
+                    <span class="profession">EGRC Control</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu-scrollable">
+
+                <ul class="menu-links">
+
+                    <br>
+                    <br>
+
+                    <li class="nav-link">
+                        <a href="home.html">
+                            <i class='bx bxs-home icon' ></i>
+                            <span class="text nav-text">Home</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="dashboard.html">
+                            <i class='bx bxs-dashboard icon' ></i>
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link has-submenu">
+                        <a href="leads.html" id="navselected">
+                            <i class='bx bxs-grid icon' ></i>
+                            <span class="text nav-text">Operacional <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="leads.html"><i class='bx bxs-chevrons-right icon' ></i>Negociações</a></li>
+                            <li><a href="follow-up.html"><i class='bx bx-transfer icon' ></i>Follow Up log</a></li>
+                            <li><a href="clients.html"><i class='bx bx-id-card icon' ></i>Carteira de Clientes</a></li>
+                            <li><a href="vendas.html"><i class='bx bx-history icon'></i></i>Histórico de Vendas</a></li>
+                            <li id="subactive"><a href="tasks.html"><i class='bx bx-task icon'></i></i>Gestor de Tarefas</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="calendar.html">
+                            <i class='bx bxs-calendar-event icon'></i>
+                            <span class="text nav-text">Mapa de Eventos</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="pricespy.html">
+                            <i class='bx bx-radar icon'></i>
+                            <span class="text nav-text">Radar de Preços</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="reminder.html">
+                            <i class='bx bxs-bell-ring icon' ></i>
+                            <span class="text nav-text">Lembretes</span>
+                        </a>
+                    </li>
+
+                    <!-- ::::::: VERIFICAR NECESSIDADE ::::::::-->
+                    <!-- <li class="nav-link">
+                        <a href="contratos.html">
+                            <i class='bx bx-briefcase icon' ></i>
+                            <span class="text nav-text">Contratos</span>
+                        </a>
+                    </li> -->
+
+                    <li class="nav-link">
+                        <a href="relatorios.html">
+                            <i class='bx bx-line-chart icon'></i>
+                            <span class="text nav-text">Relatórios</span>
+                        </a>
+                    </li>
+
+                    <!-- ::::::: REALOCAR PARA OUTRO LUGAR ::::::::-->
+                    <!-- <li class="nav-link"> 
+                        <a href="doc.html">
+                            <i class='bx bx-help-circle icon' ></i>
+                            <span class="text nav-text">Ajuda</span>
+                        </a>
+                    </li> -->
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <ul class="menu-links">
+                    <li class="nav-link has-submenu">
+                        <a href="#">
+                            <img id="profile-pic" src="img/profile_pic_F.png" alt="Usuário logado">
+                            <span class="text nav-text"><span id="menuUserName">Usuário</span> <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="profile.html"><i class='bx bx-user icon'></i> Perfil</a></li>
+                            <li class="has-submenu">
+                                <a href="empresas.html">
+                                    <i class='bx bxs-building icon'></i> Empresa <i class='bx bx-chevron-down arrow'></i>
+                                </a>
+                                <ul class="submenu">
+                                    <li><a href="#empresa-config"><i class='bx bx-briefcase icon'></i> Configurações da Empresa</a></li>
+                                    <li><a href="#hoteis-config"><i class='bx bx-hotel icon'></i> Cadastro de Hotéis</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="settings.html"><i class='bx bx-cog icon'></i> Configurações</a></li>
+                            <li><a href="help.html"><i class='bx bx-support icon'></i> Suporte</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="logout" id="logout">
+                        <a href="index.html">
+                            <i class='bx bx-log-out icon' ></i>
+                            <span class="text nav-text">Logout</span>
+                        </a>
+                    </li>
+
+                    <li class="mode">
+                        <div class="sun-moon">
+                            <i class='bx bx-moon icon moon'></i>
+                            <i class='bx bx-sun icon sun'></i>
+                        </div>
+                        <span class="mode-text text">Dark mode</span>
+
+                        <div class="toggle-switch">
+                            <span class="switch"></span>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- /Menu -->
+
+    <section class="home">
+        <div class="kanban-shell">
+            <div class="kanban-header">
+                <div>
+                    <p class="home-eyebrow">Kanban</p>
+                    <h1>Tarefas Pessoais</h1>
+                    <p>Arraste as tarefas entre as etapas.</p>
+                </div>
+                <div class="kanban-actions">
+                    <button class="icon-button" id="openConfig"><i class='bx bx-cog'></i></button>
+                </div>
+            </div>
+
+            <div class="kanban-grid" id="kanban-columns"></div>
+
+            <div class="drag-hint">
+                <i class='bx bx-mouse-alt'></i>
+                <span>As cores dos cards seguem a cor da coluna enquanto voce arrasta.</span>
+            </div>
+        </div>
+    </section>
+
+    <button class="floating-add" id="addTask"><i class='bx bx-plus'></i> Nova tarefa</button>
+
+    <div class="modal-backdrop" id="taskModal">
+        <div class="modal-card">
+            <header>
+                <h2 id="taskModalTitle">Nova tarefa</h2>
+                <button class="close-btn" data-close-task>&times;</button>
+            </header>
+            <div class="form-grid">
+                <div>
+                    <label for="taskTitle">Titulo</label>
+                    <input type="text" id="taskTitle" placeholder="Ex: Revisar tarifas OTA" required>
+                </div>
+                <div>
+                    <label for="taskDescription">Descricao</label>
+                    <textarea id="taskDescription" placeholder="Inclua detalhes importantes"></textarea>
+                </div>
+                <div>
+                    <label for="taskDue">Data e horario</label>
+                    <input type="datetime-local" id="taskDue">
+                </div>
+                <div>
+                    <label for="taskColumn">Etapa</label>
+                    <select id="taskColumn"></select>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <div style="display:flex; gap:10px;">
+                    <button class="btn btn-danger" id="deleteTask" style="display:none;">Excluir</button>
+                    <button class="btn btn-success" id="completeTask" style="display:none;">Concluir</button>
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn btn-ghost" data-close-task>Fechar</button>
+                    <button class="btn btn-primary" id="saveTask">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-backdrop" id="configModal">
+        <div class="modal-card" style="width:min(760px, 100%);">
+            <header>
+                <h2>Configurar colunas</h2>
+                <button class="close-btn" data-close-config>&times;</button>
+            </header>
+            <p class="small-note">A coluna marcada como "Concluido" encerra o lembrete e o retira do painel principal. Mantemos pelo menos duas colunas.</p>
+            <div class="form-grid" id="columnRepeater"></div>
+            <div class="form-grid" style="margin-top:8px;">
+                <div>
+                    <label>Remover concluidos apos (minutos, 0 = imediato)</label>
+                    <input type="number" id="autoRemoveMinutes" min="0" step="1" value="0">
+                </div>
+            </div>
+            <div class="modal-actions" style="margin-top:14px;">
+                <button class="btn btn-ghost" id="addColumn">+ Nova coluna</button>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn btn-ghost" data-close-config>Cancelar</button>
+                    <button class="btn btn-primary" id="saveColumns">Salvar colunas</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+    <script>
+        (function () {
+            const columnsContainer = document.getElementById("kanban-columns");
+            const taskModal = document.getElementById("taskModal");
+            const configModal = document.getElementById("configModal");
+            const addTaskBtn = document.getElementById("addTask");
+            const openConfigBtn = document.getElementById("openConfig");
+            const taskModalTitle = document.getElementById("taskModalTitle");
+            const taskTitleInput = document.getElementById("taskTitle");
+            const taskDescriptionInput = document.getElementById("taskDescription");
+            const taskDueInput = document.getElementById("taskDue");
+            const taskColumnSelect = document.getElementById("taskColumn");
+            const saveTaskBtn = document.getElementById("saveTask");
+            const deleteTaskBtn = document.getElementById("deleteTask");
+            const completeTaskBtn = document.getElementById("completeTask");
+            const columnRepeater = document.getElementById("columnRepeater");
+            const addColumnBtn = document.getElementById("addColumn");
+            const saveColumnsBtn = document.getElementById("saveColumns");
+            const autoRemoveMinutesInput = document.getElementById("autoRemoveMinutes");
+
+            const userNameSource = document.getElementById("user-name");
+            const normalizedUser = (userNameSource?.textContent || "default-user")
+                .replace(/\s*<.*?>/g, "")
+                .trim()
+                .toLowerCase()
+                .replace(/[^a-z0-9]/g, "_");
+            const reminderStorageKey = `reminders_${normalizedUser}`;
+            const columnsStorageKey = `kanban_columns_${normalizedUser}`;
+            const settingsStorageKey = `kanban_settings_${normalizedUser}`;
+
+            const defaultColumns = [
+                { id: "lembretes", title: "Lembretes", color: "#2563eb", done: false },
+                { id: "andamento", title: "Em andamento", color: "#f97316", done: false },
+                { id: "revisao", title: "Revisao", color: "#a855f7", done: false },
+                { id: "concluido", title: "Concluido", color: "#16a34a", done: true }
+            ];
+
+            let editingId = null;
+            let draggingId = null;
+            let draggingCardEl = null;
+            let columns = loadColumns();
+            let settings = loadSettings();
+
+            function loadColumns() {
+                try {
+                    const stored = JSON.parse(localStorage.getItem(columnsStorageKey));
+                    if (Array.isArray(stored) && stored.length) {
+                        return stored.map(col => ({
+                            id: col.id || (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString()),
+                            title: col.title || "Etapa",
+                            color: col.color || "#2563eb",
+                            done: Boolean(col.done)
+                        }));
+                    }
+                } catch (error) {
+                    console.error("Erro ao carregar colunas do kanban", error);
+                }
+                return defaultColumns;
+            }
+
+            function saveColumnsConfig() {
+                localStorage.setItem(columnsStorageKey, JSON.stringify(columns));
+            }
+
+            function loadSettings() {
+                try {
+                    const stored = JSON.parse(localStorage.getItem(settingsStorageKey));
+                    if (stored && typeof stored === "object") {
+                        return { autoRemoveMinutes: Number(stored.autoRemoveMinutes) || 0 };
+                    }
+                } catch (error) {
+                    console.error("Erro ao carregar configuracoes do kanban", error);
+                }
+                return { autoRemoveMinutes: 0 };
+            }
+
+            function saveSettings() {
+                localStorage.setItem(settingsStorageKey, JSON.stringify(settings));
+            }
+
+            function readReminders() {
+                try { return JSON.parse(localStorage.getItem(reminderStorageKey)) || []; }
+                catch { return []; }
+            }
+
+            function writeReminders(data) {
+                localStorage.setItem(reminderStorageKey, JSON.stringify(data));
+            }
+
+            function ensureRemindersStatus() {
+                const reminders = readReminders();
+                const now = Date.now();
+                reminders.forEach(reminder => {
+                    if (reminder.completed && reminder.autoRemovalDue && now >= reminder.autoRemovalDue) {
+                        reminder._removeNow = true;
+                        return;
+                    }
+                    if (!reminder.status || !columns.find(col => col.id === reminder.status)) {
+                        reminder.status = columns[0].id;
+                    }
+                });
+                const filtered = reminders.filter(r => !r._removeNow);
+                writeReminders(filtered);
+                return filtered;
+            }
+
+            function addAlpha(hex, alpha) {
+                const clean = hex.replace("#", "");
+                if (clean.length !== 6) return hex;
+                const a = Math.round(alpha * 255);
+                return `#${clean}${a.toString(16).padStart(2, "0")}`;
+            }
+
+            function getColorByColumn(columnId) {
+                return columns.find(col => col.id === columnId)?.color || "#2563eb";
+            }
+
+            function getDoneColumn() {
+                return columns.find(col => col.done) || columns.find(col => col.id === "concluido");
+            }
+
+            function openModal(modal) { modal.classList.add("open"); }
+            function closeModal(modal) { modal.classList.remove("open"); }
+
+            function resetTaskForm() {
+                editingId = null;
+                taskModalTitle.textContent = "Nova tarefa";
+                taskTitleInput.value = "";
+                taskDescriptionInput.value = "";
+                taskDueInput.value = "";
+                if (columns.length) taskColumnSelect.value = columns[0].id;
+                deleteTaskBtn.style.display = "none";
+                completeTaskBtn.style.display = "none";
+            }
+
+            function fillColumnSelect() {
+                taskColumnSelect.innerHTML = columns.map(col => `<option value="${col.id}">${col.title}</option>`).join("");
+            }
+
+            function pillTemplate(text, color) {
+                return `<span class="pill" style="background: ${color}1a; color:${color}; border:1px solid ${color}33;">${text}</span>`;
+            }
+
+            function renderBoard() {
+                fillColumnSelect();
+                if (autoRemoveMinutesInput) {
+                    autoRemoveMinutesInput.value = settings.autoRemoveMinutes || 0;
+                }
+                columnsContainer.innerHTML = "";
+                const reminders = ensureRemindersStatus();
+                columns.forEach(col => {
+                    const columnEl = document.createElement("article");
+                    columnEl.className = "kanban-column";
+                    columnEl.dataset.columnId = col.id;
+
+                    const header = document.createElement("header");
+                    const title = document.createElement("h3");
+                    title.innerHTML = `<span class="pill" style="background:${col.color}1a; border:1px solid ${col.color}33;"></span> ${col.title}`;
+                    const count = reminders.filter(r => r.status === col.id).length;
+                    const badge = document.createElement("span");
+                    badge.className = "pill";
+                    badge.textContent = `${count} tarefa(s)`;
+                    header.style.background = col.color;
+                    header.style.color = "#fff";
+                    badge.style.background = addAlpha(col.color, 0.2);
+                    badge.style.color = "#fff";
+                    badge.style.borderColor = addAlpha("#ffffff", 0.25);
+                    header.append(title, badge);
+
+                    const dropzone = document.createElement("div");
+                    dropzone.className = "kanban-dropzone";
+                    dropzone.dataset.columnId = col.id;
+                    dropzone.style.background = addAlpha(col.color, 0.08);
+                    dropzone.addEventListener("dragover", (event) => {
+                        event.preventDefault();
+                        if (!draggingId) return;
+                        columnEl.classList.add("active-drop");
+                        if (draggingCardEl) {
+                            draggingCardEl.style.borderColor = `${col.color}`;
+                        }
+                    });
+                    dropzone.addEventListener("dragleave", () => {
+                        columnEl.classList.remove("active-drop");
+                        if (draggingCardEl) {
+                            const reminder = reminders.find(r => r.id === draggingId);
+                            const baseColor = getColorByColumn(reminder?.status);
+                            draggingCardEl.style.borderColor = `${baseColor}`;
+                        }
+                    });
+                    dropzone.addEventListener("drop", (event) => {
+                        event.preventDefault();
+                        columnEl.classList.remove("active-drop");
+                        if (!draggingId) return;
+                        moveReminderToColumn(draggingId, col.id);
+                    });
+
+                    const cards = reminders.filter(r => r.status === col.id);
+                    if (!cards.length) {
+                        const empty = document.createElement("div");
+                        empty.className = "kanban-empty";
+                        empty.textContent = "Arraste uma tarefa para ca.";
+                        dropzone.appendChild(empty);
+                    } else {
+                        cards.forEach(reminder => dropzone.appendChild(createCard(reminder, col.color)));
+                    }
+
+                    columnEl.append(header, dropzone);
+                    columnsContainer.appendChild(columnEl);
+                });
+            }
+
+            function createCard(reminder, columnColor) {
+                const card = document.createElement("article");
+                card.className = "kanban-card";
+                card.draggable = true;
+                card.dataset.id = reminder.id;
+                card.style.background = "#fff";
+                card.style.borderColor = `${columnColor}`;
+
+                const header = document.createElement("header");
+                const title = document.createElement("div");
+                title.className = "kanban-card-title";
+                title.textContent = reminder.title || "Lembrete";
+
+                const chips = document.createElement("div");
+                chips.className = "kanban-card-meta";
+                if (reminder.dueDateTime) {
+                    const date = new Date(reminder.dueDateTime);
+                    if (!isNaN(date.getTime())) {
+                        chips.innerHTML += pillTemplate(date.toLocaleString("pt-BR"), columnColor);
+                    }
+                }
+                chips.innerHTML += pillTemplate(reminder.status ? columns.find(c => c.id === reminder.status)?.title || "Etapa" : "Etapa", columnColor);
+                if (reminder.completed) {
+                    chips.innerHTML += '<span class="meta-chip">Concluido</span>';
+                }
+
+                header.append(title);
+                card.append(header, chips);
+
+                card.addEventListener("click", () => openTaskDetail(reminder.id));
+                card.addEventListener("dragstart", () => {
+                    draggingId = reminder.id;
+                    draggingCardEl = card;
+                    card.classList.add("dragging");
+                });
+                card.addEventListener("dragend", () => {
+                    draggingId = null;
+                    draggingCardEl = null;
+                    card.classList.remove("dragging");
+                });
+
+                return card;
+            }
+
+            function moveReminderToColumn(reminderId, columnId) {
+                const reminders = readReminders();
+                const idx = reminders.findIndex(r => r.id === reminderId);
+                if (idx === -1) return;
+                reminders[idx].status = columnId;
+                reminders[idx].updatedAt = new Date().toISOString();
+                const targetCol = columns.find(col => col.id === columnId);
+                if (targetCol?.done) {
+                    reminders[idx].completed = true;
+                    const delay = Number(settings.autoRemoveMinutes) || 0;
+                    reminders[idx].autoRemovalDue = delay === 0 ? Date.now() : Date.now() + delay * 60 * 1000;
+                } else {
+                    reminders[idx].completed = false;
+                    reminders[idx].autoRemovalDue = null;
+                }
+                writeReminders(reminders);
+                renderBoard();
+            }
+
+            function openTaskDetail(id) {
+                const reminders = readReminders();
+                const reminder = reminders.find(r => r.id === id);
+                if (!reminder) return;
+                editingId = id;
+                taskModalTitle.textContent = "Editar tarefa";
+                taskTitleInput.value = reminder.title || "";
+                taskDescriptionInput.value = reminder.description || "";
+                taskDueInput.value = reminder.dueDateTime || "";
+                taskColumnSelect.value = reminder.status || columns[0].id;
+                deleteTaskBtn.style.display = "inline-flex";
+                completeTaskBtn.style.display = "inline-flex";
+                openModal(taskModal);
+            }
+
+            function saveTask() {
+                const title = taskTitleInput.value.trim();
+                if (!title) {
+                    alert("Informe um titulo para a tarefa.");
+                    return;
+                }
+                const reminders = readReminders();
+                const payload = {
+                    title,
+                    description: taskDescriptionInput.value.trim(),
+                    dueDateTime: taskDueInput.value,
+                    status: taskColumnSelect.value || columns[0].id,
+                    updatedAt: new Date().toISOString()
+                };
+                if (editingId) {
+                    const idx = reminders.findIndex(r => r.id === editingId);
+                    if (idx !== -1) {
+                        reminders[idx] = { ...reminders[idx], ...payload };
+                    }
+                } else {
+                    reminders.push({
+                        ...payload,
+                        id: crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(),
+                        createdAt: new Date().toISOString(),
+                        completed: false
+                    });
+                }
+                writeReminders(reminders);
+                closeModal(taskModal);
+                resetTaskForm();
+                renderBoard();
+            }
+
+            function deleteTask() {
+                if (!editingId) return;
+                if (!confirm("Deseja realmente excluir esta tarefa?")) return;
+                const reminders = readReminders().filter(r => r.id !== editingId);
+                writeReminders(reminders);
+                closeModal(taskModal);
+                resetTaskForm();
+                renderBoard();
+            }
+
+            function concludeTask() {
+                if (!editingId) return;
+                const reminders = readReminders();
+                const idx = reminders.findIndex(r => r.id === editingId);
+                if (idx === -1) return;
+                const doneColumn = getDoneColumn();
+                reminders[idx].completed = true;
+                if (doneColumn) reminders[idx].status = doneColumn.id;
+                const delay = Number(settings.autoRemoveMinutes) || 0;
+                reminders[idx].autoRemovalDue = delay === 0 ? Date.now() : Date.now() + delay * 60 * 1000;
+                reminders[idx].updatedAt = new Date().toISOString();
+                writeReminders(reminders);
+                closeModal(taskModal);
+                resetTaskForm();
+                renderBoard();
+            }
+
+            function renderColumnRepeater() {
+                columnRepeater.innerHTML = columns.map(col => {
+                    return `
+                        <div class="column-row" data-id="${col.id}" draggable="true">
+                            <div>
+                                <label>Nome</label>
+                                <input type="text" name="title" value="${col.title}">
+                            </div>
+                            <div>
+                                <label>Cor</label>
+                                <input type="color" name="color" value="${col.color}">
+                            </div>
+                            <div style="text-align:center;">
+                                <label style="display:block; margin-bottom:6px;">Concluido</label>
+                                <input type="checkbox" name="done" ${col.done ? "checked" : ""}>
+                            </div>
+                            <button class="close-btn" type="button" data-remove>&times;</button>
+                        </div>
+                    `;
+                }).join("");
+
+                columnRepeater.querySelectorAll("[data-remove]").forEach(btn => {
+                    btn.addEventListener("click", (event) => {
+                        if (columns.length <= 2) {
+                            alert("Mantenha pelo menos duas colunas.");
+                            return;
+                        }
+                        const row = event.currentTarget.closest(".column-row");
+                        const id = row.dataset.id;
+                        columns = columns.filter(col => col.id !== id);
+                        renderColumnRepeater();
+                    });
+                });
+
+                // drag para reordenar colunas configuradas
+                columnRepeater.querySelectorAll(".column-row").forEach(row => {
+                    row.addEventListener("dragstart", (event) => {
+                        event.dataTransfer.effectAllowed = "move";
+                        row.classList.add("dragging");
+                    });
+                    row.addEventListener("dragend", () => row.classList.remove("dragging"));
+                    row.addEventListener("dragover", (event) => {
+                        event.preventDefault();
+                        const dragging = columnRepeater.querySelector(".dragging");
+                        if (!dragging || dragging === row) return;
+                        const rows = Array.from(columnRepeater.children);
+                        const draggingIndex = rows.indexOf(dragging);
+                        const targetIndex = rows.indexOf(row);
+                        if (draggingIndex < targetIndex) {
+                            row.after(dragging);
+                        } else {
+                            row.before(dragging);
+                        }
+                    });
+                });
+
+                if (autoRemoveMinutesInput) {
+                    autoRemoveMinutesInput.value = settings.autoRemoveMinutes || 0;
+                }
+            }
+
+            function addNewColumn() {
+                const id = crypto.randomUUID ? crypto.randomUUID() : `col-${Date.now()}`;
+                columns.push({
+                    id,
+                    title: "Nova coluna",
+                    color: "#0ea5e9",
+                    done: false
+                });
+                renderColumnRepeater();
+            }
+
+            function saveColumns() {
+                const rows = Array.from(columnRepeater.querySelectorAll(".column-row"));
+                if (!rows.length) {
+                    alert("Adicione pelo menos uma coluna.");
+                    return;
+                }
+                columns = rows.map(row => {
+                    return {
+                        id: row.dataset.id,
+                        title: row.querySelector('input[name="title"]').value || "Etapa",
+                        color: row.querySelector('input[name="color"]').value || "#2563eb",
+                        done: row.querySelector('input[name="done"]').checked
+                    };
+                });
+                // permitir apenas um concluido
+                const doneIndex = columns.findIndex(col => col.done);
+                if (doneIndex === -1) {
+                    columns[columns.length - 1].done = true;
+                } else {
+                    columns = columns.map((col, idx) => ({ ...col, done: idx === doneIndex }));
+                }
+                settings.autoRemoveMinutes = Number(autoRemoveMinutesInput?.value) || 0;
+                saveSettings();
+                saveColumnsConfig();
+                ensureRemindersStatus();
+                renderBoard();
+                closeModal(configModal);
+            }
+
+            document.querySelectorAll("[data-close-task]").forEach(btn => btn.addEventListener("click", () => {
+                closeModal(taskModal);
+                resetTaskForm();
+            }));
+
+            document.querySelectorAll("[data-close-config]").forEach(btn => btn.addEventListener("click", () => closeModal(configModal)));
+
+            addTaskBtn.addEventListener("click", () => {
+                resetTaskForm();
+                openModal(taskModal);
+            });
+
+            openConfigBtn.addEventListener("click", () => {
+                renderColumnRepeater();
+                openModal(configModal);
+            });
+
+            saveTaskBtn.addEventListener("click", saveTask);
+            deleteTaskBtn.addEventListener("click", deleteTask);
+            completeTaskBtn.addEventListener("click", concludeTask);
+            addColumnBtn.addEventListener("click", addNewColumn);
+            saveColumnsBtn.addEventListener("click", saveColumns);
+
+            renderColumnRepeater();
+            renderBoard();
+            setInterval(() => {
+                const refreshed = ensureRemindersStatus();
+                if (refreshed) renderBoard();
+            }, 10000);
+        })();
+    </script>
+</body>
+</html>

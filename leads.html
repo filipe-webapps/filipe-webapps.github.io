@@ -1,0 +1,4220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>SellaStay | Painel Central</title>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="img/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <!--CSS-->
+    <link rel="stylesheet" href="css/styleleads.css">
+
+    <style>
+        
+        /* === CALENDAR STYLES CORRIGIDOS === */
+        .calendar-container {
+            width: 100%;
+            max-width: none;
+            margin: 0;
+            background: transparent;
+            padding: 20px;
+            margin-left: -15px;
+            color: #b0b1b3;
+            display: none; /* Controlado pelos toggles das abas */
+            margin-top: 65px;
+            flex-direction: column; /* FORÇAR LAYOUT VERTICAL */
+        }
+
+        /* Header Section - Organização Vertical FORÇADA */
+        .calendar-header-section {
+            width: 100%;
+            margin-bottom: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .calendar-header-section h2 {
+            color: var(--icon-color);
+            margin: 0;
+            font-size: 24px;
+            text-align: left;
+        }
+
+        /* Linha de controles - Layout horizontal mas SEMPRE abaixo do título */
+        .calendar-controls-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            width: 100%;
+            clear: both; /* Força quebra de layout */
+        }
+
+        /* Navegação do calendário */
+        .calendar-navigation {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-shrink: 0;
+        }
+
+        .nav-btn {
+            background: var(--sidebar-color);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            min-width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-btn:hover {
+            background: #244b9a;
+            transform: scale(1.1);
+        }
+
+        .today-btn {
+            background: var(--icon-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            height: 40px;
+            white-space: nowrap;
+        }
+
+        .today-btn:hover {
+            background: #ffa600;
+        }
+
+        #currentWeekRange {
+            font-weight: 600;
+            color: var(--icon-color);
+            font-size: 16px;
+            min-width: 200px;
+            text-align: center;
+        }
+
+        /* Filtros */
+        .calendar-filters {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border-radius: 8px;
+            background-color: rgba(187, 187, 187, 0.305);
+            border: 2px solid var(--icon-color);
+            color: var(--icon-color);
+            font-weight: 500;
+            cursor: pointer;
+            height: 40px;
+        }
+
+        .workflow-stage-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-color);
+            background: rgba(255,255,255,0.05);
+            border-radius: 999px;
+            padding: 4px 10px;
+        }
+
+        .workflow-stage-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .vendedores-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .vendedores-wrapper select {
+            min-height: 90px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(0,0,0,0.2);
+            color: var(--text-color);
+            padding: 8px;
+        }
+
+        #vendedoresSelecionados {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .seller-tag {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 999px;
+            padding: 4px 10px;
+            font-size: 12px;
+            color: var(--text-color);
+        }
+
+        .seller-tag-placeholder {
+            color: rgba(255,255,255,0.4);
+            font-size: 12px;
+        }
+
+        .filter-select option {
+            background-color: var(--calc-color);
+            color: var(--sidebar-color);
+            font-weight: 500;
+        }
+
+        /* Grade Principal do Calendário - GARANTIDAMENTE abaixo dos controles */
+        .calendar-main-grid {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            border: 2px solid rgba(19, 45, 97, 0.3);
+            overflow: auto;
+            clear: both; /* Força ficar abaixo dos controles */
+            /*margin-top: 10px;  Espaçamento maior para garantir separação */
+            display: block; /* Força display block */
+            position: relative;
+        }
+
+        /* Header da Semana */
+        .week-header {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            background: var(--sidebar-color);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .week-header .day-header {
+            padding: 15px 10px;
+            text-align: center;
+            font-weight: 600;
+            color: white;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            min-height: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .week-header .day-header:last-child {
+            border-right: none;
+        }
+
+        .week-header .day-header.today {
+            background: rgba(255, 174, 0, 0.3);
+            color: #FFE066;
+        }
+
+        /* Área dos Eventos */
+        .events-area {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            min-height: 400px;
+            position: relative;
+        }
+
+        .day-column {
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.02);
+            position: relative;
+            padding: 10px 5px;
+            min-height: 400px;
+        }
+
+        .day-column:last-child {
+            border-right: none;
+        }
+
+        .day-column.today {
+            background: rgba(255, 174, 0, 0.05);
+        }
+
+        /* Eventos */
+        .calendar-event {
+            position: absolute;
+            left: 6px;
+            right: 6px;
+            padding: 6px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            z-index: 10;
+            border-left: 4px solid;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            min-height: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .calendar-event:hover {
+            transform: scale(1.02);
+            z-index: 20;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .calendar-event .event-title {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .calendar-event .event-hotel {
+            font-size: 10px;
+            opacity: 0.9;
+            margin-bottom: 2px;
+        }
+
+        .calendar-event .event-duration {
+            font-size: 9px;
+            opacity: 0.8;
+        }
+
+        /* Cores por Hotel */
+        .event-aurora-golden {
+            background: rgba(255, 215, 0, 0.9);
+            color: #333;
+            border-left-color: #FFD700;
+        }
+
+        .event-aurora-suites {
+            background: rgba(30, 144, 255, 0.9);
+            color: white;
+            border-left-color: #1E90FF;
+        }
+
+        .event-aurora-budget {
+            background: rgba(34, 139, 34, 0.9);
+            color: white;
+            border-left-color: #228B22;
+        }
+
+        .event-aurora-resorts {
+            background: rgba(138, 43, 226, 0.9);
+            color: white;
+            border-left-color: #8A2BE2;
+        }
+
+        /* Placeholder quando não há eventos */
+        .no-events-message {
+            grid-column: 1 / -1;
+            text-align: center;
+            color: var(--text-color);
+            padding: 60px 20px;
+            font-style: italic;
+        }
+
+        /* Responsividade */
+        @media (max-width: 1200px) {
+            .calendar-controls-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 15px;
+            }
+            
+            .calendar-navigation {
+                justify-content: center;
+            }
+            
+            .calendar-filters {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .calendar-container {
+                padding: 10px;
+            }
+            
+            .week-header {
+                font-size: 12px;
+            }
+            
+            .day-column {
+                min-height: 300px;
+            }
+            
+            .calendar-event {
+                font-size: 10px;
+                padding: 4px 6px;
+                min-height: 40px;
+            }
+            
+            .calendar-filters {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .filter-select {
+                width: 100%;
+            }
+        }
+        /* Modal - mantém o mesmo */
+        .event-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .event-modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .close-event-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .close-event-modal:hover {
+            color: #333;
+        }
+
+        .event-modal h3 {
+            margin-bottom: 20px;
+            color: var(--sidebar-color);
+            font-size: 24px;
+        }
+
+        .event-details p {
+            margin: 12px 0;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .event-details i {
+            width: 20px;
+            color: var(--icon-color);
+        }
+
+        .event-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .event-actions button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .edit-event-btn {
+            background: var(--sidebar-color);
+            color: white;
+        }
+
+        .edit-event-btn:hover {
+            background: #244b9a;
+        }
+
+        .followup-event-btn {
+            background: var(--icon-color);
+            color: white;
+        }
+
+        .followup-event-btn:hover {
+            background: #ffa600;
+        }
+
+        /* Adicionar ao CSS existente */
+
+        /* Eventos Contínuos - Sobrepõem as colunas */
+        .calendar-event-continuous {
+            position: absolute;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            z-index: 10;
+            border-left: 4px solid;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            min-height: 55px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: calc(100% - 8px);
+            left: 4px;
+            /* Usar CSS Grid para span múltiplas colunas */
+            grid-row: 1;
+        }
+
+        .calendar-event-continuous:hover {
+            transform: translateY(-2px);
+            z-index: 30;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .calendar-event-continuous .event-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .calendar-event-continuous .event-details-inline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 10px;
+            opacity: 0.9;
+        }
+
+        .calendar-event-continuous .event-hotel {
+            font-weight: 500;
+        }
+
+        .calendar-event-continuous .event-duration {
+            font-style: italic;
+            opacity: 0.8;
+        }
+
+        /* Área dos Eventos - Modificada para suportar grid overlay */
+        .events-area {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            min-height: 400px;
+            position: relative;
+            padding-bottom: 20px; /* Espaço extra para eventos */
+        }
+
+        /* Responsividade para eventos contínuos */
+        @media (max-width: 768px) {
+            .calendar-event-continuous {
+                font-size: 10px;
+                padding: 6px 8px;
+                min-height: 45px;
+            }
+            
+            .calendar-event-continuous .event-details-inline {
+                font-size: 8px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 2px;
+            }
+        }
+        .leads-actions-bar{
+            position:fixed;
+            right:32px;
+            bottom:32px;
+            display:flex;
+            flex-direction:column;
+            align-items:flex-end;
+            gap:12px;
+            z-index:2000;
+        }
+        .btn-new-lead{
+            border:none;
+            background:linear-gradient(120deg,#f97316,#fbbf24,#fde047);
+            color:#1f2937;
+            font-weight:800;
+            padding:12px 32px;
+            border-radius:999px;
+            display:inline-flex;
+            align-items:center;
+            gap:12px;
+            cursor:pointer;
+            box-shadow:0 25px 55px rgba(249,115,22,.35);
+            transition:transform .3s ease, box-shadow .3s ease;
+            text-transform:uppercase;
+            letter-spacing:.12em;
+            position:relative;
+            overflow:hidden;
+        }
+        .btn-new-lead::after{
+            content:"";
+            position:absolute;
+            inset:-30% 0 auto 0;
+            height:220%;
+            background:radial-gradient(circle at 20% 20%,rgba(255,255,255,.7),transparent 45%);
+            opacity:.75;
+            mix-blend-mode:screen;
+            transition:transform .6s ease, opacity .6s ease;
+        }
+        .btn-new-lead i{
+            font-size:16px;
+        }
+        .btn-new-lead:hover{
+            transform:translateY(-2px) scale(1.03);
+            box-shadow:0 35px 60px rgba(249,115,22,.35);
+        }
+        .btn-new-lead:hover::after{
+            transform:translate(30px,-10px);
+            opacity:1;
+        }
+
+        .kanban-column{
+            border-radius: 12px;
+            padding:16px;
+            background:rgba(255,255,255,0.04);
+            border:1px solid rgba(255,255,255,0.08);
+        }
+        
+        .kanban-title h2{
+            color:#1f2937;
+        }
+        body.dark .kanban-title h2{
+            color:#fff;
+        }
+        .btn-import-clients{
+            border:none;
+            background:var(--sidebar-color);
+            color:#fff;
+            font-weight:600;
+            padding:10px 18px;
+            border-radius:999px;
+            display:inline-flex;
+            align-items:center;
+            gap:8px;
+            cursor:pointer;
+            box-shadow:0 10px 25px rgba(0,0,0,.2);
+            transition:transform .2s ease, box-shadow .2s ease;
+        }
+        .btn-import-clients i{
+            font-size:16px;
+        }
+        .btn-import-clients:hover{
+            transform:translateY(-1px);
+            box-shadow:0 15px 30px rgba(0,0,0,.25);
+        }
+        .clients-import-modal{
+            position:fixed;
+            inset:0;
+            background:rgba(0,0,0,.55);
+            display:none;
+            align-items:center;
+            justify-content:center;
+            padding:20px;
+            z-index:99999;
+        }
+        .clients-import-modal.open{
+            display:flex;
+        }
+        .clients-import-card{
+            background:var(--calc-color);
+            width:100%;
+            max-width:480px;
+            border-radius:18px;
+            padding:22px;
+            box-shadow:0 25px 60px rgba(0,0,0,.25);
+            border:1px solid rgba(255,255,255,.08);
+            max-height:90vh;
+            display:flex;
+            flex-direction:column;
+        }
+        .clients-import-card header{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:12px;
+            margin-bottom:10px;
+        }
+        .clients-import-card header h3{
+            margin:0;
+            color:var(--tittle-color);
+        }
+        .overline-label{
+            color:var(--text-color);
+            text-transform:uppercase;
+            font-size:11px;
+            letter-spacing:.14em;
+            margin:0;
+        }
+        .clients-import-card button.close{
+            border:none;
+            background:transparent;
+            color:var(--tittle-color);
+            font-size:22px;
+            cursor:pointer;
+        }
+        .clients-import-search input{
+            width:100%;
+            padding:10px 12px;
+            border-radius:12px;
+            border:1px solid rgba(0,0,0,.15);
+            margin-bottom:14px;
+            background:#fff;
+        }
+        .clients-import-list{
+            flex:1;
+            overflow-y:auto;
+            display:flex;
+            flex-direction:column;
+            gap:10px;
+        }
+        .clients-import-item{
+            display:flex;
+            justify-content:space-between;
+            gap:12px;
+            border:1px solid rgba(0,0,0,.08);
+            border-radius:12px;
+            padding:12px;
+            background:#fff;
+        }
+        .clients-import-item strong{
+            color:var(--tittle-color);
+            display:block;
+        }
+        .clients-import-item p{
+            margin:2px 0;
+            color:var(--text-color);
+            font-size:13px;
+        }
+        .clients-import-item small{
+            color:var(--text-color);
+            font-size:12px;
+        }
+        .clients-import-item button{
+            border:none;
+            background:var(--sidebar-color);
+            color:#fff;
+            border-radius:8px;
+            padding:8px 12px;
+            cursor:pointer;
+            font-weight:600;
+            height:fit-content;
+        }
+        .clients-import-empty{
+            text-align:center;
+            color:var(--text-color);
+            padding:20px 0;
+        }
+        .lead-client-modal{
+            position:fixed;
+            inset:0;
+            background:rgba(0,0,0,.55);
+            display:none;
+            align-items:center;
+            justify-content:center;
+            padding:20px;
+            z-index:99999;
+        }
+        .lead-client-modal.open{
+            display:flex;
+        }
+        .lead-client-card{
+            background:var(--calc-color);
+            width:100%;
+            max-width:520px;
+            border-radius:18px;
+            padding:24px;
+            box-shadow:0 25px 60px rgba(0,0,0,.25);
+            border:1px solid rgba(255,255,255,.08);
+            max-height:90vh;
+            overflow-y:auto;
+        }
+        .lead-client-card header{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:12px;
+            margin-bottom:8px;
+        }
+        .lead-client-card header h3{
+            margin:0;
+            color:var(--tittle-color);
+        }
+        .lead-client-card form{
+            display:grid;
+            gap:12px;
+            margin-top:10px;
+        }
+        .lead-client-card label{
+            font-size:13px;
+            color:var(--text-color);
+            font-weight:600;
+            text-transform:uppercase;
+            letter-spacing:.08em;
+        }
+        .lead-client-card input{
+            width:100%;
+            padding:10px 12px;
+            border-radius:10px;
+            border:1px solid rgba(0,0,0,.15);
+            background:#fff;
+        }
+        .lead-client-card button.close{
+            border:none;
+            background:transparent;
+            color:var(--tittle-color);
+            font-size:22px;
+            cursor:pointer;
+        }
+        .lead-client-actions{
+            display:flex;
+            justify-content:flex-end;
+            gap:10px;
+            margin-top:4px;
+        }
+        .lead-client-actions button{
+            border:none;
+            border-radius:10px;
+            padding:10px 18px;
+            font-weight:600;
+            cursor:pointer;
+        }
+        .lead-client-actions .btn-cancel{
+            background:rgba(0,0,0,.05);
+            color:var(--tittle-color);
+        }
+        .lead-client-actions .btn-save{
+            background:#2ecc71;
+            color:#fff;
+        }
+        @media(max-width:768px){
+            .leads-actions-bar{
+                right:16px;
+                bottom:16px;
+                width:calc(100% - 32px);
+                max-width:320px;
+                align-items:stretch;
+            }
+            .leads-actions-bar button{
+                width:100%;
+                justify-content:center;
+            }
+        }
+    </style>
+    <!--/CSS-->
+    
+    <!--Boxicons CSS-->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- Chart Js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+     
+</head>
+<body>
+
+    <!-- Menu -->
+    <nav class="sidebar close">
+
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="img/logo.png" alt="">
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name" id="nome">SellaStay</span>
+                    <span class="profession">EGRC Control</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu-scrollable">
+
+                <ul class="menu-links">
+
+                    <br>
+                    <br>
+
+                    <li class="nav-link">
+                        <a href="home.html">
+                            <i class='bx bxs-home icon' ></i>
+                            <span class="text nav-text">Home</span>
+                        </a>
+                    </li>
+
+                    <li id="nav-link">
+                        <a href="dashboard.html">
+                            <i class='bx bxs-dashboard icon' ></i>
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link has-submenu">
+                        <a href="leads.html" id="navselected">
+                            <i class='bx bx-dialpad icon' ></i>
+                            <span class="text nav-text">Operacional <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li id="subactive"><a href="leads.html"><i class='bx bxs-chevrons-right icon' ></i>Negociações</a></li>
+                            <li><a href="follow-up.html"><i class='bx bx-transfer icon' ></i>Follow Up log</a></li>
+                            <li><a href="clients.html"><i class='bx bx-id-card icon' ></i>Carteira de Clientes</a></li>
+                            <li><a href="vendas.html"><i class='bx bx-history icon'></i></i>Histórico de Vendas</a></li>
+                            <li><a href="tasks.html"><i class='bx bx-task icon'></i></i>Gestor de Tarefas</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="calendar.html">
+                            <i class='bx bxs-calendar-event icon'></i>
+                            <span class="text nav-text">Mapa de Eventos</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="pricespy.html">
+                            <i class='bx bx-radar icon'></i>
+                            <span class="text nav-text">Radar de Preços</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="reminder.html">
+                            <i class='bx bxs-bell-ring icon' ></i>
+                            <span class="text nav-text">Lembretes</span>
+                        </a>
+                    </li>
+
+                    <!-- ::::::: VERIFICAR NECESSIDADE ::::::::-->
+                    <!-- <li class="nav-link">
+                        <a href="contratos.html">
+                            <i class='bx bx-briefcase icon' ></i>
+                            <span class="text nav-text">Contratos</span>
+                        </a>
+                    </li> -->
+
+                    <li class="nav-link">
+                        <a href="relatorios.html">
+                            <i class='bx bx-line-chart icon'></i>
+                            <span class="text nav-text">Relatórios</span>
+                        </a>
+                    </li>
+
+                    <!-- ::::::: REALOCAR PARA OUTRO LUGAR ::::::::-->
+                    <!-- <li class="nav-link"> 
+                        <a href="doc.html">
+                            <i class='bx bx-help-circle icon' ></i>
+                            <span class="text nav-text">Ajuda</span>
+                        </a>
+                    </li> -->
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <ul class="menu-links">
+                    <li class="nav-link has-submenu">
+                        <a href="#">
+                            <img id="profile-pic" src="img/profile_pic_F.png" alt="Usuário logado">
+                            <span class="text nav-text"><span id="menuUserName">Usuário</span> <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="profile.html"><i class='bx bx-user icon'></i> Perfil</a></li>
+                            <li class="has-submenu">
+                                <a href="empresas.html">
+                                    <i class='bx bxs-building icon'></i> Empresa <i class='bx bx-chevron-down arrow'></i>
+                                </a>
+                                <ul class="submenu">
+                                    <li><a href="#empresa-config"><i class='bx bx-briefcase icon'></i> Configurações da Empresa</a></li>
+                                    <li><a href="#hoteis-config"><i class='bx bx-hotel icon'></i> Cadastro de Hotéis</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="settings.html"><i class='bx bx-cog icon'></i> Configurações</a></li>
+                            <li><a href="help.html"><i class='bx bx-support icon'></i> Suporte</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="logout" id="logout">
+                        <a href="index.html">
+                            <i class='bx bx-log-out icon' ></i>
+                            <span class="text nav-text">Logout</span>
+                        </a>
+                    </li>
+
+                    <li class="mode">
+                        <div class="sun-moon">
+                            <i class='bx bx-moon icon moon'></i>
+                            <i class='bx bx-sun icon sun'></i>
+                        </div>
+                        <span class="mode-text text">Dark mode</span>
+
+                        <div class="toggle-switch">
+                            <span class="switch"></span>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- /Menu -->
+
+    <header class="main-header">
+        <div class="header-left controls">
+            <div></div>
+            <div class="search-box">
+            <input type="text" id="searchBox" placeholder="Pesquisar..." onkeyup="filtrarTabela()">
+            <i class="fa fa-search"></i>
+            </div>
+            <div style="display: inline-flex; width: 1000px;">
+                <p class="data-hora" id="dataHora"></p>
+            </div>
+            
+            <i id="iconx" class='bx bx-refresh' onclick="location.reload()"></i>
+            <i id="iconx" class='bx bx-download'></i>
+            <i id="iconx" class='bx bx-export'></i>
+            <i id="iconx" class='bx bxl-gmail'></i>
+        </div>
+         
+    </header>
+
+    <section class="home gbox">
+
+        <div id="footerline">
+
+                <button id="toggleKanban" onclick="mostrarKanban()">
+                    <i class='bx bxl-trello'></i>
+                    <span class="btn-text">Workflow</span>
+                </button>
+
+                <button id="leadslist" onclick="mostrarTabela()">
+                    <i class='bx bx-list-ol icon-class'></i>
+                    <span class="btn-text">Leads</span>
+                </button>
+
+                <button id="toggleDashboard" onclick="mostrarDashboard()">
+                    <i class='bx bxs-pie-chart-alt-2'></i>
+                    <span class="btn-text">Dashboard</span>
+                </button>
+
+                <button id="toggleCalendar" onclick="mostrarCalendar()">
+                    <i class='bx bx-calendar'></i>
+                    <span class="btn-text">Agenda</span>
+                </button>
+
+                <hr id="hrline">
+
+            </div>
+
+            <div class="leads-actions-bar">
+                <button type="button" class="btn-new-lead" id="newLeadActionBtn">
+                    <i class="fa-solid fa-plus"></i> Novo lead
+                </button>
+                <button type="button" class="btn-import-clients" id="importFromClientsBtn">
+                    <i class="fa-solid fa-user-plus"></i> Adicionar da carteira
+                </button>
+            </div>
+
+        <!-- Loading indicator -->
+        <div class="loader" id="loader"></div>
+
+        <!-- Tooltip for row actions -->
+        <div class="tooltip" id="tooltip">
+            <button id="addFup"><i class='bx bx-message-rounded-add'></i></button>
+            <button id="editarBtn"><i class='bx bx-edit'></i></button>
+            <button class="btn-excluir" id="excluirBtn"> <i class='bx bx-trash' ></i></button>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal" id="modal">
+            <div class="modal-content">
+                <button class="close-btn" onclick="fecharModal()">&times;</button>
+                <h2 style="color: #b0b1b3;" id="modalTitle">Adicionar Registro</h2>
+
+                <div class="form-container">
+                    <form id="add-form">
+                        <!-- Campos correspondentes às colunas  statusProgresso -->
+                        <button id="submit" type="submit"><i class='bx bxs-save'></i></button>
+
+                        <label for="ID">ID</label>
+                        <input type="number" id="ID" name="ID" placeholder="ID">
+
+                        <label for="dataOrcamento">Data do Orçamento</label>
+                        <input type="date" name="dataOrcamento" id="dataOrcamento" placeholder="dataOrcamento">
+
+                        <label for="agencia">Agência/Solicitante</label>
+                        <input type="text" id="agencia" name="agencia" placeholder="agencia">
+
+                        <label for="responsavel">Responsável</label>
+                        <input type="text" id="responsavel" name="responsavel" placeholder="responsavel">
+
+                        <label for="telefoneSolicitante">Telefone Solicitante</label>
+                        <input type="text" id="telefoneSolicitante" name="telefoneSolicitante">
+
+                        <label for="emailSolicitante">E-mail Solicitante</label>
+                        <input type="email" id="emailSolicitante" name="emailSolicitante">
+
+                        <label for="hotel">Hotel</label>
+                        <select id="hotel" name="hotel">
+                            <option value="">Selecione o hotel</option>
+                            <option value="Aurora Golden">Aurora Golden</option>
+                            <option value="Aurora Suites">Aurora Suites</option>
+                            <option value="Aurora Budget">Aurora Budget</option>
+                            <option value="Aurora Resorts">Aurora Resorts</option>
+                        </select>
+
+                        <label for="sala">Sala</label>
+                        <input type="text" id="sala" name="sala">
+
+                        <label for="montagem">Montagem</label>
+                        <input type="text" id="montagem" name="montagem">
+
+                        <label for="dataInicio">Data Início</label>
+                        <input type="date" id="dataInicio" name="dataInicio">
+
+                        <label for="dataFim">Data Fim</label>
+                        <input type="date" id="dataFim" name="dataFim">
+
+                        <label for="totalDiasUsados">Total dias usados</label>
+                        <input type="number" id="totalDiasUsados" min="0" name="totalDiasUsados">
+
+                        <label for="segmento">Segmento</label>
+                        <input type="text" id="segmento" name="segmento">
+
+                        <label for="segmentoMercado">Segmento de Mercado</label>
+                        <input type="text" id="segmentoMercado" name="segmentoMercado">
+
+                        <label for="responsavelAtlantica">Responsável Vendas - Atlantica</label>
+                        <input type="text" id="responsavelAtlantica" name="responsavelAtlantica">
+
+                        <label for="responsavelHotel">Responsável no Hotel</label>
+                        <input type="text" id="responsavelHotel" name="responsavelHotel" readonly>
+
+                        <label for="leadVendedores">Vendedores Responsáveis</label>
+                        <div class="vendedores-wrapper">
+                            <select id="leadVendedores" multiple></select>
+                            <small>Selecione quem acompanhará este lead</small>
+                            <div id="vendedoresSelecionados">
+                                <span class="seller-tag-placeholder">Nenhum vendedor selecionado</span>
+                            </div>
+                        </div>
+                        <input type="hidden" id="responsavelNegociar" name="responsavelNegociar">
+
+                        <label for="perfilEvento">Perfil do Evento</label>
+                        <input type="text" id="perfilEvento" name="perfilEvento">
+
+                        <label for="budgetCliente">Budget do Cliente</label>
+                        <input type="number" id="budgetCliente" min="0" name="budgetCliente">
+
+                        <label for="concorrentes">Concorrentes</label>
+                        <input type="text" id="concorrentes" name="concorrentes">
+
+                        <label for="fatorDecisivo">Fator Decisivo</label>
+                        <input type="text" id="fatorDecisivo" name="fatorDecisivo">
+
+                        <label for="qtdPAX">Qtd PAX Evento</label>
+                        <input type="number" id="qtdPAX" min="0" name="qtdPAX">
+
+                        <label for="eventoHospedagem">Evento | Hospedagem</label>
+                        <input type="text" id="eventoHospedagem" name="eventoHospedagem">
+
+                        <label for="nomeEvento">Nome Evento</label>
+                        <input type="text" id="nomeEvento" name="nomeEvento">
+
+                        <label for="status">Status</label>
+                        <input type="text" id="status" name="status">
+
+                        <label for="statusProgresso">Status Progresso</label>
+                        <input type="text" id="statusProgresso" name="statusProgresso">
+
+                        <label for="motivoCancelamento">Motivo Cancelamento</label>
+                        <input type="text" id="motivoCancelamento" name="motivoCancelamento">
+
+                        <label for="concorrenteEscolhido">Concorrente Escolhido</label>
+                        <input type="text" id="concorrenteEscolhido" name="concorrenteEscolhido">
+
+                        <label for="valorConcorrente">Valor Concorrente</label>
+                        <input type="number" id="valorConcorrente" min="0" name="valorConcorrente">
+
+                        <label for="deadlineConfirmacao">Deadline Confirmação</label>
+                        <input type="date" id="deadlineConfirmacao" name="deadlineConfirmacao">
+
+                        <label for="dataConfirmacao">Data de Confirmação</label>
+                        <input type="date" id="dataConfirmacao" name="dataConfirmacao">
+
+                        <label for="rns">RNs</label>
+                        <input type="number" id="rns" min="0" name="rns">
+
+                        <label for="adr">ADR</label>
+                        <input type="number" id="adr" min="0" step="0.01" name="adr">
+
+                        <label for="receitaHospedagem">Receita Hospedagem</label>
+                        <input type="number" id="receitaHospedagem" min="0" step="0.01" name="receitaHospedagem">
+
+                        <label for="diariasHospedagem">Diárias (Hospedagem)</label>
+                        <input type="number" id="diariasHospedagem" min="0" name="diariasHospedagem">
+
+                        <label for="valorHospedagem">Valor (Hospedagem)</label>
+                        <input type="number" id="valorHospedagem" min="0" step="0.01" name="valorHospedagem">
+
+                        <label for="receitaSalas">Receita Salas</label>
+                        <input type="number" id="receitaSalas" min="0" step="0.01" name="receitaSalas">
+
+                        <label for="diariasSalas">Diárias (Salas)</label>
+                        <input type="number" id="diariasSalas" min="0" name="diariasSalas">
+
+                        <label for="valorSalas">Valor (Salas)</label>
+                        <input type="number" id="valorSalas" min="0" step="0.01" name="valorSalas">
+
+                        <label for="receitaEquipamentos">Receita Equipamentos</label>
+                        <input type="number" id="receitaEquipamentos" min="0" step="0.01" name="receitaEquipamentos">
+
+                        <label for="receitaAB">Receita A&B</label>
+                        <input type="number" id="receitaAB" min="0" step="0.01" name="receitaAB">
+
+                        <label for="receitaTotal">Receita Total Prevista</label>
+                        <input type="number" id="receitaTotal" min="0" step="0.01" name="receitaTotal">
+
+                        <label for="pagamento">Pagamento</label>
+                        <input type="text" id="pagamento" name="pagamento">    
+
+                        <label for="obs">OBS</label>
+                        <textarea id="obs" name="obs"></textarea>    
+
+                        <label for="mes">Mês</label>
+                        <input type="text" id="mes" name="mes">
+
+                        <label for="ano">Ano</label>
+                        <input type="number" id="ano" min="0" name="ano">
+
+                        <label for="mes_">Mês_</label>
+                        <input type="text" id="mes_" name="mes_">
+
+                        <label for="ano_">Ano_</label>
+                        <input type="number" id="ano_" min="0" name="ano_">
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- /Modal -->
+        
+        <!-- Tabela Leads -->
+        <main class="tableboxx" id="tableboxx">
+            <div class="container">
+                <table id="tabela-registros">
+                    <thead>
+                        <tr id="header-row">
+                            <!-- Headers will be dynamically generated -->
+                        </tr>
+                    </thead>
+                    <tbody id="results-body"></tbody>
+                </table>
+            </div>
+        </main>
+        <!-- /Tabela Leads -->
+
+        <!-- Dashboard -->
+        <div class="dashboard-container" id="dashboard">
+            
+            <!-- Filtros -->
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="filterHotel">Hotel:</label>
+                    <select id="filterHotel"></select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterYear">Ano:</label>
+                    <select id="filterYear"></select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterMonth">Mês:</label>
+                    <select id="filterMonth">
+                        <option value="">Todos</option>
+                        <option value="1">Janeiro</option>
+                        <option value="2">Fevereiro</option>
+                        <option value="3">Março</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Maio</option>
+                        <option value="6">Junho</option>
+                        <option value="7">Julho</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Setembro</option>
+                        <option value="10">Outubro</option>
+                        <option value="11">Novembro</option>
+                        <option value="12">Dezembro</option>
+                    </select>
+                </div>
+                <button id="applyFilters">Aplicar Filtros</button>
+            </div>
+            
+            <!-- Cards de Métricas -->
+            <div class="metric-cards">
+                <div class="metric-card">
+                    <h3>Total de Negociações</h3>
+                    <p id="totalEventos">0</p>
+                </div>
+                <div class="metric-card">
+                    <h3>Receita Total</h3>
+                    <p id="receitaTotal">R$ 0,00</p>
+                </div>
+                <div class="metric-card">
+                    <h3>Taxa de Conversão</h3>
+                    <p id="taxaConversao">0%</p>
+                </div>
+                <div class="metric-card">
+                    <h3>Valor Médio</h3>
+                    <p id="valorMedio">R$ 0,00</p>
+                </div>
+            </div>
+            
+            <!-- Gráficos -->
+            <div class="charts-container">
+                <div class="chart-box">
+                    <h3>Receita por Mês</h3>
+                    <canvas id="receitaMesChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <h3>Negociações por Hotel</h3>
+                    <canvas id="eventosHotelChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <h3>Status das Negociações</h3>
+                    <canvas id="statusChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <h3>Distribuição por Segmento</h3>
+                    <canvas id="segmentoChart"></canvas>
+                </div>
+                <!-- <div class="chart-box">
+                    <h3>Distribuição por Segmento</h3>
+                    <canvas id="segmentoChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <h3>Distribuição por Segmento</h3>
+                    <canvas id="segmentoChart"></canvas>
+                </div> -->
+            </div>
+        </div>
+        <!-- /Dashboard -->
+
+        <!----------- Kanban ------------>
+        <div class="kanban" id="kanban">
+            
+            <div class="kanban-column" data-id="1">
+                <div class="kanban-title">
+                    <h2>Tratativa Pendente <i style="color: #fab600;" class="fa-solid fa-triangle-exclamation"></i></h2>
+                    <button class="add-card" onclick="abrirModal()"><i class="fa-solid fa-plus"></i></button>
+                </div>
+                <div class="kanban-cards"></div>
+            </div>
+
+            <div class="kanban-column" data-id="2">
+                <div class="kanban-title">
+                    <h2>Tarifa RM-CSC <i style="color: #fea065;" class="fa-solid fa-hourglass-half"></i></h2>
+                    <!-- <button class="add-card"><i class="fa-solid fa-plus"></i></button> -->
+                </div>
+                <div class="kanban-cards"></div>
+            </div>
+
+            <div class="kanban-column" data-id="3">
+                <div class="kanban-title">
+                    <h2>Tarifa RM-CSC <i style="color: #bed646;" class="fa-solid fa-circle-check"></i></h2>
+                    <!-- <button class="add-card"><i class="fa-solid fa-plus"></i></button> -->
+                </div>
+                <div class="kanban-cards"></div>
+            </div>
+
+            <div class="kanban-column" data-id="4">
+                <div class="kanban-title">
+                    <h2>Proposta enviada <i style="color:  #00c8ec;" class="fa-solid fa-envelope-circle-check"></i></h2>
+                    <!-- <button class="add-card"><i class="fa-solid fa-plus"></i></button> -->
+                </div>
+                <div class="kanban-cards"></div>
+            </div>
+
+            <div class="kanban-column" data-id="5">
+                <div class="kanban-title">
+                    <h2>Proposta Aceita <i style="color:  #49dc70;" class="fa-regular fa-thumbs-up"></i></h2>
+                    <!-- <button class="add-card"><i class="fa-solid fa-plus"></i></button> -->
+                </div>
+                <div class="kanban-cards"></div>
+            </div>
+
+            <div class="kanban-column" data-id="6">
+                <div class="kanban-title">
+                    <h2>Proposta negada <i style="color: #e94646;" class="fa-regular fa-thumbs-down"></i></h2>
+                    <!-- <button class="add-card"><i class="fa-solid fa-plus"></i></button> -->
+                </div>
+                <div class="kanban-cards"></div>
+            </div>
+
+            <div class="kanban-column" data-id="7">
+                <div class="kanban-title">
+                    <h2>Sem Resposta <i style="color: #373737;" class="fa-solid fa-circle-xmark"></i></h2>
+                    <!-- <button class="add-card"><i class="fa-solid fa-plus"></i></button> -->
+                </div>
+                <div class="kanban-cards"></div>
+            </div>
+
+        </div>
+
+        <div class="clients-import-modal" id="importClientsModal">
+            <div class="clients-import-card">
+                <header>
+                    <div>
+                        <p class="overline-label">Carteira de clientes</p>
+                        <h3>Adicionar lead existente</h3>
+                    </div>
+                    <button type="button" class="close" id="closeImportClientsModal">&times;</button>
+                </header>
+                <div class="clients-import-search">
+                    <input type="search" id="importClientsSearch" placeholder="Buscar por nome, empresa ou CNPJ">
+                </div>
+                <div class="clients-import-list" id="importClientsList">
+                    <p class="clients-import-empty">Nenhum cliente cadastrado.</p>
+                </div>
+            </div>
+        </div>
+        <div class="lead-client-modal" id="leadClientModal">
+            <div class="lead-client-card">
+                <header>
+                    <div>
+                        <p class="overline-label">Novo lead</p>
+                        <h3>Adicionar cliente e lead</h3>
+                    </div>
+                    <button type="button" class="close" id="closeLeadClientModal">&times;</button>
+                </header>
+                <form id="leadClientForm">
+                    <input type="hidden" id="leadClientId">
+
+                    <label for="leadClientName">Nome</label>
+                    <input type="text" id="leadClientName" placeholder="Nome do responsável" required>
+
+                    <label for="leadClientCompany">Empresa</label>
+                    <input type="text" id="leadClientCompany" placeholder="Empresa ou time" required>
+
+                    <label for="leadClientCnpj">CNPJ</label>
+                    <input type="text" id="leadClientCnpj" placeholder="00.000.000/0000-00" required>
+
+                    <label for="leadClientPhone">Telefone</label>
+                    <input type="tel" id="leadClientPhone" placeholder="(00) 0000-0000">
+
+                    <label for="leadClientWhatsapp">WhatsApp</label>
+                    <input type="tel" id="leadClientWhatsapp" placeholder="(00) 00000-0000">
+
+                    <label for="leadClientEmail">E-mail</label>
+                    <input type="email" id="leadClientEmail" placeholder="contato@empresa.com" required>
+
+                    <div class="lead-client-actions">
+                        <button type="button" class="btn-cancel" id="cancelLeadClientBtn">Cancelar</button>
+                        <button type="submit" class="btn-save">Salvar lead</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal do Kanban -->
+        <div id="modalz-bg" class="modalz-bg">
+
+            <!-- Quote Modal -->
+            <div id="modal-cotacao-bg" class="modal-bg">
+                <form id="form-cotacao" class="modall">
+                    <h2>Cotação de Hospedagem</h2>
+
+                    <input type="hidden" id="cotacao-id-lead">
+                    <input type="hidden" id="cotacao-agencia">
+
+                    <label>Hotel:</label>
+                    <input type="text" id="cotacao-hotel" required>
+
+                    <label>Tipo de Quarto:</label>
+                    <input type="text" id="cotacao-tipo" placeholder="Standard, Luxo, Suíte...">
+
+                    <label>Categoria / Grupo:</label>
+                    <input type="text" id="cotacao-categoria">
+
+                    <label>Check-in:</label>
+                    <input type="date" id="cotacao-checkin" required>
+
+                    <label>Hora Check-in:</label>
+                    <input type="time" id="cotacao-horain" value="14:00">
+
+                    <label>Check-out:</label>
+                    <input type="date" id="cotacao-checkout" required>
+                    
+                    <label>Hora Check-in:</label>
+                    <input type="time" id="cotacao-horain" value="14:00">
+
+                    <label>Check-out:</label>
+                    <input type="date" id="cotacao-checkout" required>
+                    <label>Categoria / Grupo:</label>
+                    <input type="text" id="cotacao-categoria">
+
+                    <label>Check-in:</label>
+                    <input type="date" id="cotacao-checkin" required>
+
+                    <label>Hora Check-in:</label>
+                    <input type="time" id="cotacao-horain" value="14:00">
+
+                    <label>Check-out:</label>
+                    <input type="date" id="cotacao-checkout" required>
+
+                    <label>Hora Check-in:</label>
+                    <input type="time" id="cotacao-horain" value="14:00">
+
+                    <label>Check-out:</label>
+                    <input type="date" id="cotacao-checkout" required>
+
+                    <label>Hora Check-out:</label>
+                    <input type="time" id="cotacao-horaout" value="12:00">
+
+                    <label>Total de Diárias:</label>
+                    <input type="number" id="cotacao-diarias" min="1" required>
+
+                    <label>Valor Total:</label>
+                    <input type="number" id="cotacao-total" step="0.01" required>
+
+                    <div class="modal-actions">
+                    <button type="submit" class="save">Salvar</button>
+                    <button type="button" class="cancel" onclick="fecharModalCotacao()">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modalz">
+                <h2 id="modalz-title-header">Adicionar / Editar Card</h2> <button onclick="abrirModalCotacao()" title="Editar"><i class="fa-solid fa-tag"></i></button>
+                <form id="modalz-form">
+                    <input type="hidden" id="modalz-id">
+                    <input type="hidden" id="modalz-linha">
+
+                    <label>Nome do Evento:</label>
+                    <input type="text" id="modalz-title" required>
+
+                    <label>Agência:</label>
+                    <input type="text" id="modalz-agencia">
+
+                    <label>Responsável:</label>
+                    <input type="text" id="modalz-responsavel">
+
+                    <label>Status:</label>
+                    <select id="modalz-status" required>
+                        <option value="">Selecione...</option>
+                    </select>
+
+                    <label>Comentários:</label>
+                    <input type="text" id="modalz-comments">
+
+                    <label>Anexos:</label>
+                    <input type="number" id="modalz-attachments" min="0" value="0">
+
+                    <label>Avatar URL (opcional):</label>
+                    <input type="text" id="modalz-avatar">
+
+                    <label>Observações:</label>
+                    <textarea id="modalz-observacoes" rows="3"></textarea>
+
+                    <div class="modalz-actions">
+                        <button type="submit" class="save">Salvar</button>
+                        <button type="button" class="cancel">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!----------- /Kanban ----------->
+
+        <!----- Calendar ----->
+        <div class="calendar-container" id="calendar">
+            
+            <!-- Header do Calendário -->
+            <div class="calendar-header-section">
+                <h2>Calendário de Negociações <i class='bx bx-calendar'></i></h2>
+                
+                <!-- Linha de Controles -->
+                <div class="calendar-controls-row">
+                    <!-- Navegação -->
+                    <div class="calendar-navigation">
+                        <button id="prevWeek" class="nav-btn"><i class='bx bx-chevron-left'></i></button>
+                        <span id="currentWeekRange">28 Set - 4 Out 2025</span>
+                        <button id="nextWeek" class="nav-btn"><i class='bx bx-chevron-right'></i></button>
+                        <button id="todayBtn" class="today-btn">Hoje</button>
+                    </div>
+
+                    <!-- Filtros -->
+                    <div class="calendar-filters">
+                        <select id="hotelFilter" class="filter-select">
+                            <option value="all">Todos os Hotéis</option>
+                            <option value="Aurora Golden">Aurora Golden</option>
+                            <option value="Aurora Suites">Aurora Suites</option>
+                            <option value="Aurora Budget">Aurora Budget</option>
+                            <option value="Aurora Resorts">Aurora Resorts</option>
+                        </select>
+                        <select id="statusFilter" class="filter-select">
+                            <option value="all">Todos os Status</option>
+                            <option value="Proposta aceita">Confirmados</option>
+                            <option value="Proposta enviada">Em Negociação</option>
+                            <option value="Tratativa Pendente">Pendentes</option>
+                        </select>
+                    </div>
+                </div>
+            </div><br>
+
+            <!-- Grade Principal do Calendário - ABAIXO dos controles -->
+            <div class="calendar-main-grid">
+                <!-- Header dos Dias da Semana -->
+                <div class="week-header" id="weekHeader">
+                    <!-- Preenchido dinamicamente pelo JS -->
+                </div>
+
+                <!-- Área dos Eventos -->
+                <div class="events-area" id="eventsArea">
+                    <!-- Preenchido dinamicamente pelo JS -->
+                </div>
+            </div>
+
+            <!-- Modal de Detalhes do Evento -->
+            <div class="event-modal" id="eventModal">
+                <div class="event-modal-content">
+                    <button class="close-event-modal" id="closeEventModal">&times;</button>
+                    <h3 id="eventTitle">Nome do Cliente</h3>
+                    <div class="event-details">
+                        <p><i class='bx bx-buildings'></i> <strong>Hotel:</strong> <span id="eventHotel"></span></p>
+                        <p><i class='bx bx-calendar-check'></i> <strong>Check-in:</strong> <span id="eventCheckin"></span></p>
+                        <p><i class='bx bx-calendar-x'></i> <strong>Check-out:</strong> <span id="eventCheckout"></span></p>
+                        <p><i class='bx bx-time-five'></i> <strong>Duração:</strong> <span id="eventDuration"></span> noites</p>
+                        <p><i class='bx bx-group'></i> <strong>PAX:</strong> <span id="eventPax"></span></p>
+                        <p><i class='bx bx-dollar-circle'></i> <strong>Valor:</strong> R$ <span id="eventValue"></span></p>
+                        <p><i class='bx bx-user'></i> <strong>Responsável:</strong> <span id="eventResponsible"></span></p>
+                        <p><i class='bx bx-info-circle'></i> <strong>Status:</strong> <span id="eventStatus"></span></p>
+                    </div>
+                    <div class="event-actions">
+                        <button class="edit-event-btn" id="editEventBtn">
+                            <i class='bx bx-edit'></i> Editar
+                        </button>
+                        <button class="followup-event-btn" id="followupEventBtn">
+                            <i class='bx bx-message-rounded-add'></i> Follow-up
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!----- /Calendar ----->
+
+
+
+        <img id="logoavi" src="img/aviat.png">
+
+    </section>
+
+    <!-- Footer -->
+    <!-- <footer style="line-height: 15px;">
+        &copy; <span id="anoAtual"></span> SellaStay - Gestão para Hotéis. <br> <span style="font-size: 10px; cursor: pointer;">Desenvolvido por <a href="https://www.syncsoftware.com.br" style="text-decoration: none; color: var(--text-color);" onmouseover="this.style.color='#ff914d';" onmouseout="this.style.color='var(--text-color)';" target="_blank"> <b>Sync Software LTDA</b></a></span>
+    </footer> -->
+    <!-- Footer -->
+        <!-- Color KanBan -->
+    <script src="js/script.js"></script>
+    <script>
+        const WORKFLOW_STAGES = [
+            { id: 1, name: "Tratativa Pendente", color: "#fab600", slug: "stage-tratativa-pendente" },
+            { id: 2, name: "Tarifa RM-CSC encaminhado", color: "#fea065", slug: "stage-tarifa-rm-csc-encaminhado" },
+            { id: 3, name: "Tarifa RM-CSC feito!", color: "#bed646", slug: "stage-tarifa-rm-csc-feito" },
+            { id: 4, name: "Proposta enviada", color: "#00c8ec", slug: "stage-proposta-enviada" },
+            { id: 5, name: "Proposta aceita", color: "#49dc70", slug: "stage-proposta-aceita" },
+            { id: 6, name: "Proposta negada", color: "#e94646", slug: "stage-proposta-negada" },
+            { id: 7, name: "Sem Resposta", color: "#373737", slug: "stage-sem-resposta" }
+        ];
+
+        const HOTEL_DIRECTORY = {
+            "Aurora Golden": {
+                manager: "Paula Ribeiro",
+                salesTeam: ["Filipe Oliveira", "Camila Mendes", "João Batista"]
+            },
+            "Aurora Suites": {
+                manager: "Carolina Azevedo",
+                salesTeam: ["Marcela Freitas", "Rafael Carvalho", "Lívia Campos"]
+            },
+            "Aurora Budget": {
+                manager: "Daniel Souza",
+                salesTeam: ["Pedro Martins", "Bianca Castro", "Alice Moreira"]
+            },
+            "Aurora Resorts": {
+                manager: "Renata Albuquerque",
+                salesTeam: ["Laura Ramos", "Eduardo Lima", "Filipe Oliveira"]
+            }
+        };
+
+        const ALL_SELLERS = Array.from(
+            new Set(Object.values(HOTEL_DIRECTORY).flatMap(hotel => hotel.salesTeam))
+        ).sort((a, b) => a.localeCompare(b, "pt-BR"));
+
+        const STAGE_LOOKUP = WORKFLOW_STAGES.reduce((acc, stage) => {
+            acc[stage.name.toLowerCase()] = stage;
+            return acc;
+        }, {});
+
+        function normalizeName(value) {
+            return (value || "").toString().trim().toLowerCase();
+        }
+
+        function getCurrentUserName() {
+            return document.getElementById("user-name")?.textContent?.replace(/\s*<.*?>/g, "")?.trim() || "";
+        }
+
+        function parseAssignees(listValue) {
+            if (!listValue) return [];
+            return listValue
+                .toString()
+                .split(/[,;]+/)
+                .map(name => name.trim())
+                .filter(Boolean);
+        }
+
+        function canUserSeeLead(lead) {
+            if (!lead) return true;
+            const user = normalizeName(getCurrentUserName());
+            if (!user) return true;
+
+            const managerList = parseAssignees(lead.responsavelHotel || lead.gerenteHotel || lead.manager);
+            const sellerList = parseAssignees(lead.responsavelNegociar || lead.vendedoresResponsaveis || lead.sellers);
+
+            if (!managerList.length && !sellerList.length) return true;
+            if (managerList.map(normalizeName).includes(user)) return true;
+            if (sellerList.map(normalizeName).includes(user)) return true;
+            return false;
+        }
+
+        function updateSellerTags(names) {
+            const container = document.getElementById("vendedoresSelecionados");
+            if (!container) return;
+            container.innerHTML = "";
+            if (!names || !names.length) {
+                const span = document.createElement("span");
+                span.className = "seller-tag-placeholder";
+                span.textContent = "Nenhum vendedor selecionado";
+                container.appendChild(span);
+                return;
+            }
+            names.forEach(name => {
+                const span = document.createElement("span");
+                span.className = "seller-tag";
+                span.textContent = name;
+                container.appendChild(span);
+            });
+        }
+
+        function syncHiddenSellerField(selectedNames) {
+            const hiddenField = document.getElementById("responsavelNegociar");
+            if (hiddenField) {
+                hiddenField.value = selectedNames.join(", ");
+            }
+            updateSellerTags(selectedNames);
+        }
+
+        function applyHotelSelection(hotelValue, preselected = []) {
+            const hotelMeta = HOTEL_DIRECTORY[hotelValue] || {};
+            const managerInput = document.getElementById("responsavelHotel");
+            const sellersSelect = document.getElementById("leadVendedores");
+            const availableSellers = hotelMeta.salesTeam && hotelMeta.salesTeam.length
+                ? [...hotelMeta.salesTeam]
+                : [...ALL_SELLERS];
+
+            if (managerInput) {
+                managerInput.value = hotelMeta.manager || "";
+            }
+
+            if (sellersSelect) {
+                const preserved = preselected.filter(name => !availableSellers.includes(name));
+                const options = [...availableSellers, ...preserved];
+                sellersSelect.innerHTML = "";
+                options.forEach(name => {
+                    const option = document.createElement("option");
+                    option.value = name;
+                    option.textContent = name;
+                    option.selected = preselected.includes(name);
+                    sellersSelect.appendChild(option);
+                });
+                syncHiddenSellerField(preselected);
+            }
+        }
+
+        function hydrateLeadAssignments(record = {}) {
+            const hotelSelect = document.getElementById("hotel");
+            const sellers = parseAssignees(record.responsavelNegociar || record.vendedoresResponsaveis || record.responsavel);
+            if (hotelSelect) {
+                hotelSelect.value = record.hotel || "";
+            }
+            applyHotelSelection(record.hotel || "", sellers);
+        }
+
+        function clearLeadAssignments() {
+            const hotelSelect = document.getElementById("hotel");
+            if (hotelSelect) {
+                hotelSelect.value = "";
+            }
+            applyHotelSelection("", []);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const hotelSelect = document.getElementById("hotel");
+            const sellersSelect = document.getElementById("leadVendedores");
+
+            if (hotelSelect) {
+                hotelSelect.addEventListener("change", () => {
+                    applyHotelSelection(hotelSelect.value, []);
+                });
+            }
+
+            if (sellersSelect) {
+                sellersSelect.addEventListener("change", () => {
+                    const selected = Array.from(sellersSelect.selectedOptions).map(option => option.value);
+                    syncHiddenSellerField(selected);
+                });
+            }
+
+            // Inicializa opções mesmo antes de seleção de hotel
+            applyHotelSelection("", []);
+        });
+
+        window.workflowHelpers = {
+            STAGES: WORKFLOW_STAGES,
+            STAGE_LOOKUP,
+            HOTEL_DIRECTORY,
+            ALL_SELLERS,
+            getCurrentUserName,
+            normalizeName,
+            parseAssignees,
+            canUserSeeLead,
+            applyHotelSelection,
+            hydrateLeadAssignments,
+            clearLeadAssignments
+        };
+    </script>
+
+    <!--Header Script  -->
+    <script>
+     
+        document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("anoAtual").textContent = new Date().getFullYear();
+        });
+
+        // ----- Variáveis do modal -----
+        const modal = document.getElementById('modal');
+        let linhaSelecionadaParaEdicao = null; // Variável para armazenar a linha selecionada
+    
+        // Abrir modal
+        function abrirModal(stageName) {
+            modal.style.display = 'flex';
+
+            const isEditing = typeof registroSelecionado !== "undefined" && registroSelecionado !== null;
+            const fallbackStage = stageName || window.workflowHelpers?.STAGES?.[0]?.name || "Tratativa Pendente";
+            const statusField = document.getElementById('statusProgresso');
+            if (statusField && !isEditing) {
+                statusField.value = fallbackStage;
+            }
+
+            if (!isEditing && window.workflowHelpers?.clearLeadAssignments) {
+                window.workflowHelpers.clearLeadAssignments();
+            }
+        }
+
+        // Fechar modal
+        function fecharModal() {
+            modal.style.display = 'none';
+            registroSelecionado = null; // Limpar o registro selecionado
+            document.getElementById('add-form').reset(); // Limpar o formulário
+            document.getElementById("modalTitle").textContent = "Adicionar Registro"; // Resetar o título
+
+            if (window.workflowHelpers?.clearLeadAssignments) {
+                window.workflowHelpers.clearLeadAssignments();
+            }
+        }
+    
+        window.onclick = function (event) {
+            if (event.target === modal) fecharModal();
+        };
+    
+        window.onkeydown = function (event) {
+            if (event.key === 'Escape') fecharModal();
+        };
+    
+        // Função auxiliar: Formatar data para o padrão brasileiro
+        function formatarDataParaBR(data) {
+            if (!data) return "";
+            const [ano, mes, dia] = data.split("-");
+            return `${dia}/${mes}/${ano}`;
+        }
+        // ----- /Variáveis do modal -----
+
+        // Tooltip Configuração
+        const tooltip = document.getElementById("tooltip");
+        const editarBtn = document.getElementById("editarBtn");
+        const excluirBtn = document.getElementById("excluirBtn");
+        let linhaSelecionada = null;
+    
+        document.querySelector("#results-body").addEventListener("click", function (event) {
+            const linha = event.target.closest("tr");
+            if (linha) {
+                // Remover a classe 'selected-row' de qualquer linha previamente selecionada
+                document.querySelectorAll("#results-body tr.selected-row").forEach(row => {
+                    row.classList.remove("selected-row");
+                });
+                
+                // Adicionar a classe 'selected-row' à linha atual
+                linha.classList.add("selected-row");
+    
+                linhaSelecionada = linha;
+                tooltip.style.display = "block";
+                tooltip.style.left = `${event.pageX + 10}px`;
+                tooltip.style.top = `${event.pageY + 10}px`;
+            } else {
+                tooltip.style.display = "none";
+            }
+        });
+    
+        editarBtn.addEventListener("click", function () {
+            if (linhaSelecionada) {
+                abrirModal();
+                preencherFormulario(linhaSelecionada);
+                tooltip.style.display = "none";
+            }
+        });
+    
+        excluirBtn.addEventListener("click", function () {
+            if (linhaSelecionada) {
+                const registro = obterDadosDaLinha(linhaSelecionada);
+                if (confirm(`Tem certeza que deseja excluir o registro "${registro.nomeEvento || registro.ID}"?`)) {
+                    excluirRegistro(registro.Linha);
+                    tooltip.style.display = "none";
+                }
+            }
+        });
+    
+        document.addEventListener("click", function (event) {
+            if (!tooltip.contains(event.target) && !event.target.closest("tr")) {
+                tooltip.style.display = "none";
+            }
+        });
+
+
+    </script>
+    <!-- /Header Script -->
+
+    <!-- GRC Function -->
+    <script>
+        
+        /*
+         * phpMyAdmin schema (create via phpMyAdmin or seu gerenciador preferido):
+         *
+         * CREATE TABLE leads (
+         *   id INT AUTO_INCREMENT PRIMARY KEY,
+         *   external_id VARCHAR(64) UNIQUE,
+         *   dataOrcamento DATE,
+         *   agencia VARCHAR(255),
+         *   responsavel VARCHAR(255),
+         *   telefoneSolicitante VARCHAR(64),
+         *   emailSolicitante VARCHAR(255),
+         *   hotel VARCHAR(255),
+         *   sala VARCHAR(128),
+         *   montagem VARCHAR(128),
+         *   dataInicio DATE,
+         *   dataFim DATE,
+         *   totalDiasUsados INT,
+         *   segmento VARCHAR(128),
+         *   segmentoMercado VARCHAR(128),
+         *   responsavelAtlantica VARCHAR(255),
+         *   responsavelHotel VARCHAR(255),
+         *   responsavelNegociar TEXT,
+         *   perfilEvento VARCHAR(255),
+         *   budgetCliente DECIMAL(12,2),
+         *   concorrentes TEXT,
+         *   fatorDecisivo TEXT,
+         *   qtdPAX INT,
+         *   eventoHospedagem VARCHAR(255),
+         *   nomeEvento VARCHAR(255),
+         *   status VARCHAR(64),
+         *   statusProgresso VARCHAR(64),
+         *   motivoCancelamento TEXT,
+         *   concorrenteEscolhido VARCHAR(255),
+         *   valorConcorrente DECIMAL(12,2),
+         *   deadlineConfirmacao DATE,
+         *   dataConfirmacao DATE,
+         *   rns INT,
+         *   adr DECIMAL(9,2),
+         *   receitaHospedagem DECIMAL(12,2),
+         *   diariasHospedagem INT,
+         *   valorHospedagem DECIMAL(12,2),
+         *   receitaSalas DECIMAL(12,2),
+         *   diariasSalas INT,
+         *   valorSalas DECIMAL(12,2),
+         *   receitaEquipamentos DECIMAL(12,2),
+         *   receitaAB DECIMAL(12,2),
+         *   receitaTotal DECIMAL(12,2),
+         *   pagamento VARCHAR(128),
+         *   observacoes TEXT,
+         *   mes VARCHAR(32),
+         *   ano INT,
+         *   mes_ VARCHAR(32),
+         *   ano_ INT,
+         *   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+         *   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+         * );
+         *
+         * As chaves acima são os campos do formulário do modal:
+         * ID → external_id
+         * Nome Evento → nomeEvento (retornado como "Nome Evento")
+         * obs → observacoes
+         * Linha → id (também exposto como linha / Linha nos cards)
+         */
+        const scriptURL = "api/leads.php";
+
+        let registroSelecionado = null;
+
+        // Função para extrair os dados de uma linha da tabela
+        function obterDadosDaLinha(linha) {
+            const celulas = linha.querySelectorAll("td");
+            const headers = document.querySelectorAll("#header-row th");
+
+            const registro = {};
+            for (let i = 0; i < celulas.length; i++) {
+                if (headers[i] && i < celulas.length - 1) {
+                    registro[headers[i].textContent] = celulas[i].textContent;
+                }
+            }
+
+            registro["Linha"] = linha.getAttribute("data-linha") || linha.dataset.linha || registro["ID"];
+            return registro;
+        }
+
+        function confirmarEExcluir(linha) {
+            const registro = obterDadosDaLinha(linha);
+            const nome = registro["nomeEvento"] || registro["ID"];
+            if (confirm(`Tem certeza que deseja excluir o registro "${nome}"?`)) {
+                excluirRegistro(registro["Linha"]); // ✅ Isso de fato executa a exclusão
+                tooltip.style.display = "none";
+            }
+        }
+
+        // Evento para mostrar tooltip e capturar linha selecionada (CORREÇÃO)
+        document.querySelector("#results-body").addEventListener("mouseclick", function(event) {
+            const linha = event.target.closest("tr");
+            if (linha) {
+                // Remover seleção anterior
+                document.querySelectorAll("#results-body tr.selected-row").forEach(row => {
+                    row.classList.remove("selected-row");
+                });
+                
+                // Marcar nova linha como selecionada
+                linha.classList.add("selected-row");
+                linhaSelecionada = linha;
+
+                // Posicionar tooltip corretamente
+                const tooltip = document.getElementById("tooltip");
+                const rect = linha.getBoundingClientRect();
+                tooltip.style.display = "block";
+                tooltip.style.left = `${rect.right + 10}px`; // Alinhar à direita da linha
+                tooltip.style.top = `${rect.top}px`;
+            }
+        });
+
+        // Função para formatar a data no formato dd/mm/aaaa
+        function formatarData(data) {
+            const dateObj = new Date(data);
+            const dia = String(dateObj.getDate()).padStart(2, '0');
+            const mes = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const ano = dateObj.getFullYear();
+            return `${dia}/${mes}/${ano}`;
+        }
+
+        // Função para verificar se o valor é uma data válida
+        function isData(val) {
+            if (typeof val === "string" && val.match(/\d{4}-\d{2}-\d{2}/)) {
+                const data = new Date(val);
+                return !isNaN(data.getTime());
+            }
+            return false;
+        }
+
+        async function carregarDados() {
+            try {
+                toggleLoader(true);
+                
+                const response = await fetch(scriptURL + '?action=leads');
+                const registros = await response.json();
+
+                console.log("Registros retornados:", registros);
+
+                const registrosFiltrados = (registros || []).filter(item => {
+                    return !window.workflowHelpers || window.workflowHelpers.canUserSeeLead(item);
+                });
+
+                window.dadosCompletos = registrosFiltrados;
+
+                if (!registrosFiltrados.length) {
+                    document.getElementById("tabela-registros").innerHTML = "Nenhum dado encontrado.";
+                    return;
+                }
+
+                const thead = document.getElementById("header-row");
+                const tbody = document.querySelector("#tabela-registros tbody");
+                tbody.innerHTML = "";
+
+                // Criar cabeçalhos
+                thead.innerHTML = "";
+                Object.keys(registrosFiltrados[0]).forEach(key => {
+                    const th = document.createElement("th");
+                    th.textContent = key;
+                    th.addEventListener("click", () => ordenarTabela(key));
+                    thead.appendChild(th);
+                });
+
+                // Adicionar cabeçalho para ações
+                const thAcoes = document.createElement("th");
+                thAcoes.textContent = "Ações";
+                thAcoes.style.textAlign = "center";
+                thAcoes.style.width = "120px";
+                thead.appendChild(thAcoes);
+
+                // Criar linhas da tabela com formatação condicional
+                registrosFiltrados.forEach(registro => {
+                    const tr = document.createElement("tr");
+                    let statusIndex = -1;
+                    let statusValue = "";
+                    
+                    Object.entries(registro).forEach(([key, valor], index) => {
+                        const td = document.createElement("td");
+                        
+                        if (key === "statusProgresso") {
+                            const stageKey = valor ? valor.toString().toLowerCase() : "";
+                            const stage = window.workflowHelpers?.STAGE_LOOKUP?.[stageKey];
+                            const color = stage?.color || "#9ca3af";
+                            const label = valor || "Sem estágio";
+                            td.innerHTML = `<span class="workflow-stage-pill"><span class="workflow-stage-dot" style="background:${color};"></span>${label}</span>`;
+                        } else if (valor && isData(valor)) {
+                            td.textContent = formatarData(valor);
+                        } else {
+                            td.textContent = valor;
+                        }
+                        
+                        if (key === "status") {
+                            statusIndex = index;
+                            statusValue = valor;
+                            
+                            switch (valor) {
+                                case "Definitivo":
+                                    td.style.backgroundColor = "#7ed957";
+                                    td.style.color = "#155724";
+                                    break;
+                                case "Cancelado":
+                                    td.style.backgroundColor = "#ff4545";
+                                    td.style.color = "#8f0505";
+                                    break;
+                                case "Tentativo":
+                                    td.style.backgroundColor = "#fdcc33";
+                                    td.style.color = "#846400";
+                                    break;
+                                case "Não confirmado":
+                                    td.style.backgroundColor = "#e2e3e5";
+                                    td.style.color = "#383d41";
+                                    break;
+                            }
+                        }
+                        
+                        tr.appendChild(td);
+                    });
+                    
+                    // Adicionar coluna de ações
+                    const tdAcoes = document.createElement("td");
+                    tdAcoes.innerHTML = `
+                        <div class="action-buttons" style="display: flex; gap: 8px; justify-content: center; align-items: center;">
+                            <button class="btn-editar" title="Editar registro" style="background: none; border: none; cursor: pointer; color: #007bff; padding: 5px;">
+                                <i class="fas fa-edit" style="font-size: 16px;"></i>
+                            </button>
+                            <button class="btn-excluir" title="Excluir registro" style="background: none; border: none; cursor: pointer; color: #dc3545; padding: 5px;">
+                                <i class="fas fa-trash" style="font-size: 16px;"></i>
+                            </button>
+                            <button class="btn-feedback" title="Adicionar feedback" style="background: none; border: none; cursor: pointer; color: #28a745; padding: 5px;">
+                                <i class="fas fa-comment" style="font-size: 16px;"></i>
+                            </button>
+                        </div>
+                    `;
+                    tr.appendChild(tdAcoes);
+                    
+                    // Adicionar eventos de clique nos botões
+                    const btnEditar = tdAcoes.querySelector('.btn-editar');
+                    const btnExcluir = tdAcoes.querySelector('.btn-excluir');
+                    const btnFeedback = tdAcoes.querySelector('.btn-feedback');
+                    
+                    btnEditar.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        preencherFormulario(tr);
+                    });
+                    
+
+                    btnExcluir.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        if (confirm("Tem certeza que deseja excluir este registro?")) {
+                            excluirRegistro(registro["Linha"]); // ← CORREÇÃO: Usar registro["Linha"]
+                        }
+                    });
+
+                    
+                    btnFeedback.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        // Função para adicionar feedback (implementar depois)
+                        console.log("Adicionar feedback para:", registro);
+                        alert("Funcionalidade de feedback será implementada em breve!");
+                    });
+                    
+                    // Aplicar cor da fonte baseada no status
+                    if (statusValue) {
+                        let textColor;
+                        switch (statusValue) {
+                            case "Definitivo":
+                                textColor = "#38b602";
+                                break;
+                            case "Cancelado":
+                                textColor = "#ff6d6d";
+                                break;
+                            case "Tentativo":
+                                textColor = "#ffb800";
+                                break;
+                            case "Não confirmado":
+                                textColor = "#101213";
+                                break;
+                            default:
+                                textColor = "#b0b1b3";
+                        }
+                        
+                        Array.from(tr.children).forEach((cell, index) => {
+                            if (index !== statusIndex && index !== tr.children.length - 1) {
+                                cell.style.color = textColor;
+                            }
+                        });
+                    }
+                    
+                    tbody.appendChild(tr);
+                });
+                
+                mostrarFeedback("✅ Dados carregados com sucesso!", "sucesso");
+                
+            } catch (error) {
+                console.error("Erro ao carregar os dados:", error);
+                mostrarFeedback("Erro ao carregar os dados.", "erro");
+            } finally {
+                toggleLoader(false);
+            }
+        }
+
+        function filtrarTabela() {
+            const filtro = document.getElementById("searchBox").value.toLowerCase();
+            const linhas = document.querySelectorAll("#tabela-registros tbody tr");
+            
+            document.querySelectorAll(".highlight-search").forEach(el => {
+                el.outerHTML = el.textContent;
+            });
+            
+            if (filtro.trim() === "") {
+                linhas.forEach(linha => {
+                    linha.style.display = "";
+                });
+                return;
+            }
+            
+            linhas.forEach(linha => {
+                let encontrado = false;
+                const celulas = linha.querySelectorAll("td");
+                
+                celulas.forEach(celula => {
+                    const conteudo = celula.textContent.toLowerCase();
+                    
+                    if (conteudo.includes(filtro)) {
+                        encontrado = true;
+                        
+                        const regex = new RegExp(filtro, 'gi');
+                        const textoOriginal = celula.textContent;
+                        const textoComHighlight = textoOriginal.replace(regex, match => 
+                            `<span class="highlight-search">${match}</span>`
+                        );
+                        
+                        celula.innerHTML = textoComHighlight;
+                    }
+                });
+                
+                linha.style.display = encontrado ? "" : "none";
+            });
+        }
+
+        // Função para preencher o formulário com os dados do registro selecionado
+        function preencherFormulario(linha) {
+            const celulas = linha.querySelectorAll("td");
+            const headers = document.querySelectorAll("#header-row th");
+            
+            const registro = {};
+            for (let i = 0; i < celulas.length; i++) {
+                if (headers[i] && i < celulas.length - 1) { // Excluir a última coluna (ações)
+                    registro[headers[i].textContent] = celulas[i].textContent;
+                }
+            }
+            
+            registroSelecionado = registro;
+            
+            document.getElementById("modalTitle").textContent = "Editar Registro";
+            
+            const form = document.getElementById("add-form");
+            const inputs = form.querySelectorAll("input, textarea, select");
+            
+            inputs.forEach(input => {
+                if (input.tagName === "SELECT" && input.multiple) return;
+                const fieldId = input.id;
+                if (registro[fieldId] !== undefined) {
+                    if (input.type === "date" && registro[fieldId]) {
+                        const parts = registro[fieldId].split('/');
+                        if (parts.length === 3) {
+                            input.value = `${parts[2]}-${parts[1]}-${parts[0]}`;
+                        } else {
+                            input.value = registro[fieldId];
+                        }
+                    } else {
+                        input.value = registro[fieldId];
+                    }
+                }
+            });
+
+            if (window.workflowHelpers?.hydrateLeadAssignments) {
+                window.workflowHelpers.hydrateLeadAssignments(registro);
+            }
+            
+            // Abrir modal
+            const modal = document.getElementById("modal");
+            if (modal) modal.style.display = "block";
+        }
+
+        // Função para fechar modal
+        function fecharModal() {
+            const modal = document.getElementById("modal");
+            if (modal) modal.style.display = "none";
+            
+            const form = document.getElementById("add-form");
+            if (form) form.reset();
+            
+            registroSelecionado = null;
+            document.getElementById("modalTitle").textContent = "Adicionar Registro";
+        }
+
+        // Função para validar o formulário antes de enviar
+        function validarFormulario() {
+            const form = document.getElementById("add-form");
+            const camposObrigatorios = ["ID", "dataOrcamento", "agencia", "responsavel", "hotel"];
+            
+            let valido = true;
+            let mensagemErro = "Por favor, preencha os seguintes campos obrigatórios:\n";
+            
+            camposObrigatorios.forEach(campo => {
+                const input = form.querySelector(`#${campo}`);
+                if (input && !input.value.trim()) {
+                    input.style.borderColor = "red";
+                    valido = false;
+                    const label = input.previousElementSibling;
+                    if (label) mensagemErro += `- ${label.textContent}\n`;
+                } else if (input) {
+                    input.style.borderColor = "#c87902";
+                }
+            });
+            
+            if (!valido) {
+                alert(mensagemErro);
+            }
+            
+            return valido;
+        }
+
+        async function excluirRegistro(linha) {
+            if (!linha) {
+                console.error("Linha não fornecida para exclusão");
+                return;
+            }
+            
+            console.log("Tentando excluir linha:", linha);
+            
+            toggleLoader(true);
+            
+            try {
+                const formData = new FormData();
+                formData.append("action", "leads");
+                formData.append("Linha", linha);
+                formData.append("_method", "DELETE");
+                
+                const response = await fetch(scriptURL, { 
+                    method: "POST", 
+                    body: formData 
+                });
+                
+                const result = await response.json();
+                console.log("Resposta da exclusão:", result);
+
+                // CORREÇÃO: Verificar resposta e recarregar dados IMEDIATAMENTE
+                if (result.status === "success" || result.result === "success") {
+                    mostrarFeedback("✅ Registro excluído com sucesso!", "sucesso");
+                    carregarDados(); // REMOVA O setTimeout
+                    document.getElementById("tooltip").style.display = "none";
+                } else {
+                    mostrarFeedback("Erro ao excluir o registro", "erro");
+                }
+            } catch (error) {
+                console.error("Erro ao excluir registro:", error);
+                mostrarFeedback("Erro de conexão ao excluir registro", "erro");
+            } finally {
+                toggleLoader(false);
+            }
+        }
+
+        // Função para mostrar/esconder o indicador de carregamento
+        function toggleLoader(show) {
+            const loader = document.getElementById("loader");
+            if (loader) loader.style.display = show ? "block" : "none";
+        }
+
+        // Função para mostrar mensagens de feedback
+        function mostrarFeedback(mensagem, tipo) {
+            let feedback = document.getElementById("feedback");
+            if (!feedback) {
+                feedback = document.createElement("div");
+                feedback.id = "feedback";
+                feedback.classList.add("feedback");
+                feedback.style.position = "fixed";
+                feedback.style.top = "0px";
+                feedback.style.right = "20px";
+                feedback.style.padding = "15px 20px";
+                feedback.style.color = "#0a9d00";
+                // feedback.style.borderRadius = "5px";
+                // feedback.style.boxShadow = "0 4px 8px rgba(0,0,0,0.2)";
+                feedback.style.zIndex = "2000";
+                feedback.style.transition = "opacity 0.5s ease-in-out";
+                document.body.appendChild(feedback);
+            }
+            
+            feedback.className = "feedback";
+            if (tipo === "sucesso") {
+                feedback.classList.add("sucesso");
+            } else if (tipo === "erro") {
+                feedback.classList.add("erro");
+            } else {
+                feedback.classList.add("info");
+            }
+            
+            feedback.textContent = mensagem;
+            feedback.style.opacity = "1";
+            
+            setTimeout(() => {
+                feedback.style.opacity = "0";
+            }, 3000);
+        }
+
+        // Variáveis para controlar a ordenação
+        let colunaOrdenacao = null;
+        let ordemAscendente = true;
+
+        // Função para ordenar a tabela
+        function ordenarTabela(coluna) {
+            const tbody = document.querySelector("#tabela-registros tbody");
+            const linhas = Array.from(tbody.querySelectorAll("tr"));
+            
+            if (coluna === colunaOrdenacao) {
+                ordemAscendente = !ordemAscendente;
+            } else {
+                colunaOrdenacao = coluna;
+                ordemAscendente = true;
+            }
+            
+            const headers = document.querySelectorAll("#header-row th");
+            let indiceColuna = -1;
+            
+            for (let i = 0; i < headers.length; i++) {
+                if (headers[i].textContent === coluna) {
+                    indiceColuna = i;
+                    break;
+                }
+            }
+            
+            if (indiceColuna === -1) return;
+            
+            linhas.sort((a, b) => {
+                const valorA = a.querySelectorAll("td")[indiceColuna].textContent.trim();
+                const valorB = b.querySelectorAll("td")[indiceColuna].textContent.trim();
+                
+                if (valorA.match(/^\d{2}\/\d{2}\/\d{4}$/) && valorB.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
+                    const [diaA, mesA, anoA] = valorA.split('/');
+                    const [diaB, mesB, anoB] = valorB.split('/');
+                    
+                    const dataA = new Date(`${anoA}-${mesA}-${diaA}`);
+                    const dataB = new Date(`${anoB}-${mesB}-${diaB}`);
+                    
+                    return ordemAscendente ? dataA - dataB : dataB - dataA;
+                }
+                
+                if (!isNaN(valorA) && !isNaN(valorB)) {
+                    return ordemAscendente ? 
+                        parseFloat(valorA) - parseFloat(valorB) : 
+                        parseFloat(valorB) - parseFloat(valorA);
+                }
+                
+                return ordemAscendente ? 
+                    valorA.localeCompare(valorB) : 
+                    valorB.localeCompare(valorA);
+            });
+            
+            tbody.innerHTML = "";
+            linhas.forEach(linha => tbody.appendChild(linha));
+            
+            headers.forEach(th => {
+                th.classList.remove("asc", "desc");
+            });
+            
+            const thAtual = Array.from(headers).find(th => th.textContent === coluna);
+            if (thAtual) thAtual.classList.add(ordemAscendente ? "asc" : "desc");
+        }
+
+        // Event Listeners
+        document.addEventListener("DOMContentLoaded", function() {
+            carregarDados();
+            
+            // Event listener para o formulário
+            const form = document.getElementById("add-form");
+            if (form) {
+                form.addEventListener("submit", async function(event) {
+                    event.preventDefault();
+                    
+                    if (!validarFormulario()) return;
+                    
+                    toggleLoader(true);
+                    
+                    // CORREÇÃO: coleta todos os campos automaticamente pelo atributo 'name'
+                    const formData = new FormData(this);
+                    formData.append("action", "leads");
+                    
+                    try {
+                        let response;
+
+                        if (registroSelecionado && registroSelecionado["Linha"]) {
+                            formData.append("Linha", registroSelecionado["Linha"]);
+                            formData.append("_method", "PUT");
+                            response = await fetch(scriptURL, { 
+                                method: "POST",
+                                body: formData 
+                            });
+                            mostrarFeedback("✅ Registro atualizado com sucesso!", "sucesso");
+                        } else {
+                            response = await fetch(scriptURL, { 
+                                method: "POST", 
+                                body: formData 
+                            });
+                            mostrarFeedback("✅ Registro adicionado com sucesso!", "sucesso");
+                        }
+
+                        fecharModal();
+                        setTimeout(carregarDados, 1500);
+                        
+                    } catch (error) {
+                        console.error("Erro:", error);
+                        mostrarFeedback("Ocorreu um erro ao salvar o registro.", "erro");
+                    } finally {
+                        toggleLoader(false);
+                    }
+                });
+
+            }
+            
+            // Event listener para fechar modal
+            const closeBtn = document.querySelector(".close");
+            if (closeBtn) {
+                closeBtn.addEventListener("click", fecharModal);
+            }
+            
+            // Event listener para botão de adicionar
+            const addBtn = document.getElementById("add-btn");
+            if (addBtn) {
+                addBtn.addEventListener("click", function() {
+                    registroSelecionado = null;
+                    const form = document.getElementById("add-form");
+                    if (form) form.reset();
+                    
+                    document.getElementById("modalTitle").textContent = "Adicionar Registro";
+                    
+                    const modal = document.getElementById("modal");
+                    if (modal) modal.style.display = "block";
+                });
+            }
+        });
+    </script>
+    <!-- /GRC Function -->
+
+    <!-- Dashboard Function -->
+    <script>
+        // Dashboard JavaScript
+        document.addEventListener("DOMContentLoaded", async function() {
+            await carregarDados();
+            setTimeout(inicializarDashboard, 1000); // Pequeno atraso para garantir que os dados estejam disponíveis
+      
+
+            
+            // Configurar evento para o botão de filtro
+            document.getElementById("applyFilters").addEventListener("click", atualizarDashboard);
+        });
+
+        // Variáveis globais para os gráficos
+        let receitaMesChart, eventosHotelChart, statusChart, segmentoChart;
+        let dadosCompletos = [];
+
+        // Inicializar o dashboard
+        async function inicializarDashboard() {
+            try {
+                if (window.dadosCompletos && window.dadosCompletos.length) {
+                    dadosCompletos = window.dadosCompletos.slice();
+                } else {
+                    const response = await fetch(scriptURL);
+                    const resultado = await response.json();
+                    dadosCompletos = (resultado || []).filter(item => {
+                        return !window.workflowHelpers || window.workflowHelpers.canUserSeeLead(item);
+                    });
+                    window.dadosCompletos = dadosCompletos.slice();
+                }
+                
+                // Preencher os filtros
+                preencherFiltros();
+                
+                // Criar gráficos iniciais
+                criarGraficos(dadosCompletos);
+                
+                // Atualizar métricas
+                atualizarMetricas(dadosCompletos);
+                
+            } catch (error) {
+                console.error("Erro ao inicializar dashboard:", error);
+            }
+        }
+
+        // Preencher os filtros com base nos dados
+        function preencherFiltros() {
+            // Filtro de Hotel
+            const hoteis = [...new Set(dadosCompletos.map(item => item.hotel).filter(Boolean))];
+            const selectHotel = document.getElementById("filterHotel");
+            selectHotel.innerHTML = '<option value="">Todos os Hotéis</option>';
+            hoteis.forEach(hotel => {
+                const option = document.createElement("option");
+                option.value = hotel;
+                option.textContent = hotel;
+                selectHotel.appendChild(option);
+            });
+            
+            // Filtro de Ano
+            const anos = [...new Set(dadosCompletos.map(item => {
+                if (item.dataOrcamento) {
+                    const data = new Date(converterDataParaISO(item.dataOrcamento));
+                    return data.getFullYear();
+                }
+                return null;
+            }).filter(Boolean))];
+            
+            const selectAno = document.getElementById("filterYear");
+            selectAno.innerHTML = '<option value="">Todos os Anos</option>';
+            anos.sort((a, b) => b - a).forEach(ano => {
+                const option = document.createElement("option");
+                option.value = ano;
+                option.textContent = ano;
+                selectAno.appendChild(option);
+            });
+        }
+
+        // Converter data do formato DD/MM/YYYY para YYYY-MM-DD
+        function converterDataParaISO(dataString) {
+            if (!dataString) return null;
+            
+            // Verificar se já está no formato ISO
+            if (dataString.match(/^\d{4}-\d{2}-\d{2}$/)) return dataString;
+            
+            // Verificar formato DD/MM/YYYY
+            const partes = dataString.split('/');
+            if (partes.length === 3) {
+                return `${partes[2]}-${partes[1]}-${partes[0]}`;
+            }
+            
+            // Tentar converter usando Date
+            try {
+                const data = new Date(dataString);
+                if (!isNaN(data.getTime())) {
+                    return data.toISOString().split('T')[0];
+                }
+            } catch (e) {
+                console.error("Erro ao converter data:", dataString);
+            }
+            
+            return null;
+        }
+
+
+        // Filtrar dados com base nos filtros selecionados
+        function filtrarDados() {
+            const hotelSelecionado = document.getElementById("filterHotel").value;
+            const anoSelecionado = document.getElementById("filterYear").value;
+            const mesSelecionado = document.getElementById("filterMonth").value;
+            
+            return dadosCompletos.filter(item => {
+                // Filtrar por hotel
+                if (hotelSelecionado && item.hotel !== hotelSelecionado) return false;
+                
+                // Converter a data para um objeto Date
+                if (!item.dataOrcamento) return true;
+                const data = new Date(converterDataParaISO(item.dataOrcamento));
+                
+                // Filtrar por ano
+                if (anoSelecionado && data.getFullYear() != anoSelecionado) return false;
+                
+                // Filtrar por mês
+                if (mesSelecionado && (data.getMonth() + 1) != mesSelecionado) return false;
+                
+                return true;
+            });
+        }
+
+        // Atualizar o dashboard com base nos filtros
+        function atualizarDashboard() {
+            const dadosFiltrados = filtrarDados();
+            
+            // Atualizar gráficos
+            atualizarGraficos(dadosFiltrados);
+            
+            // Atualizar métricas
+            atualizarMetricas(dadosFiltrados);
+        }
+
+        // Atualizar as métricas principais
+        function atualizarMetricas(dados) {
+            // Total de eventos
+            document.getElementById("totalEventos").textContent = dados.length;
+            
+            // Receita total
+            const receitaTotal = dados.reduce((total, item) => {
+                return total + (parseFloat(item.receitaTotal) || 0);
+            }, 0);
+            document.getElementById("receitaTotal").textContent = `R$ ${receitaTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            
+            // Taxa de conversão
+            const confirmados = dados.filter(item => item.status === "Confirmado").length;
+            const taxaConversao = dados.length > 0 ? (confirmados / dados.length) * 100 : 0;
+            document.getElementById("taxaConversao").textContent = `${taxaConversao.toFixed(1)}%`;
+            
+            // Valor médio
+            const valorMedio = dados.length > 0 ? receitaTotal / dados.length : 0;
+            document.getElementById("valorMedio").textContent = `R$ ${valorMedio.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        }
+
+        // Criar os gráficos iniciais
+        function criarGraficos(dados) {
+            // Configuração de cores
+            const cores = [
+                '#FF9F40', '#FFCD56', '#4BC0C0', '#36A2EB', '#9966FF', 
+                '#FF6384', '#C9CBCF', '#7FD8BE', '#B2F7EF', '#E2B4BD'
+            ];
+            
+            // 1. Gráfico de Receita por Mês
+            const dadosReceitaMes = processarDadosReceitaPorMes(dados);
+            const ctxReceitaMes = document.getElementById('receitaMesChart').getContext('2d');
+            receitaMesChart = new Chart(ctxReceitaMes, {
+                type: 'bar',
+                data: {
+                    labels: dadosReceitaMes.labels,
+                    datasets: [{
+                        label: 'Receita Total (R$)',
+                        data: dadosReceitaMes.valores,
+                        backgroundColor: cores[0],
+                        borderColor: cores[0],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#b0b1b3'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#b0b1b3'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#b0b1b3'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 2. Gráfico de Eventos por Hotel
+            const dadosEventosHotel = processarDadosEventosPorHotel(dados);
+            const ctxEventosHotel = document.getElementById('eventosHotelChart').getContext('2d');
+            eventosHotelChart = new Chart(ctxEventosHotel, {
+                type: 'pie',
+                data: {
+                    labels: dadosEventosHotel.labels,
+                    datasets: [{
+                        data: dadosEventosHotel.valores,
+                        backgroundColor: cores,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                color: '#b0b1b3'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 3. Gráfico de Status dos Eventos
+            const dadosStatus = processarDadosPorStatus(dados);
+            const ctxStatus = document.getElementById('statusChart').getContext('2d');
+            statusChart = new Chart(ctxStatus, {
+                type: 'doughnut',
+                data: {
+                    labels: dadosStatus.labels,
+                    datasets: [{
+                        data: dadosStatus.valores,
+                        backgroundColor: [cores[2], cores[3], cores[5]],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                color: '#b0b1b3'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 4. Gráfico de Distribuição por Segmento
+            const dadosSegmento = processarDadosPorSegmento(dados);
+            const ctxSegmento = document.getElementById('segmentoChart').getContext('2d');
+            segmentoChart = new Chart(ctxSegmento, {
+                type: 'bar',
+                data: {
+                    labels: dadosSegmento.labels,
+                    datasets: [{
+                        label: 'Número de Eventos',
+                        data: dadosSegmento.valores,
+                        backgroundColor: cores[2],
+                        borderColor: cores[2],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#b0b1b3'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            ticks: {
+                                color: '#b0b1b3'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#b0b1b3'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        
+        // Atualizar os gráficos com novos dados
+        function atualizarGraficos(dados) {
+            // Verificar se os gráficos foram inicializados
+            if (!receitaMesChart || !eventosHotelChart || !statusChart || !segmentoChart) {
+                // Se os gráficos não existirem, crie-os primeiro
+                criarGraficos(dados);
+                return;
+            }
+
+            // 1. Atualizar gráfico de Receita por Mês
+            const dadosReceitaMes = processarDadosReceitaPorMes(dados);
+            receitaMesChart.data.labels = dadosReceitaMes.labels;
+            receitaMesChart.data.datasets[0].data = dadosReceitaMes.valores;
+            receitaMesChart.update();
+            
+            // 2. Atualizar gráfico de Eventos por Hotel
+            const dadosEventosHotel = processarDadosEventosPorHotel(dados);
+            eventosHotelChart.data.labels = dadosEventosHotel.labels;
+            eventosHotelChart.data.datasets[0].data = dadosEventosHotel.valores;
+            eventosHotelChart.update();
+            
+            // 3. Atualizar gráfico de Status dos Eventos
+            const dadosStatus = processarDadosPorStatus(dados);
+            statusChart.data.labels = dadosStatus.labels;
+            statusChart.data.datasets[0].data = dadosStatus.valores;
+            statusChart.update();
+            
+            // 4. Atualizar gráfico de Distribuição por Segmento
+            const dadosSegmento = processarDadosPorSegmento(dados);
+            segmentoChart.data.labels = dadosSegmento.labels;
+            segmentoChart.data.datasets[0].data = dadosSegmento.valores;
+            segmentoChart.update();
+        }
+
+        // Função para processar dados para o gráfico de Receita por Mês
+        function processarDadosReceitaPorMes(dados) {
+            const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
+                        'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+            const receitaPorMes = Array(12).fill(0);
+            
+            dados.forEach(item => {
+                if (item.dataOrcamento) {
+                    const data = new Date(converterDataParaISO(item.dataOrcamento));
+                    const mes = data.getMonth(); // 0-11
+                    receitaPorMes[mes] += parseFloat(item.receitaTotal) || 0;
+                }
+            });
+            
+            return {
+                labels: meses,
+                valores: receitaPorMes
+            };
+        }
+
+        // Função para processar dados para o gráfico de Eventos por Hotel
+        function processarDadosEventosPorHotel(dados) {
+            const hoteisMap = new Map();
+            
+            dados.forEach(item => {
+                if (item.hotel) {
+                    if (hoteisMap.has(item.hotel)) {
+                        hoteisMap.set(item.hotel, hoteisMap.get(item.hotel) + 1);
+                    } else {
+                        hoteisMap.set(item.hotel, 1);
+                    }
+                }
+            });
+            
+            return {
+                labels: Array.from(hoteisMap.keys()),
+                valores: Array.from(hoteisMap.values())
+            };
+        }
+
+        // Função para processar dados para o gráfico de Status dos Eventos
+        function processarDadosPorStatus(dados) {
+            const statusMap = new Map();
+            
+            dados.forEach(item => {
+                const status = item.statusProgresso || item.status;
+                if (status) {
+                    if (statusMap.has(status)) {
+                        statusMap.set(status, statusMap.get(status) + 1);
+                    } else {
+                        statusMap.set(status, 1);
+                    }
+                }
+            });
+            
+            return {
+                labels: Array.from(statusMap.keys()),
+                valores: Array.from(statusMap.values())
+            };
+        }
+
+        // Função para processar dados para o gráfico de Distribuição por Segmento
+        function processarDadosPorSegmento(dados) {
+            const segmentoMap = new Map();
+            
+            dados.forEach(item => {
+                if (item.segmento) {
+                    if (segmentoMap.has(item.segmento)) {
+                        segmentoMap.set(item.segmento, segmentoMap.get(item.segmento) + 1);
+                    } else {
+                        segmentoMap.set(item.segmento, 1);
+                    }
+                }
+            });
+            
+            // Ordenar por quantidade (do maior para o menor)
+            const segmentosOrdenados = [...segmentoMap.entries()]
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 10); // Limitar aos 10 principais segmentos
+            
+            return {
+                labels: segmentosOrdenados.map(item => item[0]),
+                valores: segmentosOrdenados.map(item => item[1])
+            };
+        }
+
+        // Funções para alternar entre tabela e dashboard
+        function mostrarTabela() {
+            document.getElementById("tableboxx").style.display = "block";
+            document.getElementById("dashboard").style.display = "none";
+            document.getElementById("kanban").style.display = "none";
+            document.getElementById("calendar").style.display = "none";
+
+            // Alternar classe ativa
+            document.getElementById("leadslist").classList.add("ativo");
+            document.getElementById("toggleDashboard").classList.remove("ativo");
+            document.getElementById("toggleKanban").classList.remove("ativo");
+            document.getElementById("toggleCalendar").classList.remove("ativo");
+        }
+
+        function mostrarDashboard() {
+            document.getElementById("tableboxx").style.display = "none";
+            document.getElementById("kanban").style.display = "none";
+            document.getElementById("dashboard").style.display = "block";
+            document.getElementById("calendar").style.display = "none";
+
+            // Alternar classe ativa
+            document.getElementById("toggleDashboard").classList.add("ativo");
+            document.getElementById("leadslist").classList.remove("ativo");
+            document.getElementById("toggleKanban").classList.remove("ativo");
+            document.getElementById("toggleCalendar").classList.remove("ativo");
+        }
+
+        function mostrarKanban() {
+            document.getElementById("tableboxx").style.display = "none";
+            document.getElementById("dashboard").style.display = "none";
+            document.getElementById("kanban").style.display = "flex";
+            document.getElementById("calendar").style.display = "none";
+
+            // Alternar classe ativa
+            document.getElementById("toggleKanban").classList.add("ativo");
+            document.getElementById("leadslist").classList.remove("ativo");
+            document.getElementById("toggleDashboard").classList.remove("ativo");
+            document.getElementById("toggleCalendar").classList.remove("ativo");
+        }
+
+        function mostrarCalendar() {
+            document.getElementById("tableboxx").style.display = "none";
+            document.getElementById("dashboard").style.display = "none";
+            document.getElementById("kanban").style.display = "none";
+            document.getElementById("calendar").style.display = "flex";
+
+            // Alternar classe ativa
+            document.getElementById("toggleCalendar").classList.add("ativo");
+            document.getElementById("toggleKanban").classList.remove("ativo");
+            document.getElementById("leadslist").classList.remove("ativo");
+            document.getElementById("toggleDashboard").classList.remove("ativo");
+        }
+
+        const hrLine = document.getElementById("hrline");
+        const buttons = document.querySelectorAll("#leadslist, #toggleDashboard, #toggleKanban, #toggleCalendar");
+
+        function updateHrLineFromButton(button) {
+            if (!hrLine || !button) return;
+            const bgColor = window.getComputedStyle(button).backgroundColor;
+            hrLine.style.display = "block";
+            hrLine.style.background = `linear-gradient(to right, ${bgColor} 50%, transparent)`;
+        }
+
+        // Mostrar a tabela por padr?o ao carregar a p?gina e j? ajustar hrline para o bot?o padr?o
+        document.addEventListener("DOMContentLoaded", function () {
+            mostrarKanban();
+            const defaultButton = document.getElementById("toggleKanban");
+            if (defaultButton) {
+                buttons.forEach(btn => btn.classList.remove("active"));
+                defaultButton.classList.add("active");
+                updateHrLineFromButton(defaultButton);
+            }
+        });
+
+        buttons.forEach(button => {
+            button.addEventListener("click", () => {
+            // Remove 'active' de todos os bot?es
+            buttons.forEach(btn => btn.classList.remove("active"));
+
+            // Adiciona 'active' ao bot?o clicado
+            button.classList.add("active");
+
+            updateHrLineFromButton(button);
+            });
+        });
+    </script>   
+    <!-- /Dashboard Function -->
+
+    <!-- Kanban Function -->   
+    <script>
+    
+        const defaultAvatars = [
+            "https://i.pravatar.cc/150?img=1",
+            "https://i.pravatar.cc/150?img=2",
+            "https://i.pravatar.cc/150?img=3",
+            "https://i.pravatar.cc/150?img=4",
+            "https://i.pravatar.cc/150?img=5"
+        ];
+
+        const columns = (window.workflowHelpers?.STAGES || [
+            { id: 1, name: "Tratativa Pendente", color: "#fab600", slug: "stage-tratativa-pendente" },
+            { id: 2, name: "Tarifa RM-CSC encaminhado", color: "#fea065", slug: "stage-tarifa-rm-csc-encaminhado" },
+            { id: 3, name: "Tarifa RM-CSC feito!", color: "#bed646", slug: "stage-tarifa-rm-csc-feito" },
+            { id: 4, name: "Proposta enviada", color: "#00c8ec", slug: "stage-proposta-enviada" },
+            { id: 5, name: "Proposta aceita", color: "#49dc70", slug: "stage-proposta-aceita" },
+            { id: 6, name: "Proposta negada", color: "#e94646", slug: "stage-proposta-negada" },
+            { id: 7, name: "Sem Resposta", color: "#373737", slug: "stage-sem-resposta" }
+        ]).map(stage => ({ ...stage }));
+
+        let cards = [];
+
+        // Utilitários
+        function colIdToStatus(id) {
+            const col = columns.find(c => c.id == id);
+            return col ? col.name : "";
+        }
+        function statusToColId(status) {
+            const normalized = status ? status.toString().trim().toLowerCase() : "";
+            const col = columns.find(c => c.name?.toLowerCase() === normalized);
+            return col ? col.id : 1;
+        }
+
+        // Carregar do backend
+        async function loadCards() {
+            const res = await fetch(`${scriptURL}?action=kanban`);
+            const data = await res.json();
+            cards = [];
+
+            Object.keys(data).forEach(status => {
+                const leads = data[status];
+                leads.forEach(item => {
+                    if (window.workflowHelpers && !window.workflowHelpers.canUserSeeLead(item)) {
+                        return;
+                    }
+
+                    const columnId = statusToColId(status);
+                    const stageMeta = columns.find(stage => stage.id === columnId) || columns.find(stage => stage.name === status);
+
+                    cards.push({
+                        id: item.ID,
+                        title: item["Nome Evento"] || item.ID,
+                        agencia: item.agencia || "",
+                        responsavel: item.responsavelNegociar || "",
+                        column: columnId,
+                        stage: stageMeta,
+                        comments: 0,
+                        attachments: 0,
+                        avatar: "https://i.pravatar.cc/150?u=" + item.ID,
+                        observacoes: item.observacoes || "",
+                        linha: item.Linha
+                    });
+                });
+            });
+
+            renderCards();
+        }
+
+        // Renderizar
+        function renderCards() {
+            document.querySelectorAll('.kanban-cards').forEach(col => col.innerHTML = "");
+
+            columns.forEach(col => {
+                const colEl = document.querySelector(`.kanban-column[data-id="${col.id}"] .kanban-cards`);
+                const colCards = cards.filter(card => card.column === col.id);
+                colCards.forEach(card => {
+                    const cardEl = createCardElement(card);
+                    colEl.appendChild(cardEl);
+                });
+            });
+        }
+
+        // Criar card visual
+        function createCardElement(card) {
+            const div = document.createElement("div");
+            div.className = "kanban-card";
+            div.setAttribute("draggable", "true");
+            div.dataset.id = card.id;
+            div.dataset.linha = card.linha; // 👈 ESSENCIAL PARA UPDATE
+
+            const stageColor = card.stage?.color || "#9ca3af";
+            const stageName = card.stage?.name || colIdToStatus(card.column);
+            const stageSlug = card.stage?.slug || stageName?.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+            if (stageSlug) {
+                div.dataset.stage = stageSlug;
+            }
+            div.style.borderTopColor = stageColor;
+
+            div.innerHTML = `
+                <span class="workflow-stage-pill" style="margin-bottom:6px;">
+                    <span class="workflow-stage-dot" style="background:${stageColor};"></span>${stageName}
+                </span>
+                <p class="card-title">#${card.title}</p>
+                <p class="card-agencia"><i class="fa-solid fa-building"></i> ${card.agencia}</p>
+                <div class="card-infos">
+                    <div class="card-icons">
+                        <p><i class="fa-regular fa-comment"></i> ${card.comments}</p>
+                        <p><i class="fa-solid fa-paperclip"></i> ${card.attachments}</p>
+                    </div>
+                    <div class="user">
+                        <img src="${card.avatar}" alt="Avatar">
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button class="edit" title="Editar"><i class="fa-regular fa-pen-to-square"></i></button>
+                    <button class="delete" title="Excluir"><i class="fa-regular fa-trash-can"></i></button>
+                </div>
+            `;
+
+            // Editar
+            div.querySelector(".edit").onclick = () => openModal(card.id);
+
+            // Excluir
+            div.querySelector(".delete").onclick = async () => {
+                if (confirm("Tem certeza que deseja excluir este card?")) {
+                    await fetch(`${scriptURL}?action=leads`, {
+                        method: "POST",
+                        body: new URLSearchParams({
+                            _method: "DELETE",
+                            Linha: card.linha
+                        })
+                    });
+                    loadCards();
+                }
+            };
+
+            // Drag events
+            div.addEventListener('dragstart', () => div.classList.add('dragging'));
+            div.addEventListener('dragend', () => div.classList.remove('dragging'));
+
+            return div;
+        }
+
+        // Drag & Drop
+        document.querySelectorAll('.kanban-cards').forEach(column => {
+            column.addEventListener('dragover', e => {
+                e.preventDefault();
+                column.classList.add('cards-hover');
+            });
+
+            column.addEventListener('dragleave', () => {
+                column.classList.remove('cards-hover');
+            });
+
+            column.addEventListener('drop', async (e) => {
+                e.preventDefault();
+                column.classList.remove('cards-hover');
+
+                const draggingCard = document.querySelector('.kanban-card.dragging');
+                if (!draggingCard) return;
+
+                const cardId = draggingCard.dataset.id;
+                const linha = draggingCard.dataset.linha;
+                const colId = column.closest('.kanban-column').dataset.id;
+                const novoStatus = colIdToStatus(colId);
+
+                if (!cardId || !linha || !novoStatus) {
+                    console.error("Dados insuficientes para atualizar status.");
+                    return;
+                }
+
+                // Atualizar visualmente
+                column.appendChild(draggingCard);
+
+                // Atualizar no backend
+                try {
+                    const formData = new FormData();
+                    formData.append('action', 'updateStatus');
+                    formData.append('id', cardId);
+                    formData.append('linha', linha);
+                    formData.append('novoStatus', novoStatus);
+                    formData.append('usuario', window.workflowHelpers?.getCurrentUserName?.() || 'Usuário');
+
+                    const res = await fetch(scriptURL, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const result = await res.json();
+                    console.log('Status atualizado:', result);
+
+                    loadCards();
+                } catch (error) {
+                    console.error('Erro ao atualizar status:', error);
+                }
+            });
+        });
+
+        // Modal
+        const modalBg = document.getElementById("modalz-bg");
+        const modalForm = document.getElementById("modalz-form");
+        const modalId = document.getElementById("modalz-id");
+        const modalLinha = document.getElementById("modalz-linha");
+        const modalTitle = document.getElementById("modalz-title");
+        const modalAgencia = document.getElementById("modalz-agencia");
+        const modalResponsavel = document.getElementById("modalz-responsavel");
+        const modalStatus = document.getElementById("modalz-status");
+        const modalComments = document.getElementById("modalz-comments");
+        const modalAttachments = document.getElementById("modalz-attachments");
+        const modalAvatar = document.getElementById("modalz-avatar");
+        const modalObservacoes = document.getElementById("modalz-observacoes");
+        const importClientsBtn = document.getElementById("importFromClientsBtn");
+        const importClientsModal = document.getElementById("importClientsModal");
+        const importClientsList = document.getElementById("importClientsList");
+        const importClientsSearch = document.getElementById("importClientsSearch");
+        const closeImportClientsModalBtn = document.getElementById("closeImportClientsModal");
+        const newLeadActionBtn = document.getElementById("newLeadActionBtn");
+        const leadClientModal = document.getElementById("leadClientModal");
+        const leadClientForm = document.getElementById("leadClientForm");
+        const closeLeadClientModalBtn = document.getElementById("closeLeadClientModal");
+        const cancelLeadClientBtn = document.getElementById("cancelLeadClientBtn");
+        const leadClientFields = {
+            id: document.getElementById("leadClientId"),
+            name: document.getElementById("leadClientName"),
+            company: document.getElementById("leadClientCompany"),
+            cnpj: document.getElementById("leadClientCnpj"),
+            phone: document.getElementById("leadClientPhone"),
+            whatsapp: document.getElementById("leadClientWhatsapp"),
+            email: document.getElementById("leadClientEmail")
+        };
+        const CLIENT_STORAGE_KEY = "sellastay_clients";
+        let cachedClients = [];
+
+        function fetchClientsFromStorage(){
+            try{
+                const raw = localStorage.getItem(CLIENT_STORAGE_KEY);
+                const parsed = JSON.parse(raw);
+                if(Array.isArray(parsed)){
+                    return parsed;
+                }
+            }catch(e){
+                console.warn("Não foi possível ler a carteira de clientes:", e);
+            }
+            return [];
+        }
+
+        function upsertClientInStorage(client){
+            const clients = fetchClientsFromStorage();
+            const index = clients.findIndex(item => {
+                if(client.id && item.id === client.id) return true;
+                if(client.cnpj && item.cnpj === client.cnpj) return true;
+                return false;
+            });
+            if(index >= 0){
+                clients[index] = client;
+            }else{
+                clients.push(client);
+            }
+            localStorage.setItem(CLIENT_STORAGE_KEY, JSON.stringify(clients));
+            cachedClients = clients;
+        }
+
+        function hydrateLeadFormFromClient(client, columnId = 1){
+            openModal(null, columnId);
+            const fallbackTitle = client.company || client.name || "Novo lead";
+            modalTitle.value = fallbackTitle;
+            modalAgencia.value = client.company || fallbackTitle;
+            modalResponsavel.value = client.name || "";
+            const statusValue = colIdToStatus(columnId);
+            if(statusValue){
+                modalStatus.value = statusValue;
+            }
+            modalComments.value = client.cnpj || "";
+            modalAttachments.value = 0;
+            modalAvatar.value = client.email || "";
+            modalObservacoes.value = `Telefone: ${client.phone || "N/A"} • WhatsApp: ${client.whatsapp || "N/A"} • Email: ${client.email || "N/A"}`;
+        }
+
+        function renderImportClients(filterText = ""){
+            if(!importClientsList) return;
+            const normalized = filterText.trim().toLowerCase();
+            importClientsList.innerHTML = "";
+            const filtered = cachedClients.filter(client => {
+                if(!normalized) return true;
+                return [client.name, client.company, client.cnpj].some(field => (field || "").toLowerCase().includes(normalized));
+            });
+            if(!filtered.length){
+                importClientsList.innerHTML = '<p class="clients-import-empty">Nenhum cliente encontrado.</p>';
+                return;
+            }
+            filtered.forEach(client => {
+                const item = document.createElement("div");
+                item.className = "clients-import-item";
+                item.innerHTML = `
+                    <div>
+                        <strong>${client.name || "Cliente sem nome"}</strong>
+                        <p>${client.company || "Empresa não informada"}</p>
+                        <small>${client.cnpj || ""}</small>
+                    </div>
+                    <button type="button" data-client-id="${client.id || ""}">Adicionar</button>
+                `;
+                importClientsList.appendChild(item);
+            });
+        }
+
+        function openImportClients(){
+            cachedClients = fetchClientsFromStorage();
+            if(!cachedClients.length){
+                alert("Nenhum cliente encontrado na carteira. Cadastre em clients.html.");
+                return;
+            }
+            renderImportClients();
+            importClientsModal?.classList.add("open");
+        }
+
+        function closeImportClients(){
+            importClientsModal?.classList.remove("open");
+            if(importClientsSearch){
+                importClientsSearch.value = "";
+            }
+        }
+
+        importClientsBtn?.addEventListener("click", openImportClients);
+        closeImportClientsModalBtn?.addEventListener("click", closeImportClients);
+        importClientsModal?.addEventListener("click", (event) => {
+            if(event.target === importClientsModal){
+                closeImportClients();
+            }
+        });
+        importClientsSearch?.addEventListener("input", (event) => {
+            renderImportClients(event.target.value);
+        });
+        importClientsList?.addEventListener("click", (event) => {
+            const button = event.target.closest("button[data-client-id]");
+            if(!button) return;
+            const client = cachedClients.find(item => item.id === button.dataset.clientId);
+            if(!client){
+                alert("Cliente não encontrado.");
+                return;
+            }
+            closeImportClients();
+            hydrateLeadFormFromClient(client, 1);
+        });
+
+        function openLeadClientModal(){
+            if(!leadClientModal) return;
+            leadClientForm?.reset();
+            leadClientModal.classList.add("open");
+        }
+
+        function closeLeadClientModal(){
+            leadClientModal?.classList.remove("open");
+        }
+
+        newLeadActionBtn?.addEventListener("click", openLeadClientModal);
+        closeLeadClientModalBtn?.addEventListener("click", closeLeadClientModal);
+        cancelLeadClientBtn?.addEventListener("click", closeLeadClientModal);
+        leadClientModal?.addEventListener("click", (event) => {
+            if(event.target === leadClientModal){
+                closeLeadClientModal();
+            }
+        });
+
+        leadClientForm?.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const payload = {
+                id: leadClientFields.id.value || (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString()),
+                name: leadClientFields.name.value.trim(),
+                company: leadClientFields.company.value.trim(),
+                cnpj: leadClientFields.cnpj.value.trim(),
+                phone: leadClientFields.phone.value.trim(),
+                whatsapp: leadClientFields.whatsapp.value.trim(),
+                email: leadClientFields.email.value.trim()
+            };
+            upsertClientInStorage(payload);
+            closeLeadClientModal();
+            renderImportClients(importClientsSearch?.value || "");
+            hydrateLeadFormFromClient(payload, 1);
+            alert("Cliente salvo na carteira e pronto para ser registrado como lead.");
+        });
+
+        // Popular status no select
+        columns.forEach(col => {
+            const opt = document.createElement("option");
+            opt.value = col.name;
+            opt.textContent = col.name;
+            modalStatus.appendChild(opt);
+        });
+
+        function openModal(id = null, columnId = null) {
+            modalBg.classList.add("active");
+
+            if (id) {
+                const card = cards.find(c => c.id === id);
+                if (!card) return;
+
+                modalId.value = card.id;
+                modalLinha.value = card.linha;
+                modalTitle.value = card.title;
+                modalAgencia.value = card.agencia;
+                modalResponsavel.value = card.responsavel;
+                modalStatus.value = colIdToStatus(card.column);
+                modalComments.value = card.comments;
+                modalAttachments.value = card.attachments;
+                modalAvatar.value = card.avatar;
+                modalObservacoes.value = card.observacoes;
+            } else {
+                modalId.value = "";
+                modalLinha.value = "";
+                modalTitle.value = "";
+                modalAgencia.value = "";
+                modalResponsavel.value = "";
+                modalStatus.value = colIdToStatus(columnId);
+                modalComments.value = 0;
+                modalAttachments.value = 0;
+                modalAvatar.value = "";
+                modalObservacoes.value = "";
+            }
+        }
+
+        function closeModal() {
+            modalBg.classList.remove("active");
+        }
+
+        modalBg.onclick = function (e) {
+            if (e.target === modalBg) closeModal();
+        };
+
+        modalForm.querySelector(".cancel").onclick = (e) => {
+            e.preventDefault();
+            closeModal();
+        };
+
+        modalForm.onsubmit = async function (e) {
+            e.preventDefault();
+
+            const id = modalId.value || crypto.randomUUID();
+            const linha = modalLinha.value;
+            const title = modalTitle.value.trim();
+            const agencia = modalAgencia.value.trim();
+            const responsavel = modalResponsavel.value.trim();
+            const novoStatus = modalStatus.value;
+            const avatar = modalAvatar.value.trim();
+            const observacoes = modalObservacoes.value.trim();
+            const comments = modalComments.value.trim();
+
+            // Buscar status antigo se for edição
+            const cardAntigo = cards.find(c => c.id === id);
+            const statusAntigo = cardAntigo ? colIdToStatus(cardAntigo.column) : novoStatus;
+
+            // 1. SALVAR OU ATUALIZAR LEAD NA ABA LEADS
+            const formData = new URLSearchParams({
+                ID: id,
+                "Nome Evento": title,
+                agencia: agencia,
+                responsavelNegociar: responsavel,
+                statusProgresso: novoStatus,
+                observacoes: observacoes,
+            });
+
+            if (linha) {
+                formData.append("_method", "PUT");
+                formData.append("Linha", linha);
+            }
+
+            await fetch(`${scriptURL}?action=leads`, {
+                method: "POST",
+                body: formData
+            });
+
+            // 2. REGISTRAR MOVIMENTAÇÃO DE STATUS NA FUP (SE HOUVE MUDANÇA)
+            if (statusAntigo !== novoStatus) {
+                const moveData = new URLSearchParams({
+                    action: "addFup",
+                    id,
+                    usuario: window.workflowHelpers?.getCurrentUserName?.() || "Usuário",
+                    origem: statusAntigo,
+                    destino: novoStatus,
+                    observacao: "Movimentação via edição",
+                    customer: agencia,
+                    comments: ""
+                });
+
+                await fetch(scriptURL, {
+                    method: "POST",
+                    body: moveData
+                });
+            }
+
+            // 3. REGISTRAR COMENTÁRIO (SE PREENCHIDO)
+            if (comments) {
+                const commentData = new URLSearchParams({
+                    action: "addFup",
+                    id,
+                    usuario: window.workflowHelpers?.getCurrentUserName?.() || "Usuário",
+                    origem: novoStatus,
+                    destino: novoStatus,
+                    observacao: "Comentário via edição",
+                    customer: agencia,
+                    comments: comments
+                });
+
+                await fetch(scriptURL, {
+                    method: "POST",
+                    body: commentData
+                });
+
+                modalComments.value = ""; // Limpar campo
+            }
+
+            closeModal();
+            loadCards();
+        };
+
+        loadCards();
+
+    </script>
+
+    <!-- quote modal --> 
+    <script>
+        function abrirModalCotacao(id, agencia) {
+            document.getElementById('cotacao-id-lead').value = id;
+            document.getElementById('cotacao-agencia').value = agencia;
+            document.getElementById('modal-cotacao-bg').classList.add('active');
+            }
+
+            function fecharModalCotacao() {
+            document.getElementById('modal-cotacao-bg').classList.remove('active');
+            }
+
+            document.getElementById("form-cotacao").onsubmit = async function(e) {
+            e.preventDefault();
+
+            const data = {
+                action: "addCotacao",
+                tipo: "hospedagem",
+                id: document.getElementById('cotacao-id-lead').value,
+                agencia: document.getElementById('cotacao-agencia').value,
+                hotel: document.getElementById('cotacao-hotel').value,
+                tipoQuarto: document.getElementById('cotacao-tipo').value,
+                categoria: document.getElementById('cotacao-categoria').value,
+                grupo: document.getElementById('cotacao-categoria').value,
+                checkin: document.getElementById('cotacao-checkin').value,
+                horain: document.getElementById('cotacao-horain').value,
+                checkout: document.getElementById('cotacao-checkout').value,
+                horaout: document.getElementById('cotacao-horaout').value,
+                totalNoites: document.getElementById('cotacao-diarias').value,
+                totalValor: document.getElementById('cotacao-total').value,
+            };
+
+            const formData = new URLSearchParams(data);
+            const res = await fetch(scriptURL, { method: "POST", body: formData });
+            const result = await res.json();
+
+            if (result.status === "ok") {
+                alert("Cotação salva com sucesso!");
+                fecharModalCotacao();
+            } else {
+                alert("Erro ao salvar cotação.");
+            }
+        };
+
+    </script>
+    <!-- /quote modal --> 
+    <!-- /Kanban Function --> 
+
+    <!-- Calendar/Schedule -->
+    <script>
+        // === CALENDAR FUNCTIONALITY COM EVENTOS CONTÍNUOS ===
+        class HospitalityCalendar {
+            constructor() {
+                this.currentWeekStart = this.getWeekStart(new Date());
+                this.events = [];
+                this.filteredEvents = [];
+                this.scriptURL = scriptURL;
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.renderWeekHeader();
+                this.loadEventsFromGlobalData();
+            }
+
+            setupEventListeners() {
+                document.getElementById('prevWeek')?.addEventListener('click', () => {
+                    this.navigateWeek(-1);
+                });
+
+                document.getElementById('nextWeek')?.addEventListener('click', () => {
+                    this.navigateWeek(1);
+                });
+
+                document.getElementById('todayBtn')?.addEventListener('click', () => {
+                    this.goToToday();
+                });
+
+                document.getElementById('hotelFilter')?.addEventListener('change', () => {
+                    this.applyFilters();
+                });
+
+                document.getElementById('statusFilter')?.addEventListener('change', () => {
+                    this.applyFilters();
+                });
+
+                document.getElementById('closeEventModal')?.addEventListener('click', () => {
+                    this.closeEventModal();
+                });
+
+                document.getElementById('eventModal')?.addEventListener('click', (e) => {
+                    if (e.target.id === 'eventModal') {
+                        this.closeEventModal();
+                    }
+                });
+            }
+
+            async loadEventsFromGlobalData() {
+                try {
+                    if (typeof window.dadosCompletos !== 'undefined' && window.dadosCompletos && window.dadosCompletos.length > 0) {
+                        console.log('Usando dados globais já carregados:', window.dadosCompletos.length, 'registros');
+                        this.processDataFromGlobalVariable(window.dadosCompletos);
+                        return;
+                    }
+
+                    if (typeof window.carregarDados === 'function') {
+                        console.log('Chamando função global carregarDados()...');
+                        await window.carregarDados();
+                        
+                        setTimeout(() => {
+                            if (window.dadosCompletos && window.dadosCompletos.length > 0) {
+                                this.processDataFromGlobalVariable(window.dadosCompletos);
+                            } else {
+                                this.loadDirectFromAPI();
+                            }
+                        }, 1000);
+                        return;
+                    }
+
+                    console.log('Carregando dados diretamente da API...');
+                    this.loadDirectFromAPI();
+
+                } catch (error) {
+                    console.error('Erro ao carregar eventos:', error);
+                    this.loadDirectFromAPI();
+                }
+            }
+
+            async loadDirectFromAPI() {
+                try {
+                    console.log('Fazendo requisição direta para a API...');
+                    const response = await fetch(`${this.scriptURL}?action=leads`);
+                    const result = await response.json();
+                    
+                    let data = [];
+                    if (result.status === 'success' && Array.isArray(result.data)) {
+                        data = result.data;
+                    } else if (Array.isArray(result)) {
+                        data = result;
+                    }
+                    
+                    console.log('Dados recebidos da API:', data.length, 'registros');
+                    this.processDataFromGlobalVariable(data);
+                    
+                } catch (error) {
+                    console.error('Erro na requisição da API:', error);
+                    this.events = [];
+                    this.filteredEvents = [];
+                    this.renderEvents();
+                }
+            }
+
+            processDataFromGlobalVariable(data) {
+                console.log('Processando dados para o calendário:', data.length, 'registros');
+                
+                this.events = data
+                    .filter(item => {
+                        if (window.workflowHelpers && !window.workflowHelpers.canUserSeeLead(item)) {
+                            return false;
+                        }
+                        return item.dataInicio && item.dataFim && 
+                            item.dataInicio.toString().trim() !== '' && 
+                            item.dataFim.toString().trim() !== '';
+                    })
+                    .map(item => {
+                        const startDate = this.parseDate(item.dataInicio);
+                        const endDate = this.parseDate(item.dataFim);
+                        
+                        if (!startDate || !endDate) {
+                            console.warn('Data inválida encontrada:', item.dataInicio, item.dataFim);
+                            return null;
+                        }
+                        
+                        return {
+                            id: item.ID || item.id || `event-${Math.random().toString(36).substr(2, 9)}`,
+                            title: item.agencia || item.nomeEvento || item.cliente || 'Cliente',
+                            hotel: item.hotel || 'Hotel não informado',
+                            startDate: startDate,
+                            endDate: endDate,
+                            status: item.statusProgresso || item.status || 'Sem status',
+                            responsible: item.responsavelNegociar || item.responsavel || 'Não informado',
+                            pax: item.qtdPAX || item.pax || 'N/A',
+                            value: item.receitaTotal || item.valor || '0',
+                            event: item.nomeEvento || item.evento || 'Evento',
+                            rawData: item
+                        };
+                    })
+                    .filter(event => event !== null);
+
+                console.log('Eventos válidos processados:', this.events.length);
+                this.applyFilters();
+            }
+
+            parseDate(dateStr) {
+                if (!dateStr) return null;
+                
+                try {
+                    const dateString = dateStr.toString().trim();
+                    
+                    if (dateString.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/)) {
+                        const [day, month, year] = dateString.split('/');
+                        const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+                        return isNaN(date.getTime()) ? null : date;
+                    }
+                    
+                    if (dateString.match(/^\d{1,2}-\d{1,2}-\d{4}$/)) {
+                        const [day, month, year] = dateString.split('-');
+                        const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+                        return isNaN(date.getTime()) ? null : date;
+                    }
+                    
+                    if (dateString.match(/^\d{4}-\d{2}-\d{2}/)) {
+                        const date = new Date(dateString);
+                        return isNaN(date.getTime()) ? null : date;
+                    }
+                    
+                    const date = new Date(dateString);
+                    return isNaN(date.getTime()) ? null : date;
+                    
+                } catch (error) {
+                    console.warn('Erro ao fazer parse da data:', dateStr, error);
+                    return null;
+                }
+            }
+
+            getWeekStart(date) {
+                const d = new Date(date);
+                const day = d.getDay();
+                const diff = d.getDate() - day;
+                return new Date(d.setDate(diff));
+            }
+
+            navigateWeek(direction) {
+                this.currentWeekStart.setDate(this.currentWeekStart.getDate() + (direction * 7));
+                this.renderWeekHeader();
+                this.renderEvents();
+            }
+
+            goToToday() {
+                this.currentWeekStart = this.getWeekStart(new Date());
+                this.renderWeekHeader();
+                this.renderEvents();
+            }
+
+            renderWeekHeader() {
+                const weekHeader = document.getElementById('weekHeader');
+                if (!weekHeader) return;
+
+                const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+                const today = new Date();
+                
+                let headerHTML = '';
+                
+                for (let i = 0; i < 7; i++) {
+                    const date = new Date(this.currentWeekStart);
+                    date.setDate(date.getDate() + i);
+                    
+                    const isToday = date.toDateString() === today.toDateString();
+                    const todayClass = isToday ? 'today' : '';
+                    
+                    headerHTML += `
+                        <div class="day-header ${todayClass}">
+                            <div style="font-size: 14px;">${days[i]}</div>
+                            <div style="font-size: 18px; font-weight: bold; margin-top: 5px;">
+                                ${date.getDate()}
+                            </div>
+                            <div style="font-size: 10px; opacity: 0.8;">
+                                ${(date.getMonth() + 1).toString().padStart(2, '0')}
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                weekHeader.innerHTML = headerHTML;
+                this.updateWeekRange();
+            }
+
+            updateWeekRange() {
+                const endDate = new Date(this.currentWeekStart);
+                endDate.setDate(endDate.getDate() + 6);
+                
+                const formatDate = (date) => {
+                    const day = date.getDate();
+                    const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
+                                'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+                    return `${day} ${months[date.getMonth()]}`;
+                };
+                
+                const weekRangeElement = document.getElementById('currentWeekRange');
+                if (weekRangeElement) {
+                    weekRangeElement.textContent = 
+                        `${formatDate(this.currentWeekStart)} - ${formatDate(endDate)} ${endDate.getFullYear()}`;
+                }
+            }
+
+            // NOVA LÓGICA: Renderizar eventos contínuos
+            renderEvents() {
+                const eventsArea = document.getElementById('eventsArea');
+                if (!eventsArea) return;
+
+                // Criar estrutura de linhas para eventos
+                const eventRows = this.organizeEventsInRows();
+                
+                let areaHTML = '';
+                const today = new Date();
+                
+                // Criar as 7 colunas base com indicador "hoje"
+                for (let day = 0; day < 7; day++) {
+                    const date = new Date(this.currentWeekStart);
+                    date.setDate(date.getDate() + day);
+                    
+                    const isToday = date.toDateString() === today.toDateString();
+                    const todayClass = isToday ? 'today' : '';
+                    
+                    areaHTML += `<div class="day-column ${todayClass}" data-date="${date.toISOString().split('T')[0]}"></div>`;
+                }
+                
+                // Adicionar eventos contínuos como overlays
+                eventRows.forEach((row, rowIndex) => {
+                    row.forEach(event => {
+                        if (event) {
+                            areaHTML += this.createContinuousEventHTML(event, rowIndex);
+                        }
+                    });
+                });
+                
+                // Se não há eventos, mostrar mensagem
+                if (this.filteredEvents.length === 0) {
+                    areaHTML = '<div class="no-events-message">Nenhum evento encontrado para esta semana. Verifique os filtros ou adicione novos leads.</div>';
+                }
+                
+                eventsArea.innerHTML = areaHTML;
+                this.attachEventListeners();
+            }
+
+            // NOVA FUNÇÃO: Organizar eventos em linhas para evitar sobreposição
+            organizeEventsInRows() {
+                const weekEvents = this.getEventsForWeek();
+                const rows = [];
+                
+                weekEvents.forEach(event => {
+                    const eventDays = this.getEventDaysInWeek(event);
+                    
+                    // Encontrar uma linha onde este evento pode ser colocado sem conflito
+                    let placedInRow = false;
+                    
+                    for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+                        if (this.canPlaceEventInRow(rows[rowIndex], eventDays)) {
+                            // Colocar evento nesta linha
+                            eventDays.forEach(dayIndex => {
+                                rows[rowIndex][dayIndex] = event;
+                            });
+                            placedInRow = true;
+                            break;
+                        }
+                    }
+                    
+                    // Se não conseguiu colocar em nenhuma linha existente, criar nova linha
+                    if (!placedInRow) {
+                        const newRow = new Array(7).fill(null);
+                        eventDays.forEach(dayIndex => {
+                            newRow[dayIndex] = event;
+                        });
+                        rows.push(newRow);
+                    }
+                });
+                
+                return rows;
+            }
+
+            // NOVA FUNÇÃO: Verificar se evento pode ser colocado na linha sem conflito
+            canPlaceEventInRow(row, eventDays) {
+                return eventDays.every(dayIndex => row[dayIndex] === null);
+            }
+
+            // NOVA FUNÇÃO: Obter eventos que se sobrepõem à semana atual
+            getEventsForWeek() {
+                const weekStart = new Date(this.currentWeekStart);
+                const weekEnd = new Date(this.currentWeekStart);
+                weekEnd.setDate(weekEnd.getDate() + 6);
+                weekEnd.setHours(23, 59, 59, 999);
+                
+                return this.filteredEvents.filter(event => {
+                    return event.startDate <= weekEnd && event.endDate >= weekStart;
+                });
+            }
+
+            // NOVA FUNÇÃO: Obter quais dias da semana o evento ocupa
+            getEventDaysInWeek(event) {
+                const weekStart = new Date(this.currentWeekStart);
+                const weekEnd = new Date(this.currentWeekStart);
+                weekEnd.setDate(weekEnd.getDate() + 6);
+                
+                const eventStart = new Date(Math.max(event.startDate.getTime(), weekStart.getTime()));
+                const eventEnd = new Date(Math.min(event.endDate.getTime(), weekEnd.getTime()));
+                
+                const days = [];
+                const current = new Date(eventStart);
+                
+                while (current <= eventEnd) {
+                    const dayOfWeek = (current.getDay() + 7) % 7; // Garantir que domingo = 0
+                    if (!days.includes(dayOfWeek)) {
+                        days.push(dayOfWeek);
+                    }
+                    current.setDate(current.getDate() + 1);
+                }
+                
+                return days;
+            }
+
+            // NOVA FUNÇÃO: Criar HTML para evento contínuo
+            createContinuousEventHTML(event, rowIndex) {
+                const eventDays = this.getEventDaysInWeek(event);
+                const startDay = Math.min(...eventDays);
+                const endDay = Math.max(...eventDays);
+                const spanWidth = endDay - startDay + 1;
+                
+                const hotelClass = this.getHotelClass(event.hotel);
+                const duration = Math.ceil((event.endDate - event.startDate) / (1000 * 60 * 60 * 24)) + 1;
+                
+                // Calcular posição no grid
+                const gridColumnStart = startDay + 1; // CSS Grid é 1-indexed
+                const gridColumnEnd = endDay + 2; // Span até o final
+                const topPosition = 10 + (rowIndex * 65); // Espaçamento entre linhas
+                
+                return `
+                    <div class="calendar-event-continuous ${hotelClass}" 
+                        data-event-id="${event.id}"
+                        style="
+                            grid-column: ${gridColumnStart} / ${gridColumnEnd};
+                            top: ${topPosition}px;
+                            z-index: ${10 + rowIndex};
+                        "
+                        title="${event.title} - ${event.hotel} (${duration} noite${duration > 1 ? 's' : ''})">
+                        <div class="event-title">${event.title}</div>
+                        <div class="event-details-inline">
+                            <span class="event-hotel">${event.hotel}</span>
+                            <span class="event-duration">${duration} noite${duration > 1 ? 's' : ''}</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            getHotelClass(hotel) {
+                const hotelMap = {
+                    'Aurora Golden': 'event-aurora-golden',
+                    'Aurora Suites': 'event-aurora-suites', 
+                    'Aurora Budget': 'event-aurora-budget',
+                    'Aurora Resorts': 'event-aurora-resorts'
+                };
+                return hotelMap[hotel] || 'event-aurora-golden';
+            }
+
+            attachEventListeners() {
+                document.querySelectorAll('.calendar-event-continuous').forEach(eventElement => {
+                    eventElement.addEventListener('click', () => {
+                        const eventId = eventElement.dataset.eventId;
+                        const event = this.events.find(e => e.id == eventId);
+                        if (event) {
+                            this.showEventModal(event);
+                        }
+                    });
+                });
+            }
+
+            showEventModal(event) {
+                const modalElements = {
+                    title: document.getElementById('eventTitle'),
+                    hotel: document.getElementById('eventHotel'),
+                    checkin: document.getElementById('eventCheckin'),
+                    checkout: document.getElementById('eventCheckout'),
+                    duration: document.getElementById('eventDuration'),
+                    pax: document.getElementById('eventPax'),
+                    value: document.getElementById('eventValue'),
+                    responsible: document.getElementById('eventResponsible'),
+                    status: document.getElementById('eventStatus')
+                };
+
+                Object.keys(modalElements).forEach(key => {
+                    if (modalElements[key]) {
+                        switch(key) {
+                            case 'title':
+                                modalElements[key].textContent = event.title;
+                                break;
+                            case 'hotel':
+                                modalElements[key].textContent = event.hotel;
+                                break;
+                            case 'checkin':
+                                modalElements[key].textContent = this.formatDate(event.startDate);
+                                break;
+                            case 'checkout':
+                                modalElements[key].textContent = this.formatDate(event.endDate);
+                                break;
+                            case 'duration':
+                                const duration = Math.ceil((event.endDate - event.startDate) / (1000 * 60 * 60 * 24)) + 1;
+                                modalElements[key].textContent = duration;
+                                break;
+                            case 'pax':
+                                modalElements[key].textContent = event.pax;
+                                break;
+                            case 'value':
+                                modalElements[key].textContent = this.formatCurrency(event.value);
+                                break;
+                            case 'responsible':
+                                modalElements[key].textContent = event.responsible;
+                                break;
+                            case 'status':
+                                modalElements[key].textContent = event.status;
+                                break;
+                        }
+                    }
+                });
+                
+                const modal = document.getElementById('eventModal');
+                if (modal) {
+                    modal.style.display = 'flex';
+                }
+            }
+
+            closeEventModal() {
+                const modal = document.getElementById('eventModal');
+                if (modal) {
+                    modal.style.display = 'none';
+                }
+            }
+
+            formatDate(date) {
+                return date.toLocaleDateString('pt-BR');
+            }
+
+            formatCurrency(value) {
+                const numValue = parseFloat(value) || 0;
+                return new Intl.NumberFormat('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                }).format(numValue);
+            }
+
+            applyFilters() {
+                const hotelFilter = document.getElementById('hotelFilter')?.value || 'all';
+                const statusFilter = document.getElementById('statusFilter')?.value || 'all';
+                
+                this.filteredEvents = this.events.filter(event => {
+                    const hotelMatch = hotelFilter === 'all' || event.hotel === hotelFilter;
+                    const statusMatch = statusFilter === 'all' || event.status?.includes(statusFilter);
+                    
+                    return hotelMatch && statusMatch;
+                });
+                
+                console.log(`Filtros aplicados: ${this.filteredEvents.length} eventos de ${this.events.length} total`);
+                this.renderEvents();
+            }
+
+            refresh() {
+                console.log('Recarregando dados do calendário...');
+                this.loadEventsFromGlobalData();
+            }
+        }
+
+        // Inicialização (mantém igual)
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                if (!window.hospitalityCalendar) {
+                    console.log('Inicializando calendário...');
+                    window.hospitalityCalendar = new HospitalityCalendar();
+                }
+            }, 2000);
+        });
+
+        document.addEventListener('click', (e) => {
+            const target = e.target;
+            
+            if (target.id === 'toggleCalendar' || 
+                target.closest('#toggleCalendar') ||
+                (target.onclick && target.onclick.toString().includes('mostrarCalendar'))) {
+                
+                console.log('Aba calendário ativada - refrescando dados...');
+                setTimeout(() => {
+                    if (window.hospitalityCalendar) {
+                        window.hospitalityCalendar.refresh();
+                    }
+                }, 500);
+            }
+        });
+    </script>
+
+</body>
+</html>

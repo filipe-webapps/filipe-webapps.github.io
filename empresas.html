@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Empresas | SellaStay</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="img/favicon.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--body-color);
+            color: var(--text-color);
+            min-height: 100vh;
+        }
+        .home {
+            position: absolute;
+            top: 0;
+            left: 250px;
+            min-height: 100vh;
+            width: calc(100% - 250px);
+            text-align: left;
+            background-color: var(--body-color);
+            transition: var(--tran-05);
+            padding: 48px 48px 120px;
+            color: var(--text-color);
+        }
+        .home-overview {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+        .home-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            gap: 16px;
+            align-items: flex-start;
+        }
+        .home-header-text {
+            width: 100%;
+            text-align: left;
+        }
+
+        .home-header-text h1 {
+            margin: 0;
+            font-size: clamp(2rem, 4vw, 2.6rem);
+        }
+        .home-subtitle {
+            margin: 0;
+            color: #94a3b8;
+            font-size: 1rem;
+        }
+        .home-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+        .home-card {
+            background: linear-gradient(135deg, #0f172a, #070b1f 70%);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            color: #fff;
+        }
+        .home-card h3,
+        .home-card p,
+        .home-card strong,
+        .home-card span,
+        .home-card .card-link {
+            color: #fff;
+        }
+        .home-card header {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            align-items: flex-start;
+        }
+        .home-card h3 {
+            margin: 4px 0 0;
+        }
+        .home-card-value {
+            font-size: clamp(2.5rem, 5vw, 3rem);
+            margin: 0;
+        }
+        .home-card-meta {
+            margin: 2px 0 0;
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .home-card .card-link {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            color: #ffeed4;
+            padding: 6px 16px;
+            border-radius: 999px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.2s ease, border-color 0.2s ease;
+        }
+        .home-card .card-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+        .meta-description {
+            opacity: 0.6;
+        }
+        .companies-panel {
+            background: rgba(4, 6, 16, 0.75);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 28px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .section-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        .section-header p {
+            margin: 4px 0 0;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        .new-company-button {
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            background: transparent;
+            color: #ffeed4;
+            padding: 8px 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease, border-color 0.2s ease;
+        }
+        .new-company-button:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.7);
+        }
+        .empty-state {
+            margin-top: 24px;
+            border-radius: 18px;
+            padding: 22px;
+            border: 1px dashed rgba(255, 255, 255, 0.3);
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            background: rgba(15, 23, 42, 0.35);
+        }
+        .hidden {
+            display: none;
+        }
+        .companies-grid {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+        .company-card {
+            border-radius: 18px;
+            padding: 18px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 16px 30px rgba(0, 0, 0, 0.42);
+            transition: transform 0.2s ease, border 0.2s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        .company-card h3,
+        .company-card p {
+            color: #fff;
+        }
+        .company-card-cta {
+            color: #fff;
+        }
+        .company-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 145, 77, 0.7);
+        }
+        .company-card h3 {
+            margin: 0 0 6px;
+        }
+        .company-card p {
+            margin: 2px 0;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.75);
+        }
+        .company-card-cta {
+            margin-top: 10px;
+            border: none;
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+        .company-card-cta:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(2, 6, 23, 0.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 2000;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-content {
+            background: #0f172a;
+            border-radius: 20px;
+            padding: 28px;
+            width: min(500px, 90vw);
+            box-shadow: 0 25px 55px rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .modal-content header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .modal-content header h2 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+        .modal-content .close {
+            background: transparent;
+            border: none;
+            font-size: 1.6rem;
+            color: #fff;
+            cursor: pointer;
+        }
+        .modal-content form label {
+            display: block;
+            font-size: 0.85rem;
+            margin-bottom: 6px;
+            margin-top: 12px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        .modal-content form input {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+            font-size: 0.95rem;
+        }
+        .modal-content form input:focus {
+            border-color: rgba(255, 145, 77, 0.8);
+            outline: none;
+        }
+        .modal-actions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .modal-actions button {
+            border-radius: 10px;
+            padding: 10px 16px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+        }
+        .modal-actions .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+        .modal-actions .btn-primary {
+            background: linear-gradient(120deg, #ff914d, #ff6b00);
+            color: #050712;
+        }
+        footer {
+            margin-left: 250px;
+            padding: 24px 48px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+        }
+        @media (max-width: 1024px) {
+            .home {
+                margin-left: 80px;
+                padding: 32px 24px;
+            }
+            footer {
+                margin-left: 80px;
+            }
+        }
+        @media (max-width: 768px) {
+            .home {
+                margin-left: 0;
+                padding: 20px;
+            }
+            footer {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Menu -->
+    <nav class="sidebar close">
+
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="img/logo.png" alt="">
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name" id="nome">SellaStay</span>
+                    <span class="profession">EGRC Control</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu-scrollable">
+
+                <ul class="menu-links">
+
+                    <br>
+                    <br>
+
+                    <li class="nav-link">
+                        <a href="home.html">
+                            <i class='bx bxs-home icon' ></i>
+                            <span class="text nav-text">Home</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="dashboard.html">
+                            <i class='bx bxs-dashboard icon' ></i>
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link has-submenu">
+                        <a href="leads.html">
+                            <i class='bx bxs-grid icon' ></i>
+                            <span class="text nav-text">Operacional <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="leads.html"><i class='bx bxs-chevrons-right icon' ></i>Negociações</a></li>
+                            <li><a href="follow-up.html"><i class='bx bx-transfer icon' ></i>Follow Up log</a></li>
+                            <li><a href="clients.html"><i class='bx bx-id-card icon' ></i>Carteira de Clientes</a></li>
+                            <li><a href="vendas.html"><i class='bx bx-history icon'></i></i>Histórico de Vendas</a></li>
+                            <li><a href="tasks.html"><i class='bx bx-task icon'></i></i>Gestor de Tarefas</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="calendar.html">
+                            <i class='bx bxs-calendar-event icon'></i>
+                            <span class="text nav-text">Mapa de Eventos</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="pricespy.html">
+                            <i class='bx bx-radar icon'></i>
+                            <span class="text nav-text">Radar de Preços</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="reminder.html">
+                            <i class='bx bxs-bell-ring icon' ></i>
+                            <span class="text nav-text">Lembretes</span>
+                        </a>
+                    </li>
+
+                    <!-- ::::::: VERIFICAR NECESSIDADE ::::::::-->
+                    <!-- <li class="nav-link">
+                        <a href="contratos.html">
+                            <i class='bx bx-briefcase icon' ></i>
+                            <span class="text nav-text">Contratos</span>
+                        </a>
+                    </li> -->
+
+                    <li class="nav-link">
+                        <a href="relatorios.html">
+                            <i class='bx bx-line-chart icon'></i>
+                            <span class="text nav-text">Relatórios</span>
+                        </a>
+                    </li>
+
+                    <!-- ::::::: REALOCAR PARA OUTRO LUGAR ::::::::-->
+                    <!-- <li class="nav-link"> 
+                        <a href="doc.html">
+                            <i class='bx bx-help-circle icon' ></i>
+                            <span class="text nav-text">Ajuda</span>
+                        </a>
+                    </li> -->
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <ul class="menu-links">
+                    <li class="nav-link has-submenu">
+                        <a href="#" id="navselected">
+                            <img id="profile-pic" src="img/profile_pic_F.png" alt="Usuário logado">
+                            <span class="text nav-text"><span id="menuUserName">Usuário</span> <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="profile.html"><i class='bx bx-user icon'></i> Perfil</a></li>
+                            <li class="has-submenu" id="subactive">
+                                <a href="empresas.html">
+                                    <i class='bx bxs-building icon'></i> Empresa <i class='bx bx-chevron-down arrow'></i>
+                                </a>
+                                <ul class="submenu">
+                                    <li><a href="#empresa-config"><i class='bx bx-briefcase icon'></i> Configurações da Empresa</a></li>
+                                    <li><a href="#hoteis-config"><i class='bx bx-hotel icon'></i> Cadastro de Hotéis</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="settings.html"><i class='bx bx-cog icon'></i> Configurações</a></li>
+                            <li><a href="help.html"><i class='bx bx-support icon'></i> Suporte</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="logout" id="logout">
+                        <a href="index.html">
+                            <i class='bx bx-log-out icon' ></i>
+                            <span class="text nav-text">Logout</span>
+                        </a>
+                    </li>
+
+                    <li class="mode">
+                        <div class="sun-moon">
+                            <i class='bx bx-moon icon moon'></i>
+                            <i class='bx bx-sun icon sun'></i>
+                        </div>
+                        <span class="mode-text text">Dark mode</span>
+
+                        <div class="toggle-switch">
+                            <span class="switch"></span>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- /Menu -->
+
+    <section class="home">
+        <div id="content-chat" class="home-overview">
+            <div class="home-header">
+                <div class="home-header-text">
+                    <p class="home-eyebrow">Empresas</p>
+                </div>
+            </div>
+            <div class="home-cards">
+                <article class="home-card home-card-receita">
+                    <header>
+                        <div>
+                            <p class="card-eyebrow">Meta consolidada</p>
+                            <h3>Receitas corporativas</h3>
+                        </div>
+                    </header>
+                    <p class="home-card-value" id="metaValue">R$ 0,00</p>
+                    <p class="home-card-meta">
+                        <span id="companiesCount">0 empresas cadastradas</span>
+                    </p>
+                    <p class="home-card-meta meta-description">Estes valores alimentam o card de receitas da home.</p>
+                </article>
+            </div>
+            <section class="companies-panel">
+                <div class="section-header">
+                    <div>
+                        <h2>Empresas cadastradas</h2>
+                        <p>Selecione uma empresa para alterar seus dados ou cadastrar uma nova.</p>
+                    </div>
+                    <button class="card-link new-company-button" type="button">Cadastrar empresa</button>
+                </div>
+                <div class="empty-state hidden" id="emptyCompanies">Nenhuma empresa registrada ainda. Clique em Cadastrar empresa para começar.</div>
+                <div class="companies-grid" id="companiesGrid"></div>
+            </section>
+        </div>
+    </section>
+    <div class="modal-overlay" id="companyModal" aria-hidden="true">
+        <div class="modal-content">
+            <header>
+                <h2 id="modalCompanyTitle">Empresa</h2>
+                <button type="button" class="close" data-close aria-label="Fechar popup">&times;</button>
+            </header>
+            <form id="companyForm">
+                <label for="companyName">Nome da empresa</label>
+                <input type="text" id="companyName" name="name" placeholder="Sync Mais Hospedagem" required>
+                <label for="companyCnpj">CNPJ</label>
+                <input type="text" id="companyCnpj" name="cnpj" placeholder="12.345.678/0001-95">
+                <label for="companyContact">Contato</label>
+                <input type="text" id="companyContact" name="contact" placeholder="Nome do executivo">
+                <label for="companyEmail">E-mail</label>
+                <input type="email" id="companyEmail" name="email" placeholder="contato@empresa.com">
+                <label for="companyMeta">Meta mensal (R$)</label>
+                <input type="text" inputmode="decimal" id="companyMeta" name="meta" placeholder="850.000,00">
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" data-close>Cancelar</button>
+                    <button type="submit" class="btn-primary">Salvar empresa</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--Rodapé -->
+    <!-- <footer style="line-height: 15px;">
+        &copy; <span id="anoAtual"></span> SellaStay - Gestão para Hotéis. <br> <span style="font-size: 10px; cursor: pointer;">Desenvolvido por <a href="https://www.syncsoftware.com.br" style="text-decoration: none; color: var(--text-color);" onmouseover="this.style.color='#ff914d';" onmouseout="this.style.color='var(--text-color)';" target="_blank"> <b>Sync Software LTDA</b></a></span>
+    </footer> -->
+    <!-- Rodapé -->
+<script src="js/script.js"></script>
+<script>
+    (() => {
+        const STORAGE_KEY = "empresas_data";
+        const companiesGrid = document.getElementById("companiesGrid");
+        const metaValueEl = document.getElementById("metaValue");
+        const companiesCountEl = document.getElementById("companiesCount");
+        const emptyStateEl = document.getElementById("emptyCompanies");
+        const modal = document.getElementById("companyModal");
+        const form = document.getElementById("companyForm");
+        const modalTitle = document.getElementById("modalCompanyTitle");
+        const companyMetaInput = document.getElementById("companyMeta");
+        const newCompanyButtons = document.querySelectorAll(".new-company-button");
+        const closeButtons = document.querySelectorAll("[data-close]");
+        const defaults = [
+            { id: "empresa-1", name: "Aurora Grand", cnpj: "12.345.678/0001-90", contact: "Lucas", email: "contato@aurora.com.br", meta: 850000 },
+            { id: "empresa-2", name: "Viva Suítes", cnpj: "98.765.432/0001-60", contact: "Marina", email: "suporte@vivahotels.com", meta: 450000 },
+            { id: "empresa-3", name: "SkyLine Resorts", cnpj: "23.456.789/0001-12", contact: "Paulo", email: "reservas@skyline.com", meta: 680000 }
+        ];
+        let activeId = null;
+
+        function readCompanies() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (!raw) {
+                    writeCompanies(defaults);
+                    return [...defaults];
+                }
+                const parsed = JSON.parse(raw);
+                if (Array.isArray(parsed)) {
+                    return parsed;
+                }
+            } catch (error) {
+                console.error("Erro ao carregar empresas", error);
+            }
+            return [...defaults];
+        }
+
+        function writeCompanies(data) {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            } catch (error) {
+                console.error("Erro ao salvar empresas", error);
+            }
+        }
+
+        function formatCurrency(value = 0) {
+            return `R$ ${Number(value).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        }
+
+        function updateMetaSummary(list) {
+            const totalMeta = list.reduce((sum, company) => sum + (Number(company.meta) || 0), 0);
+            if (metaValueEl) {
+                metaValueEl.textContent = formatCurrency(totalMeta);
+            }
+            if (companiesCountEl) {
+                const label = list.length === 1 ? "empresa cadastrada" : "empresas cadastradas";
+                companiesCountEl.textContent = `${list.length} ${label}`;
+            }
+            if (emptyStateEl) {
+                emptyStateEl.classList.toggle("hidden", list.length > 0);
+            }
+        }
+
+        function renderCompanies() {
+            const companies = readCompanies();
+            if (!companiesGrid) return;
+            companiesGrid.innerHTML = companies.map((company) => `
+                <div class="company-card" data-id="${company.id}">
+                    <h3>${company.name}</h3>
+                    <p><strong>CNPJ:</strong> ${company.cnpj || "Não informado"}</p>
+                    <p><strong>Contato:</strong> ${company.contact || "Não informado"}</p>
+                    <p><strong>E-mail:</strong> ${company.email || "Não informado"}</p>
+                    <p><strong>Meta mensal:</strong> ${formatCurrency(company.meta)}</p>
+                    <button type="button" class="company-card-cta" data-action="edit" data-id="${company.id}">Editar</button>
+                </div>
+            `).join("");
+            updateMetaSummary(companies);
+            companiesGrid.querySelectorAll("[data-action=\"edit\"]").forEach((btn) => {
+                btn.addEventListener("click", (event) => {
+                    event.stopPropagation();
+                    openModal(btn.getAttribute("data-id"));
+                });
+            });
+            companiesGrid.querySelectorAll(".company-card").forEach((card) => {
+                card.addEventListener("click", () => {
+                    openModal(card.getAttribute("data-id"));
+                });
+            });
+        }
+
+        function openModal(id = null) {
+            if (!form) return;
+            activeId = id;
+            const companies = readCompanies();
+            const company = companies.find((item) => item.id === id);
+            form.reset();
+            if (company) {
+                modalTitle.textContent = `Editar: ${company.name}`;
+                form.elements.name.value = company.name || "";
+                form.elements.cnpj.value = company.cnpj || "";
+                form.elements.contact.value = company.contact || "";
+                form.elements.email.value = company.email || "";
+                form.elements.meta.value = formatMetaValueForInput(company.meta);
+            } else {
+                modalTitle.textContent = "Cadastrar empresa";
+                form.elements.name.value = "";
+                form.elements.cnpj.value = "";
+                form.elements.contact.value = "";
+                form.elements.email.value = "";
+                form.elements.meta.value = "";
+            }
+            modal?.classList.add("active");
+            modal?.setAttribute("aria-hidden", "false");
+        }
+
+        function closeModal() {
+            modal?.classList.remove("active");
+            modal?.setAttribute("aria-hidden", "true");
+            activeId = null;
+        }
+
+        newCompanyButtons.forEach((btn) => {
+            btn.addEventListener("click", () => openModal());
+        });
+
+        closeButtons.forEach((button) => {
+            button.addEventListener("click", closeModal);
+        });
+
+        modal?.addEventListener("click", (event) => {
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+
+        form?.addEventListener("submit", (event) => {
+            event.preventDefault();
+            if (!form) return;
+            const name = form.elements.name.value.trim();
+            if (!name) {
+                alert("Informe o nome da empresa.");
+                return;
+            }
+            const metaValue = extractMetaNumber(form.elements.meta.value);
+            const payload = {
+                id: activeId || `empresa-${Date.now()}`,
+                name,
+                cnpj: form.elements.cnpj.value.trim(),
+                contact: form.elements.contact.value.trim(),
+                email: form.elements.email.value.trim(),
+                meta: metaValue
+            };
+            const companies = readCompanies();
+            if (activeId) {
+                const index = companies.findIndex((item) => item.id === activeId);
+                if (index !== -1) {
+                    companies[index] = { ...companies[index], ...payload };
+                } else {
+                    companies.push(payload);
+                }
+            } else {
+                companies.push(payload);
+            }
+            writeCompanies(companies);
+            updateMetaSummary(companies);
+            renderCompanies();
+            closeModal();
+        });
+
+        companyMetaInput?.addEventListener("focus", () => {
+            if (!companyMetaInput) return;
+            const numeric = extractMetaNumber(companyMetaInput.value);
+            companyMetaInput.value = numeric ? numeric.toString().replace(".", ",") : "";
+        });
+
+        companyMetaInput?.addEventListener("blur", () => {
+            if (!companyMetaInput) return;
+            companyMetaInput.value = formatMetaValueForInput(companyMetaInput.value);
+        });
+
+        function extractMetaNumber(value) {
+            if (value === null || value === undefined) return 0;
+            const source = String(value);
+            const normalized = source.replace(/\./g, "").replace(",", ".").replace(/[^\d.]/g, "");
+            return Number(normalized) || 0;
+        }
+
+        function formatMetaValueForInput(value) {
+            const numeric = extractMetaNumber(value);
+            if (!numeric) return "";
+            return numeric.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        renderCompanies();
+    })();
+</script>
+
+</body>
+</html>

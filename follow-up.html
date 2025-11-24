@@ -1,0 +1,1176 @@
+ /<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SellaStay | Auditoria</title>
+    <link rel="icon" type="image/x-icon" href="img/favicon.png">
+
+    <!--CSS-->
+    <link rel="stylesheet" href="css/style.css">
+    <!--/CSS-->
+
+    <!--Boxicons CSS-->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <!--/Boxicons CSS-->
+
+    <style>
+
+        .home-overview {
+            gap: 28px;
+            color: var(--text-color);
+        }
+
+        .home-overview h1,
+        .home-overview h2,
+        .home-overview h3,
+        .home-overview h4,
+        .home-overview h5,
+        .home-overview p,
+        .home-overview span,
+        .home-overview label,
+        .home-overview small,
+        .home-overview strong,
+        .home-overview button,
+        .home-overview a,
+        .home-overview input,
+        .home-overview select,
+        .home-overview th,
+        .home-overview td {
+            color: #000000;
+        }
+
+        .followup-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+        }
+
+        .followup-header h1 {
+            font-size: 2rem;
+            margin: 0;
+        }
+
+        .followup-header p {
+            margin: 6px 0 0;
+            max-width: 540px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .followup-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .followup-actions button,
+        .followup-actions a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.08);
+            padding: 0.65rem 1.4rem;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+        }
+
+        .followup-actions button.primary {
+            border-color: transparent;
+            background: linear-gradient(120deg, #ffb347, #ff6b00);
+            color: #050712;
+        }
+
+        .followup-actions button:hover,
+        .followup-actions a:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .followup-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+        }
+
+        .followup-card {
+            background: var(--sidebar-color);
+            border-radius: 18px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            border: 1px solid rgba(255,255,255,0.03);
+            cursor: pointer;
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+            color: #ffffff;
+        }
+
+        .followup-card:hover,
+        .followup-card:focus-visible {
+            transform: translateY(-3px);
+            border-color: rgba(255, 145, 77, 0.6);
+            box-shadow: 0 14px 32px rgba(0, 0, 0, 0.35);
+        }
+
+        .followup-card:focus-visible {
+            outline: 2px solid rgba(255, 145, 77, 0.65);
+            outline-offset: 3px;
+        }
+
+        .followup-card span {
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.18em;
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        .followup-card strong {
+            font-size: 1.8rem;
+            color: #ffffff;
+        }
+
+        .followup-card small {
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+        }
+
+        .filters-grid label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .filters-grid select,
+        .filters-grid input {
+            width: 100%;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.12);
+            padding: 12px;
+            background: var(--body-color);
+            color: var(--text-color);
+        }
+
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin: 20px 0;
+        }
+
+        .timeline-item {
+            display: grid;
+            grid-template-columns: 80px auto;
+            gap: 16px;
+            padding: 18px;
+            border-radius: 18px;
+            background: var(--sidebar-color);
+            border: 1px solid rgba(255,255,255,0.04);
+            color: #ffffff;
+        }
+
+        .timeline-item time {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .timeline-item h4 {
+            margin: 0 0 6px;
+            font-size: 1.05rem;
+        }
+
+        .timeline-item p {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .timeline-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .timeline-meta span {
+            background: rgba(255,255,255,0.08);
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            color: #ffffff;
+        }
+
+        .audit-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
+            background: #ffffff;
+        }
+
+        .audit-table thead {
+            background: #f4f5f7;
+        }
+
+        .audit-table th,
+        .audit-table td {
+            padding: 14px 16px;
+            text-align: left;
+            color: #000000;
+        }
+
+        .audit-table tbody tr:nth-child(even) {
+            background: rgba(0,0,0,0.04);
+        }
+
+        .audit-table tbody tr:hover {
+            background: rgba(0,0,0,0.08);
+        }
+
+        .log-source {
+            border-left: 4px solid var(--primary-color);
+            padding-left: 10px;
+        }
+
+        .tags {
+            display: inline-flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tags span {
+            background: rgba(255,255,255,0.08);
+            border-radius: 999px;
+            padding: 4px 10px;
+            font-size: 0.75rem;
+            color: #ffffff;
+        }
+
+        .audit-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(3, 5, 15, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1100;
+        }
+
+        .audit-modal-backdrop.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .audit-modal {
+            width: min(420px, 100%);
+            border-radius: 24px;
+            padding: 26px 24px 22px;
+            background: rgba(12, 16, 32, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+            color: #ffffff;
+            backdrop-filter: blur(18px);
+            position: relative;
+        }
+
+        .audit-modal h3 {
+            margin: 0 0 6px;
+            font-size: 1.28rem;
+        }
+
+        .audit-modal p {
+            margin: 0 0 18px;
+            opacity: 0.85;
+        }
+
+        .audit-modal-close {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            border: none;
+            background: transparent;
+            color: #ffffff;
+            font-size: 1.6rem;
+            cursor: pointer;
+        }
+
+        .audit-modal-close:focus-visible {
+            outline: 2px solid rgba(255, 145, 77, 0.65);
+            outline-offset: 3px;
+        }
+
+        .audit-modal form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .audit-modal label {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-bottom: 4px;
+        }
+
+        .audit-modal input {
+            width: 100%;
+            padding: 0.7rem 0.9rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+        }
+
+        .audit-modal input:focus-visible {
+            outline: 2px solid rgba(255, 145, 77, 0.65);
+            border-color: rgba(255, 145, 77, 0.65);
+        }
+
+        .audit-modal .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .audit-modal .form-row > div {
+            flex: 1;
+            min-width: 140px;
+        }
+
+        .audit-modal .form-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .audit-modal .form-actions button {
+            border: none;
+            border-radius: 999px;
+            padding: 0.9rem 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            background: linear-gradient(120deg, #ffb347, #ff6b00);
+            color: #050712;
+        }
+
+        .audit-modal .form-actions button.secondary {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: #ffffff;
+        }
+
+        .lead-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(5, 7, 18, 0.82);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1100;
+        }
+
+        .lead-modal-backdrop.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .lead-modal {
+            width: min(420px, 100%);
+            border-radius: 26px;
+            padding: 28px 26px 24px;
+            background: rgba(20, 26, 46, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 28px 65px rgba(0, 0, 0, 0.55);
+            color: #ffffff;
+            backdrop-filter: blur(18px);
+            position: relative;
+        }
+
+        .lead-modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            border: none;
+            background: transparent;
+            color: #ffffff;
+            font-size: 1.6rem;
+            cursor: pointer;
+        }
+
+        .lead-modal-close:focus-visible {
+            outline: 2px solid rgba(255, 145, 77, 0.65);
+            outline-offset: 4px;
+        }
+
+        .lead-modal-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.07);
+            font-size: 0.78rem;
+            letter-spacing: 0.08em;
+        }
+
+        .lead-modal h4 {
+            margin: 10px 0 4px;
+            font-size: 1.35rem;
+        }
+
+        .lead-modal-stage {
+            margin: 0 0 12px;
+            opacity: 0.85;
+        }
+
+        .lead-modal-summary {
+            margin: 0 0 16px;
+            line-height: 1.45;
+        }
+
+        .lead-modal-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .lead-modal-meta span {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 999px;
+            padding: 6px 12px;
+            font-size: 0.85rem;
+        }
+
+        .lead-modal-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border-radius: 999px;
+            padding: 0.85rem 1.2rem;
+            background: linear-gradient(120deg, #ffb347, #ff6b00);
+            color: #050712;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        @media (max-width: 640px) {
+            .timeline-item {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Menu -->
+    <nav class="sidebar close">
+
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="img/logo.png" alt="">
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name" id="nome">SellaStay</span>
+                    <span class="profession">EGRC Control</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu-scrollable">
+
+                <ul class="menu-links">
+
+                    <br>
+                    <br>
+
+                    <li class="nav-link">
+                        <a href="home.html">
+                            <i class='bx bxs-home icon' ></i>
+                            <span class="text nav-text">Home</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="dashboard.html">
+                            <i class='bx bxs-dashboard icon' ></i>
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link has-submenu">
+                        <a href="leads.html" id="navselected">
+                            <i class='bx bxs-grid icon' ></i>
+                            <span class="text nav-text">Operacional <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="leads.html"><i class='bx bxs-chevrons-right icon' ></i>Negociações</a></li>
+                            <li id="subactive"><a href="follow-up.html"><i class='bx bx-transfer icon' ></i>Follow Up log</a></li>
+                            <li><a href="clients.html"><i class='bx bx-id-card icon' ></i>Carteira de Clientes</a></li>
+                            <li><a href="vendas.html"><i class='bx bx-history icon'></i></i>Histórico de Vendas</a></li>
+                            <li><a href="tasks.html"><i class='bx bx-task icon'></i></i>Gestor de Tarefas</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="calendar.html">
+                            <i class='bx bxs-calendar-event icon'></i>
+                            <span class="text nav-text">Mapa de Eventos</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="pricespy.html">
+                            <i class='bx bx-radar icon'></i>
+                            <span class="text nav-text">Radar de Preços</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="reminder.html">
+                            <i class='bx bxs-bell-ring icon' ></i>
+                            <span class="text nav-text">Lembretes</span>
+                        </a>
+                    </li>
+
+                    <!-- ::::::: VERIFICAR NECESSIDADE ::::::::-->
+                    <!-- <li class="nav-link">
+                        <a href="contratos.html">
+                            <i class='bx bx-briefcase icon' ></i>
+                            <span class="text nav-text">Contratos</span>
+                        </a>
+                    </li> -->
+
+                    <li class="nav-link">
+                        <a href="relatorios.html">
+                            <i class='bx bx-line-chart icon'></i>
+                            <span class="text nav-text">Relatórios</span>
+                        </a>
+                    </li>
+
+                    <!-- ::::::: REALOCAR PARA OUTRO LUGAR ::::::::-->
+                    <!-- <li class="nav-link"> 
+                        <a href="doc.html">
+                            <i class='bx bx-help-circle icon' ></i>
+                            <span class="text nav-text">Ajuda</span>
+                        </a>
+                    </li> -->
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <ul class="menu-links">
+                    <li class="nav-link has-submenu">
+                        <a href="#">
+                            <img id="profile-pic" src="img/profile_pic_F.png" alt="Usuário logado">
+                            <span class="text nav-text"><span id="menuUserName">Usuário</span> <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="profile.html"><i class='bx bx-user icon'></i> Perfil</a></li>
+                            <li class="has-submenu">
+                                <a href="empresas.html">
+                                    <i class='bx bxs-building icon'></i> Empresa <i class='bx bx-chevron-down arrow'></i>
+                                </a>
+                                <ul class="submenu">
+                                    <li><a href="#empresa-config"><i class='bx bx-briefcase icon'></i> Configurações da Empresa</a></li>
+                                    <li><a href="#hoteis-config"><i class='bx bx-hotel icon'></i> Cadastro de Hotéis</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="settings.html"><i class='bx bx-cog icon'></i> Configurações</a></li>
+                            <li><a href="help.html"><i class='bx bx-support icon'></i> Suporte</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="logout" id="logout">
+                        <a href="index.html">
+                            <i class='bx bx-log-out icon' ></i>
+                            <span class="text nav-text">Logout</span>
+                        </a>
+                    </li>
+
+                    <li class="mode">
+                        <div class="sun-moon">
+                            <i class='bx bx-moon icon moon'></i>
+                            <i class='bx bx-sun icon sun'></i>
+                        </div>
+                        <span class="mode-text text">Dark mode</span>
+
+                        <div class="toggle-switch">
+                            <span class="switch"></span>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- /Menu -->
+
+    <section class="home">
+        <div class="home-overview">
+
+            <header class="followup-header">
+                <div>
+                    <p class="home-eyebrow">Auditoria</p>
+                    <h1>Follow up & rastreabilidade</h1>
+                </div>
+                <div class="followup-actions">
+                    <button class="primary"><i class='bx bx-upload'></i> Exportar CSV</button>
+                    <button id="auditModalTrigger"><i class='bx bx-shield-quarter'></i> Guardar em auditoria</button>
+                    <a href="auditoria.html"><i class='bx bx-folder-open'></i> Abrir modulo auditoria</a>
+                </div>
+            </header>
+
+            <section class="followup-card-grid">
+                <article class="followup-card" data-card-key="mov24h" role="button" tabindex="0" aria-label="Ver resumo de leads movimentados nas ultimas 24 horas">
+                    <span>Movimentacoes nas ultimas 24h</span>
+                    <strong id="mov24h">0</strong>
+                    <small>Alteracoes manuais e automaticas.</small>
+                </article>
+                <article class="followup-card" data-card-key="avgStage" role="button" tabindex="0" aria-label="Ver resumo sobre tempo medio por estagio">
+                    <span>Tempo medio por estagio</span>
+                    <strong id="avgStage">0h</strong>
+                    <small>Janela entre status Escopo - Proposta.</small>
+                </article>
+                <article class="followup-card" data-card-key="topOwner" role="button" tabindex="0" aria-label="Ver resumo do responsavel mais ativo">
+                    <span>Responsavel mais ativo</span>
+                    <strong id="topOwner">--</strong>
+                    <small>Usuario com mais interacoes registradas.</small>
+                </article>
+                <article class="followup-card" data-card-key="lastWin" role="button" tabindex="0" aria-label="Ver resumo do ultimo fechamento">
+                    <span>Ultimo fechamento</span>
+                    <strong id="lastWin">--</strong>
+                    <small>Data/hora do ultimo ganho confirmado.</small>
+                </article>
+            </section>
+
+            <section class="filters-grid">
+                <div>
+                    <label for="filterStage">Filtrar por estágio</label>
+                    <select id="filterStage">
+                        <option value="all">Todos</option>
+                        <option value="Captacao">Captação</option>
+                        <option value="Qualificacao">Qualificação</option>
+                        <option value="Proposta">Proposta</option>
+                        <option value="Negociacao">Negociação</option>
+                        <option value="Fechamento">Fechamento</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="filterOwner">Responsável</label>
+                    <select id="filterOwner">
+                        <option value="all">Todos</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="filterSearch">Palavra-chave</label>
+                    <input type="text" id="filterSearch" placeholder="hotel, lead, motivo...">
+                </div>
+            </section>
+
+            <section>
+                <h2>Timeline de auditoria</h2>
+                <div class="timeline" id="timeline"></div>
+            </section>
+
+            <section>
+                <h2>Logs detalhados</h2>
+                <div class="tableboxx" style="margin-top: 12px;">
+                    <table class="audit-table">
+                        <thead>
+                            <tr>
+                                <th>ID Lead</th>
+                                <th>Movimentação</th>
+                                <th>Responsável</th>
+                                <th>Origem</th>
+                                <th>Data</th>
+                                <th>Detalhes</th>
+                            </tr>
+                        </thead>
+                        <tbody id="log-table-body"></tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </section>
+
+    <div class="audit-modal-backdrop" id="audit-modal" aria-hidden="true">
+        <div class="audit-modal" role="dialog" aria-modal="true" aria-labelledby="audit-modal-title">
+            <button type="button" class="audit-modal-close" id="audit-modal-close" aria-label="Fechar formulário de auditoria">&times;</button>
+            <h3 id="audit-modal-title">Guardar em auditoria</h3>
+            <p>Escolha o período que deseja preservar com o contexto atual do follow up.</p>
+            <form id="audit-modal-form">
+                <div class="form-row">
+                    <div>
+                        <label for="audit-start">Início do período</label>
+                        <input type="date" id="audit-start" required>
+                    </div>
+                    <div>
+                        <label for="audit-end">Fim do período</label>
+                        <input type="date" id="audit-end" required>
+                    </div>
+                </div>
+                <div>
+                    <label for="audit-notes">Observações (opcional)</label>
+                    <input type="text" id="audit-notes" placeholder="Insights, motivo, cliente...">
+                </div>
+                <div class="form-actions">
+                    <button type="submit">Salvar na auditoria</button>
+                    <button type="button" class="secondary" id="audit-modal-cancel">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="lead-modal-backdrop" id="lead-summary-modal" aria-hidden="true">
+        <div class="lead-modal" role="dialog" aria-modal="true" aria-labelledby="lead-modal-title">
+            <button type="button" class="lead-modal-close" id="lead-modal-close" aria-label="Fechar resumo do lead">&times;</button>
+            <span class="lead-modal-pill" id="lead-modal-pill">Lead em foco</span>
+            <h4 id="lead-modal-title">Resumo do lead</h4>
+            <p class="lead-modal-stage" id="lead-modal-stage">--</p>
+            <p class="lead-modal-summary" id="lead-modal-summary">Selecione um card para visualizar um resumo detalhado com contexto do lead.</p>
+            <div class="lead-modal-meta">
+                <span id="lead-modal-owner">Responsavel: --</span>
+                <span id="lead-modal-hotel">Hotel: --</span>
+                <span id="lead-modal-date">Atualizado em --</span>
+            </div>
+            <a href="leads.html" class="lead-modal-action" id="lead-modal-action" target="_blank" rel="noopener">Abrir detalhes</a>
+        </div>
+    </div>
+
+     <!--Rodapé -->
+    <!-- <footer style="line-height: 15px;">
+        &copy; <span id="anoAtual"></span> SellaStay - Gestão para Hotéis. <br> <span style="font-size: 10px; cursor: pointer;">Desenvolvido por <a href="https://www.syncsoftware.com.br" style="text-decoration: none; color: var(--text-color);" onmouseover="this.style.color='#ff914d';" onmouseout="this.style.color='var(--text-color)';" target="_blank"> <b>Sync Software LTDA</b></a></span>
+    </footer> -->
+    <!-- Rodapé -->
+
+    <script src="js/script.js"></script>
+    
+    <script>
+        const dataNow = new Date();
+        document.getElementById("anoAtual").textContent = dataNow.getFullYear();
+
+        const AUDIT_STORAGE_KEY = "sella_audit_records";
+        const logs = [
+            {
+                leadId: "LEAD-2091",
+                hotel: "Aurora Golden",
+                stageFrom: "Captacao",
+                stageTo: "Qualificacao",
+                owner: "Fernanda Ruiz",
+                source: "Kanban",
+                timestamp: "2025-11-15T08:42:00",
+                summary: "Lead importado do formulário corporativo e priorizado para triagem.",
+                tags: ["formulário", "evento corporativo"],
+                reason: "Volume acima de 200 pax identificado"
+            },
+            {
+                leadId: "LEAD-2091",
+                hotel: "Aurora Golden",
+                stageFrom: "Qualificacao",
+                stageTo: "Proposta",
+                owner: "Raul Bettini",
+                source: "Kanban",
+                timestamp: "2025-11-15T11:08:00",
+                summary: "Proposta liberada com tarifa dinâmica e cláusula de blackout.",
+                tags: ["tarifa", "SLA 4h"],
+                reason: "Disponibilidade confirmada pelo RM-CSC"
+            },
+            {
+                leadId: "LEAD-2091",
+                hotel: "Aurora Golden",
+                stageFrom: "Proposta",
+                stageTo: "Negociacao",
+                owner: "Marina Sato",
+                source: "Kanban",
+                timestamp: "2025-11-16T09:55:00",
+                summary: "Cliente pediu revisão de coffee break e parcelamento.",
+                tags: ["follow-up", "condições"],
+                reason: "Solicitação do comprador"
+            },
+            {
+                leadId: "LEAD-2078",
+                hotel: "Aurora Suites",
+                stageFrom: "Negociacao",
+                stageTo: "Fechamento",
+                owner: "Leonardo Prado",
+                source: "API Orgânico",
+                timestamp: "2025-11-14T18:11:00",
+                summary: "Fechamento registrado e contrato versão 2 anexado.",
+                tags: ["ganho", "checklist"],
+                reason: "Condições aprovadas"
+            },
+            {
+                leadId: "LEAD-2054",
+                hotel: "Aurora Resorts",
+                stageFrom: "Qualificacao",
+                stageTo: "Cold",
+                owner: "Fernanda Ruiz",
+                source: "Kanban",
+                timestamp: "2025-11-13T15:27:00",
+                summary: "Lead congelado por falta de retorno – disparado lembrete automático.",
+                tags: ["inatividade", "alerta"],
+                reason: "Sem resposta há 14 dias"
+            }
+        ];
+
+        const timeline = document.getElementById("timeline");
+        const tableBody = document.getElementById("log-table-body");
+        const filterStage = document.getElementById("filterStage");
+        const filterOwner = document.getElementById("filterOwner");
+        const filterSearch = document.getElementById("filterSearch");
+        const auditModalEl = document.getElementById("audit-modal");
+        const auditModalTrigger = document.getElementById("auditModalTrigger");
+        const auditModalClose = document.getElementById("audit-modal-close");
+        const auditModalCancel = document.getElementById("audit-modal-cancel");
+        const auditModalForm = document.getElementById("audit-modal-form");
+        const auditStartInput = document.getElementById("audit-start");
+        const auditEndInput = document.getElementById("audit-end");
+        const auditNotesInput = document.getElementById("audit-notes");
+        const leadSummaryModalEl = document.getElementById("lead-summary-modal");
+        const leadModalPillEl = document.getElementById("lead-modal-pill");
+        const leadModalTitleEl = document.getElementById("lead-modal-title");
+        const leadModalStageEl = document.getElementById("lead-modal-stage");
+        const leadModalSummaryEl = document.getElementById("lead-modal-summary");
+        const leadModalOwnerEl = document.getElementById("lead-modal-owner");
+        const leadModalHotelEl = document.getElementById("lead-modal-hotel");
+        const leadModalDateEl = document.getElementById("lead-modal-date");
+        const leadModalActionEl = document.getElementById("lead-modal-action");
+        const leadModalCloseEl = document.getElementById("lead-modal-close");
+        const leadMetricCards = document.querySelectorAll(".followup-card[data-card-key]");
+
+        const owners = [...new Set(logs.map(item => item.owner))];
+        owners.forEach(owner => {
+            const option = document.createElement("option");
+            option.value = owner;
+            option.textContent = owner;
+            filterOwner.appendChild(option);
+        });
+
+        function formatDate(value) {
+            return new Date(value).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
+        }
+
+        function readAuditRecords() {
+            try {
+                return JSON.parse(localStorage.getItem(AUDIT_STORAGE_KEY)) || [];
+            } catch (error) {
+                console.error("Nao foi possivel ler auditorias salvas", error);
+                return [];
+            }
+        }
+
+        function persistAuditRecords(records = []) {
+            try {
+                localStorage.setItem(AUDIT_STORAGE_KEY, JSON.stringify(records));
+            } catch (error) {
+                console.error("Erro ao salvar auditoria", error);
+            }
+        }
+
+        function describeLeadSnapshot(log, pillText) {
+            if (!log) return null;
+            return {
+                pill: pillText,
+                title: `${log.leadId || "Lead"} · ${log.hotel || "Hotel"}`,
+                stage: `${log.stageFrom || "--"} -> ${log.stageTo || "--"}`,
+                summary: log.summary || "Sem descricao adicional para este lead.",
+                owner: log.owner || "--",
+                hotel: log.hotel || "--",
+                timestamp: log.timestamp,
+                link: log.leadId ? `leads.html?lead=${encodeURIComponent(log.leadId)}` : "leads.html"
+            };
+        }
+
+        function getLeadSnapshot(metricKey) {
+            if (!logs.length) return null;
+            const sorted = [...logs].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            const fallback = sorted[0];
+            const now = Date.now();
+            if (metricKey === "mov24h") {
+                const lastDay = sorted.find(item => now - new Date(item.timestamp).getTime() <= 86_400_000);
+                return describeLeadSnapshot(lastDay || fallback, "Movimentos recentes");
+            }
+            if (metricKey === "avgStage") {
+                const focused = sorted.find(item => item.stageFrom === "Qualificacao" && item.stageTo === "Proposta");
+                return describeLeadSnapshot(focused || fallback, "Tempo entre estagios");
+            }
+            if (metricKey === "topOwner") {
+                const ownerCount = {};
+                logs.forEach(item => ownerCount[item.owner] = (ownerCount[item.owner] || 0) + 1);
+                const top = Object.entries(ownerCount).sort((a, b) => b[1] - a[1])[0];
+                const ownerLog = top ? sorted.find(item => item.owner === top[0]) : fallback;
+                return describeLeadSnapshot(ownerLog || fallback, `Responsavel em destaque`);
+            }
+            if (metricKey === "lastWin") {
+                const won = sorted.find(item => item.stageTo === "Fechamento");
+                return describeLeadSnapshot(won || fallback, "Ultimo fechamento");
+            }
+            return describeLeadSnapshot(fallback, "Resumo do lead");
+        }
+
+        function renderLogCards(items) {
+            timeline.innerHTML = "";
+            items.forEach(item => {
+                const div = document.createElement("article");
+                div.className = "timeline-item";
+                div.innerHTML = `
+                    <time>${formatDate(item.timestamp)}</time>
+                    <div>
+                        <h4>${item.stageFrom} → ${item.stageTo}</h4>
+                        <p class="log-source">${item.summary}</p>
+                        <div class="timeline-meta">
+                            <span><i class='bx bx-user'></i> ${item.owner}</span>
+                            <span><i class='bx bx-buildings'></i> ${item.hotel}</span>
+                            <span><i class='bx bx-hash'></i> ${item.leadId}</span>
+                            <span><i class='bx bx-share-alt'></i> ${item.source}</span>
+                        </div>
+                        <div class="tags">
+                            ${item.tags.map(tag => `<span>${tag}</span>`).join("")}
+                        </div>
+                    </div>
+                `;
+                timeline.appendChild(div);
+            });
+        }
+
+        function renderTable(items) {
+            tableBody.innerHTML = "";
+            items.forEach(item => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${item.leadId}</td>
+                    <td>${item.stageFrom} → ${item.stageTo}</td>
+                    <td>${item.owner}</td>
+                    <td>${item.source}</td>
+                    <td>${formatDate(item.timestamp)}</td>
+                    <td>${item.reason}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function updateStats(items) {
+            const now = Date.now();
+            const total24h = items.filter(item => now - new Date(item.timestamp).getTime() <= 86_400_000).length;
+            document.getElementById("mov24h").textContent = total24h;
+
+            const stageDurations = items.filter(item => item.stageFrom === "Qualificacao" && item.stageTo === "Proposta");
+            const avg = stageDurations.reduce((acc, item) => acc + 3.5, 0) / Math.max(stageDurations.length, 1);
+            document.getElementById("avgStage").textContent = `${avg.toFixed(1)}h`;
+
+            const ownerCount = {};
+            items.forEach(item => ownerCount[item.owner] = (ownerCount[item.owner] || 0) + 1);
+            const top = Object.entries(ownerCount).sort((a, b) => b[1] - a[1])[0];
+            document.getElementById("topOwner").textContent = top ? top[0] : "--";
+
+            const lastWin = items.filter(item => item.stageTo === "Fechamento").sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
+            document.getElementById("lastWin").textContent = lastWin ? formatDate(lastWin.timestamp) : "--";
+        }
+
+        function openAuditModal() {
+            if (!auditModalEl) return;
+            const today = new Date().toISOString().slice(0, 10);
+            if (!auditStartInput.value) auditStartInput.value = today;
+            if (!auditEndInput.value) auditEndInput.value = today;
+            auditModalEl.classList.add("open");
+            auditModalEl.setAttribute("aria-hidden", "false");
+            setTimeout(() => auditStartInput?.focus(), 50);
+        }
+
+        function closeAuditModal() {
+            if (!auditModalEl) return;
+            auditModalEl.classList.remove("open");
+            auditModalEl.setAttribute("aria-hidden", "true");
+        }
+
+        function handleAuditSubmit(event) {
+            event.preventDefault();
+            if (!auditStartInput || !auditEndInput) return;
+            const start = auditStartInput.value;
+            const end = auditEndInput.value;
+            if (!start || !end) {
+                alert("Informe o período completo.");
+                return;
+            }
+            if (new Date(start) > new Date(end)) {
+                alert("O início do período não pode ser maior que o fim.");
+                return;
+            }
+            const notes = auditNotesInput?.value?.trim() || "";
+            const fromDate = new Date(`${start}T00:00:00`);
+            const toDate = new Date(`${end}T23:59:59`);
+            const periodLogs = logs.filter((item) => {
+                const ts = new Date(item.timestamp);
+                return ts >= fromDate && ts <= toDate;
+            });
+            const ownerCount = {};
+            periodLogs.forEach(item => ownerCount[item.owner] = (ownerCount[item.owner] || 0) + 1);
+            const ownerHighlights = Object.entries(ownerCount)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 3)
+                .map(([owner, total]) => ({ owner, total }));
+            const snapshot = {
+                id: `audit_${Date.now()}`,
+                savedAt: new Date().toISOString(),
+                period: { start, end },
+                totalLogs: periodLogs.length,
+                ownerHighlights,
+                sampleLead: periodLogs[0]?.leadId || null,
+                sampleSummary: periodLogs[0]?.summary || (periodLogs.length ? "" : "Nenhuma movimentacao encontrada para o período."),
+                filters: {
+                    stage: filterStage.value,
+                    owner: filterOwner.value
+                },
+                notes
+            };
+            const existing = readAuditRecords();
+            existing.unshift(snapshot);
+            persistAuditRecords(existing);
+            closeAuditModal();
+            auditModalForm?.reset();
+            alert(`Auditoria salva (${periodLogs.length} registros no período). Confira em auditoria.html.`);
+        }
+
+        function openLeadSummaryModal(metricKey) {
+            if (!leadSummaryModalEl) return;
+            const snapshot = getLeadSnapshot(metricKey);
+            if (!snapshot) {
+                alert("Nao ha dados suficientes para exibir este resumo.");
+                return;
+            }
+            if (leadModalPillEl) leadModalPillEl.textContent = snapshot.pill;
+            if (leadModalTitleEl) leadModalTitleEl.textContent = snapshot.title;
+            if (leadModalStageEl) leadModalStageEl.textContent = snapshot.stage;
+            if (leadModalSummaryEl) leadModalSummaryEl.textContent = snapshot.summary;
+            if (leadModalOwnerEl) leadModalOwnerEl.textContent = `Responsavel: ${snapshot.owner}`;
+            if (leadModalHotelEl) leadModalHotelEl.textContent = `Hotel: ${snapshot.hotel}`;
+            if (leadModalDateEl) {
+                const readableDate = snapshot.timestamp ? formatDate(snapshot.timestamp) : "--";
+                leadModalDateEl.textContent = `Atualizado em ${readableDate}`;
+            }
+            if (leadModalActionEl) leadModalActionEl.href = snapshot.link || "leads.html";
+            leadSummaryModalEl.classList.add("open");
+            leadSummaryModalEl.setAttribute("aria-hidden", "false");
+        }
+
+        function closeLeadSummaryModal() {
+            if (!leadSummaryModalEl) return;
+            leadSummaryModalEl.classList.remove("open");
+            leadSummaryModalEl.setAttribute("aria-hidden", "true");
+        }
+
+        function applyFilters() {
+            const stage = filterStage.value;
+            const owner = filterOwner.value;
+            const search = filterSearch.value.toLowerCase();
+
+            const filtered = logs.filter(item => {
+                const matchesStage = stage === "all" || item.stageTo === stage;
+                const matchesOwner = owner === "all" || item.owner === owner;
+                const matchesSearch = [item.leadId, item.hotel, item.summary, item.reason]
+                    .join(" ")
+                    .toLowerCase()
+                    .includes(search);
+                return matchesStage && matchesOwner && matchesSearch;
+            });
+
+            renderLogCards(filtered);
+            renderTable(filtered);
+            updateStats(filtered);
+        }
+
+        if (auditModalTrigger) {
+            auditModalTrigger.addEventListener("click", () => openAuditModal());
+        }
+        if (auditModalClose) {
+            auditModalClose.addEventListener("click", () => closeAuditModal());
+        }
+        if (auditModalCancel) {
+            auditModalCancel.addEventListener("click", () => {
+                auditModalForm?.reset();
+                closeAuditModal();
+            });
+        }
+        if (auditModalEl) {
+            auditModalEl.addEventListener("click", (event) => {
+                if (event.target === auditModalEl) {
+                    closeAuditModal();
+                }
+            });
+            document.addEventListener("keydown", (event) => {
+                if (event.key === "Escape" && auditModalEl.classList.contains("open")) {
+                    closeAuditModal();
+                }
+            });
+        }
+        if (auditModalForm) {
+            auditModalForm.addEventListener("submit", handleAuditSubmit);
+        }
+
+        if (leadModalCloseEl) {
+            leadModalCloseEl.addEventListener("click", () => closeLeadSummaryModal());
+        }
+        if (leadSummaryModalEl) {
+            leadSummaryModalEl.addEventListener("click", (event) => {
+                if (event.target === leadSummaryModalEl) {
+                    closeLeadSummaryModal();
+                }
+            });
+            document.addEventListener("keydown", (event) => {
+                if (event.key === "Escape" && leadSummaryModalEl.classList.contains("open")) {
+                    closeLeadSummaryModal();
+                }
+            });
+        }
+        if (leadMetricCards.length) {
+            leadMetricCards.forEach((card) => {
+                const key = card.dataset.cardKey;
+                card.addEventListener("click", () => openLeadSummaryModal(key));
+                card.addEventListener("keydown", (event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        openLeadSummaryModal(key);
+                    }
+                });
+            });
+        }
+
+        filterStage.addEventListener("change", applyFilters);
+        filterOwner.addEventListener("change", applyFilters);
+        filterSearch.addEventListener("input", applyFilters);
+
+        renderLogCards(logs);
+        renderTable(logs);
+        updateStats(logs);
+    </script>
+</body>
+</html>

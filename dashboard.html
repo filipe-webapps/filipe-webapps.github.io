@@ -1,0 +1,2158 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>SellaStay | Dashboard</title>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="img/favicon.png">
+    
+    <!--CSS-->
+    <link rel="stylesheet" href="css/styledash.css">
+
+    <!--Boxicons CSS-->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- Chart Js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+
+    <style>
+        #footerline{
+            display: flex;
+            align-items: center !important;
+            gap:15px;
+            width: 800px;
+            padding: 10px;
+            border-radius: 15px;
+            background:rgba(148,163,184,.15);
+            margin-bottom: 50px !important;
+        }
+
+        .tab-button {
+            width: auto;
+            padding: 10px 150px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            transition: .4s ease-in-out;
+            background: var(--body-color);
+            color: var(--text-color);
+            font-weight: 700;
+        }
+        .tab-button i {
+            color: var(--text-color);
+        }
+        .tab-button:hover {
+            background: var(--icon-color);
+            color: var(--text-color);
+        }
+
+        .tab-button.active-tab {
+            background: linear-gradient(135deg,#ff8a3d,#ffb26b);
+            color: var(--tittle-color);
+            box-shadow: 0 10px 24px rgba(255,138,61,0.25);
+        }
+        .tab-button.active-tab i {
+            color: var(--tittle-color);
+        }
+
+        .filters.modern{
+            background:rgba(148,163,184,.15);
+            padding:16px;
+            border-radius:20px;
+            display:flex;
+            gap:16px;
+            flex-wrap:wrap;
+        }
+        .filters.modern .filter-group{
+            flex:1 1 180px;
+            display:flex;
+            flex-direction:column;
+            gap:6px;
+        }
+        .filters.modern select{
+            border-radius:14px;
+            border:1px solid rgba(15,23,42,.1);
+            padding:10px 14px;
+        }
+        .filters.modern button{
+            align-self:flex-end;
+            border:none;
+            border-radius:16px;
+            padding:12px 20px;
+            background:linear-gradient(120deg,#2563eb,#0891b2);
+            color:#fff;
+            font-weight:600;
+            cursor:pointer;
+            box-shadow:0 12px 30px rgba(37,99,235,.35);
+        }
+        .metric-cards.modern{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+            gap:18px;
+            margin:24px 0;
+        }
+        .metric-card.modern{
+            background:var(--card-color, #fff);
+            border-radius:24px;
+            padding:20px;
+            border:1px solid rgba(15,23,42,.08);
+            box-shadow:0 20px 35px rgba(15,23,42,.08);
+        }
+        .metric-card.modern span.label{
+            font-size:13px;
+            text-transform:uppercase;
+            letter-spacing:.16em;
+            color:var(--text-light-color,#94a3b8);
+        }
+        .metric-card.modern strong{
+            display:block;
+            font-size:32px;
+            margin-top:6px;
+        }
+        .metric-card.modern small{
+            color:#64748b;
+        }
+        .charts-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+            gap:20px;
+        }
+        .chart-card{
+            background:#fff;
+            border-radius:24px;
+            padding:18px;
+            border:1px solid rgba(15,23,42,.08);
+            box-shadow:0 20px 40px rgba(15,23,42,.06);
+        }
+        .chart-card h3{
+            margin:0 0 12px;
+        }
+        .seller-goals,
+        .seller-board{
+            margin-top:30px;
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+            gap:16px;
+        }
+        .seller-card{
+            background:#fff;
+            border-radius:20px;
+            padding:16px;
+            border:1px solid rgba(15,23,42,.08);
+            box-shadow:0 15px 30px rgba(15,23,42,.06);
+        }
+        .seller-card header{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:10px;
+        }
+        .seller-card .progress{
+            height:8px;
+            border-radius:999px;
+            background:rgba(148,163,184,.3);
+            overflow:hidden;
+        }
+        .seller-card .progress span{
+            display:block;
+            height:100%;
+            border-radius:999px;
+            background:linear-gradient(120deg,#22d3ee,#14b8a6);
+        }
+        .floating-chat {
+            position: fixed;
+            bottom: 22px;
+            right: 22px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 12px;
+        }
+
+        .floating-chat-toggle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            border: none;
+            border-radius: 999px;
+            padding: 0.9rem 1.4rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 40%, #ff6b00 65%, #ff914d 100%);
+            background-size: 220% 220%;
+            animation: floatingChatGradient 6s ease infinite;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            isolation: isolate;
+        }
+
+        .floating-chat-toggle span,
+        .floating-chat-toggle i {
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            #footerline{
+                grid-template-columns:1fr;
+                gap:10px;
+                padding:0;
+                max-width: 100%;
+            }
+            #footerline .tab-button{
+                min-height:52px;
+                padding:12px 14px;
+                max-width: none;
+                min-width: 0;
+            }
+            #footerline .tab-button .tab-label{
+                font-size:14px;
+            }
+            #footerline .tab-button .btn-text{
+                display:none;
+            }
+           
+        }
+
+        .floating-chat-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .floating-chat-window {
+            width: min(360px, calc(100vw - 44px));
+            background: var(--body-color);
+            border-radius: 20px;
+            border: 1px solid rgba(15, 23, 42, 0.05);
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.25);
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+        }
+
+        .floating-chat-window.open {
+            display: flex;
+        }
+
+        .floating-chat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            padding: 1rem 1.25rem;
+            background: linear-gradient(135deg, #0b2447, #163964);
+            color: #fff;
+        }
+
+        .floating-chat-header h3 {
+            margin: 0;
+            font-size: 1.05rem;
+        }
+
+        .floating-chat-close {
+            background: transparent;
+            border: none;
+            color: inherit;
+            font-size: 1.5rem;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0;
+        }
+
+        .floating-chat-window .ia-chat {
+            padding: 1rem 1.25rem 0.75rem;
+            background: var(--sidebar-color, #fff);
+        }
+
+        .floating-chat-window .chat-container {
+            max-height: 280px;
+            min-height: 160px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .message {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .message .bubble {
+            padding: 10px 14px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #101827;
+            line-height: 1.4;
+        }
+
+        .message.bot .bubble {
+            background: rgba(241, 245, 249, 0.9);
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: #fff;
+        }
+
+        .message.user .avatar {
+            background: rgba(37, 99, 235, 0.7);
+        }
+
+        .floating-chat-window input {
+            width: 100%;
+            border: none;
+            outline: none;
+            padding: 12px 14px;
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            background: #fff;
+        }
+
+        @keyframes floatingChatGradient {
+            to {
+                background-position: 200% center;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-container {
+                width: 100% !important;
+                padding: 0;
+            }
+            #footerline{
+                width: 300px;
+                padding: 10px;
+                border-radius: 15px;
+                background:rgba(148,163,184,.15);
+                margin-top: 25px;
+            }
+
+            .tab-button {
+                width: 100%;
+            }
+            .filters.modern {
+                width: 100% !important;
+            }
+        }
+    </style>
+     
+</head>
+<body>
+
+    <!-- Menu -->
+    <nav class="sidebar close">
+
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="img/logo.png" alt="">
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name" id="nome">SellaStay</span>
+                    <span class="profession">EGRC Control</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu-scrollable">
+
+                <ul class="menu-links">
+
+                    <br>
+                    <br>
+
+                    <li class="nav-link">
+                        <a href="home.html">
+                            <i class='bx bxs-home icon' ></i>
+                            <span class="text nav-text">Home</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link" id="navselected">
+                        <a href="dashboard.html">
+                            <i class='bx bxs-dashboard icon' ></i>
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link has-submenu">
+                        <a href="leads.html">
+                            <i class='bx bxs-grid icon' ></i>
+                            <span class="text nav-text">Operacional <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="leads.html"><i class='bx bxs-chevrons-right icon' ></i>Negociações</a></li>
+                            <li><a href="follow-up.html"><i class='bx bx-transfer icon' ></i>Follow Up log</a></li>
+                            <li><a href="clients.html"><i class='bx bx-id-card icon' ></i>Carteira de Clientes</a></li>
+                            <li><a href="vendas.html"><i class='bx bx-history icon'></i></i>Histórico de Vendas</a></li>
+                            <li><a href="tasks.html"><i class='bx bx-task icon'></i></i>Gestor de Tarefas</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="calendar.html">
+                            <i class='bx bxs-calendar-event icon'></i>
+                            <span class="text nav-text">Mapa de Eventos</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="pricespy.html">
+                            <i class='bx bx-radar icon'></i>
+                            <span class="text nav-text">Radar de Preços</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="reminder.html">
+                            <i class='bx bxs-bell-ring icon' ></i>
+                            <span class="text nav-text">Lembretes</span>
+                        </a>
+                    </li>
+
+                    <!-- ::::::: VERIFICAR NECESSIDADE ::::::::-->
+                    <!-- <li class="nav-link">
+                        <a href="contratos.html">
+                            <i class='bx bx-briefcase icon' ></i>
+                            <span class="text nav-text">Contratos</span>
+                        </a>
+                    </li> -->
+
+                    <li class="nav-link">
+                        <a href="relatorios.html">
+                            <i class='bx bx-line-chart icon'></i>
+                            <span class="text nav-text">Relatórios</span>
+                        </a>
+                    </li>
+
+                    <!-- ::::::: REALOCAR PARA OUTRO LUGAR ::::::::-->
+                    <!-- <li class="nav-link"> 
+                        <a href="doc.html">
+                            <i class='bx bx-help-circle icon' ></i>
+                            <span class="text nav-text">Ajuda</span>
+                        </a>
+                    </li> -->
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <ul class="menu-links">
+                    <li class="nav-link has-submenu">
+                        <a href="#">
+                            <img id="profile-pic" src="img/profile_pic_F.png" alt="Usuário logado">
+                            <span class="text nav-text"><span id="menuUserName">Usuário</span> <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="profile.html"><i class='bx bx-user icon'></i> Perfil</a></li>
+                            <li class="has-submenu">
+                                <a href="empresas.html">
+                                    <i class='bx bxs-building icon'></i> Empresa <i class='bx bx-chevron-down arrow'></i>
+                                </a>
+                                <ul class="submenu">
+                                    <li><a href="#empresa-config"><i class='bx bx-briefcase icon'></i> Configurações da Empresa</a></li>
+                                    <li><a href="#hoteis-config"><i class='bx bx-hotel icon'></i> Cadastro de Hotéis</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="settings.html"><i class='bx bx-cog icon'></i> Configurações</a></li>
+                            <li><a href="help.html"><i class='bx bx-support icon'></i> Suporte</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="logout" id="logout">
+                        <a href="index.html">
+                            <i class='bx bx-log-out icon' ></i>
+                            <span class="text nav-text">Logout</span>
+                        </a>
+                    </li>
+
+                    <li class="mode">
+                        <div class="sun-moon">
+                            <i class='bx bx-moon icon moon'></i>
+                            <i class='bx bx-sun icon sun'></i>
+                        </div>
+                        <span class="mode-text text">Dark mode</span>
+
+                        <div class="toggle-switch">
+                            <span class="switch"></span>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- /Menu -->
+
+
+    <section class="home">
+        <div class="headernav">
+            
+    
+            <div class="fixedbar" id="fixedbar">
+                
+                <div class="footerline" id="footerline">
+                    <button id="toggleDashboard" class="tab-button active-tab" onclick="mostrarDashboard()">
+                        <span class="tab-icon"><i class='bx bxs-pie-chart-alt-2'></i></span>
+                        <span class="tab-label">Analítico</span>
+                    </button>
+                    <button id="toggleKanban" class="tab-button" onclick="mostrarKanban()">
+                        <span class="tab-icon"><i class='bx bxs-bar-chart-alt-2'></i></span>
+                        <span class="tab-label">Sintético</span>
+                    </button>
+                </div>
+                <br>
+            </div>
+            
+        </div>
+
+        <!-- Loading indicator -->
+        <div class="loader" id="loader" style="display: block;"></div>
+
+        <!-- Tooltip for row actions -->
+        <div class="tooltip" id="tooltip">
+            <button id="editarBtn"><i class='bx bx-edit'></i> Editar</button>
+            <button id="excluirBtn"> <i class='bx bx-trash' ></i> Excluir</button>
+        </div>
+
+        <!-- Modal -->
+        <div style="display: none;" class="modal" id="modal">
+            <div class="modal-content">
+                <button class="close-btn" onclick="fecharModal()">&times;</button>
+                <h2 style="color: #b0b1b3;" id="modalTitle">Adicionar Registro</h2>
+
+                <div class="form-container">
+                    <form id="add-form">
+                        <!-- Campos correspondentes Ã s colunas -->
+                        <label for="ID">ID</label>
+                        <input type="number" id="ID" placeholder="ID">
+                        <label for="dataOrcamento">Data do Orçamento</label>
+                        <input type="date" id="dataOrcamento" placeholder="dataOrcamento">
+                        <label for="agencia">Agência/Solicitante</label>
+                        <input type="text" id="agencia" placeholder="agencia">
+                        <label for="responsavel">Responsável</label>
+                        <input type="text" id="responsavel" placeholder="responsavel">
+                        <label for="telefoneSolicitante">Telefone Solicitante</label>
+                        <input type="text" id="telefoneSolicitante">
+                        <label for="emailSolicitante">E-mail Solicitante</label>
+                        <input type="email" id="emailSolicitante">
+                        <label for="hotel">Hotel</label>
+                        <input type="text" id="hotel"> <!-- Fixed missing closing tag -->
+                        <label for="sala">Sala</label>
+                        <input type="text" id="sala">
+                        <label for="montagem">Montagem</label>
+                        <input type="text" id="montagem">
+                        <label for="dataInicio">Data Início</label>
+                        <input type="date" id="dataInicio">
+                        <label for="dataFim">Data Fim</label>
+                        <input type="date" id="dataFim">
+                        <label for="totalDiasUsados">Total dias usados</label>
+                        <input type="number" id="totalDiasUsados" min="0">
+                        <label for="segmento">Segmento</label>
+                        <input type="text" id="segmento">
+                        <label for="segmentoMercado">Segmento de Mercado</label>
+                        <input type="text" id="segmentoMercado">
+                        <label for="responsavelAtlantica">ResponsÃ¡vel Vendas - Atlantica</label>
+                        <input type="text" id="responsavelAtlantica">
+                        <label for="responsavelHotel">Responsáveis no Hotel</label>
+                        <input type="text" id="responsavelHotel">
+                        <label for="perfilEvento">Perfil do Evento</label>
+                        <input type="text" id="perfilEvento">
+                        <label for="budgetCliente">Budget do Cliente</label>
+                        <input type="number" id="budgetCliente" min="0">
+                        <label for="concorrentes">Concorrentes</label>
+                        <input type="text" id="concorrentes">
+                        <label for="fatorDecisivo">Fator Decisivo</label>
+                        <input type="text" id="fatorDecisivo">
+                        <label for="qtdPAX">Qtd PAX Evento</label>
+                        <input type="number" id="qtdPAX" min="0">
+                        <label for="eventoHospedagem">Evento | Hospedagem</label>
+                        <input type="text" id="eventoHospedagem">
+                        <label for="nomeEvento">Nome Evento</label>
+                        <input type="text" id="nomeEvento">
+                        <label for="status">Status</label>
+                        <input type="text" id="status">
+                        <label for="motivoCancelamento">Motivo Cancelamento</label>
+                        <input type="text" id="motivoCancelamento">
+                        <label for="concorrenteEscolhido">Concorrente Escolhido</label>
+                        <input type="text" id="concorrenteEscolhido">
+                        <label for="valorConcorrente">Valor Concorrente</label>
+                        <input type="number" id="valorConcorrente" min="0">
+                        <label for="deadlineConfirmacao">Deadline Confirmação</label>
+                        <input type="date" id="deadlineConfirmacao">
+                        <label for="dataConfirmacao">Data de Confirmação</label>
+                        <input type="date" id="dataConfirmacao">
+                        <label for="rns">RNs</label>
+                        <input type="number" id="rns" min="0">
+                        <label for="adr">ADR</label>
+                        <input type="number" id="adr" min="0" step="0.01">
+                        <label for="receitaHospedagem">Receita Hospedagem</label>
+                        <input type="number" id="receitaHospedagem" min="0" step="0.01">
+                        <label for="diariasHospedagem">Diárias (Hospedagem)</label>
+                        <input type="number" id="diariasHospedagem" min="0">
+                        <label for="valorHospedagem">Valor (Hospedagem)</label>
+                        <input type="number" id="valorHospedagem" min="0" step="0.01">
+                        <label for="receitaSalas">Receita Salas</label>
+                        <input type="number" id="receitaSalas" min="0" step="0.01">
+                        <label for="diariasSalas">Diárias (Salas)</label>
+                        <input type="number" id="diariasSalas" min="0">
+                        <label for="valorSalas">Valor (Salas)</label>
+                        <input type="number" id="valorSalas" min="0" step="0.01">
+                        <label for="receitaEquipamentos">Receita Equipamentos</label>
+                        <input type="number" id="receitaEquipamentos" min="0" step="0.01">
+                        <label for="receitaAB">Receita A&B</label>
+                        <input type="number" id="receitaAB" min="0" step="0.01">
+                        <label for="receitaTotal">Receita Total Prevista</label>
+                        <input type="number" id="receitaTotal" min="0" step="0.01">
+                        <label for="pagamento">Pagamento</label>
+                        <input type="text" id="pagamento">    
+                        <label for="obs">OBS</label>
+                        <textarea id="obs"></textarea>    
+                        <label for="mes">Mês</label>
+                        <input type="text" id="mes">
+                        <label for="ano">Ano</label>
+                        <input type="number" id="ano" min="0">
+                        <label for="mes_">Mês</label>
+                        <input type="text" id="mes_">
+                        <label for="ano_">Ano_</label>
+                        <input type="number" id="ano_" min="0">
+                        <button id="submit" type="submit">Salvar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- /Modal -->
+        
+        <!-- Tabela Leads -->
+        <main style="display: none;" class="tableboxx" id="tableboxx">
+            <div class="container">
+                <table id="tabela-registros">
+                    <thead>
+                        <tr id="header-row">
+                            <!-- Headers will be dynamically generated -->
+                        </tr>
+                    </thead>
+                    <tbody id="results-body"></tbody>
+                </table>
+            </div>
+        </main>
+        <!-- /Tabela Leads -->
+
+        <!-- Dashboard - A1 -->
+        <div class="dashboard-container" id="dashboard">
+            <br>
+            <div class="analytics-header">
+                <h2>Panorama do pipeline <i class='bx bxs-report'></i></h2>
+                <p>Todos os indicaores são atualizados automaticamente com base nos leads movimentados no Kanban.</p>
+            </div>
+            <div class="filters modern">
+                <div class="filter-group">
+                    <label for="filterSeller">Responsáveis</label>
+                    <select id="filterSeller">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterStage">Estágio</label>
+                    <select id="filterStage">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterMonth">Mês</label>
+                    <select id="filterMonth">
+                        <option value="">Todos</option>
+                        <option value="1">Janeiro</option>
+                        <option value="2">Fevereiro</option>
+                        <option value="3">MarÃ§o</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Maio</option>
+                        <option value="6">Junho</option>
+                        <option value="7">Julho</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Setembro</option>
+                        <option value="10">Outubro</option>
+                        <option value="11">Novembro</option>
+                        <option value="12">Dezembro</option>
+                    </select>
+                </div>
+                <button id="applyFilters">Aplicar filtros</button>
+            </div>
+            <div class="metric-cards modern">
+                <div class="metric-card modern">
+                    <span class="label">Total de leads</span>
+                    <strong id="metricTotalLeads">0</strong>
+                    <small>Itens ativos no funil</small>
+                </div>
+                <div class="metric-card modern">
+                    <span class="label">Propostas aceitas</span>
+                    <strong id="metricWon">0</strong>
+                    <small>Conversões finalizadas</small>
+                </div>
+                <div class="metric-card modern">
+                    <span class="label">Taxa de conversão</span>
+                    <strong id="metricConversion">0%</strong>
+                    <small>Ganhos / total</small>
+                </div>
+                <div class="metric-card modern">
+                    <span class="label">Valor estimado</span>
+                    <strong id="metricPipelineValue">R$ 0,00</strong>
+                    <small>Baseado nos valores informados</small>
+                </div>
+            </div>
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3>Distribuição por estágio</h3>
+                    <canvas id="stageDistributionChart" height="260"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Metas por responsável</h3>
+                    <canvas id="sellerPerformanceChart" height="260"></canvas>
+                </div>
+            </div>
+            <div class="seller-goals" id="sellerGoals"></div>
+        </div>
+        <!-- /Dashboard - A1 --> 
+
+        <!-- Dashboard - A2 -->
+        <div class="dashboard-container" id="dashboard2" style="display:none;">
+            <div class="analytics-header">
+                <h2>Sintético por indicadores <i class='bx bxs-analyse'></i></h2>
+                <p>Visão compacta dos pilares da operação com cards clicáveis para explorar detalhes.</p>
+            </div>
+            <div class="synthetic-grid">
+                <article class="synthetic-card" data-metric="total">
+                    <header>
+                        <h3>Total de leads</h3>
+                        <span>Oportunidades ativas</span>
+                    </header>
+                    <canvas id="syntheticChartTotal" height="170"></canvas>
+                    <div class="synthetic-card-footer">
+                        <strong id="syntheticValueTotal">0</strong>
+                        <span>em andamento</span>
+                    </div>
+                    <button class="synthetic-card-cta" data-metric="total">Ver mais</button>
+                </article>
+                <article class="synthetic-card" data-metric="wins">
+                    <header>
+                        <h3>Propostas aceitas</h3>
+                        <span>Conversões fechadas</span>
+                    </header>
+                    <canvas id="syntheticChartWins" height="170"></canvas>
+                    <div class="synthetic-card-footer">
+                        <strong id="syntheticValueWins">0</strong>
+                        <span>integradas ao funil</span>
+                    </div>
+                    <button class="synthetic-card-cta" data-metric="wins">Ver mais</button>
+                </article>
+                <article class="synthetic-card" data-metric="conversion">
+                    <header>
+                        <h3>Taxa de conversão</h3>
+                        <span>Ganha vs total</span>
+                    </header>
+                    <canvas id="syntheticChartConversion" height="170"></canvas>
+                    <div class="synthetic-card-footer">
+                        <strong id="syntheticValueConversion">0%</strong>
+                        <span>performance atual</span>
+                    </div>
+                    <button class="synthetic-card-cta" data-metric="conversion">Ver mais</button>
+                </article>
+                <article class="synthetic-card" data-metric="value">
+                    <header>
+                        <h3>Valor estimado</h3>
+                        <span>Receita prevista</span>
+                    </header>
+                    <canvas id="syntheticChartValue" height="170"></canvas>
+                    <div class="synthetic-card-footer">
+                        <strong id="syntheticValueValue">R$ 0,00</strong>
+                        <span>em tickets previstos</span>
+                    </div>
+                    <button class="synthetic-card-cta" data-metric="value">Ver mais</button>
+                </article>
+            </div>
+            <div class="synthetic-details">
+                <div class="chart-card synthetic-chart-card">
+                    <h3>Pipeline por estágio</h3>
+                    <canvas id="pipelineStageChart" height="280"></canvas>
+                </div>
+                <div class="synthetic-board-wrapper">
+                    <div class="synthetic-board-title">
+                        <h3>Ranking de responsáveis</h3>
+                        <p>Meta x resultado por vendedor</p>
+                    </div>
+                    <div class="seller-board" id="sellerBoard"></div>
+                </div>
+            </div>
+        </div>
+        <!-- /Dashboard - A2 -->
+
+        <img id="logoavi" src="img/aviat.png">
+        <div class="synthetic-modal" id="syntheticModal" aria-hidden="true">
+            <div class="synthetic-modal-content">
+                <button type="button" class="synthetic-modal-close" data-close-synthetic>&times;</button>
+                <h3 id="syntheticModalTitle"></h3>
+                <p id="syntheticModalDescription"></p>
+                <ul id="syntheticModalList"></ul>
+            </div>
+        </div>
+
+    </section>
+
+      <!--Rodapé -->
+    <!-- <footer style="line-height: 15px;">
+        &copy; <span id="anoAtual"></span> SellaStay - Gestão para Hotéis. <br> <span style="font-size: 10px; cursor: pointer;">Desenvolvido por <a href="https://www.syncsoftware.com.br" style="text-decoration: none; color: var(--text-color);" onmouseover="this.style.color='#ff914d';" onmouseout="this.style.color='var(--text-color)';" target="_blank"> <b>Sync Software LTDA</b></a></span>
+    </footer> -->
+    <!-- Rodapé -->
+        
+    <script src="js/script.js"></script>
+
+     <!--Header Script  -->
+    <script>
+        // Função para obter a saudação dependendo da hora do dia
+        // function obterSaudacao() {
+        //     const agora = new Date();
+        //     const hora = agora.getHours(); // horario a hora atual (de 0 a 23)
+
+        //     let saudacao = "";
+            
+        //     if (hora >= 6 && hora < 12) {
+        //         saudacao = "Olá, Bom dia! Seja bem-vindo(a)!";
+        //     } else if (hora >= 12 && hora < 18) {
+        //         saudacao = "Olá, Boa tarde! Seja bem-vindo(a)!";
+        //     } else {
+        //         saudacao = "Olá, Boa noite! Seja bem-vindo(a)!";
+        //     }
+
+        //     return saudacao;
+        // }
+
+        // // Exibe a saudação no elemento com o id "saudacao"
+        // document.getElementById("saudacao").textContent = obterSaudacao();
+
+
+        // function updateDataHora() {
+        // const data = new Date();
+        // const options = {
+        //     weekday: "long",
+        //     day: "numeric",
+        //     month: "long",
+        //     year: "numeric",
+        //     hour: "2-digit",
+        //     minute: "2-digit",
+        // };
+        // const dataHoraFormatada = data.toLocaleString("pt-BR", options);
+        // document.getElementById("dataHora").textContent = dataHoraFormatada;
+        // }
+
+        // setInterval(updateDataHora, 1000);
+
+        document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("anoAtual").textContent = new Date().getFullYear();
+        });
+
+
+
+        // ----- Váriaveis do modal -----
+        const modal = document.getElementById('modal');
+        let linhaSelecionadaParaEdicao = null; // VariÃ¡vel para armazenar a linha selecionada
+    
+        // Abrir modal
+        function abrirModal() {
+            modal.style.display = 'flex';
+        }
+    
+        // Fechar modal
+        function fecharModal() {
+            modal.style.display = 'none';
+            registroSelecionado = null; // Limpar o registro selecionado
+            document.getElementById('add-form').reset(); // Limpar o formulário
+            document.getElementById("modalTitle").textContent = "Adicionar Registro"; // Resetar o titulo
+        }
+    
+        window.onclick = function (event) {
+            if (event.target === modal) fecharModal();
+        };
+    
+        window.onkeydown = function (event) {
+            if (event.key === 'Escape') fecharModal();
+        };
+    
+        // Fynção auxiliar: Formatar data para o padrão brasileiro
+        function formatarDataParaBR(data) {
+            if (!data) return "";
+            const [ano, mes, dia] = data.split("-");
+            return `${dia}/${mes}/${ano}`;
+        }
+        // ----- /variaveis do modal -----
+
+        // Tooltip configuração
+        const tooltip = document.getElementById("tooltip");
+        const editarBtn = document.getElementById("editarBtn");
+        const excluirBtn = document.getElementById("excluirBtn");
+        let linhaSelecionada = null;
+    
+        document.querySelector("#results-body").addEventListener("click", function (event) {
+            const linha = event.target.closest("tr");
+            if (linha) {
+                // Remover a classe 'selected-row' de qualquer linha previamente selecionada
+                document.querySelectorAll("#results-body tr.selected-row").forEach(row => {
+                    row.classList.remove("selected-row");
+                });
+                
+                // Adicionar a classe 'selected-row' Ã  linha atual
+                linha.classList.add("selected-row");
+    
+                linhaSelecionada = linha;
+                tooltip.style.display = "block";
+                tooltip.style.left = `${event.pageX + 10}px`;
+                tooltip.style.top = `${event.pageY + 10}px`;
+            } else {
+                tooltip.style.display = "none";
+            }
+        });
+    
+        editarBtn.addEventListener("click", function () {
+            if (linhaSelecionada) {
+                abrirModal();
+                preencherFormulario(linhaSelecionada);
+                tooltip.style.display = "none";
+            }
+        });
+    
+        excluirBtn.addEventListener("click", function () {
+            if (linhaSelecionada) {
+                const registro = obterDadosDaLinha(linhaSelecionada);
+                if (confirm(`Tem certeza que deseja excluir o registro "${registro.nomeEvento || registro.ID}"?`)) {
+                    excluirRegistro(registro.Linha);
+                    tooltip.style.display = "none";
+                }
+            }
+        });
+    
+        document.addEventListener("click", function (event) {
+            if (!tooltip.contains(event.target) && !event.target.closest("tr")) {
+                tooltip.style.display = "none";
+            }
+        });
+
+
+    </script>
+    <!-- /Header Script -->
+
+    <!-- GRC Function -->
+    <script>
+        const scriptURL = "https://script.google.com/macros/s/AKfycbwUa33fLEv9IdK4hny0rVGNZkTyTgQK7WOAtHgeUw-Xea-Uf83rgMeFf4po3d-o_RrGmg/exec";
+    
+        // Variavel global para armazenar o registro selecionado
+        let registroSelecionado = null;
+
+        // Função para formatar a data no formato dd/mm/aaaa
+        function formatarData(data) {
+            const dateObj = new Date(data);
+            const dia = String(dateObj.getDate()).padStart(2, '0'); // Adiciona o zero a  esquerda
+            const mes = String(dateObj.getMonth() + 1).padStart(2, '0'); // Meses do 0, então adiciona +1
+            const ano = dateObj.getFullYear();
+    
+            return `${dia}/${mes}/${ano}`;
+        }
+    
+        //  verificar se o valor  uma data valida
+        function isData(val) {
+            // Verifica se o valor  
+            if (typeof val === "string" && val.match(/\d{4}-\d{2}-\d{2}/)) {
+                const data = new Date(val);
+                return !isNaN(data.getTime()); // Verifica se a data valida
+            }
+            return false;
+        }
+    
+        async function carregarDados() {
+            try {
+                // Mostrar indicador de carregamento
+                toggleLoader(true);
+                
+                const response = await fetch(scriptURL);
+                const registros = await response.json();
+
+                // Verifique o que estÃ¡ sendo retornado da API
+                console.log("Registros retornados:", registros);
+
+                if (registros.length === 0) {
+                    document.getElementById("tabela-registros").innerHTML = "Nenhum dado encontrado.";
+                    return;
+                }
+
+                const thead = document.getElementById("header-row");
+                const tbody = document.querySelector("#tabela-registros tbody");
+                tbody.innerHTML = ""; // Limpa o corpo da tabela antes de adicionar os novos dados
+
+                // Criar cabeÃ§alhos
+                thead.innerHTML = "";
+                Object.keys(registros[0]).forEach(key => {
+                    const th = document.createElement("th");
+                    th.textContent = key;
+                    th.addEventListener("click", () => ordenarTabela(key));
+                    thead.appendChild(th);
+                });
+
+                // Criar linhas da tabela com formataÃ§Ã£o condicional
+                registros.forEach(registro => {
+                    const tr = document.createElement("tr");
+                    let statusIndex = -1;
+                    let statusValue = "";
+                    
+                    Object.entries(registro).forEach(([key, valor], index) => {
+                        const td = document.createElement("td");
+                        
+                        // Verifica se o valor Ã© uma data e formata, caso contrÃ¡rio, deixa como estÃ¡
+                        if (valor && isData(valor)) {
+                            td.textContent = formatarData(valor);
+                        } else {
+                            td.textContent = valor;
+                        }
+                        
+                        // Guarda o Ã­ndice e valor da coluna de status
+                        if (key === "status") {
+                            statusIndex = index;
+                            statusValue = valor;
+                            
+                            // Aplica formataÃ§Ã£o condicional na cÃ©lula de status
+                            switch (valor) {
+                                case "Definitivo":
+                                    td.style.backgroundColor = "#7ed957"; // Verde claro
+                                    td.style.color = "#155724"; // Verde escuro
+                                    break;
+                                case "Cancelado":
+                                    td.style.backgroundColor = "#ff4545"; // Vermelho claro
+                                    td.style.color = "#8f0505"; // Vermelho escuro
+                                    break;
+                                case "Tentativo":
+                                    td.style.backgroundColor = "#fdcc33"; // Amarelo claro
+                                    td.style.color = "#846400"; // Amarelo escuro
+                                    break;
+                                case "NÃ£o confirmado":
+                                    td.style.backgroundColor = "#e2e3e5"; // Cinza claro
+                                    td.style.color = "#383d41"; // Cinza escuro
+                                    break;
+                            }
+                        }
+                        
+                        tr.appendChild(td);
+                    });
+                    
+                    // Aplica a cor da fonte em toda a linha, baseada no status
+                    if (statusValue) {
+                        let textColor;
+                        switch (statusValue) {
+                            case "Definitivo":
+                                textColor = "#38b602"; // Verde escuro
+                                break;
+                            case "Cancelado":
+                                textColor = "#ff6d6d"; // Vermelho escuro
+                                break;
+                            case "Tentativo":
+                                textColor = "#ffb800"; // Amarelo escuro
+                                break;
+                            case "NÃ£o confirmado":
+                                textColor = "#101213"; // Cinza escuro
+                                break;
+                            default:
+                                textColor = "#b0b1b3"; // Cor padrÃ£o
+                        }
+                        
+                        // Aplica a cor a todas as cÃ©lulas da linha
+                        Array.from(tr.children).forEach((cell, index) => {
+                            if (index !== statusIndex) { // NÃ£o altera a cor da cÃ©lula de status que jÃ¡ foi definida
+                                cell.style.color = textColor;
+                            }
+                        });
+                    }
+                    
+                    tbody.appendChild(tr);
+                });
+            } catch (error) {
+                console.error("Erro ao carregar os dados:", error);
+                mostrarFeedback("Erro ao carregar os dados.", "erro");
+            } finally {
+                // Esconder indicador de carregamento
+                toggleLoader(false);
+            }
+        }
+  
+    
+        function filtrarTabela() {
+            const filtro = document.getElementById("searchBox").value.toLowerCase();
+            const linhas = document.querySelectorAll("#tabela-registros tbody tr");
+            
+            // Remover highlights anteriores
+            document.querySelectorAll(".highlight-search").forEach(el => {
+                el.outerHTML = el.textContent;
+            });
+            
+            // Se o filtro estiver vazio, apenas mostrar todas as linhas
+            if (filtro.trim() === "") {
+                linhas.forEach(linha => {
+                    linha.style.display = "";
+                });
+                return;
+            }
+            
+            linhas.forEach(linha => {
+                let encontrado = false;
+                const celulas = linha.querySelectorAll("td");
+                
+                celulas.forEach(celula => {
+                    const conteudo = celula.textContent.toLowerCase();
+                    
+                    if (conteudo.includes(filtro)) {
+                        encontrado = true;
+                        
+                        // Criar uma versÃ£o do texto com highlight
+                        const regex = new RegExp(filtro, 'gi');
+                        const textoOriginal = celula.textContent;
+                        const textoComHighlight = textoOriginal.replace(regex, match => 
+                            `<span class="highlight-search">${match}</span>`
+                        );
+                        
+                        celula.innerHTML = textoComHighlight;
+                    }
+                });
+                
+                linha.style.display = encontrado ? "" : "none";
+            });
+        }
+
+
+        document.addEventListener("DOMContentLoaded", carregarDados);
+
+        // Funcção para preencher o formulário com os dados do registro selecionado
+        function preencherFormulario(linha) {
+            const celulas = linha.querySelectorAll("td");
+            const headers = document.querySelectorAll("#header-row th");
+            
+            // Criar um objeto com os dados da linha
+            const registro = {};
+            for (let i = 0; i < celulas.length; i++) {
+                if (headers[i]) {
+                    registro[headers[i].textContent] = celulas[i].textContent;
+                }
+            }
+            
+            // Armazenar o registro para uso posterior
+            registroSelecionado = registro;
+            
+            // Atualizar o tÃ­tulo do modal
+            document.getElementById("modalTitle").textContent = "Editar Registro";
+            
+            // Preencher o formulÃ¡rio com os dados
+            const form = document.getElementById("add-form");
+            const inputs = form.querySelectorAll("input, textarea");
+            
+            inputs.forEach(input => {
+                const fieldId = input.id;
+                if (registro[fieldId] !== undefined) {
+                    // Tratamento especial para campos de data
+                    if (input.type === "date" && registro[fieldId]) {
+                        // Converter formato dd/mm/yyyy para yyyy-mm-dd para campos de data
+                        const parts = registro[fieldId].split('/');
+                        if (parts.length === 3) {
+                            input.value = `${parts[2]}-${parts[1]}-${parts[0]}`;
+                        } else {
+                            input.value = registro[fieldId];
+                        }
+                    } else {
+                        input.value = registro[fieldId];
+                    }
+                }
+            });
+        }
+
+        // Função para validar o formulário antes de enviar
+        function validarFormulario() {
+            const form = document.getElementById("add-form");
+            const camposObrigatorios = ["ID", "dataOrcamento", "agencia", "responsavel"];
+            
+            let valido = true;
+            let mensagemErro = "Por favor, preencha os seguintes campos obrigatórios:\n";
+            
+            camposObrigatorios.forEach(campo => {
+                const input = form.querySelector(`#${campo}`);
+                if (!input.value.trim()) {
+                    input.style.borderColor = "red";
+                    valido = false;
+                    mensagemErro += `- ${input.previousElementSibling.textContent}\n`;
+                } else {
+                    input.style.borderColor = "#c87902";
+                }
+            });
+            
+            if (!valido) {
+                alert(mensagemErro);
+            }
+            
+            return valido;
+        }
+
+        // Modificar o evento de sumissão do formulário
+        document.getElementById("add-form").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            
+            if (!validarFormulario()) {
+                return;
+            }
+            
+            // Mostrar indicador de carregamento
+            toggleLoader(true);
+            
+            const formData = new FormData();
+            const inputs = this.querySelectorAll("input, textarea");
+            
+            // Adicionar cada campo ao FormData
+            inputs.forEach(input => {
+                formData.append(input.id, input.value);
+            });
+            
+            try {
+                let response;
+
+                // Se estiver editando um registro existente
+                if (registroSelecionado && registroSelecionado["Linha"]) {
+                    formData.append("Linha", registroSelecionado["Linha"]);
+                    formData.append("_method", "PUT");
+                    response = await fetch(scriptURL, { 
+                        method: "POST",
+                        body: formData 
+                    });
+                    mostrarFeedback("Registro atualizado com sucesso!", "sucesso");
+                } else {
+                    // Se estiver adicionando um novo registro
+                    response = await fetch(scriptURL, { 
+                        method: "POST", 
+                        body: formData 
+                    });
+                    mostrarFeedback("Registro adicionado com sucesso!", "sucesso");
+                }
+
+                
+                fecharModal();
+                
+                // Aguardar um curto período para que o Google Sheets processe a alteração
+                setTimeout(async () => {
+                    await carregarDados();
+                }, 1500);
+            } catch (error) {
+                console.error("Erro:", error);
+                mostrarFeedback("Ocorreu um erro ao salvar o registro.", "erro");
+            } finally {
+                // Esconder indicador de carregamento
+                toggleLoader(false);
+            }
+        });
+
+        // Função para obter dados da linha
+        function obterDadosDaLinha(linha) {
+            const celulas = linha.querySelectorAll("td");
+            const headers = document.querySelectorAll("#header-row th");
+            
+            const registro = {};
+            for (let i = 0; i < celulas.length; i++) {
+                if (headers[i]) {
+                    registro[headers[i].textContent] = celulas[i].textContent;
+                }
+            }
+            
+            return registro;
+        }
+
+        async function excluirRegistro(linha) {
+            if (!linha) return;
+            
+            // Mostrar indicador de carregamento
+            toggleLoader(true);
+            
+            try {
+                // Em vez de usar DELETE diretamente, use POST com um parÃ¢metro _method
+                const formData = new FormData();
+                formData.append("Linha", linha);
+                formData.append("_method", "DELETE");
+                
+                const response = await fetch(scriptURL, { 
+                    method: "POST", 
+                    body: formData 
+                });
+                
+                if (response.ok) {
+                    mostrarFeedback("Registro excluído com sucesso!", "sucesso");
+                    
+                    // Aguardar um curto período para que o Google Sheets processe a alterações
+                    setTimeout(async () => {
+                        await carregarDados();
+                    }, 1500);
+                } else {
+                    mostrarFeedback("Erro ao excluir o registro.", "erro");
+                }
+            } catch (error) {
+                console.error("Erro:", error);
+                mostrarFeedback("Ocorreu um erro ao excluir o registro.", "erro");
+            } finally {
+                // Esconder indicador de carregamento
+                toggleLoader(false);
+            }
+        }
+
+
+        // FunÃ§Ã£o para mostrar/esconder o indicador de carregamento
+        function toggleLoader(show) {
+            document.getElementById("loader").style.display = show ? "block" : "none";
+        }
+
+        // FunÃ§Ã£o para mostrar mensagens de feedback
+        function mostrarFeedback(mensagem, tipo) {
+            // Criar elemento de feedback se nÃ£o existir
+            let feedback = document.getElementById("feedback");
+            if (!feedback) {
+                feedback = document.createElement("div");
+                feedback.id = "feedback";
+                feedback.classList.add("feedback"); // Use classList para adicionar a classe
+                feedback.style.position = "fixed";
+                feedback.style.top = "20px";
+                feedback.style.right = "20px";
+                feedback.style.padding = "15px 20px";
+                feedback.style.borderRadius = "5px";
+                feedback.style.boxShadow = "0 4px 8px rgba(0,0,0,0.2)";
+                feedback.style.zIndex = "2000";
+                feedback.style.transition = "opacity 0.5s ease-in-out";
+                document.body.appendChild(feedback);
+            }
+            
+            // Definir estilo baseado no tipo
+            feedback.className = "feedback"; // Limpar classes existentes
+            if (tipo === "sucesso") {
+                feedback.classList.add("sucesso");
+            } else if (tipo === "erro") {
+                feedback.classList.add("erro");
+            } else {
+                feedback.classList.add("info");
+            }
+            
+            feedback.textContent = mensagem;
+            feedback.style.opacity = "1";
+            
+            // Esconder após 3 segundos
+            setTimeout(() => {
+                feedback.style.opacity = "0";
+            }, 3000);
+        }
+
+
+        // // ----- ORDENAR TABELA ----- 
+        // Variavéis para controlar a ordenação
+        let colunaOrdenacao = null;
+        let ordemAscendente = true;
+
+        // Função para ordenar a tabela
+        function ordenarTabela(coluna) {
+            const tbody = document.querySelector("#tabela-registros tbody");
+            const linhas = Array.from(tbody.querySelectorAll("tr"));
+            
+            // Se clicar na mesma coluna, inverte a ordem
+            if (coluna === colunaOrdenacao) {
+                ordemAscendente = !ordemAscendente;
+            } else {
+                colunaOrdenacao = coluna;
+                ordemAscendente = true;
+            }
+            
+            // Obter o Ã­ndice da coluna
+            const headers = document.querySelectorAll("#header-row th");
+            let indiceColuna = -1;
+            
+            for (let i = 0; i < headers.length; i++) {
+                if (headers[i].textContent === coluna) {
+                    indiceColuna = i;
+                    break;
+                }
+            }
+            
+            if (indiceColuna === -1) return;
+            
+            // Ordenar as linhas
+            linhas.sort((a, b) => {
+                const valorA = a.querySelectorAll("td")[indiceColuna].textContent.trim();
+                const valorB = b.querySelectorAll("td")[indiceColuna].textContent.trim();
+                
+                // Verificar se Ã© uma data no formato DD/MM/YYYY
+                if (valorA.match(/^\d{2}\/\d{2}\/\d{4}$/) && valorB.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
+                    const [diaA, mesA, anoA] = valorA.split('/');
+                    const [diaB, mesB, anoB] = valorB.split('/');
+                    
+                    const dataA = new Date(`${anoA}-${mesA}-${diaA}`);
+                    const dataB = new Date(`${anoB}-${mesB}-${diaB}`);
+                    
+                    return ordemAscendente ? dataA - dataB : dataB - dataA;
+                }
+                
+                // Verificar se sÃ£o nÃºmeros
+                if (!isNaN(valorA) && !isNaN(valorB)) {
+                    return ordemAscendente ? 
+                        parseFloat(valorA) - parseFloat(valorB) : 
+                        parseFloat(valorB) - parseFloat(valorA);
+                }
+                
+                // ComparaÃ§Ã£o de texto
+                return ordemAscendente ? 
+                    valorA.localeCompare(valorB) : 
+                    valorB.localeCompare(valorA);
+            });
+            
+            // Atualizar a tabela com as linhas ordenadas
+            tbody.innerHTML = "";
+            linhas.forEach(linha => tbody.appendChild(linha));
+            
+            // Atualizar indicador visual de ordenaÃ§Ã£o
+            headers.forEach(th => {
+                th.classList.remove("asc", "desc");
+            });
+            
+            const thAtual = Array.from(headers).find(th => th.textContent === coluna);
+            thAtual.classList.add(ordemAscendente ? "asc" : "desc");
+        }
+
+        // ----- /ORDENAR TABELA ----- 
+    </script>   
+    <!-- /GRC Function -->
+
+    <!-- GRC_Dashboard Function -->
+    <script>
+        const kanbanAnalyticsURL = "https://script.google.com/macros/s/AKfycbwUa33fLEv9IdK4hny0rVGNZkTyTgQK7WOAtHgeUw-Xea-Uf83rgMeFf4po3d-o_RrGmg/exec";
+        const pipelineStages = [
+            { id:1, name:"Tratativa Pendente", slug:"stage-tratativa-pendente", color:"#fab600" },
+            { id:2, name:"Tarifa RM-CSC encaminhado", slug:"stage-tarifa-rm-csc-encaminhado", color:"#fea065" },
+            { id:3, name:"Tarifa RM-CSC feito!", slug:"stage-tarifa-rm-csc-feito", color:"#bed646" },
+            { id:4, name:"Proposta enviada", slug:"stage-proposta-enviada", color:"#00c8ec" },
+            { id:5, name:"Proposta aceita", slug:"stage-proposta-aceita", color:"#49dc70" },
+            { id:6, name:"Proposta negada", slug:"stage-proposta-negada", color:"#e94646" },
+            { id:7, name:"Sem Resposta", slug:"stage-sem-resposta", color:"#373737" }
+        ];
+        let kanbanRecords = [];
+        let filteredRecords = [];
+        let stageChartInstance = null;
+        let sellerChartInstance = null;
+        let pipelineChartInstance = null;
+        let analyticsSummary = { total: 0, wins: 0, conversion: 0, value: 0 };
+        const syntheticCardsConfig = [
+            {
+                key: "total",
+                label: "Total de leads",
+                description: "Volume de oportunidades ativas no funil.",
+                detail: "Mantenha a cadência de prospecção para alimentar o pipeline.",
+                canvasId: "syntheticChartTotal",
+                valueId: "syntheticValueTotal",
+                chartType: "doughnut",
+                color: "#0ea5e9"
+            },
+            {
+                key: "wins",
+                label: "Propostas aceitas",
+                description: "O número de negociações ganhas no período.",
+                detail: "Reforce o acompanhamento dos prazos de confirmação.",
+                canvasId: "syntheticChartWins",
+                valueId: "syntheticValueWins",
+                chartType: "bar",
+                color: "#10b981"
+            },
+            {
+                key: "conversion",
+                label: "Taxa de conversão",
+                description: "Percentual de leads que viraram propostas aceitas.",
+                detail: "Aproveite os momentos de pico para reforçar cross-sell.",
+                canvasId: "syntheticChartConversion",
+                valueId: "syntheticValueConversion",
+                chartType: "polarArea",
+                color: "#f97316"
+            },
+            {
+                key: "value",
+                label: "Valor estimado",
+                description: "Receita potencial amostrada pelo funil ativo.",
+                detail: "Use esse número para priorizar os follow-ups mais valiosos.",
+                canvasId: "syntheticChartValue",
+                valueId: "syntheticValueValue",
+                chartType: "line",
+                color: "#14b8a6"
+            }
+        ];
+        const syntheticChartInstances = {};
+
+        function mostrarDashboard() {
+            document.getElementById("dashboard").style.display = "block";
+            document.getElementById("dashboard2").style.display = "none";
+            document.getElementById("toggleDashboard").classList.add("active-tab");
+            document.getElementById("toggleKanban").classList.remove("active-tab");
+        }
+
+        function mostrarKanban() {
+            document.getElementById("dashboard").style.display = "none";
+            document.getElementById("dashboard2").style.display = "block";
+            document.getElementById("toggleDashboard").classList.remove("active-tab");
+            document.getElementById("toggleKanban").classList.add("active-tab");
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("loader").style.display = "block";
+            document.getElementById("dashboard").style.display = "none";
+            setupSyntheticCards();
+            loadKanbanAnalytics();
+            document.getElementById("applyFilters").addEventListener("click", renderAnalytics);
+        });
+
+        async function loadKanbanAnalytics(){
+            try{
+                const response = await fetch(`${kanbanAnalyticsURL}?action=kanban`);
+                const data = await response.json();
+                kanbanRecords = normalizeKanbanData(data);
+                populateAnalyticsFilters();
+                renderAnalytics();
+            }catch(error){
+                console.error("Erro ao carregar dados do Kanban:", error);
+            }finally{
+                document.getElementById("loader").style.display = "none";
+                document.getElementById("dashboard").style.display = "block";
+                mostrarDashboard();
+            }
+        }
+
+        function normalizeKanbanData(rawData){
+            const normalized = [];
+            Object.keys(rawData || {}).forEach(statusName => {
+                const rows = rawData[statusName] || [];
+                rows.forEach(item => {
+                    const stageMeta = pipelineStages.find(stage => stage.name.toLowerCase() === statusName.toLowerCase()) || pipelineStages.find(stage => stage.slug === slugify(statusName));
+                    const referenceDate = pickDate(item);
+                    normalized.push({
+                        id:item.ID,
+                        title:item["Nome Evento"] || item.nomeEvento || item.ID,
+                        responsavel:item.responsavelNegociar || item.responsavel || "Sem responsável",
+                        hotel:item.hotel || item.hotelEvento || "Não informado",
+                        value:toNumber(item.receitaTotal || item.valorTotal || item.valor || item.valorHospedagem),
+                        stageSlug: stageMeta?.slug || slugify(statusName),
+                        stageName: stageMeta?.name || statusName,
+                        stageColor: stageMeta?.color || "#94a3b8",
+                        date: referenceDate,
+                        month: referenceDate ? (new Date(referenceDate).getMonth() + 1) : ""
+                    });
+                });
+            });
+            return normalized;
+        }
+
+        function populateAnalyticsFilters(){
+            const sellerSelect = document.getElementById("filterSeller");
+            const stageSelect = document.getElementById("filterStage");
+            sellerSelect.innerHTML = '<option value="">Todos</option>';
+            const sellers = [...new Set(kanbanRecords.map(item => item.responsavel).filter(Boolean))].sort();
+            sellers.forEach(name => {
+                const option = document.createElement("option");
+                option.value = name;
+                option.textContent = name;
+                sellerSelect.appendChild(option);
+            });
+            stageSelect.innerHTML = '<option value="">Todos</option>';
+            pipelineStages.forEach(stage => {
+                const option = document.createElement("option");
+                option.value = stage.slug;
+                option.textContent = stage.name;
+                stageSelect.appendChild(option);
+            });
+        }
+
+        function renderAnalytics(){
+            const seller = document.getElementById("filterSeller").value;
+            const stage = document.getElementById("filterStage").value;
+            const month = document.getElementById("filterMonth").value;
+            filteredRecords = kanbanRecords.filter(item => {
+                if(seller && item.responsavel !== seller) return false;
+                if(stage && item.stageSlug !== stage) return false;
+                if(month && item.month && item.month.toString() !== month) return false;
+                return true;
+            });
+            updateMetricCards();
+            updateStageChart();
+            updateSellerChart();
+            updateSellerGoals();
+            updatePipelineChart();
+        }
+
+        function updateMetricCards(){
+            const total = filteredRecords.length;
+            const wins = filteredRecords.filter(item => item.stageSlug === "stage-proposta-aceita").length;
+            const value = filteredRecords.reduce((acc,item)=> acc + (item.value || 0), 0);
+            const conversion = total ? ((wins / total) * 100) : 0;
+            analyticsSummary = { total, wins, conversion, value };
+            updateSyntheticView();
+            document.getElementById("metricTotalLeads").textContent = total;
+            document.getElementById("metricWon").textContent = wins;
+            document.getElementById("metricConversion").textContent = `${conversion.toFixed(1)}%`;
+            document.getElementById("metricPipelineValue").textContent = formatCurrency(value);
+        }
+
+        function updateStageChart(){
+            const stageMap = {};
+            filteredRecords.forEach(item => {
+                const key = item.stageSlug || "outros";
+                stageMap[key] = (stageMap[key] || 0) + 1;
+            });
+            const labels = Object.keys(stageMap).map(slug => {
+                const stage = pipelineStages.find(s => s.slug === slug);
+                return stage?.name || slug;
+            });
+            const colors = Object.keys(stageMap).map(slug => pipelineStages.find(s => s.slug === slug)?.color || "#94a3b8");
+            const data = Object.values(stageMap);
+            const ctx = document.getElementById("stageDistributionChart").getContext("2d");
+            if(stageChartInstance){
+                stageChartInstance.data.labels = labels;
+                stageChartInstance.data.datasets[0].data = data;
+                stageChartInstance.data.datasets[0].backgroundColor = colors;
+                stageChartInstance.update();
+            }else{
+                stageChartInstance = new Chart(ctx,{
+                    type:"doughnut",
+                    data:{labels,datasets:[{data,backgroundColor:colors}]},
+                    options:{responsive:true,plugins:{legend:{position:"bottom"}}}
+                });
+            }
+        }
+
+        function updateSellerChart(){
+            const sellerMap = {};
+            filteredRecords.forEach(item => {
+                const name = item.responsavel || "Sem responsável";
+                sellerMap[name] = (sellerMap[name] || 0) + 1;
+            });
+            const labels = Object.keys(sellerMap);
+            const metas = labels.map(name => Math.max(5, sellerMap[name] + 2));
+            const atuais = labels.map(name => sellerMap[name]);
+            const ctx = document.getElementById("sellerPerformanceChart").getContext("2d");
+            if(sellerChartInstance){
+                sellerChartInstance.data.labels = labels;
+                sellerChartInstance.data.datasets[0].data = metas;
+                sellerChartInstance.data.datasets[1].data = atuais;
+                sellerChartInstance.update();
+            }else{
+                sellerChartInstance = new Chart(ctx,{
+                    type:"bar",
+                    data:{
+                        labels,
+                        datasets:[
+                            {label:"Meta", data:metas, backgroundColor:"rgba(148,163,184,.4)"},
+                            {label:"Real", data:atuais, backgroundColor:"rgba(37,99,235,.85)"}
+                        ]
+                    },
+                    options:{responsive:true,scales:{y:{beginAtZero:true}}}
+                });
+            }
+        }
+
+        function updateSellerGoals(){
+            const container = document.getElementById("sellerGoals");
+            const board = document.getElementById("sellerBoard");
+            if(!container || !board) return;
+            const aggregations = {};
+            filteredRecords.forEach(item => {
+                const key = item.responsavel || "Sem responsável";
+                aggregations[key] = (aggregations[key] || 0) + 1;
+            });
+            const cards = Object.keys(aggregations).map(name => {
+                const atual = aggregations[name];
+                const meta = Math.max(5, atual + 2);
+                const progresso = meta ? Math.min(100, (atual/meta)*100) : 0;
+                return {name, atual, meta, progresso};
+            });
+            container.innerHTML = cards.length ? cards.map(card => `
+                <div class="seller-card">
+                    <header>
+                        <strong>${card.name}</strong>
+                        <small>${card.atual}/${card.meta}</small>
+                    </header>
+                    <div class="progress"><span style="width:${card.progresso}%"></span></div>
+                    <small>${card.progresso.toFixed(1)}% da meta</small>
+                </div>
+            `).join("") : '<p class="empty-state">Nenhum responsável nesse filtro.</p>';
+            board.innerHTML = cards.length ? cards.map(card => `
+                <div class="seller-card">
+                    <header>
+                        <strong>${card.name}</strong>
+                        <small>${card.atual}/${card.meta}</small>
+                    </header>
+                    <p class="badge">${card.progresso.toFixed(1)}%</p>
+                    <div class="progress"><span style="width:${card.progresso}%"></span></div>
+                </div>
+            `).join("") : '<p class="empty-state">Nenhum dado disponível para montar o ranking.</p>';
+        }
+
+        function updatePipelineChart(){
+            const stageMap = pipelineStages.reduce((acc, stage) => {
+                acc[stage.slug] = 0;
+                return acc;
+            }, {});
+            filteredRecords.forEach(item => {
+                if(stageMap[item.stageSlug] !== undefined){
+                    stageMap[item.stageSlug] += 1;
+                }
+            });
+            const labels = pipelineStages.map(stage => stage.name);
+            const data = pipelineStages.map(stage => stageMap[stage.slug] || 0);
+            const ctx = document.getElementById("pipelineStageChart").getContext("2d");
+            if(pipelineChartInstance){
+                pipelineChartInstance.data.labels = labels;
+                pipelineChartInstance.data.datasets[0].data = data;
+                pipelineChartInstance.update();
+            }else{
+                pipelineChartInstance = new Chart(ctx,{
+                    type:"line",
+                    data:{
+                        labels,
+                        datasets:[{
+                            label:"Leads",
+                            data,
+                            fill:false,
+                            borderColor:"rgba(37,99,235,.8)",
+                            tension:.3,
+                            pointBackgroundColor:pipelineStages.map(stage => stage.color)
+                        }]
+                    },
+                    options:{responsive:true,plugins:{legend:{display:false}}}
+                });
+            }
+        }
+
+        function updateSyntheticView(){
+            syntheticCardsConfig.forEach(config => {
+                const value = Math.max(0, analyticsSummary[config.key] || 0);
+                const target = getSyntheticTarget(config.key);
+                const valueEl = document.getElementById(config.valueId);
+                if(valueEl){
+                    valueEl.textContent = formatSyntheticValue(config.key, value);
+                }
+                renderSyntheticChart(config, value, target);
+            });
+        }
+
+        function renderSyntheticChart(config, value, target){
+            const canvas = document.getElementById(config.canvasId);
+            if(!canvas) return;
+            const ctx = canvas.getContext("2d");
+            const chartKey = config.key;
+            const existingChart = syntheticChartInstances[chartKey];
+
+            if(config.chartType === "doughnut"){
+                const data = [value, Math.max(target - value, 0)];
+                const labels = ["Atual", "Meta restante"];
+                const dataset = {
+                    data,
+                    backgroundColor: [config.color, "rgba(15,23,42,0.08)"]
+                };
+                if(existingChart){
+                    existingChart.data.labels = labels;
+                    existingChart.data.datasets[0].data = data;
+                    existingChart.update();
+                }else{
+                    syntheticChartInstances[chartKey] = new Chart(ctx,{
+                        type:"doughnut",
+                        data:{labels,datasets:[dataset]},
+                        options:{responsive:true,cutout:"70%",plugins:{legend:{display:false}}}
+                    });
+                }
+                return;
+            }
+
+            if(config.chartType === "bar"){
+                const chartData = {
+                    labels:["Meta","Atual"],
+                    datasets:[{
+                        label: config.label,
+                        data:[target, value],
+                        backgroundColor:["rgba(15,23,42,0.15)", config.color]
+                    }]
+                };
+                const options = {
+                    responsive:true,
+                    scales:{y:{beginAtZero:true}},
+                    plugins:{legend:{display:false}}
+                };
+                if(existingChart){
+                    existingChart.data = chartData;
+                    existingChart.update();
+                }else{
+                    syntheticChartInstances[chartKey] = new Chart(ctx,{type:"bar",data:chartData,options});
+                }
+                return;
+            }
+
+            if(config.chartType === "polarArea"){
+                const data = [value, Math.max(100 - value, 0)];
+                const labels = ["Conversão", "Restante"];
+                const dataset = {
+                    data,
+                    backgroundColor: [config.color, "rgba(15,23,42,0.1)"]
+                };
+                if(existingChart){
+                    existingChart.data.labels = labels;
+                    existingChart.data.datasets[0].data = data;
+                    existingChart.update();
+                }else{
+                    syntheticChartInstances[chartKey] = new Chart(ctx,{
+                        type:"polarArea",
+                        data:{labels,datasets:[dataset]},
+                        options:{responsive:true,plugins:{legend:{position:"bottom"}}}
+                    });
+                }
+                return;
+            }
+
+            if(config.chartType === "line"){
+                const chartData = {
+                    labels:["Atual","Meta"],
+                    datasets:[{
+                        label: config.label,
+                        data:[value, target],
+                        fill:true,
+                        backgroundColor:"rgba(14,165,233,0.2)",
+                        borderColor:config.color,
+                        pointBackgroundColor:config.color,
+                        tension:0.35
+                    }]
+                };
+                const options = {
+                    responsive:true,
+                    scales:{y:{beginAtZero:true}},
+                    plugins:{legend:{display:false}}
+                };
+                if(existingChart){
+                    existingChart.data = chartData;
+                    existingChart.update();
+                }else{
+                    syntheticChartInstances[chartKey] = new Chart(ctx,{type:"line",data:chartData,options});
+                }
+            }
+        }
+
+        function getSyntheticTarget(key){
+            switch(key){
+                case "total":
+                    return Math.max(3, analyticsSummary.total + 5);
+                case "wins":
+                    return Math.max(1, analyticsSummary.wins + 4);
+                case "conversion":
+                    return 100;
+                case "value":
+                    return Math.max(1, analyticsSummary.value * 1.1);
+                default:
+                    return 1;
+            }
+        }
+
+        function formatSyntheticValue(key, value){
+            if(key === "conversion"){
+                return `${value.toFixed(1)}%`;
+            }
+            if(key === "value"){
+                return formatCurrency(value);
+            }
+            return value.toLocaleString("pt-BR");
+        }
+
+        function formatSyntheticTarget(key, target){
+            return formatSyntheticValue(key, target);
+        }
+
+        function setupSyntheticCards(){
+            const modal = document.getElementById("syntheticModal");
+            document.querySelectorAll(".synthetic-card").forEach(card => {
+                card.addEventListener("click", () => openSyntheticDetails(card.dataset.metric));
+            });
+            document.querySelectorAll(".synthetic-card-cta").forEach(btn => {
+                btn.addEventListener("click", event => {
+                    event.stopPropagation();
+                    openSyntheticDetails(btn.dataset.metric);
+                });
+            });
+            const closeBtn = document.querySelector("[data-close-synthetic]");
+            if(modal){
+                modal.addEventListener("click", event => {
+                    if(event.target === modal){
+                        modal.classList.remove("active");
+                    }
+                });
+            }
+            if(closeBtn && modal){
+                closeBtn.addEventListener("click", () => modal.classList.remove("active"));
+            }
+        }
+
+        function openSyntheticDetails(metricKey){
+            const config = syntheticCardsConfig.find(item => item.key === metricKey);
+            const modal = document.getElementById("syntheticModal");
+            const title = document.getElementById("syntheticModalTitle");
+            const description = document.getElementById("syntheticModalDescription");
+            const list = document.getElementById("syntheticModalList");
+            if(!config || !modal || !title || !description || !list) return;
+            const value = Math.max(0, analyticsSummary[metricKey] || 0);
+            const target = getSyntheticTarget(metricKey);
+            title.textContent = config.label;
+            description.textContent = config.description;
+            list.innerHTML = `
+                <li><strong>Atual:</strong> ${formatSyntheticValue(metricKey, value)}</li>
+                <li><strong>Meta:</strong> ${formatSyntheticTarget(metricKey, target)}</li>
+                <li><strong>Destaque:</strong> ${config.detail}</li>
+            `;
+            modal.classList.add("active");
+        }
+
+        function formatCurrency(value){
+            return value.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+        }
+        function toNumber(value){
+            const num = Number((value || "0").toString().replace(/\./g,"").replace(",","."));
+            return isNaN(num) ? 0 : num;
+        }
+        function pickDate(item){
+            const options = [item.dataInicio, item.dataEvento, item.dataOrcamento, item.dataConfirmacao, item.deadlineConfirmacao];
+            for(const candidate of options){
+                const iso = convertToISO(candidate);
+                if(iso) return iso;
+            }
+            return "";
+        }
+        function convertToISO(value){
+            if(!value) return "";
+            if(typeof value === "string" && value.match(/^\d{4}-\d{2}-\d{2}$/)) return value;
+            if(typeof value === "string" && value.includes("/")){
+                const [d,m,y] = value.split("/");
+                return `${y}-${m}-${d}`;
+            }
+            const parsed = new Date(value);
+            if(!isNaN(parsed.getTime())){
+                return parsed.toISOString().split("T")[0];
+            }
+            return "";
+        }
+        function slugify(text){
+            return (text || "").toString().toLowerCase().replace(/[^\w]+/g,"-");
+        }
+    </script>
+    <!-- /GRC_Dashboard Function -->
+
+    <script>
+        // ====== CÓDIGO ORIGINAL DE CONTRATOS ======
+        const contracts = [
+            {
+                id: "CTR-102",
+                client: "Aurora Grand",
+                contact: "Lucas Morais",
+                value: "R$ 42.500,00",
+                payment: "Parcelado",
+                due: "05/06/2025",
+                status: "pending_signature",
+                installments: "8x R$ 5.312,50",
+                description: "Contrato anual com escalas premium e integração PMS."
+            },
+            {
+                id: "CTR-110",
+                client: "Viva Suítes",
+                contact: "Marina Sales",
+                value: "R$ 28.600,00",
+                payment: "À vista",
+                due: "12/06/2025",
+                status: "pending_payment",
+                installments: "Pagamento único via boleto",
+                description: "Projeto de automação de upsell e CRM integrado."
+            },
+            {
+                id: "CTR-115",
+                client: "SkyLine Resorts",
+                contact: "Paulo Andrade",
+                value: "R$ 65.000,00",
+                payment: "Parcelado",
+                due: "18/06/2025",
+                status: "paid",
+                installments: "10x R$ 6.500,00",
+                description: "Pacote completo com BI financeiro e acompanhamento SyncIA."
+            }
+        ];
+
+        function countByStatus(status) {
+            return contracts.filter(c => c.status === status).length;
+        }
+
+        function closeModal(modal) {
+            if (!modal) return;
+            modal.classList.remove("active");
+            modal.setAttribute("aria-hidden", "true");
+        }
+
+        function renderContracts(filterStatus = "all") {
+            const list = document.getElementById("contractsList");
+            if (!list) return;
+            let filtered = contracts;
+            if (filterStatus === "paid") filtered = contracts.filter(c => c.status === "paid");
+            list.innerHTML = filtered.map(contract => `
+                <article class="contract-card" data-contract="${contract.id}">
+                    <header>
+                        <h3>${contract.client}</h3>
+                        <span class="pill">${contract.id}</span>
+                    </header>
+                    <div class="contract-summary">
+                        <span>${contract.payment}</span>
+                        <span>${contract.value}</span>
+                    </div>
+                    <div class="contract-summary">
+                        <span>Vencimento</span>
+                        <span>${contract.due}</span>
+                    </div>
+                    <span class="payment-status">${contract.status === "paid" ? "Pago" : "Pendente"}</span>
+                </article>
+            `).join("");
+            document.querySelectorAll(".contract-card").forEach(card => {
+                card.addEventListener("click", () => {
+                    document.querySelectorAll(".contract-card").forEach(c => c.classList.remove("active"));
+                    card.classList.add("active");
+                    openContractModal(card.dataset.contract);
+                });
+            });
+        }
+
+        function openContractModal(contractId) {
+            const contract = contracts.find(c => c.id === contractId);
+            if (!contract) return;
+            document.getElementById("modalClient").textContent = `Cliente: ${contract.client} — ${contract.contact}`;
+            document.getElementById("modalSummary").textContent = contract.description;
+            document.getElementById("modalPayment").textContent = `Pagamento: ${contract.payment} · ${contract.installments}`;
+            document.getElementById("contractDetailModal").classList.add("active");
+            document.getElementById("contractDetailModal").setAttribute("aria-hidden", "false");
+        }
+
+        const contractModal = document.getElementById("contractDetailModal");
+
+        document.getElementById("contractStatus")?.addEventListener("change", (event) => {
+            renderContracts(event.target.value);
+        });
+
+        document.querySelectorAll("[data-close]").forEach(btn => {
+            btn.addEventListener("click", () => closeModal(contractModal));
+        });
+
+        contractModal?.addEventListener("click", (event) => {
+            if (event.target === contractModal) closeModal(contractModal);
+        });
+
+        document.getElementById("downloadContractPdf")?.addEventListener("click", () => {
+            const active = document.querySelector(".contract-card.active");
+            if (active) {
+                window.open(`contratos/${active.dataset.contract}.pdf`, "_blank");
+            }
+        });
+
+        document.getElementById("pendingSignature").textContent = countByStatus("pending_signature");
+        document.getElementById("pendingPayment").textContent = countByStatus("pending_payment");
+        document.getElementById("paidContracts").textContent = countByStatus("paid");
+
+        renderContracts();
+    </script>
+
+    <script>
+        (function () {
+            const chat = document.getElementById("chat");
+            const input = document.getElementById("userInput");
+            const floatingChatWindow = document.getElementById("floating-chat-window");
+            const floatingChatToggle = document.getElementById("floatingChatToggle");
+            const floatingChatClose = document.getElementById("floatingChatClose");
+
+            function addMessage(text, sender = "bot") {
+                if (!chat) return;
+                const wrapper = document.createElement("div");
+                wrapper.className = `message ${sender}`;
+                const bubble = document.createElement("div");
+                bubble.className = "bubble";
+                bubble.textContent = text;
+                wrapper.appendChild(bubble);
+                chat.appendChild(wrapper);
+                chat.scrollTop = chat.scrollHeight;
+            }
+
+            async function sendMessageHandler() {
+                if (!input) return;
+                const text = input.value.trim();
+                if (!text) return;
+                addMessage(text, "user");
+                input.value = "";
+                addMessage("Conectando com a SyncIA...", "bot");
+                const lastBubble = chat?.querySelectorAll(".message.bot .bubble");
+                const currentBubble = lastBubble?.[lastBubble.length - 1];
+                try {
+                    await new Promise((resolve) => setTimeout(resolve, 1000));
+                    if (currentBubble) {
+                        currentBubble.textContent = "Ainda estou aprendendo aqui, mas posso simular uma resposta.";
+                    }
+                } catch (error) {
+                    if (currentBubble) {
+                        currentBubble.textContent = "Não consegui processar agora. Tente novamente.";
+                    }
+                }
+            }
+
+            function toggleFloatingChat(open) {
+                if (!floatingChatWindow) return;
+                const shouldOpen = typeof open === "boolean" ? open : !floatingChatWindow.classList.contains("open");
+                floatingChatWindow.classList.toggle("open", shouldOpen);
+                floatingChatWindow.hidden = !shouldOpen;
+                if (floatingChatToggle) {
+                    floatingChatToggle.setAttribute("aria-expanded", shouldOpen ? "true" : "false");
+                    floatingChatToggle.classList.toggle("active", shouldOpen);
+                }
+                if (shouldOpen && chat && chat.childElementCount === 0) {
+                    addMessage("Olá! Eu sou a SyncIA. Como posso ajudar hoje?", "bot");
+                }
+            }
+
+            if (floatingChatToggle) {
+                floatingChatToggle.addEventListener("click", () => toggleFloatingChat());
+            }
+            if (floatingChatClose) {
+                floatingChatClose.addEventListener("click", () => toggleFloatingChat(false));
+            }
+            if (input) {
+                input.addEventListener("keydown", (event) => {
+                    if (event.key === "Enter") {
+                        event.preventDefault();
+                        sendMessageHandler();
+                    }
+                });
+            }
+        })();
+    </script>
+    
+</body>
+</html>

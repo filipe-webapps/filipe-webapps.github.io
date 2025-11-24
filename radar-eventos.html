@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SellaStay | Radar de Eventos</title>
+    <link rel="icon" type="image/x-icon" href="img/favicon.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- /CSS -->
+
+    <!-- Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <!-- /Boxicons -->
+
+    <style>
+        .home-overview {
+            gap: 28px;
+        }
+
+        .radar-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+        }
+
+        .radar-header h1 {
+            margin: 0;
+            font-size: 2.2rem;
+        }
+
+        .radar-header p {
+            margin: 8px 0 0;
+            max-width: 620px;
+            color: var(--text-color);
+        }
+        .home-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+        }
+        .info-hint {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            background: transparent;
+            color: inherit;
+            cursor: help;
+            font-size: 0.75rem;
+        }
+        .info-hint::after {
+            content: attr(data-hint);
+            position: absolute;
+            transform: translate(-50%, -110%);
+            left: 50%;
+            top: 0;
+            width: 280px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            background: var(--sidebar-color);
+            color: var(--text-color);
+            font-size: 0.85rem;
+            line-height: 1.4;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+        .info-hint:hover::after {
+            opacity: 1;
+        }
+
+        .radar-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .radar-actions button {
+            border: none;
+            border-radius: 999px;
+            padding: 12px 20px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            background: var(--sidebar-color);
+            color: #fff;
+            transition: .2s;
+        }
+
+        .radar-actions button.primary {
+            background: linear-gradient(120deg, #ff914d, #ffb347);
+            color: #0f172a;
+        }
+
+        .radar-actions button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+            background: var(--sidebar-color);
+            padding: 24px;
+            border-radius: 22px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .filters-grid label {
+            display: block;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--text-color);
+            margin-bottom: 6px;
+        }
+
+        .filters-grid select,
+        .filters-grid input {
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 12px;
+            background: var(--body-color);
+            color: var(--text-color);
+            font-size: 1rem;
+        }
+
+        .filters-grid button {
+            align-self: end;
+            border: none;
+            border-radius: 16px;
+            padding: 12px 16px;
+            font-weight: 600;
+            cursor: pointer;
+            background: linear-gradient(120deg, #ff914d, #ffb347);
+            color: #0f172a;
+            transition: .2s;
+        }
+
+        .filters-grid button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(255, 145, 77, 0.3);
+        }
+
+
+        .results-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .radar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .radar-card {
+            background: var(--sidebar-color);
+            border-radius: 22px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .radar-card h3 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        .radar-card p {
+            margin: 0;
+            color: var(--text-color);
+        }
+
+        .radar-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: var(--text-color);
+        }
+
+        .radar-meta span {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 999px;
+            padding: 4px 10px;
+        }
+
+        .radar-source {
+            font-size: 0.8rem;
+            color: var(--text-color);
+        }
+        .source-group {
+            margin-top: 28px;
+        }
+        .source-group h3 {
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-color);
+        }
+
+        .empty-state {
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 18px;
+            padding: 32px;
+            text-align: center;
+            color: var(--text-color);
+        }
+    </style>
+</head>
+<body>
+
+<!-- Menu -->
+<nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="img/logo.png" alt="">
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name" id="nome">SellaStay</span>
+                    <span class="profession">GRC Control</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu-scrollable">
+
+                <li class="search-box" id="search-box">
+                    <i class='bx bx-search icon'></i>
+                    <input type="text" placeholder="Search...">
+                </li>
+                <br>
+                <br>
+
+                <ul class="menu-links">
+
+                    <li class="nav-link">
+                        <a href="home.html">
+                            <i class='bx bxs-home icon' ></i>
+                            <span class="text nav-text">Home</span>
+                        </a>
+                    </li>
+
+                    <li id="nav-link">
+                        <a href="dashboard.html">
+                            <i class='bx bxs-dashboard icon' ></i>
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+
+                    <li class="nav-link has-submenu">
+                        <a href="leads.html">
+                            <i class='bx bxs-user-detail icon' ></i>
+                            <span class="text nav-text">Negociações <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="leads.html"><i class='bx bx-user icon' ></i>Leads</a></li>
+                            <li><a href="follow-up.html"><i class='bx bx-transfer icon' ></i>Follow Up log</a></li>
+                            <li><a href="clients.html"><i class='bx bxs-user-account icon' ></i>Carteira de Clientes</a></li>
+                            <li><a href="vendas.html"><i class='bx bx-history icon'></i></i>Histórico de Vendas</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-link">
+                        <a href="calendar.html">
+                            <i class='bx bxs-calendar icon'></i>
+                            <span class="text nav-text">Calendário</span>
+                        </a>
+                    </li>
+                  <!--  <li class="nav-link">
+                        <a href="hoteis.html">
+                            <i class='bx bxs-business icon'></i>
+                            <span class="text nav-text">Hotéis</span>
+                        </a> -->
+                      <!--  <ul class="submenu">
+                            <li><a href="hotel-1.html"><i class='bx bx-home-smile icon'></i> Aurora Golden</a></li>
+                            <li><a href="hotel-2.html"><i class='bx bxs-buildings icon'></i> Aurora Suites</a></li>
+                            <li><a href="hotel-3.html"><i class='bx bx-building icon'></i> Aurora Budget</a></li>
+                            <li><a href="hotel-4.html"><i class='bx bxs-arch icon'></i> Aurora Resorts</a></li>
+                        </ul> 
+                    </li> -->
+
+                    <li class="nav-link">
+                        <a href="pricespy.html">
+                            <i class='bx bx-radar icon'></i>
+                            <span class="text nav-text">Radar de Preços</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="radar-eventos.html">
+                            <i class='bx bx-calendar-event icon'></i>
+                            <span class="text nav-text">Mapa de Eventos</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="reminder.html">
+                            <i class='bx bxs-bell-ring icon' ></i>
+                            <span class="text nav-text">Lembretes</span>
+                        </a>
+                    </li>
+
+                  <!--  <li class="nav-link">
+                        <a href="pricespy.html">
+                            <i class='bx bx-bell icon'></i>
+                            <span class="text nav-text">Alertas</span>
+                        </a>
+                    </li> -->
+
+                    <li class="nav-link">
+                        <a href="contratos.html">
+                            <i class='bx bx-briefcase icon' ></i>
+                            <span class="text nav-text">Contratos</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="relatorios.html">
+                            <i class='bx bx-line-chart icon'></i>
+                            <span class="text nav-text">Relatórios</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="help.html">
+                            <i class='bx bx-help-circle icon' ></i>
+                            <span class="text nav-text">Ajuda</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <ul class="menu-links">
+                    <li class="nav-link has-submenu">
+                        <a href="#">
+                            <img id="profile-pic" src="img/profile_pic_F.png" alt="Usuário logado">
+                            <span class="text nav-text"><span id="menuUserName">Usuário</span> <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="profile.html"><i class='bx bx-user icon'></i> Perfil</a></li>
+                            <li class="has-submenu">
+                                <a href="empresas.html">
+                                    <i class='bx bxs-building icon'></i> Empresa <i class='bx bx-chevron-down arrow'></i>
+                                </a>
+                                <ul class="submenu">
+                                    <li><a href="#empresa-config"><i class='bx bx-briefcase icon'></i> Configurações da Empresa</a></li>
+                                    <li><a href="#hoteis-config"><i class='bx bx-hotel icon'></i> Cadastro de Hotéis</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="settings.html"><i class='bx bx-cog icon'></i> Configurações</a></li>
+                            <li><a href="help.html"><i class='bx bx-support icon'></i> Fale com a Sync</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="logout" id="logout">
+                        <a href="index.html">
+                            <i class='bx bx-log-out icon' ></i>
+                            <span class="text nav-text">Logout</span>
+                        </a>
+                    </li>
+
+                    <li class="mode">
+                        <div class="sun-moon">
+                            <i class='bx bx-moon icon moon'></i>
+                            <i class='bx bx-sun icon sun'></i>
+                        </div>
+                        <span class="mode-text text">Dark mode</span>
+
+                        <div class="toggle-switch">
+                            <span class="switch"></span>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- FIM MENU -->
+    <section class="home">
+        <div class="home-overview">
+
+            <header class="radar-header">
+                <div>
+                    <p class="home-eyebrow">
+                        Mapa de eventos
+                        <button type="button" class="info-hint" aria-label="Mais informacoes" data-hint="Buscamos eventos em tempo real conectando Google, Eventim e Sympla. Selecione estado, cidade ou palavra-chave para identificar novas oportunidades.">
+                            i
+                        </button>
+                    </p>
+                    <h1>Pesquise por eventos em sua localidade</h1>
+                </div>
+                <div class="radar-actions">
+                    <button class="primary" id="refreshBtn"><i class='bx bx-sync'></i>Atualizar agora</button>
+                    <button id="exportBtn"><i class='bx bx-download'></i>Exportar</button>
+                </div>
+            </header>
+
+            <form class="filters-grid" id="radarForm">
+                <div>
+                    <label for="stateInput">Estado</label>
+                    <input type="text" id="stateInput" list="statesList" placeholder="Digite ou selecione o estado" autocomplete="off" required>
+                    <datalist id="statesList"></datalist>
+                </div>
+                <div>
+                    <label for="cityInput">Cidade</label>
+                    <input type="text" id="cityInput" list="citiesList" placeholder="Selecione o estado primeiro" autocomplete="off" disabled required>
+                    <datalist id="citiesList"></datalist>
+                </div>
+                <div>
+                    <label for="startDate">Data inicial</label>
+                    <input type="date" id="startDate">
+                </div>
+                <div>
+                    <label for="endDate">Data final (opcional)</label>
+                    <input type="date" id="endDate">
+                </div>
+                <div>
+                    <label for="keyword">Palavra-chave (opcional)</label>
+                    <input type="text" id="keyword" placeholder="Carnaval, congresso, feira...">
+                </div>
+                <div>
+                    <button type="submit">Buscar eventos</button>
+                </div>
+            </form>
+
+            <div class="results-meta">
+                <p id="statusMessage">Informe um estado e cidade para iniciar a consulta.</p>
+                <span id="remoteBadge" class="radar-source"></span>
+            </div>
+
+            <section id="resultsContainer"></section>
+        </div>
+    </section>
+
+    <!--Rodapé -->
+    <footer style="line-height: 15px;">
+        &copy; <span id="anoAtual"></span> SellaStay - Gestão para Hotéis. <br> <span style="font-size: 10px; cursor: pointer;">Desenvolvido por <a href="https://www.syncsoftware.com.br" style="text-decoration: none; color: var(--text-color);" onmouseover="this.style.color='#ff914d';" onmouseout="this.style.color='var(--text-color)';" target="_blank"> <b>Sync Software LTDA</b></a></span>
+    </footer>
+    <!-- Rodapé -->
+
+    <script src="js/script.js"></script>
+    <script>
+        const statesEndpoint = "https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome";
+        const citiesEndpoint = (uf) => `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios?orderBy=nome`;
+        const opendataEndpoint = "https://public.opendatasoft.com/api/records/1.0/search/";
+        const symplaEndpoint = "https://www.sympla.com.br/eventos";
+        const eventimEndpoint = "https://www.eventim.com.br/eventim-search/search.html";
+        const googleSearchEndpoint = "https://www.google.com/search";
+        const proxyHost = "https://r.jina.ai/";
+
+        const stateInput = document.getElementById("stateInput");
+        const cityInput = document.getElementById("cityInput");
+        const statesList = document.getElementById("statesList");
+        const citiesList = document.getElementById("citiesList");
+        const form = document.getElementById("radarForm");
+        const statusMessage = document.getElementById("statusMessage");
+        const resultsContainer = document.getElementById("resultsContainer");
+        const refreshBtn = document.getElementById("refreshBtn");
+        const exportBtn = document.getElementById("exportBtn");
+        const remoteBadge = document.getElementById("remoteBadge");
+        const yearEl = document.getElementById("anoAtual");
+        const startDateInput = document.getElementById("startDate");
+        const endDateInput = document.getElementById("endDate");
+        const keywordInput = document.getElementById("keyword");
+
+        yearEl.textContent = new Date().getFullYear();
+
+        let cachedEvents = [];
+        let statesCache = [];
+        let citiesCache = [];
+
+        const fallbackEvents = [
+            {
+                title: "Festival Gastronômico Atlântico",
+                city: "Recife",
+                state: "Pernambuco",
+                start_date: "2025-02-18",
+                end_date: "2025-02-22",
+                venue: "Marco Zero",
+                category: "Gastronomia",
+                source: "Fallback interno"
+            },
+            {
+                title: "Summit Tech Nordeste",
+                city: "Fortaleza",
+                state: "Ceará",
+                start_date: "2025-03-04",
+                end_date: "2025-03-05",
+                venue: "Centro de Eventos do Ceará",
+                category: "Tecnologia",
+                source: "Fallback interno"
+            },
+            {
+                title: "Virada Cultural Amazônica",
+                city: "Manaus",
+                state: "Amazonas",
+                start_date: "2025-07-09",
+                end_date: "2025-07-10",
+                venue: "Teatro Amazonas",
+                category: "Cultura",
+                source: "Fallback interno"
+            }
+        ];
+
+        async function loadStates() {
+            try {
+                const response = await fetch(statesEndpoint);
+                const data = await response.json();
+                statesCache = data;
+                statesList.innerHTML = "";
+                data.forEach(({ sigla, nome }) => {
+                    const option = document.createElement("option");
+                    option.value = `${nome} (${sigla})`;
+                    option.dataset.uf = sigla;
+                    statesList.appendChild(option);
+                });
+            } catch (error) {
+                console.error("Falha ao carregar estados:", error);
+                statusMessage.textContent = "Nao foi possivel carregar os estados (verifique a conexao).";
+            }
+        }
+
+        async function loadCities(uf) {
+            citiesCache = [];
+            citiesList.innerHTML = "";
+            cityInput.value = "";
+            cityInput.disabled = true;
+            if (!uf) {
+                cityInput.placeholder = "Selecione o estado primeiro";
+                return;
+            }
+
+            cityInput.placeholder = "Carregando cidades...";
+            try {
+                const response = await fetch(citiesEndpoint(uf));
+                if (!response.ok) throw new Error("Erro ao consultar cidades");
+                const data = await response.json();
+                citiesCache = data;
+                data.forEach(({ nome }) => {
+                    const option = document.createElement("option");
+                    option.value = nome;
+                    citiesList.appendChild(option);
+                });
+                cityInput.disabled = false;
+                cityInput.placeholder = "Digite ou selecione a cidade";
+            } catch (error) {
+                console.error("Falha ao carregar cidades:", error);
+                cityInput.placeholder = "Falha ao carregar cidades";
+            }
+        }
+
+        async function fetchEvents({ stateName, stateUF, cityName, keyword }) {
+            const tasks = [
+                fetchFromOpenData({ stateName, cityName, keyword }),
+                searchSympla({ cityName, stateName, keyword }),
+                searchEventim({ cityName, stateName, keyword }),
+                searchGoogle({ cityName, stateName, stateUF, keyword })
+            ];
+
+            const sourceLabels = ["OpenDataSoft", "Sympla", "Eventim", "Google"];
+            const settled = await Promise.allSettled(tasks);
+
+            const aggregated = [];
+            const successfulSources = [];
+
+            settled.forEach((result, index) => {
+                const sourceName = sourceLabels[index];
+                if (result.status === "fulfilled" && Array.isArray(result.value) && result.value.length) {
+                    aggregated.push(...result.value);
+                    successfulSources.push(sourceName);
+                } else if (result.status === "rejected") {
+                    console.error(`Falha em ${sourceName}:`, result.reason);
+                }
+            });
+
+            remoteBadge.textContent = successfulSources.length
+                ? `Fonte: ${successfulSources.join(", ")}`
+                : "Sem retorno das fontes externas";
+
+            return aggregated;
+        }
+
+        async function fetchFromOpenData({ stateName, cityName, keyword }) {
+            const params = new URLSearchParams({
+                dataset: "world-festival-and-event-dataset",
+                rows: "50",
+                q: keyword || "",
+            });
+            params.append("refine.country_name", "Brazil");
+            if (stateName) params.append("refine.region", stateName);
+            if (cityName) params.append("refine.city", cityName);
+
+            const url = `${opendataEndpoint}?${params.toString()}`;
+            const response = await fetch(url);
+            if (!response.ok) throw new Error("Falha ao consultar banco global de eventos.");
+            const payload = await response.json();
+
+            return (payload.records || []).map((record) => {
+                const fields = record.fields || {};
+                return {
+                    title: fields.event_name || fields.title || "Evento sem titulo",
+                    city: fields.city || fields.location_city || cityName || "",
+                    state: fields.region || fields.state || stateName || "",
+                    start_date: fields.start_date || fields.date_begin || fields.date,
+                    end_date: fields.end_date || fields.date_end || fields.date,
+                    venue: fields.location || fields.address || "Local nao informado",
+                    category: fields.event_type || fields.category || "Evento",
+                    source: "OpenDataSoft",
+                    url: fields.website || fields.url || null,
+                    description: fields.description || ""
+                };
+            });
+        }
+
+        async function searchSympla({ cityName, stateName, keyword }) {
+            const query = ["eventos", cityName, stateName, keyword].filter(Boolean).join(" ");
+            const url = `${symplaEndpoint}?ordem=mais-relevantes&q=${encodeURIComponent(query)}`;
+            const html = await fetchTextWithProxy(url);
+            return extractDomainEvents(html, {
+                domain: "sympla.com.br",
+                baseUrl: "https://www.sympla.com.br/",
+                category: "Sympla",
+                cityName,
+                stateName,
+                limit: 6
+            });
+        }
+
+        async function searchEventim({ cityName, stateName, keyword }) {
+            const query = ["eventos", cityName, stateName, keyword].filter(Boolean).join(" ");
+            const url = `${eventimEndpoint}?search=${encodeURIComponent(query)}`;
+            const html = await fetchTextWithProxy(url);
+            return extractDomainEvents(html, {
+                domain: "eventim.com.br",
+                baseUrl: "https://www.eventim.com.br/",
+                category: "Eventim",
+                cityName,
+                stateName,
+                limit: 6
+            });
+        }
+
+        async function searchGoogle({ cityName, stateName, stateUF, keyword }) {
+            const query = ["eventos", cityName, stateUF || stateName, keyword].filter(Boolean).join(" ");
+            const url = `${googleSearchEndpoint}?q=${encodeURIComponent(query)}&hl=pt-BR`;
+            const html = await fetchTextWithProxy(url);
+            return extractGoogleResults(html, { cityName, stateName, query, limit: 6 });
+        }
+
+        function extractDomainEvents(html, { domain, baseUrl, category, cityName, stateName, limit = 6 }) {
+            const events = [];
+            const seen = new Set();
+            const anchorRegex = /<a\b[^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/gi;
+            let match;
+            while (events.length < limit && (match = anchorRegex.exec(html))) {
+                const absolute = ensureAbsoluteUrl(baseUrl, match[1]);
+                if (!absolute || !absolute.includes(domain)) continue;
+                const title = cleanHtmlSnippet(match[2]);
+                if (!title || title.length < 4) continue;
+                if (seen.has(absolute)) continue;
+                seen.add(absolute);
+                events.push({
+                    title,
+                    city: cityName,
+                    state: stateName,
+                    start_date: "",
+                    end_date: "",
+                    venue: cityName,
+                    category,
+                    source: category,
+                    url: absolute,
+                    description: `Resultado encontrado em ${category}.`
+                });
+            }
+            return events;
+        }
+
+        function extractGoogleResults(html, { cityName, stateName, query, limit = 6 }) {
+            const events = [];
+            const regex = /<a[^>]+href="\/url\?q=([^"&]+)[^"]*"[^>]*>(.*?)<\/a>/gi;
+            const seen = new Set();
+            let match;
+            while (events.length < limit && (match = regex.exec(html))) {
+                const target = decodeURIComponent(match[1]);
+                if (!target || target.includes("google.com")) continue;
+                const title = cleanHtmlSnippet(match[2]);
+                if (!title || title.length < 4) continue;
+                if (seen.has(target)) continue;
+                seen.add(target);
+                events.push({
+                    title,
+                    city: cityName,
+                    state: stateName,
+                    start_date: "",
+                    end_date: "",
+                    venue: cityName,
+                    category: "Google",
+                    source: "Google",
+                    url: target,
+                    description: `Resultado encontrado no Google para "${query}".`
+                });
+            }
+            return events;
+        }
+
+        function buildProxyUrl(url) {
+            const trimmed = url.replace(/^https?:\/\//, "");
+            const protocol = url.startsWith("https://") ? "https://" : "http://";
+            return `${proxyHost}${protocol}${trimmed}`;
+        }
+
+        async function fetchTextWithProxy(url) {
+            const proxied = buildProxyUrl(url);
+            const response = await fetch(proxied);
+            if (!response.ok) throw new Error(`Falha ao acessar ${url}`);
+            return response.text();
+        }
+
+        function cleanHtmlSnippet(value = "") {
+            return value
+                .replace(/<[^>]+>/g, " ")
+                .replace(/&nbsp;/gi, " ")
+                .replace(/&#39;/g, "'")
+                .replace(/&quot;/g, '"')
+                .replace(/&amp;/g, "&")
+                .replace(/\s+/g, " ")
+                .trim();
+        }
+
+        function ensureAbsoluteUrl(base, link) {
+            try {
+                return new URL(link, base).href;
+            } catch (error) {
+                return link;
+            }
+        }
+
+        function normalizeEntry(value) {
+            return (value || "")
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .trim()
+                .toLowerCase();
+        }
+
+        function resolveSelectedState() {
+            const value = stateInput.value;
+            if (!value) return null;
+            const normalized = normalizeEntry(value);
+            return statesCache.find(({ sigla, nome }) => {
+                const siglaNormalized = normalizeEntry(sigla);
+                const nameNormalized = normalizeEntry(nome);
+                const composedNormalized = normalizeEntry(`${nome} (${sigla})`);
+                return normalized === siglaNormalized || normalized === nameNormalized || normalized === composedNormalized;
+            }) || null;
+        }
+
+        function resolveSelectedCity() {
+            const value = cityInput.value.trim();
+            if (!value) return "";
+            const normalized = normalizeEntry(value);
+            const match = citiesCache.find(({ nome }) => normalizeEntry(nome) === normalized);
+            return match ? match.nome : value;
+        }
+
+        function applyDateFilter(items) {
+            const start = startDateInput.value ? new Date(startDateInput.value) : null;
+            const end = endDateInput.value ? new Date(endDateInput.value) : null;
+            if (!start && !end) return items;
+
+            return items.filter(event => {
+                const eventDate = new Date(event.start_date || event.end_date || Date.now());
+                if (start && eventDate < start) return false;
+                if (end && eventDate > end) return false;
+                return true;
+            });
+        }
+
+        function renderEvents(events) {
+            resultsContainer.innerHTML = "";
+            if (!events.length) {
+                resultsContainer.innerHTML = `<div class="empty-state">Nenhum evento encontrado para o filtro. Ajuste os parametros e tente novamente.</div>`;
+                return;
+            }
+
+            events.forEach(event => {
+                const card = document.createElement("article");
+                card.className = "radar-card";
+                card.innerHTML = `
+                    <div>
+                        <p class="badge">${event.category || "Evento"}</p>
+                        <h3>${event.title}</h3>
+                        <p>${event.description || "Evento divulgado pela base publica consultada."}</p>
+                    </div>
+                    <div class="radar-meta">
+                        <span><i class='bx bx-map-pin'></i> ${event.city} - ${event.state}</span>
+                        <span><i class='bx bx-calendar'></i> ${formatDate(event.start_date)} ${event.end_date ? " - " + formatDate(event.end_date) : ""}</span>
+                        <span><i class='bx bx-buildings'></i> ${event.venue}</span>
+                    </div>
+                    <div class="radar-source">Origem: ${event.source}${event.url ? ` - <a href="${event.url}" target="_blank">Ver mais</a>` : ""}</div>
+                `;
+                resultsContainer.appendChild(card);
+            });
+        }
+
+        function formatDate(date) {
+            if (!date) return "--";
+            const parsed = new Date(date);
+            if (Number.isNaN(parsed.getTime())) return date;
+            return parsed.toLocaleDateString("pt-BR", { day: "2-digit", month: "short", year: "numeric" });
+        }
+
+        function refreshStats() {
+            const start = startDateInput.value || "--";
+            const end = endDateInput.value || "--";
+            statusMessage.textContent = `Periodo aplicado: ${start} a ${end}`.replace(/a --$/, "a aberto");
+        }
+
+        async function handleSearch(event) {
+            event?.preventDefault();
+            const selectedState = resolveSelectedState();
+            const cityName = resolveSelectedCity();
+
+            if (!selectedState) {
+                statusMessage.textContent = "Selecione ou pesquise um estado valido.";
+                stateInput.focus();
+                return;
+            }
+
+            if (!cityName) {
+                statusMessage.textContent = "Selecione ou pesquise uma cidade.";
+                cityInput.focus();
+                return;
+            }
+
+            const keyword = keywordInput.value.trim();
+
+            statusMessage.textContent = "Buscando eventos nas fontes conectadas...";
+            resultsContainer.innerHTML = "";
+
+            try {
+                let events = await fetchEvents({
+                    stateName: selectedState.nome,
+                    stateUF: selectedState.sigla,
+                    cityName,
+                    keyword
+                });
+                if (!events.length) {
+                    remoteBadge.textContent = "Fonte: fallback interno (sem registros online)";
+                    events = fallbackEvents.filter(item => {
+                        const stateMatch = normalizeEntry(item.state).includes(normalizeEntry(selectedState.nome));
+                        const cityMatch = normalizeEntry(item.city) === normalizeEntry(cityName);
+                        return stateMatch || cityMatch;
+                    });
+                }
+                events = applyDateFilter(events);
+                cachedEvents = events;
+                renderEvents(events);
+                refreshStats(events);
+                statusMessage.textContent = `Consulta concluida: ${events.length} evento(s) encontrado(s).`;
+            } catch (error) {
+                console.error(error);
+                remoteBadge.textContent = "Falha nas fontes online - exibindo base interna";
+                const fallback = applyDateFilter(fallbackEvents).filter(item => normalizeEntry(item.city) === normalizeEntry(cityName));
+                cachedEvents = fallback;
+                renderEvents(fallback);
+                refreshStats(fallback);
+                statusMessage.textContent = "Nao foi possivel acessar as buscas em tempo real. Exibindo dados internos.";
+            }
+        }
+
+        function exportResults() {
+            if (!cachedEvents.length) {
+                alert("Nenhum resultado para exportar.");
+                return;
+            }
+            const blob = new Blob([JSON.stringify(cachedEvents, null, 2)], { type: "application/json" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `radar-eventos-${Date.now()}.json`;
+            link.click();
+        }
+
+        function handleStateFieldChange() {
+            const selected = resolveSelectedState();
+            if (selected) {
+                loadCities(selected.sigla);
+            } else {
+                citiesCache = [];
+                citiesList.innerHTML = "";
+                cityInput.value = "";
+                cityInput.disabled = true;
+                cityInput.placeholder = "Selecione o estado primeiro";
+            }
+        }
+
+        stateInput.addEventListener("input", handleStateFieldChange);
+        stateInput.addEventListener("change", handleStateFieldChange);
+        form.addEventListener("submit", handleSearch);
+        refreshBtn.addEventListener("click", handleSearch);
+        exportBtn.addEventListener("click", exportResults);
+
+        loadStates();
+    </script>
+</body>
+</html>

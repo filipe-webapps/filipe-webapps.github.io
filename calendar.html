@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventos</title>
+    <link rel="stylesheet" href="css/stylecale.css">
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css">
+    <link rel="icon" type="image/x-icon" href="img/favicon.png">
+    
+</head>
+<body>
+
+    <!-- Menu -->
+    <nav class="sidebar close">
+
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="img/logo.png" alt="">
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name" id="nome">SellaStay</span>
+                    <span class="profession">EGRC Control</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu-scrollable">
+
+                <ul class="menu-links">
+
+                    <br>
+                    <br>
+
+                    <li class="nav-link">
+                        <a href="home.html">
+                            <i class='bx bxs-home icon' ></i>
+                            <span class="text nav-text">Home</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="dashboard.html">
+                            <i class='bx bxs-dashboard icon' ></i>
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link has-submenu">
+                        <a href="leads.html">
+                            <i class='bx bxs-grid icon' ></i>
+                            <span class="text nav-text">Operacional <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="leads.html"><i class='bx bxs-chevrons-right icon' ></i>Negociações</a></li>
+                            <li><a href="follow-up.html"><i class='bx bx-transfer icon' ></i>Follow Up log</a></li>
+                            <li><a href="clients.html"><i class='bx bx-id-card icon' ></i>Carteira de Clientes</a></li>
+                            <li><a href="vendas.html"><i class='bx bx-history icon'></i></i>Histórico de Vendas</a></li>
+                            <li><a href="tasks.html"><i class='bx bx-task icon'></i></i>Gestor de Tarefas</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-link" id="navselected">
+                        <a href="calendar.html">
+                            <i class='bx bxs-calendar-event icon'></i>
+                            <span class="text nav-text">Mapa de Eventos</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="pricespy.html">
+                            <i class='bx bx-radar icon'></i>
+                            <span class="text nav-text">Radar de Preços</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="reminder.html">
+                            <i class='bx bxs-bell-ring icon' ></i>
+                            <span class="text nav-text">Lembretes</span>
+                        </a>
+                    </li>
+
+                    <!-- ::::::: VERIFICAR NECESSIDADE ::::::::-->
+                    <!-- <li class="nav-link">
+                        <a href="contratos.html">
+                            <i class='bx bx-briefcase icon' ></i>
+                            <span class="text nav-text">Contratos</span>
+                        </a>
+                    </li> -->
+
+                    <li class="nav-link">
+                        <a href="relatorios.html">
+                            <i class='bx bx-line-chart icon'></i>
+                            <span class="text nav-text">Relatórios</span>
+                        </a>
+                    </li>
+
+                    <!-- ::::::: REALOCAR PARA OUTRO LUGAR ::::::::-->
+                    <!-- <li class="nav-link"> 
+                        <a href="doc.html">
+                            <i class='bx bx-help-circle icon' ></i>
+                            <span class="text nav-text">Ajuda</span>
+                        </a>
+                    </li> -->
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <ul class="menu-links">
+                    <li class="nav-link has-submenu">
+                        <a href="#">
+                            <img id="profile-pic" src="img/profile_pic_F.png" alt="Usuário logado">
+                            <span class="text nav-text"><span id="menuUserName">Usuário</span> <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="profile.html"><i class='bx bx-user icon'></i> Perfil</a></li>
+                            <li class="has-submenu">
+                                <a href="empresas.html">
+                                    <i class='bx bxs-building icon'></i> Empresa <i class='bx bx-chevron-down arrow'></i>
+                                </a>
+                                <ul class="submenu">
+                                    <li><a href="#empresa-config"><i class='bx bx-briefcase icon'></i> Configurações da Empresa</a></li>
+                                    <li><a href="#hoteis-config"><i class='bx bx-hotel icon'></i> Cadastro de Hotéis</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="settings.html"><i class='bx bx-cog icon'></i> Configurações</a></li>
+                            <li><a href="help.html"><i class='bx bx-support icon'></i> Suporte</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="logout" id="logout">
+                        <a href="index.html">
+                            <i class='bx bx-log-out icon' ></i>
+                            <span class="text nav-text">Logout</span>
+                        </a>
+                    </li>
+
+                    <li class="mode">
+                        <div class="sun-moon">
+                            <i class='bx bx-moon icon moon'></i>
+                            <i class='bx bx-sun icon sun'></i>
+                        </div>
+                        <span class="mode-text text">Dark mode</span>
+
+                        <div class="toggle-switch">
+                            <span class="switch"></span>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- /Menu -->
+
+     <div class="home-header">
+        <div class="home-header-text">
+            <p class="home-eyebrow">Pagina inicial</p>
+            <h1 id="saudacao" class="home-greeting">Bem-vindo</h1>
+            <p id="dataHora" class="home-clock"></p>
+        </div>
+    </div>
+
+    <section class="home">
+    <header>
+        <p class="home-eyebrow">Mapa de Eventos | Calendário</p><br>
+        <p class="subtitle">Monitore eventos relevantes locais, feriados nacionais, estaduais, municipais e datas comemorativas que podem impactar a sua demanda.</p>
+    </header>
+    <main class="calendar-shell">
+        <div class="toolbar">
+            <div class="view-switch">
+                <button data-view="year">Ano</button>
+                <button data-view="month" class="active">Mês</button>
+                <button data-view="week">Semana</button>
+                <button data-view="day">Dia</button>
+            </div>
+            <div class="nav-controls">
+                <button id="prevBtn"><i class='bx bx-left-arrow-alt'></i></button>
+                <h2 id="periodLabel"></h2>
+                <button id="nextBtn"><i class='bx bx-right-arrow-alt'></i></button>
+                <button id="todayBtn">Hoje</button>
+                <button id="openModalBtn" class="add-event-btn"><i class='bx bx-plus'></i> Novo evento</button>
+                <button id="openModalmap" class="add-event-btn"><i class='bx bxs-map-pin'></i> Mapear</button>
+            </div>
+        </div>
+        <div class="filters">
+            <label><input type="checkbox" data-filter="nacional" checked> Nacional</label>
+            <label><input type="checkbox" data-filter="estadual" checked> Estadual</label>
+            <label><input type="checkbox" data-filter="municipal" checked> Municipal</label>
+            <label><input type="checkbox" data-filter="comemorativo" checked> Comemorativas</label>
+            <label><input type="checkbox" data-filter="manual" checked> Eventos manuais</label>
+        </div>
+        <div class="calendar-view" id="calendarView"></div>
+        <section>
+            <h3>Próximos eventos</h3>
+            <ul class="event-list" id="eventList"></ul>
+        </section>
+    </main>
+    </section>
+
+    <div class="modal" id="eventModal" aria-hidden="true">
+        <div class="modal-card">
+            <h3>Novo evento manual</h3>
+            <form id="eventForm">
+                <label for="eventTitle">Título</label>
+                <input type="text" id="eventTitle" required>
+
+                <label for="eventDate">Data</label>
+                <input type="date" id="eventDate" required>
+
+                <label for="eventTime">Horário</label>
+                <input type="time" id="eventTime" value="09:00" required>
+
+                <label for="eventCategory">Categoria</label>
+                <select id="eventCategory">
+                    <option value="manual">Manual</option>
+                    <option value="comemorativo">Comemorativa</option>
+                </select>
+
+                <label for="eventDescription">Descrição</label>
+                <textarea id="eventDescription"></textarea>
+
+                <div class="modal-actions">
+                    <button type="button" class="ghost" id="closeModalBtn">Cancelar</button>
+                    <button type="submit" class="solid">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Modal Mapa (radar-eventos) -->
+    <div class="modal map-modal" id="mapModal" aria-hidden="true">
+        <div class="modal-card">
+            <div class="map-modal-header">
+                <h3><i class='bx bx-radar'></i> Radar de Eventos</h3>
+                <button class="map-modal-close" id="closeMapModal" aria-label="Fechar modal">&times;</button>
+            </div>
+            <div class="map-modal-body">
+                <section class="home" style="margin-top: 75px;">
+                    <div class="home-overview">
+                        <header class="radar-header">
+                            <div>
+                                <p class="home-eyebrow">
+                                    Mapa de eventos
+                                    <button type="button" class="info-hint" aria-label="Mais informacoes" data-hint="Buscamos eventos em tempo real conectando Google, Eventim e Sympla. Selecione estado, cidade ou palavra-chave para identificar novas oportunidades.">
+                                        i
+                                    </button>
+                                </p>
+                                <h1>Pesquise por eventos em sua localidade</h1>
+                            </div>
+                            <div class="radar-actions">
+                                <button class="primary" id="refreshBtn"><i class='bx bx-sync'></i>Atualizar agora</button>
+                                <button id="exportBtn"><i class='bx bx-download'></i>Exportar</button>
+                            </div>
+                        </header>
+
+                        <form class="filters-grid" id="radarForm">
+                            <div>
+                                <label for="stateInput">Estado</label>
+                                <input type="text" id="stateInput" list="statesList" placeholder="Digite ou selecione o estado" autocomplete="off" required>
+                                <datalist id="statesList"></datalist>
+                            </div>
+                            <div>
+                                <label for="cityInput">Cidade</label>
+                                <input type="text" id="cityInput" list="citiesList" placeholder="Selecione o estado primeiro" autocomplete="off" disabled required>
+                                <datalist id="citiesList"></datalist>
+                            </div>
+                            <div>
+                                <label for="startDate">Data inicial</label>
+                                <input type="date" id="startDate">
+                            </div>
+                            <div>
+                                <label for="endDate">Data final (opcional)</label>
+                                <input type="date" id="endDate">
+                            </div>
+                            <div>
+                                <label for="keyword">Palavra-chave (opcional)</label>
+                                <input type="text" id="keyword" placeholder="Carnaval, congresso, feira...">
+                            </div>
+                            <div>
+                                <label style="color: transparent;">...</label>
+                                <button id="searchevntz" type="submit">Buscar eventos</button>
+                            </div>
+                            
+                                
+                            
+                        </form>
+
+                        <div class="results-meta">
+                            <p id="statusMessage">Informe um estado e cidade para iniciar a consulta.</p>
+                            <span id="remoteBadge" class="radar-source"></span>
+                        </div>
+
+                        <section id="resultsContainer"></section>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="daySummaryModal" aria-hidden="true">
+        <div class="modal-card">
+            <h3 id="dayModalTitle">Eventos do dia</h3>
+            <ul class="event-list" id="dayModalList"></ul>
+            <div class="modal-actions">
+                <button type="button" class="ghost" id="closeDayModal">Fechar</button>
+                <button type="button" class="solid" id="openDayViewBtn">Ver detalhes</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (() => {
+            const calendarViewEl = document.getElementById('calendarView');
+            const viewButtons = document.querySelectorAll('[data-view]');
+            const periodLabel = document.getElementById('periodLabel');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const todayBtn = document.getElementById('todayBtn');
+            const filtersEl = document.querySelectorAll('[data-filter]');
+            const eventListEl = document.getElementById('eventList');
+            const modal = document.getElementById('eventModal');
+            const openModalBtn = document.getElementById('openModalBtn');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const eventForm = document.getElementById('eventForm');
+            const mapModal = document.getElementById('mapModal');
+            const openMapBtn = document.getElementById('openModalmap');
+            const closeMapBtn = document.getElementById('closeMapModal');
+            const daySummaryModal = document.getElementById('daySummaryModal');
+            const dayModalTitle = document.getElementById('dayModalTitle');
+            const dayModalList = document.getElementById('dayModalList');
+            const closeDayModalBtn = document.getElementById('closeDayModal');
+            const openDayViewBtn = document.getElementById('openDayViewBtn');
+            const BRAZIL_API = 'https://brasilapi.com.br/api/feriados/v1/';
+            const storageKey = 'calendario_brasil_manual_events';
+
+            const CELEBRATIONS = [
+                { month:1, day:25, title:'Aniversário de São Paulo', type:'comemorativo', description:'Data tradicional do município de SP' },
+                { month:2, day:14, title:'Dia do Turista Internacional', type:'comemorativo', description:'Ações promocionais com trade internacional' },
+                { month:3, day:8, title:'Dia Internacional da Mulher', type:'comemorativo', description:'Eventos especiais para o turismo feminino' },
+                { month:6, day:13, title:'Dia do Turista', type:'comemorativo', description:'Campanhas nacionais com parceiros' },
+                { month:9, day:27, title:'Dia Mundial do Turismo', type:'comemorativo', description:'Ações coordenadas pelo MTur' },
+                { month:11, day:20, title:'Dia da Consciência Negra', type:'comemorativo', description:'Programações culturais nas capitais' }
+            ];
+
+            const state = {
+                currentDate: new Date(),
+                view: 'month',
+                filters: {
+                    nacional:true,
+                    estadual:true,
+                    municipal:true,
+                    comemorativo:true,
+                    manual:true
+                },
+                manualEvents: loadManualEvents(),
+                remoteEvents: new Map()
+            };
+
+            function loadManualEvents(){
+                try{
+                    const data = JSON.parse(localStorage.getItem(storageKey));
+                    return Array.isArray(data) ? data : [];
+                }catch(e){
+                    return [];
+                }
+            }
+            function saveManualEvents(){
+                localStorage.setItem(storageKey, JSON.stringify(state.manualEvents));
+            }
+            function categorizeEvent(evt){
+                if(evt.source === 'manual') return 'manual';
+                if(evt.type === 'conmemorative' || evt.type === 'celebration' || evt.source === 'celebration') return 'comemorativo';
+                if(evt.type === 'municipal') return 'municipal';
+                if(evt.type === 'state') return 'estadual';
+                return 'nacional';
+            }
+
+            async function ensureYearData(year){
+                if(state.remoteEvents.has(year)) return;
+                try{
+                    const res = await fetch(BRAZIL_API + year);
+                    if(!res.ok) throw new Error('API error');
+                    const data = await res.json();
+                    const mapped = data.map(item => ({
+                        id:`remote-${item.date}`,
+                        title:item.name,
+                        date:item.date,
+                        time:'08:00',
+                        description:item.type,
+                        type:item.type?.toLowerCase(),
+                        source:'remote'
+                    }));
+                    const celebrations = CELEBRATIONS.map((c,idx)=>({
+                        id:`celebration-${year}-${idx}`,
+                        title:c.title,
+                        date:`${year}-${String(c.month).padStart(2,'0')}-${String(c.day).padStart(2,'0')}`,
+                        time:'09:00',
+                        description:c.description,
+                        type:'comemorativo',
+                        source:'celebration'
+                    }));
+                    state.remoteEvents.set(year,[...mapped,...celebrations]);
+                }catch(e){
+                    console.warn('Falha ao buscar feriados', e);
+                    state.remoteEvents.set(year, []);
+                }
+            }
+
+            function getAllEvents(){
+                const yearsNeeded = new Set([state.currentDate.getFullYear()]);
+                if(state.view === 'year'){
+                    yearsNeeded.add(state.currentDate.getFullYear()-1);
+                    yearsNeeded.add(state.currentDate.getFullYear()+1);
+                }
+                const remote = [];
+                yearsNeeded.forEach(year=>{
+                    const data = state.remoteEvents.get(year) || [];
+                    remote.push(...data);
+                });
+                return [...remote, ...state.manualEvents];
+            }
+
+            function getFilteredEvents(){
+                return getAllEvents().filter(evt => state.filters[categorizeEvent(evt)] !== false);
+            }
+
+            function formatDate(date, options){
+                return date.toLocaleDateString('pt-BR', options);
+            }
+            function formatKey(date){
+                return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+            }
+
+            function render(){
+                const date = state.currentDate;
+                if(state.view === 'year'){
+                    periodLabel.textContent = date.getFullYear();
+                    calendarViewEl.innerHTML = renderYearView(date);
+                }else if(state.view === 'month'){
+                    periodLabel.textContent = formatDate(date,{month:'long',year:'numeric'});
+                    calendarViewEl.innerHTML = renderMonthView(date);
+                }else if(state.view === 'week'){
+                    const start = new Date(date);
+                    start.setDate(start.getDate() - start.getDay());
+                    const end = new Date(start);
+                    end.setDate(start.getDate()+6);
+                    periodLabel.textContent = `${formatDate(start,{day:'2-digit',month:'short'})} - ${formatDate(end,{day:'2-digit',month:'short'})}`;
+                    calendarViewEl.innerHTML = renderWeekView(start);
+                }else{
+                    periodLabel.textContent = formatDate(date,{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+                    calendarViewEl.innerHTML = renderDayView(date);
+                }
+                renderUpcoming();
+            }
+
+            function renderYearView(date){
+                const year = date.getFullYear();
+                let html = '<div class="year-grid">';
+                for(let month=0; month<12; month++){
+                    const label = new Date(year,month,1).toLocaleDateString('pt-BR',{month:'long'});
+                    const first = new Date(year,month,1);
+                    const start = new Date(first);
+                    start.setDate(first.getDate() - first.getDay());
+                    html += `<div class="mini-month"><h4>${label}</h4><div class="mini-grid">`;
+                    ['D','S','T','Q','Q','S','S'].forEach(d => html += `<span>${d}</span>`);
+                    for(let i=0;i<42;i++){
+                        const day = new Date(start);
+                        day.setDate(start.getDate()+i);
+                        const events = getEventsByDate(formatKey(day));
+                        html += `<span style="opacity:${day.getMonth()===month?1:.2};font-weight:${events.length?'700':'400'}">${day.getDate()}</span>`;
+                    }
+                    html += `</div></div>`;
+                }
+                html += '</div>';
+                return html;
+            }
+
+            function renderMonthView(date){
+                const year = date.getFullYear();
+                const month = date.getMonth();
+                const first = new Date(year,month,1);
+                const start = new Date(first);
+                start.setDate(first.getDate() - first.getDay());
+                let html = '<div class="calendar-grid">';
+                ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'].forEach(label => html += `<div class="day-header">${label}</div>`);
+                for(let i=0;i<42;i++){
+                    const day = new Date(start);
+                    day.setDate(start.getDate()+i);
+                    html += buildDayCell(day, day.getMonth() !== month);
+                }
+                html += '</div>';
+                return html;
+            }
+
+            function renderWeekView(start){
+                let html = '<div class="week-view">';
+                for(let i=0;i<7;i++){
+                    const day = new Date(start);
+                    day.setDate(start.getDate()+i);
+                    const key = formatKey(day);
+                    const events = getEventsByDate(key);
+                    const items = events.length
+                        ? events.map(evt => `<span class="event-chip chip-${categorizeEvent(evt)}">${evt.title}</span>`).join('')
+                        : '<p class="empty-day">Sem eventos</p>';
+                    html += `<div class="week-column">
+                        <h4>${formatDate(day,{weekday:'short',day:'2-digit'})}</h4>
+                        ${items}
+                    </div>`;
+                }
+                html += '</div>';
+                return html;
+            }
+
+            function renderDayView(date){
+                const key = formatKey(date);
+                const events = getEventsByDate(key);
+                if(!events.length){
+                    return `<div class="day-view"><h3>${formatDate(date,{weekday:'long',day:'2-digit',month:'long'})}</h3><p class="empty-day">Sem eventos registrados.</p></div>`;
+                }
+                return `<div class="day-view">
+                    <h3>${formatDate(date,{weekday:'long',day:'2-digit',month:'long',year:'numeric'})}</h3>
+                    ${events.map(evt => `
+                        <div class="event-card">
+                            <span class="event-chip chip-${categorizeEvent(evt)}">${evt.title}</span>
+                            <p>${evt.time} — ${evt.description || ''}</p>
+                        </div>
+                    `).join('')}
+                </div>`;
+            }
+
+            function buildDayCell(day, isOtherMonth){
+                const key = formatKey(day);
+                const events = getEventsByDate(key);
+                const chips = events.slice(0,3).map(evt => `<span class="event-chip chip-${categorizeEvent(evt)}">${evt.title}</span>`).join('');
+                const more = events.length > 3 ? `<span class="event-chip">${events.length - 3}+ eventos</span>` : '';
+                const todayKey = formatKey(new Date());
+                return `<div class="calendar-day ${isOtherMonth?'other':''} ${key===todayKey?'today':''}" data-date="${key}">
+                    <span class="date-number">${day.getDate()}</span>
+                    ${chips}${more}
+                </div>`;
+            }
+
+            function getEventsByDate(dateKey){
+                return getFilteredEvents().filter(evt => evt.date === dateKey);
+            }
+
+            function renderUpcoming(){
+                const upcoming = [...getFilteredEvents()]
+                    .filter(evt => new Date(evt.date) >= new Date(new Date().toDateString()))
+                    .sort((a,b) => new Date(a.date) - new Date(b.date))
+                    .slice(0,8);
+                if(!upcoming.length){
+                    eventListEl.innerHTML = '<li>Sem eventos próximos.</li>';
+                    return;
+                }
+                eventListEl.innerHTML = upcoming.map(evt => `
+                    <li>
+                        <strong>${evt.title}</strong>
+                        <span>${formatDisplayDate(evt.date)} às ${evt.time}</span>
+                        <small>${evt.description || ''}</small>
+                    </li>
+                `).join('');
+            }
+
+            function formatDisplayDate(dateStr){
+                const date = new Date(dateStr + 'T00:00');
+                return formatDate(date,{day:'2-digit',month:'long',year:'numeric'});
+            }
+
+            function changeView(view){
+                state.view = view;
+                viewButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.view === view));
+                render();
+            }
+
+            function navigate(step){
+                const date = state.currentDate;
+                if(state.view === 'year'){
+                    date.setFullYear(date.getFullYear()+step);
+                }else if(state.view === 'month'){
+                    date.setMonth(date.getMonth()+step);
+                }else if(state.view === 'week'){
+                    date.setDate(date.getDate()+7*step);
+                }else{
+                    date.setDate(date.getDate()+step);
+                }
+                preloadYears();
+                render();
+            }
+
+            function preloadYears(){
+                const years = [state.currentDate.getFullYear()];
+                if(state.view === 'year'){
+                    years.push(state.currentDate.getFullYear()-1, state.currentDate.getFullYear()+1);
+                }
+                years.forEach(year => ensureYearData(year));
+            }
+
+            function openModal(){
+                modal.classList.add('open');
+                modal.setAttribute('aria-hidden','false');
+                document.getElementById('eventDate').value = formatKey(state.currentDate);
+            }
+            function closeModal(){
+                modal.classList.remove('open');
+                modal.setAttribute('aria-hidden','true');
+                eventForm.reset();
+            }
+            function openMapModal(){
+                mapModal.classList.add('open');
+                mapModal.setAttribute('aria-hidden','false');
+            }
+            function closeMapModal(){
+                mapModal.classList.remove('open');
+                mapModal.setAttribute('aria-hidden','true');
+            }
+            function openDaySummary(dateKey){
+                const date = new Date(dateKey + 'T00:00');
+                const events = getEventsByDate(dateKey);
+                dayModalTitle.textContent = formatDate(date,{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+                if(!events.length){
+                    dayModalList.innerHTML = '<li>Sem eventos registrados.</li>';
+                }else{
+                    dayModalList.innerHTML = events.map(evt => `
+                        <li>
+                            <strong>${evt.title}</strong>
+                            <span>${evt.time} — ${evt.description || ''}</span>
+                            <span class="event-chip chip-${categorizeEvent(evt)}">${evt.type || evt.source}</span>
+                        </li>
+                    `).join('');
+                }
+                daySummaryModal.classList.add('open');
+                daySummaryModal.setAttribute('aria-hidden','false');
+                openDayViewBtn.dataset.date = dateKey;
+            }
+            function closeDaySummary(){
+                daySummaryModal.classList.remove('open');
+                daySummaryModal.setAttribute('aria-hidden','true');
+                openDayViewBtn.removeAttribute('data-date');
+            }
+
+            eventForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const payload = {
+                    id:`manual-${Date.now()}`,
+                    title:document.getElementById('eventTitle').value.trim(),
+                    date:document.getElementById('eventDate').value,
+                    time:document.getElementById('eventTime').value || '09:00',
+                    description:document.getElementById('eventDescription').value.trim(),
+                    type:document.getElementById('eventCategory').value,
+                    source:'manual'
+                };
+                if(!payload.title || !payload.date){
+                    alert('Preencha título e data.');
+                    return;
+                }
+                state.manualEvents.push(payload);
+                saveManualEvents();
+                closeModal();
+                render();
+            });
+
+            filtersEl.forEach(cb => cb.addEventListener('change', () => {
+                state.filters[cb.dataset.filter] = cb.checked;
+                render();
+            }));
+            viewButtons.forEach(btn => btn.addEventListener('click', () => changeView(btn.dataset.view)));
+            prevBtn.addEventListener('click', () => navigate(-1));
+            nextBtn.addEventListener('click', () => navigate(1));
+            todayBtn.addEventListener('click', () => {
+                state.currentDate = new Date();
+                render();
+            });
+            openModalBtn.addEventListener('click', openModal);
+            closeModalBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (event) => {
+                if(event.target === modal) closeModal();
+            });
+            if(openMapBtn){
+                openMapBtn.addEventListener('click', openMapModal);
+            }
+            if(closeMapBtn){
+                closeMapBtn.addEventListener('click', closeMapModal);
+            }
+            mapModal.addEventListener('click', (event) => {
+                if(event.target === mapModal) closeMapModal();
+            });
+            closeDayModalBtn.addEventListener('click', closeDaySummary);
+            daySummaryModal.addEventListener('click', (event) => {
+                if(event.target === daySummaryModal) closeDaySummary();
+            });
+            openDayViewBtn.addEventListener('click', () => {
+                const dateKey = openDayViewBtn.dataset.date;
+                if(!dateKey) return;
+                state.currentDate = new Date(dateKey + 'T00:00');
+                closeDaySummary();
+                changeView('day');
+            });
+            calendarViewEl.addEventListener('click', event => {
+                const day = event.target.closest('.calendar-day');
+                if(day){
+                    state.currentDate = new Date(day.dataset.date + 'T00:00');
+                    if(state.view === 'month'){
+                        openDaySummary(day.dataset.date);
+                    }else{
+                        changeView('day');
+                    }
+                }
+            });
+
+            preloadYears();
+            ensureYearData(state.currentDate.getFullYear()).then(render);
+        })();
+    </script>
+    <script src="js/script.js"></script>
+</body>
+</html>

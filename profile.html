@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="img/favicon.png">
+    
+    <!--CSS-->
+    <link rel="stylesheet" href="css/styleset.css">
+
+    <style>
+        .profile-hero{
+            margin-top:20px;
+            background:linear-gradient(135deg,#0a1f44,#132d61 70%,#1f3b81);
+            border-radius:30px;
+            padding:32px;
+            color:#fff;
+            display:flex;
+            flex-direction:column;
+            gap:20px;
+        }
+        .profile-hero header{
+            display:flex;
+            gap:20px;
+            align-items:center;
+            flex-wrap:wrap;
+        }
+        .profile-hero .avatar{
+            position:relative;
+            width:110px;
+            height:110px;
+        }
+        .profile-hero .avatar img{
+            width:100%;
+            height:100%;
+            border-radius:24px;
+            object-fit:cover;
+            border:4px solid rgba(255,255,255,.4);
+        }
+        .profile-hero .avatar button{
+            position:absolute;
+            bottom:6px;
+            right:6px;
+            border:none;
+            background:#ff914d;
+            color:#fff;
+            border-radius:12px;
+            padding:6px;
+            cursor:pointer;
+        }
+        .profile-hero .hero-meta{
+            flex:1;
+        }
+        .profile-hero h1{
+            margin:0;
+            font-size:2.1rem;
+        }
+        .profile-hero p{
+            margin:4px 0 0;
+            opacity:.85;
+        }
+        .hero-actions{
+            display:flex;
+            flex-wrap:wrap;
+            gap:12px;
+        }
+        .hero-actions button{
+            border:none;
+            border-radius:12px;
+            padding:12px 18px;
+            font-weight:600;
+            cursor:pointer;
+            display:flex;
+            align-items:center;
+            gap:8px;
+        }
+        .btn-white{
+            background:#fff;
+            color:#132d61;
+        }
+        .btn-clear{
+            background:rgba(255,255,255,0.15);
+            color:#fff;
+        }
+        .profile-stats{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+            gap:16px;
+        }
+        .profile-stat{
+            background:rgba(255,255,255,0.15);
+            border-radius:18px;
+            padding:16px;
+        }
+        .profile-stat span{
+            display:block;
+            font-size:12px;
+            letter-spacing:0.2em;
+            text-transform:uppercase;
+            margin-bottom:6px;
+        }
+        .profile-stat strong{
+            font-size:28px;
+        }
+        .profile-content{
+            margin-top:24px;
+            display:flex;
+            flex-direction:column;
+            gap:20px;
+        }
+        .info-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+            gap:16px;
+        }
+        .info-card{
+            border:1px solid rgba(19,45,97,0.08);
+            border-radius:20px;
+            padding:16px;
+            background:var(--calc-color);
+            display:flex;
+            flex-direction:column;
+            gap:6px;
+        }
+        .info-card span.label{
+            font-size:11px;
+            letter-spacing:0.2em;
+            text-transform:uppercase;
+            color:var(--text-color);
+        }
+        .info-card span.value{
+            font-size:17px;
+            font-weight:600;
+            color:var(--tittle-color);
+        }
+        .profile-panels{
+            display:grid;
+            grid-template-columns:2fr 1fr;
+            gap:20px;
+        }
+        .panel-column{
+            display:flex;
+            flex-direction:column;
+            gap:20px;
+        }
+        .panel-card{
+            border:1px solid rgba(19,45,97,0.08);
+            border-radius:22px;
+            padding:22px;
+            background:var(--calc-color);
+            display:flex;
+            flex-direction:column;
+            gap:18px;
+        }
+        .panel-card header{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+        .panel-card header h3{
+            margin:0;
+            color:var(--tittle-color);
+        }
+        .panel-card header button{
+            border:none;
+            background:transparent;
+            color:var(--sidebar-color);
+            font-weight:600;
+            cursor:pointer;
+        }
+        .contact-list{
+            display:grid;
+            gap:12px;
+        }
+        .contact-item{
+            display:flex;
+            align-items:center;
+            gap:12px;
+            color:var(--tittle-color);
+        }
+        .contact-item i{
+            color:#ff914d;
+            font-size:20px;
+        }
+        .security-card{
+            border-radius:22px;
+            padding:22px;
+            background:#0b1835;
+            color:#fff;
+            display:flex;
+            flex-direction:column;
+            gap:16px;
+        }
+        .security-card button{
+            align-self:flex-start;
+            border:none;
+            border-radius:12px;
+            padding:10px 16px;
+            cursor:pointer;
+            font-weight:600;
+        }
+        .security-card .secondary{
+            background:rgba(255,255,255,0.15);
+            color:#fff;
+        }
+        .activity-list{
+            display:flex;
+            flex-direction:column;
+            gap:12px;
+        }
+        .activity-item{
+            display:flex;
+            gap:12px;
+            align-items:flex-start;
+        }
+        .activity-item i{
+            color:#ff914d;
+            font-size:18px;
+        }
+        .activity-item p{
+            margin:0;
+            color:var(--tittle-color);
+        }
+        .activity-item span{
+            font-size:12px;
+            color:var(--text-color);
+        }
+        .actions-bar{
+            display:flex;
+            flex-wrap:wrap;
+            gap:12px;
+            margin-top:10px;
+        }
+        .actions-bar button{
+            border:none;
+            border-radius:12px;
+            padding:12px 16px;
+            font-weight:600;
+            cursor:pointer;
+            background:var(--sidebar-color);
+            color:#fff;
+        }
+        .actions-bar button.secondary{
+            background:rgba(19,45,97,0.08);
+            color:var(--sidebar-color);
+        }
+        .modal{
+            display:none;
+            position:fixed;
+            inset:0;
+            background:rgba(0,0,0,0.5);
+            align-items:center;
+            justify-content:center;
+            z-index:1000;
+        }
+        .modal.open{
+            display:flex;
+        }
+        .modal-content{
+            background:#fff;
+            border-radius:20px;
+            padding:24px;
+            width: min(520px, 90%);
+            position:relative;
+            box-shadow:0 30px 60px rgba(0,0,0,0.15);
+        }
+        .modal-content h3{
+            margin-top:0;
+            margin-bottom:16px;
+            color:var(--tittle-color);
+        }
+        .modal-content label{
+            font-size:13px;
+            font-weight:600;
+            color:var(--text-color);
+            margin-bottom:4px;
+            display:block;
+        }
+        .modal-content input,
+        .modal-content select{
+            width:100%;
+            border:1px solid rgba(0,0,0,0.1);
+            border-radius:12px;
+            padding:10px 12px;
+            margin-bottom:12px;
+        }
+        .modal-actions{
+            display:flex;
+            gap:10px;
+            flex-wrap:wrap;
+        }
+        .modal-actions button{
+            flex:1;
+            border:none;
+            border-radius:12px;
+            padding:12px;
+            font-weight:600;
+            cursor:pointer;
+        }
+        .btn-save{
+            background:#132d61;
+            color:#fff;
+        }
+        .btn-cancel{
+            background:rgba(19,45,97,0.08);
+            color:var(--sidebar-color);
+        }
+        .close-modal{
+            position:absolute;
+            top:12px;
+            right:16px;
+            background:transparent;
+            border:none;
+            font-size:22px;
+            cursor:pointer;
+            color:var(--text-color);
+        }
+        @media(max-width:900px){
+            .profile-panels{
+                grid-template-columns:1fr;
+            }
+        }
+    </style>
+    <!--/CSS-->
+    
+    <!--Boxicons CSS-->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <!--/Boxicons CSS-->
+    
+    <title>Aurora Grand Hotels</title> 
+</head>
+<body>
+
+    <!-- Menu -->
+    <nav class="sidebar close">
+
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="img/logo.png" alt="">
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name" id="nome">SellaStay</span>
+                    <span class="profession">EGRC Control</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu-scrollable">
+
+                <ul class="menu-links">
+
+                    <br>
+                    <br>
+
+                    <li class="nav-link">
+                        <a href="home.html">
+                            <i class='bx bxs-home icon' ></i>
+                            <span class="text nav-text">Home</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="dashboard.html">
+                            <i class='bx bxs-dashboard icon' ></i>
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link has-submenu">
+                        <a href="leads.html">
+                            <i class='bx bxs-grid icon' ></i>
+                            <span class="text nav-text">Operacional <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="leads.html"><i class='bx bxs-chevrons-right icon' ></i>Negociações</a></li>
+                            <li><a href="follow-up.html"><i class='bx bx-transfer icon' ></i>Follow Up log</a></li>
+                            <li><a href="clients.html"><i class='bx bx-id-card icon' ></i>Carteira de Clientes</a></li>
+                            <li><a href="vendas.html"><i class='bx bx-history icon'></i></i>Histórico de Vendas</a></li>
+                            <li><a href="tasks.html"><i class='bx bx-task icon'></i></i>Gestor de Tarefas</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="calendar.html">
+                            <i class='bx bxs-calendar-event icon'></i>
+                            <span class="text nav-text">Mapa de Eventos</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="pricespy.html">
+                            <i class='bx bx-radar icon'></i>
+                            <span class="text nav-text">Radar de Preços</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="reminder.html">
+                            <i class='bx bxs-bell-ring icon' ></i>
+                            <span class="text nav-text">Lembretes</span>
+                        </a>
+                    </li>
+
+                    <!-- ::::::: VERIFICAR NECESSIDADE ::::::::-->
+                    <!-- <li class="nav-link">
+                        <a href="contratos.html">
+                            <i class='bx bx-briefcase icon' ></i>
+                            <span class="text nav-text">Contratos</span>
+                        </a>
+                    </li> -->
+
+                    <li class="nav-link">
+                        <a href="relatorios.html">
+                            <i class='bx bx-line-chart icon'></i>
+                            <span class="text nav-text">Relatórios</span>
+                        </a>
+                    </li>
+
+                    <!-- ::::::: REALOCAR PARA OUTRO LUGAR ::::::::-->
+                    <!-- <li class="nav-link"> 
+                        <a href="doc.html">
+                            <i class='bx bx-help-circle icon' ></i>
+                            <span class="text nav-text">Ajuda</span>
+                        </a>
+                    </li> -->
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <ul class="menu-links">
+                    <li class="nav-link has-submenu">
+                        <a href="#" id="navselected">
+                            <img id="profile-pic" src="img/profile_pic_F.png" alt="Usuário logado">
+                            <span class="text nav-text"><span id="menuUserName">Usuário</span> <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li id="subactive"><a href="profile.html"><i class='bx bx-user icon'></i> Perfil</a></li>
+                            <li class="has-submenu">
+                                <a href="empresas.html">
+                                    <i class='bx bxs-building icon'></i> Empresa <i class='bx bx-chevron-down arrow'></i>
+                                </a>
+                                <ul class="submenu">
+                                    <li><a href="#empresa-config"><i class='bx bx-briefcase icon'></i> Configurações da Empresa</a></li>
+                                    <li><a href="#hoteis-config"><i class='bx bx-hotel icon'></i> Cadastro de Hotéis</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="settings.html"><i class='bx bx-cog icon'></i> Configurações</a></li>
+                            <li><a href="help.html"><i class='bx bx-support icon'></i> Suporte</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="logout" id="logout">
+                        <a href="index.html">
+                            <i class='bx bx-log-out icon' ></i>
+                            <span class="text nav-text">Logout</span>
+                        </a>
+                    </li>
+
+                    <li class="mode">
+                        <div class="sun-moon">
+                            <i class='bx bx-moon icon moon'></i>
+                            <i class='bx bx-sun icon sun'></i>
+                        </div>
+                        <span class="mode-text text">Dark mode</span>
+
+                        <div class="toggle-switch">
+                            <span class="switch"></span>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- /Menu -->
+
+    <section class="home">
+        <div class="profile-hero">
+            <header>
+                <div class="avatar">
+                    <img id="profile-img" src="https://i.pravatar.cc/150?img=32" alt="Foto do perfil">
+                    <button type="button" onclick="document.getElementById('file-input').click()"><i class='bx bxs-edit'></i></button>
+                    <input type="file" id="file-input" accept="image/*" style="display:none;">
+                </div>
+                <div class="hero-meta">
+                    <span class="overline" style="letter-spacing:0.3em;text-transform:uppercase;opacity:.7;">Perfil</span>
+                    <h1 id="username">Filipe Oliveira</h1>
+                    <p id="role">Analista de Vendas | Cluster BR</p>
+                    <div class="hero-actions">
+                        <button class="btn-white" onclick="openModal()"><i class='bx bx-edit-alt'></i>Editar perfil</button>
+                        <button class="btn-clear" onclick="logout()"><i class='bx bx-log-out'></i>Sair da conta</button>
+                    </div>
+                </div>
+            </header>
+            <div class="profile-stats">
+                <div class="profile-stat">
+                    <span>Metas</span>
+                    <strong id="statGoals">12</strong>
+                    <p>negociações conquistadas este trimestre</p>
+                </div>
+                <div class="profile-stat">
+                    <span>Carteira</span>
+                    <strong id="statClients">48</strong>
+                    <p>clientes ativos sob sua responsabilidade</p>
+                </div>
+                <div class="profile-stat">
+                    <span>SLA médio</span>
+                    <strong id="statSla">2h</strong>
+                    <p>tempo médio para retorno ao lead</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-content">
+            <div class="info-grid">
+                <article class="info-card">
+                    <span class="label">Cargo</span>
+                    <span class="value" id="position">Analista de Vendas</span>
+                </article>
+                <article class="info-card">
+                    <span class="label">Setor</span>
+                    <span class="value" id="setor">Comercial</span>
+                </article>
+                <article class="info-card">
+                    <span class="label">E-mail corporativo</span>
+                    <span class="value" id="email">filipe@example.com</span>
+                </article>
+                <article class="info-card">
+                    <span class="label">E-mail pessoal</span>
+                    <span class="value" id="alt-email">filipe.backup@example.com</span>
+                </article>
+                <article class="info-card">
+                    <span class="label">Telefone corporativo</span>
+                    <span class="value" id="phone">+55 (31) 99999-9999</span>
+                </article>
+                <article class="info-card">
+                    <span class="label">Telefone pessoal</span>
+                    <span class="value" id="alt-phone">+55 (31) 99999-9999</span>
+                </article>
+                <article class="info-card">
+                    <span class="label">Supervisor</span>
+                    <span class="value" id="supervisor">Marcos Almeida</span>
+                </article>
+                <article class="info-card">
+                    <span class="label">Status</span>
+                    <span class="value" id="status">Disponível</span>
+                </article>
+            </div>
+
+            <div class="profile-panels">
+                <article class="panel-card">
+                    <header>
+                        <h3>Perfil profissional</h3>
+                        <button type="button" onclick="openModal()">Atualizar dados</button>
+                    </header>
+                    <div class="contact-list">
+                        <div class="contact-item"><i class='bx bx-briefcase'></i><div><strong>Squad atual</strong><p style="margin:0;color:var(--text-color);">Expansão | Sudeste</p></div></div>
+                        <div class="contact-item"><i class='bx bx-user-pin'></i><div><strong>Supervisor</strong><p style="margin:0;color:var(--text-color);" id="supervisorName">Marcos Almeida</p></div></div>
+                        <div class="contact-item"><i class='bx bx-map'></i><div><strong>Base</strong><p style="margin:0;color:var(--text-color);">Belo Horizonte, MG</p></div></div>
+                        <div class="contact-item"><i class='bx bx-target-lock'></i><div><strong>Último OKR</strong><p style="margin:0;color:var(--text-color);">Aumentar share em canais diretos em 20%</p></div></div>
+                    </div>
+                    <div class="actions-bar">
+                        <button onclick="openModal()"><i class='bx bx-pencil'></i>Editar informações</button>
+                        <button class="secondary" onclick="logout()"><i class='bx bx-exit'></i>Encerrar sessão</button>
+                    </div>
+                </article>
+
+                <div class="panel-column">
+                    <div class="security-card">
+                        <div>
+                            <h4>Segurança da conta</h4>
+                            <p style="opacity:.8;">Última alteração de senha há 90 dias.</p>
+                        </div>
+                        <button type="button" class="btn-white" onclick="openModal()">Alterar senha</button>
+                        <button type="button" class="secondary">Ativar 2FA</button>
+                    </div>
+                    <article class="panel-card">
+                        <header>
+                            <h3>Atividades recentes</h3>
+                        </header>
+                        <div class="activity-list">
+                            <div class="activity-item">
+                                <i class='bx bx-check-circle'></i>
+                                <div>
+                                    <p>Contrato fechado com Hotel Aurora Golden.</p>
+                                    <span>há 2h</span>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <i class='bx bx-user-plus'></i>
+                                <div>
+                                    <p>Novo lead adicionado à carteira Sudeste.</p>
+                                    <span>há 6h</span>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <i class='bx bx-bell'></i>
+                                <div>
+                                    <p>Alerta de radar ativado: tarifas concorrentes acima da meta.</p>
+                                    <span>ontem</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+            <h3>Atualizar informações</h3>
+
+            <label>Nome completo</label>
+            <input type="text" id="editName">
+
+            <label>Cargo</label>
+            <input type="text" id="editPosition">
+
+            <label>Setor</label>
+            <input type="text" id="editSetor">
+
+            <label>Supervisor</label>
+            <input type="text" id="editSupervisor">
+
+            <label>E-mail corporativo</label>
+            <input type="email" id="editEmail">
+
+            <label>E-mail pessoal</label>
+            <input type="email" id="editAltEmail">
+
+            <label>Telefone corporativo</label>
+            <input type="text" id="editPhone">
+
+            <label>Telefone pessoal</label>
+            <input type="text" id="editAltPhone">
+
+            <label>Link da foto de perfil</label>
+            <input type="text" id="editProfileImg">
+
+            <label>Nova senha</label>
+            <input type="password" id="editPassword">
+
+            <label>Confirme a nova senha</label>
+            <input type="password" id="editPasswordConfirm">
+
+            <div class="modal-actions">
+                <button class="btn-save" onclick="saveProfile()">Salvar alterações</button>
+                <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!--Rodapé -->
+    <!-- <footer style="line-height: 15px;">
+        &copy; <span id="anoAtual"></span> SellaStay - Gestão para Hotéis. <br> <span style="font-size: 10px; cursor: pointer;">Desenvolvido por <a href="https://www.syncsoftware.com.br" style="text-decoration: none; color: var(--text-color);" onmouseover="this.style.color='#ff914d';" onmouseout="this.style.color='var(--text-color)';" target="_blank"> <b>Sync Software LTDA</b></a></span>
+    </footer> -->
+    <!-- Rodapé -->
+        
+    <script src="js/script.js"></script>
+
+    <!-- Profile Script -->
+    <script>
+        const modalEl = document.getElementById('editModal');
+
+        function openModal() {
+            modalEl.classList.add('open');
+            document.getElementById('editName').value = document.getElementById('username').innerText;
+            document.getElementById('editEmail').value = document.getElementById('email').innerText;
+            document.getElementById('editAltEmail').value = document.getElementById('alt-email').innerText;
+            document.getElementById('editPhone').value = document.getElementById('phone').innerText;
+            document.getElementById('editAltPhone').value = document.getElementById('alt-phone').innerText;
+            document.getElementById('editSetor').value = document.getElementById('setor').innerText;
+            document.getElementById('editPosition').value = document.getElementById('position').innerText;
+            document.getElementById('editSupervisor').value = document.getElementById('supervisor').innerText;
+            document.getElementById('editProfileImg').value = document.getElementById('profile-img').src;
+            document.getElementById('editPassword').value = '';
+            document.getElementById('editPasswordConfirm').value = '';
+        }
+
+        function closeModal() {
+            modalEl.classList.remove('open');
+        }
+
+        function saveProfile() {
+            const password = document.getElementById('editPassword').value;
+            const confirm = document.getElementById('editPasswordConfirm').value;
+            if(password && password !== confirm){
+                alert('As senhas não coincidem.');
+                return;
+            }
+            document.getElementById('username').innerText = document.getElementById('editName').value;
+            document.getElementById('email').innerText = document.getElementById('editEmail').value;
+            document.getElementById('alt-email').innerText = document.getElementById('editAltEmail').value;
+            document.getElementById('phone').innerText = document.getElementById('editPhone').value;
+            document.getElementById('alt-phone').innerText = document.getElementById('editAltPhone').value;
+            document.getElementById('setor').innerText = document.getElementById('editSetor').value;
+            document.getElementById('position').innerText = document.getElementById('editPosition').value;
+            document.getElementById('supervisor').innerText = document.getElementById('editSupervisor').value;
+            document.getElementById('supervisorName').innerText = document.getElementById('editSupervisor').value;
+            const imgValue = document.getElementById('editProfileImg').value.trim();
+            if(imgValue){
+                document.getElementById('profile-img').src = imgValue;
+            }
+            const newRole = `${document.getElementById('editPosition').value} | ${document.getElementById('editSetor').value}`;
+            document.getElementById('role').innerText = newRole;
+            closeModal();
+        }
+
+        function logout() {
+            alert('Você saiu do sistema.');
+            window.location.href = 'home.html';
+        }
+
+        document.getElementById('file-input').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('profile-img').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        window.addEventListener('click', (event) => {
+            if(event.target === modalEl){
+                closeModal();
+            }
+        });
+    </script>
+    <!-- /Profile Script -->
+
+</body>
+</html>
+
+

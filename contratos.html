@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contratos | SellaStay</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/x-icon" href="img/favicon.png">
+    <link href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #ffffff;
+            color: #0f172a;
+            font-family: 'Poppins', sans-serif;
+        }
+        .workspace {
+            margin-left: 250px;
+            padding: 48px;
+        }
+        .contracts-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+        .section-head {
+            display:flex;
+            justify-content:space-between;
+            align-items:flex-end;
+            flex-wrap:wrap;
+            gap:16px;
+        }
+        .section-head h1 {
+            margin:0;
+            font-size:clamp(2rem,4vw,2.4rem);
+        }
+        .section-head small {
+            color:#94a3b8;
+        }
+        .filters {
+            display:flex;
+            gap:12px;
+            flex-wrap:wrap;
+        }
+        .filters select,
+        .filters input {
+            border-radius:12px;
+            background:rgba(255,255,255,0.05);
+            border:1px solid rgba(255,255,255,0.1);
+            padding:10px 12px;
+            color:#fff;
+        }
+        .contracts-briefing {
+            display:flex;
+            gap:16px;
+            flex-wrap:wrap;
+        }
+        .brief-card {
+            flex:1;
+            min-width:200px;
+            background:linear-gradient(135deg,#111840,#1f2c63);
+            border-radius:20px;
+            padding:18px;
+            border:1px solid rgba(255,255,255,0.08);
+            box-shadow:0 20px 40px rgba(0,0,0,0.45);
+        }
+        .brief-card h3 {
+            margin:0;
+            font-size:1rem;
+            color:#fff;
+        }
+        .brief-card strong {
+            font-size:2rem;
+            display:block;
+            margin-top:12px;
+        }
+        .brief-card p {
+            margin:4px 0 0;
+            color: rgba(255,255,255,0.7);
+            font-size:0.85rem;
+        }
+        .contracts-list {
+            margin-top:12px;
+            display:flex;
+            flex-direction:column;
+            gap:16px;
+        }
+        .contract-card {
+            background:linear-gradient(145deg,#0f172a,#141f3b);
+            border-radius:22px;
+            padding:18px 22px;
+            border:1px solid rgba(255,255,255,0.12);
+            box-shadow:0 25px 45px rgba(0,0,0,0.55);
+            display:flex;
+            flex-direction:column;
+            gap:6px;
+            cursor:pointer;
+            transition:transform 0.25s ease, border-color 0.25s ease;
+        }
+        .contract-card:hover {
+            transform:translateY(-4px);
+            border-color:#38bdf8;
+        }
+        .contract-card.active {
+            border-color:#38bdf8;
+            box-shadow:0 25px 45px rgba(56,189,248,0.35);
+        }
+        .contract-card header {
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:10px;
+        }
+        .contract-card header h3 {
+            margin:0;
+            font-size:1.25rem;
+            color:#fff;
+        }
+        .contract-card .pill {
+            padding:4px 10px;
+            border-radius:999px;
+            font-size:0.75rem;
+            background:rgba(59,130,246,0.2);
+            border:1px solid rgba(59,130,246,0.4);
+            color:#a5b4fc;
+        }
+        .contract-summary {
+            display:flex;
+            justify-content:space-between;
+            font-size:0.95rem;
+            color:#fff;
+        }
+        .contract-summary span:last-child {
+            font-weight:600;
+        }
+        .payment-status {
+            padding:4px 10px;
+            border-radius:999px;
+            background:rgba(16,185,129,0.15);
+            border:1px solid rgba(16,185,129,0.4);
+            color:#34d399;
+            font-size:0.8rem;
+            align-self:flex-start;
+        }
+        .modal-overlay {
+            position:fixed;
+            inset:0;
+            background:rgba(2,6,23,0.85);
+            align-items:center;
+            justify-content:center;
+            padding:20px;
+            z-index:1500;
+            display:none;
+        }
+        .modal-overlay.active {
+            display:flex;
+        }
+        .modal {
+            width:min(560px,95vw);
+            background:#0b1224;
+            color:#fff;
+            border-radius:20px;
+            padding:22px 20px;
+            box-shadow:0 30px 70px rgba(0,0,0,0.55);
+            border:1px solid rgba(255,255,255,0.08);
+        }
+        .modal header {
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:10px;
+            margin-bottom:12px;
+        }
+        .modal header h2 {
+            margin:0;
+        }
+        .modal .close {
+            background:transparent;
+            border:none;
+            color:#fff;
+            font-size:1.6rem;
+            cursor:pointer;
+        }
+        .modal-body {
+            display:flex;
+            flex-direction:column;
+            gap:8px;
+            font-size:0.95rem;
+        }
+        .modal-actions {
+            margin-top:14px;
+            display:flex;
+            justify-content:flex-end;
+        }
+        #downloadContractPdf {
+            border:none;
+            padding:12px 16px;
+            border-radius:12px;
+            font-weight:700;
+            cursor:pointer;
+            background:linear-gradient(135deg,#0ea5e9,#2563eb 50%,#ff6b00);
+            color:#fff;
+        }
+        @media(max-width:768px){
+            .workspace{
+                margin-left:0;
+                padding:24px;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Menu -->
+<nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="img/logo.png" alt="">
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name" id="nome">SellaStay</span>
+                    <span class="profession">GRC Control</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu-scrollable">
+
+                <li class="search-box" id="search-box">
+                    <i class='bx bx-search icon'></i>
+                    <input type="text" placeholder="Search...">
+                </li>
+                <br>
+                <br>
+
+                <ul class="menu-links">
+
+                    <li class="nav-link">
+                        <a href="home.html">
+                            <i class='bx bxs-home icon' ></i>
+                            <span class="text nav-text">Home</span>
+                        </a>
+                    </li>
+
+                    <li id="nav-link">
+                        <a href="dashboard.html">
+                            <i class='bx bxs-dashboard icon' ></i>
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+
+                    <li class="nav-link has-submenu">
+                        <a href="leads.html">
+                            <i class='bx bxs-user-detail icon' ></i>
+                            <span class="text nav-text">Negociações <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="leads.html"><i class='bx bx-user icon' ></i>Leads</a></li>
+                            <li><a href="follow-up.html"><i class='bx bx-transfer icon' ></i>Follow Up log</a></li>
+                            <li><a href="clients.html"><i class='bx bxs-user-account icon' ></i>Carteira de Clientes</a></li>
+                            <li><a href="vendas.html"><i class='bx bx-history icon'></i></i>Histórico de Vendas</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-link">
+                        <a href="calendar.html">
+                            <i class='bx bxs-calendar icon'></i>
+                            <span class="text nav-text">Calendário</span>
+                        </a>
+                    </li>
+                  <!--  <li class="nav-link">
+                        <a href="hoteis.html">
+                            <i class='bx bxs-business icon'></i>
+                            <span class="text nav-text">Hotéis</span>
+                        </a> -->
+                      <!--  <ul class="submenu">
+                            <li><a href="hotel-1.html"><i class='bx bx-home-smile icon'></i> Aurora Golden</a></li>
+                            <li><a href="hotel-2.html"><i class='bx bxs-buildings icon'></i> Aurora Suites</a></li>
+                            <li><a href="hotel-3.html"><i class='bx bx-building icon'></i> Aurora Budget</a></li>
+                            <li><a href="hotel-4.html"><i class='bx bxs-arch icon'></i> Aurora Resorts</a></li>
+                        </ul> 
+                    </li> -->
+
+                    <li class="nav-link">
+                        <a href="pricespy.html">
+                            <i class='bx bx-radar icon'></i>
+                            <span class="text nav-text">Radar de Preços</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="radar-eventos.html">
+                            <i class='bx bx-calendar-event icon'></i>
+                            <span class="text nav-text">Mapa de Eventos</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="reminder.html">
+                            <i class='bx bxs-bell-ring icon' ></i>
+                            <span class="text nav-text">Lembretes</span>
+                        </a>
+                    </li>
+
+                  <!--  <li class="nav-link">
+                        <a href="pricespy.html">
+                            <i class='bx bx-bell icon'></i>
+                            <span class="text nav-text">Alertas</span>
+                        </a>
+                    </li> -->
+
+                    <li class="nav-link">
+                        <a href="contratos.html">
+                            <i class='bx bx-briefcase icon' ></i>
+                            <span class="text nav-text">Contratos</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="relatorios.html">
+                            <i class='bx bx-line-chart icon'></i>
+                            <span class="text nav-text">Relatórios</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="help.html">
+                            <i class='bx bx-help-circle icon' ></i>
+                            <span class="text nav-text">Ajuda</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <ul class="menu-links">
+                    <li class="nav-link has-submenu">
+                        <a href="#">
+                            <img id="profile-pic" src="img/profile_pic_F.png" alt="Usuário logado">
+                            <span class="text nav-text"><span id="menuUserName">Usuário</span> <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="profile.html"><i class='bx bx-user icon'></i> Perfil</a></li>
+                            <li class="has-submenu">
+                                <a href="empresas.html">
+                                    <i class='bx bxs-building icon'></i> Empresa <i class='bx bx-chevron-down arrow'></i>
+                                </a>
+                                <ul class="submenu">
+                                    <li><a href="#empresa-config"><i class='bx bx-briefcase icon'></i> Configurações da Empresa</a></li>
+                                    <li><a href="#hoteis-config"><i class='bx bx-hotel icon'></i> Cadastro de Hotéis</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="settings.html"><i class='bx bx-cog icon'></i> Configurações</a></li>
+                            <li><a href="help.html"><i class='bx bx-support icon'></i> Fale com a Sync</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="logout" id="logout">
+                        <a href="index.html">
+                            <i class='bx bx-log-out icon' ></i>
+                            <span class="text nav-text">Logout</span>
+                        </a>
+                    </li>
+
+                    <li class="mode">
+                        <div class="sun-moon">
+                            <i class='bx bx-moon icon moon'></i>
+                            <i class='bx bx-sun icon sun'></i>
+                        </div>
+                        <span class="mode-text text">Dark mode</span>
+
+                        <div class="toggle-switch">
+                            <span class="switch"></span>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- FIM MENU -->
+
+    <main class="workspace">
+        <section class="contracts-panel">
+            <div class="section-head">
+                <div>
+                    <small>Gestão de Contratos</small>
+                    <h1>Contratos</h1>
+                    <p>Cada contrato representa um cliente encerrado com dados financeiros e de pagamento.</p>
+                </div>
+                <div class="filters">
+                    <input type="month" id="contractMonth">
+                    <select id="contractStatus">
+                        <option value="all">Filtrar por status</option>
+                        <option value="paid">Encerrados</option>
+                    </select>
+                </div>
+            </div>
+            <div class="contracts-briefing">
+                <div class="brief-card">
+                    <h3>Aguardando assinatura</h3>
+                    <strong id="pendingSignature">03</strong>
+                    <p>Leads prontos para assinatura final</p>
+                </div>
+                <div class="brief-card">
+                    <h3>Aguardando pagamento</h3>
+                    <strong id="pendingPayment">05</strong>
+                    <p>Contratos assinados aguardando liquidação</p>
+                </div>
+                <div class="brief-card">
+                    <h3>Pago</h3>
+                    <strong id="paidContracts">12</strong>
+                    <p>Contratos encerrados com pagamentos confirmados</p>
+                </div>
+            </div>
+            <div class="contracts-list" id="contractsList"></div>
+        </section>
+    </main>
+
+    <div class="modal-overlay" id="contractDetailModal">
+        <div class="modal">
+            <header>
+                <h2>Detalhes do contrato</h2>
+                <button class="close" data-close>&times;</button>
+            </header>
+            <div class="modal-body">
+                <p id="modalClient"></p>
+                <p id="modalSummary"></p>
+                <p id="modalPayment"></p>
+                <div class="modal-actions">
+                    <button class="btn btn-success" id="downloadContractPdf">Baixar PDF</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/script.js"></script>
+    <script>
+        const contracts = [
+            {
+                id: "CTR-102",
+                client: "Aurora Grand",
+                contact: "Lucas Morais",
+                value: "R$ 42.500,00",
+                payment: "Parcelado",
+                due: "05/06/2025",
+                status: "pending_signature",
+                installments: "8x R$ 5.312,50",
+                description: "Contrato anual com escalas premium e integração PMS."
+            },
+            {
+                id: "CTR-110",
+                client: "Viva Suítes",
+                contact: "Marina Sales",
+                value: "R$ 28.600,00",
+                payment: "À vista",
+                due: "12/06/2025",
+                status: "pending_payment",
+                installments: "Pagamento único via boleto",
+                description: "Projeto de automação de upsell e CRM integrado."
+            },
+            {
+                id: "CTR-115",
+                client: "SkyLine Resorts",
+                contact: "Paulo Andrade",
+                value: "R$ 65.000,00",
+                payment: "Parcelado",
+                due: "18/06/2025",
+                status: "paid",
+                installments: "10x R$ 6.500,00",
+                description: "Pacote completo com BI financeiro e acompanhamento SyncIA."
+            }
+        ];
+
+        function countByStatus(status) {
+            return contracts.filter(c => c.status === status).length;
+        }
+
+        function closeModal(modal) {
+            if (!modal) return;
+            modal.classList.remove("active");
+            modal.setAttribute("aria-hidden", "true");
+        }
+
+        function renderContracts(filterStatus = "all") {
+            const list = document.getElementById("contractsList");
+            if (!list) return;
+            let filtered = contracts;
+            if (filterStatus === "paid") filtered = contracts.filter(c => c.status === "paid");
+            list.innerHTML = filtered.map(contract => `
+                <article class="contract-card" data-contract="${contract.id}">
+                    <header>
+                        <h3>${contract.client}</h3>
+                        <span class="pill">${contract.id}</span>
+                    </header>
+                    <div class="contract-summary">
+                        <span>${contract.payment}</span>
+                        <span>${contract.value}</span>
+                    </div>
+                    <div class="contract-summary">
+                        <span>Vencimento</span>
+                        <span>${contract.due}</span>
+                    </div>
+                    <span class="payment-status">${contract.status === "paid" ? "Pago" : "Pendente"}</span>
+                </article>
+            `).join("");
+        }
+
+        let currentContractId = null;
+
+        const contractsList = document.getElementById("contractsList");
+        contractsList?.addEventListener("click", (event) => {
+            const card = event.target.closest(".contract-card");
+            if (!card) return;
+            contractsList.querySelectorAll(".contract-card").forEach(c => c.classList.remove("active"));
+            card.classList.add("active");
+            openContractModal(card.dataset.contract);
+        });
+
+        function openContractModal(contractId) {
+            const contract = contracts.find(c => c.id === contractId);
+            if (!contract) return;
+            currentContractId = contractId;
+            document.getElementById("modalClient").textContent = `Cliente: ${contract.client} - ${contract.contact}`;
+            document.getElementById("modalSummary").textContent = contract.description;
+            document.getElementById("modalPayment").textContent = `Pagamento: ${contract.payment} - ${contract.installments}`;
+            document.getElementById("contractDetailModal").classList.add("active");
+            document.getElementById("contractDetailModal").setAttribute("aria-hidden", "false");
+        }
+
+        const contractModal = document.getElementById("contractDetailModal");
+        document.getElementById("contractStatus")?.addEventListener("change", (event) => {
+            renderContracts(event.target.value);
+        });
+        document.querySelectorAll("[data-close]").forEach(btn => {
+            btn.addEventListener("click", () => closeModal(contractModal));
+        });
+        contractModal?.addEventListener("click", (event) => {
+            if (event.target === contractModal) closeModal(contractModal);
+        });
+        document.getElementById("downloadContractPdf")?.addEventListener("click", () => {
+            const activeId = currentContractId || document.querySelector(".contract-card.active")?.dataset.contract;
+            if (activeId) {
+                window.open(`contratos/${activeId}.pdf`, "_blank");
+            }
+        });
+            document.getElementById("pendingSignature").textContent = countByStatus("pending_signature");
+            document.getElementById("pendingPayment").textContent = countByStatus("pending_payment");
+            document.getElementById("paidContracts").textContent = countByStatus("paid");
+
+        renderContracts();
+    </script>
+</body>
+</html>

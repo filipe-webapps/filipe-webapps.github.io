@@ -1,0 +1,933 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="img/favicon.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <title>SellaStay | Lembretes</title>
+    <style>
+        .reminder-module {
+            background: var(--calc-color);
+            margin: 30px auto;
+            padding: 32px;
+            border-radius: 28px;
+            box-shadow: 0 25px 65px rgba(0,0,0,0.12);
+            border: 1px solid rgba(0,0,0,0.06);
+            max-width: 1200px;
+        }
+        .reminder-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .reminder-header h1 {
+            margin: 4px 0;
+            font-size: 36px;
+            color: var(--tittle-color);
+        }
+        .reminder-header button {
+            background: #132d61;
+            color: #fff;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .reminder-legend {
+            margin: 20px 0 10px 0;
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            color: var(--text-color);
+            font-size: 14px;
+        }
+        .detail-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+        .detail-actions-left,
+        .detail-actions-right {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .history-link {
+            margin-top: 4px;
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 0.9rem;
+            color: #0b5ed7;
+        }
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+        }
+        .list-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--tittle-color);
+            margin: 25px 0 15px 0;
+        }
+        .reminder-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .reminder-card-item {
+            border: 1px solid rgba(0,0,0,0.08);
+            border-radius: 20px;
+            padding: 18px 22px;
+            background: var(--body-color);
+            cursor: pointer;
+            transition: transform 0.15s ease, border 0.15s ease;
+        }
+        .reminder-card-item:hover {
+            transform: translateY(-2px);
+            border-color: rgba(0,0,0,0.2);
+        }
+        .reminder-card-item header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+        .reminder-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--tittle-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .urgency-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .urgency-pill.low { background: rgba(22,163,74,0.15); color: #15803d; }
+        .urgency-pill.medium { background: rgba(250,204,21,0.2); color: #a16207; }
+        .urgency-pill.high { background: rgba(220,38,38,0.15); color: #b91c1c; }
+        .reminder-meta {
+            margin-top: 10px;
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+            font-size: 14px;
+            color: var(--text-color);
+        }
+        .reminder-empty {
+            border: 2px dashed rgba(0,0,0,0.12);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            color: var(--text-color);
+            background: rgba(0,0,0,0.02);
+        }
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15,23,42,0.65);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 9999;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal {
+            background: var(--calc-color);
+            width: 100%;
+            max-width: 560px;
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: 0 40px 60px rgba(0,0,0,0.25);
+            border: 1px solid rgba(0,0,0,0.08);
+        }
+        .modal header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+        .modal h2 {
+            margin: 0;
+            color: var(--tittle-color);
+        }
+        .modal-actions {
+            margin-top: 12px;
+        }
+        .btn-save {
+            width: 100%;
+            border-radius: 14px;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            background: linear-gradient(135deg, #0ea5e9, #2563eb 45%, #ff6b00);
+            box-shadow: 0 12px 26px rgba(37, 99, 235, 0.45);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 18px 30px rgba(37, 99, 235, 0.55);
+        }
+        .modal button.close {
+            background: transparent;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+        .history-list {
+            max-height: 300px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .history-card {
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(0,0,0,0.08);
+            background: rgba(255,255,255,0.85);
+            cursor: pointer;
+        }
+        .history-card header {
+            display:flex;
+            justify-content:space-between;
+            font-size:0.9rem;
+            margin-bottom:4px;
+        }
+        .history-detail {
+            min-height: 80px;
+            margin-bottom: 10px;
+        }
+        .modal label {
+            display: block;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--text-color);
+            margin-bottom: 6px;
+        }
+        .modal input,
+        .modal textarea {
+            width: 100%;
+            padding: 11px 14px;
+            border-radius: 14px;
+            border: 1px solid rgba(0,0,0,0.1);
+            background: var(--body-color);
+            margin-bottom: 16px;
+            color: var(--tittle-color);
+        }
+        .modal textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        .modal footer {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .modal footer button {
+            border: none;
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn-primary { background: #132d61; color: #fff; }
+        .btn-secondary { background: transparent; color: #132d61; border: 1px dashed #132d61; }
+        .btn-danger { background: #dc2626; color: #fff; }
+        .btn-warning { background: #fbbf24; color: #1f2937; }
+        .db-spec {
+            margin-top: 40px;
+            padding: 24px;
+            border-radius: 20px;
+            border: 1px solid rgba(0,0,0,0.08);
+            background: var(--body-color);
+        }
+        .db-spec pre {
+            background: #0f172a;
+            color: #fff;
+            padding: 18px;
+            border-radius: 16px;
+            overflow-x: auto;
+            font-size: 13px;
+        }
+        @media (max-width: 768px) {
+            .reminder-module { padding: 22px; }
+            .modal { max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Menu -->
+    <nav class="sidebar close">
+
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="img/logo.png" alt="">
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name" id="nome">SellaStay</span>
+                    <span class="profession">EGRC Control</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu-scrollable">
+
+                <ul class="menu-links">
+
+                    <br>
+                    <br>
+
+                    <li class="nav-link">
+                        <a href="home.html">
+                            <i class='bx bxs-home icon' ></i>
+                            <span class="text nav-text">Home</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="dashboard.html">
+                            <i class='bx bxs-dashboard icon' ></i>
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link has-submenu">
+                        <a href="leads.html">
+                            <i class='bx bxs-grid icon' ></i>
+                            <span class="text nav-text">Operacional <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="leads.html"><i class='bx bxs-chevrons-right icon' ></i>Negociações</a></li>
+                            <li><a href="follow-up.html"><i class='bx bx-transfer icon' ></i>Follow Up log</a></li>
+                            <li><a href="clients.html"><i class='bx bx-id-card icon' ></i>Carteira de Clientes</a></li>
+                            <li><a href="vendas.html"><i class='bx bx-history icon'></i></i>Histórico de Vendas</a></li>
+                            <li><a href="tasks.html"><i class='bx bx-task icon'></i></i>Gestor de Tarefas</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="calendar.html">
+                            <i class='bx bxs-calendar-event icon'></i>
+                            <span class="text nav-text">Mapa de Eventos</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="pricespy.html">
+                            <i class='bx bx-radar icon'></i>
+                            <span class="text nav-text">Radar de Preços</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link" id="navselected">
+                        <a href="reminder.html">
+                            <i class='bx bxs-bell-ring icon' ></i>
+                            <span class="text nav-text">Lembretes</span>
+                        </a>
+                    </li>
+
+                    <!-- ::::::: VERIFICAR NECESSIDADE ::::::::-->
+                    <!-- <li class="nav-link">
+                        <a href="contratos.html">
+                            <i class='bx bx-briefcase icon' ></i>
+                            <span class="text nav-text">Contratos</span>
+                        </a>
+                    </li> -->
+
+                    <li class="nav-link">
+                        <a href="relatorios.html">
+                            <i class='bx bx-line-chart icon'></i>
+                            <span class="text nav-text">Relatórios</span>
+                        </a>
+                    </li>
+
+                    <!-- ::::::: REALOCAR PARA OUTRO LUGAR ::::::::-->
+                    <!-- <li class="nav-link"> 
+                        <a href="doc.html">
+                            <i class='bx bx-help-circle icon' ></i>
+                            <span class="text nav-text">Ajuda</span>
+                        </a>
+                    </li> -->
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <ul class="menu-links">
+                    <li class="nav-link has-submenu">
+                        <a href="#">
+                            <img id="profile-pic" src="img/profile_pic_F.png" alt="Usuário logado">
+                            <span class="text nav-text"><span id="menuUserName">Usuário</span> <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="profile.html"><i class='bx bx-user icon'></i> Perfil</a></li>
+                            <li class="has-submenu">
+                                <a href="empresas.html">
+                                    <i class='bx bxs-building icon'></i> Empresa <i class='bx bx-chevron-down arrow'></i>
+                                </a>
+                                <ul class="submenu">
+                                    <li><a href="#empresa-config"><i class='bx bx-briefcase icon'></i> Configurações da Empresa</a></li>
+                                    <li><a href="#hoteis-config"><i class='bx bx-hotel icon'></i> Cadastro de Hotéis</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="settings.html"><i class='bx bx-cog icon'></i> Configurações</a></li>
+                            <li><a href="help.html"><i class='bx bx-support icon'></i> Suporte</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="logout" id="logout">
+                        <a href="index.html">
+                            <i class='bx bx-log-out icon' ></i>
+                            <span class="text nav-text">Logout</span>
+                        </a>
+                    </li>
+
+                    <li class="mode">
+                        <div class="sun-moon">
+                            <i class='bx bx-moon icon moon'></i>
+                            <i class='bx bx-sun icon sun'></i>
+                        </div>
+                        <span class="mode-text text">Dark mode</span>
+
+                        <div class="toggle-switch">
+                            <span class="switch"></span>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- /Menu -->
+
+    <section class="home">
+        <div class="reminder-module">
+        <div class="reminder-header">
+            <div>
+                <p class="home-eyebrow">Organize seu dia</p>
+                <h1>Lembretes</h1>
+            </div>
+            <button id="openCreateModal"><i class='bx bx-plus'></i>Adicionar novo</button>
+        </div>
+        <div class="reminder-legend">
+            <span><span class="legend-dot" style="background:#dc2626;"></span>Vermelho: urgente</span>
+                <span><span class="legend-dot" style="background:#facc15;"></span>Amarelo: crítico</span>
+            <span><span class="legend-dot" style="background:#16a34a;"></span>Verde: no prazo</span>
+        </div>
+        <p class="history-link" id="openHistoryLink">Histórico de lembretes</p>
+            <div class="list-title">Últimos lembretes cadastrados (ordenados por urgência)</div>
+            <div class="reminder-list" id="reminderList"></div>
+        </div>
+        <img id="logoavi" src="img/aviat.png" alt="Aviat">
+    </section>
+
+    <!--Rodapé -->
+    <footer style="line-height: 15px;">
+        &copy; <span id="anoAtual"></span> SellaStay - Gestão para Hotéis. <br> <span style="font-size: 10px; cursor: pointer;">Desenvolvido por <a href="https://www.syncsoftware.com.br" style="text-decoration: none; color: var(--text-color);" onmouseover="this.style.color='#ff914d';" onmouseout="this.style.color='var(--text-color)';" target="_blank"> <b>Sync Software LTDA</b></a></span>
+    </footer>
+    <!-- Rodapé -->
+
+    <div class="modal-overlay" id="createModal">
+        <div class="modal">
+            <header>
+                <h2 id="modalTitle">Novo lembrete</h2>
+                <button class="close" data-close>&times;</button>
+            </header>
+            <form id="reminderForm">
+                <label for="reminderTitle">Titulo</label>
+                <input type="text" id="reminderTitle" required placeholder="Ex: Revisar tarifas OTA">
+                <label for="reminderDescription">Descricao</label>
+                <textarea id="reminderDescription" placeholder="Inclua detalhes importantes"></textarea>
+                <label for="reminderDateTime">Data e horario</label>
+                <input type="datetime-local" id="reminderDateTime" required>
+                <div class="modal-actions">
+                    <button type="submit" class="btn-primary btn-save" id="saveReminder">Salvar lembrete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal">
+            <header>
+                <h2>Detalhes do lembrete</h2>
+                <button class="close" data-close>&times;</button>
+            </header>
+            <form id="detailForm">
+                <label for="detailTitle">Titulo</label>
+                <input type="text" id="detailTitle" disabled>
+                <label for="detailDescription">Descricao</label>
+                <textarea id="detailDescription" disabled></textarea>
+                <label for="detailDateTime">Data e horario</label>
+                <input type="datetime-local" id="detailDateTime" disabled>
+                  <footer>
+                      <div class="detail-actions">
+                          <div class="detail-actions-left">
+                              <button type="button" class="btn-warning" id="editReminder">Editar</button>
+                              <button type="button" class="btn-danger" id="deleteReminder">Excluir</button>
+                          </div>
+                          <div class="detail-actions-right">
+                              <button type="button" class="btn-primary" id="saveDetail" style="display:none;">Salvar</button>
+                              <button type="button" class="btn-success" id="completeReminder">
+                                  Concluir lembrete
+                              </button>
+                          </div>
+                      </div>
+                      <button type="button" class="btn-secondary" data-close>Fechar</button>
+                  </footer>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="historyModal">
+        <div class="modal">
+            <header>
+                <h2>Histórico de lembretes</h2>
+                <button class="close" data-close-history>&times;</button>
+            </header>
+            <div class="history-list" id="historyList"></div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="historyDetailModal">
+        <div class="modal">
+            <header>
+                <h2 id="historyTitle">Detalhes do lembrete</h2>
+                <button class="close" data-close-history-detail>&times;</button>
+            </header>
+            <div class="history-detail" id="historyDetail"></div>
+            <div class="settings-actions">
+                <button type="button" class="btn-success" id="historyReopenBtn">Reabrir lembrete</button>
+                <button type="button" class="btn-secondary" data-close-history-detail>Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+    <script>
+        (function() {
+            const list = document.getElementById('reminderList');
+            const createModal = document.getElementById('createModal');
+            const detailModal = document.getElementById('detailModal');
+            const form = document.getElementById('reminderForm');
+            const detailForm = document.getElementById('detailForm');
+            const saveDetailBtn = document.getElementById('saveDetail');
+            const editDetailBtn = document.getElementById('editReminder');
+            const deleteDetailBtn = document.getElementById('deleteReminder');
+            const completeDetailBtn = document.getElementById('completeReminder');
+            const openCreateBtn = document.getElementById('openCreateModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const saveBtn = document.getElementById('saveReminder');
+            const closeButtons = document.querySelectorAll('[data-close]');
+            const userName = document.getElementById('user-name')?.textContent?.replace(/\s*<.*?>/g, '')?.trim() || 'default-user';
+            const storageKey = `reminders_${userName.toLowerCase().replace(/[^a-z0-9]/g,'_')}`;
+            const historyKey = `reminders_history_${userName.toLowerCase().replace(/[^a-z0-9]/g,'_')}`;
+            const autoCloseStorageKey = 'reminder_auto_close_days';
+            const defaultAutoCloseDays = 7;
+            const detailFields = ['detailTitle','detailDescription','detailDateTime'];
+            let editingId = null;
+            let activeDetailId = null;
+
+            function openModal(modal) { modal.classList.add('active'); }
+            function closeModal(modal) { modal.classList.remove('active'); }
+            closeButtons.forEach(btn => btn.addEventListener('click', () => {
+                closeModal(createModal);
+                closeModal(detailModal);
+                resetForms();
+            }));
+
+            function setDetailEditable(canEdit) {
+                detailFields.forEach(id => {
+                    const field = document.getElementById(id);
+                    if (field) field.disabled = !canEdit;
+                });
+            }
+
+            function resetForms() {
+                form.reset();
+                detailForm.reset();
+                editingId = null;
+                activeDetailId = null;
+                saveDetailBtn.style.display = 'none';
+                editDetailBtn.textContent = 'Editar';
+                editDetailBtn.dataset.mode = 'view';
+                setDetailEditable(false);
+                modalTitle.textContent = 'Novo lembrete';
+                saveBtn.textContent = 'Salvar lembrete';
+            }
+
+            function readData() {
+                try { return JSON.parse(localStorage.getItem(storageKey)) || []; }
+                catch(e){ console.error(e); return []; }
+            }
+            function writeData(data) { localStorage.setItem(storageKey, JSON.stringify(data)); }
+            function readHistory() {
+                try { return JSON.parse(localStorage.getItem(historyKey)) || []; }
+                catch(e){ console.error(e); return []; }
+            }
+            function writeHistory(data) {
+                localStorage.setItem(historyKey, JSON.stringify(data));
+            }
+            function addToHistory(reminder, reason = 'manual') {
+                const history = readHistory();
+                history.unshift({
+                    ...reminder,
+                    completionReason: reason,
+                    completed: true,
+                    completedAt: new Date().toISOString()
+                });
+                writeHistory(history);
+            }
+            function getAutoCloseDays() {
+                const stored = parseInt(localStorage.getItem(autoCloseStorageKey), 10);
+                return Number.isNaN(stored) ? defaultAutoCloseDays : Math.max(1, stored);
+            }
+            function cleanExpiredReminders() {
+                const days = getAutoCloseDays();
+                if (!days) return;
+                const data = readData();
+                const now = Date.now();
+                const threshold = days * 864e5;
+                let updated = false;
+                const kept = [];
+                data.forEach(reminder => {
+                    const due = new Date(reminder.dueDateTime).getTime();
+                    if (!isNaN(due) && now - due >= threshold) {
+                        addToHistory(reminder, 'auto');
+                        updated = true;
+                        return;
+                    }
+                    kept.push(reminder);
+                });
+                if (updated) {
+                    writeData(kept);
+                }
+            }
+            function removeReminderById(id) {
+                const data = readData();
+                const idx = data.findIndex(item => item.id === id);
+                if (idx === -1) return null;
+                const [removed] = data.splice(idx, 1);
+                writeData(data);
+                return removed;
+            }
+            function completeReminderById(id, reason = 'manual') {
+                const reminder = removeReminderById(id);
+                if (!reminder) return false;
+                addToHistory(reminder, reason);
+            if (activeDetailId === id) {
+                closeModal(detailModal);
+                resetForms();
+            }
+            render();
+            return true;
+        }
+
+        const historyModal = document.getElementById('historyModal');
+        const historyList = document.getElementById('historyList');
+        const historyDetailModal = document.getElementById('historyDetailModal');
+        const historyDetailNode = document.getElementById('historyDetail');
+        const historyTitle = document.getElementById('historyTitle');
+        const openHistoryLink = document.getElementById('openHistoryLink');
+        const historyReopenBtn = document.getElementById('historyReopenBtn');
+
+        function renderHistoryList() {
+            const history = readHistory();
+            if (!historyList) return;
+            if (!history.length) {
+                historyList.innerHTML = '<p style="color:var(--text-color);">Nenhum lembrete no histórico.</p>';
+                return;
+            }
+            historyList.innerHTML = history.map(reminder => `
+                <article class="history-card" data-id="${reminder.id}">
+                    <header>
+                        <strong>${reminder.title}</strong>
+                        <span>${new Date(reminder.completedAt).toLocaleString('pt-BR')}</span>
+                    </header>
+                    <p>${reminder.description || 'Sem descrição'}</p>
+                </article>
+            `).join('');
+            historyList.querySelectorAll('.history-card').forEach(card => {
+                card.addEventListener('click', () => openHistoryDetail(card.dataset.id));
+            });
+        }
+
+        function openHistoryDetail(id) {
+            const history = readHistory();
+            const reminder = history.find(item => item.id === id);
+            if (!reminder) return;
+            historyDetailNode.innerHTML = `
+                <p><strong>Título:</strong> ${reminder.title}</p>
+                <p><strong>Descrição:</strong> ${reminder.description || 'Sem descrição'}</p>
+                <p><strong>Finalizado em:</strong> ${new Date(reminder.completedAt).toLocaleString('pt-BR')}</p>
+                <p><strong>Motivo:</strong> ${reminder.completionReason || 'Manual'}</p>
+            `;
+            if (historyTitle) {
+                historyTitle.textContent = `Detalhes - ${reminder.title}`;
+            }
+            historyReopenBtn.dataset.id = id;
+            historyDetailModal?.classList.add('active');
+        }
+
+        function reopenHistoryReminder(id) {
+            const history = readHistory();
+            const idx = history.findIndex(item => item.id === id);
+            if (idx === -1) return;
+            const [entry] = history.splice(idx, 1);
+            writeHistory(history);
+            const active = readData();
+            active.push({ ...entry, completed: false, completedAt: null });
+            writeData(active);
+            render();
+            historyDetailModal?.classList.remove('active');
+            historyModal?.classList.remove('active');
+            alert('Lembrete reaberto com sucesso.');
+        }
+
+        openHistoryLink?.addEventListener('click', () => {
+            renderHistoryList();
+            historyModal?.classList.add('active');
+        });
+        document.querySelectorAll('[data-close-history]').forEach(btn => btn.addEventListener('click', () => historyModal?.classList.remove('active')));
+        document.querySelectorAll('[data-close-history-detail]').forEach(btn => btn.addEventListener('click', () => historyDetailModal?.classList.remove('active')));
+        historyReopenBtn?.addEventListener('click', () => {
+            const id = historyReopenBtn.dataset.id;
+            if (id) reopenHistoryReminder(id);
+        });
+
+            function getUrgency(reminder) {
+                const now = new Date();
+                const due = new Date(reminder.dueDateTime);
+                const diffHours = (due - now) / 36e5;
+                if (diffHours <= 0) return 'high';
+                if (diffHours <= 24) return 'high';
+                if (diffHours <= 72) return 'medium';
+                return 'low';
+            }
+            function urgencyPriority(urgency) {
+                return { high: 0, medium: 1, low: 2 }[urgency] ?? 2;
+            }
+            const urgencyLabel = { low: 'No prazo', medium: 'Crítico', high: 'Urgente' };
+
+            function render() {
+                cleanExpiredReminders();
+                const data = readData();
+                if (!data.length) {
+                    list.innerHTML = '<div class="reminder-empty">Nenhum lembrete cadastrado. Clique em "Adicionar novo" para começar.</div>';
+                    return;
+                }
+                data.sort((a,b) => {
+                    const urgDiff = urgencyPriority(getUrgency(a)) - urgencyPriority(getUrgency(b));
+                    if (urgDiff !== 0) return urgDiff;
+                    return new Date(a.dueDateTime) - new Date(b.dueDateTime);
+                });
+                list.innerHTML = data.map(reminder => {
+                    const urgency = getUrgency(reminder);
+                    return `
+                        <article class="reminder-card-item" data-id="${reminder.id}">
+                            <header>
+                                <div class="reminder-title">
+                                    <span class="legend-dot" style="background:${urgency === 'high' ? '#dc2626' : urgency === 'medium' ? '#facc15' : '#16a34a'};"></span>
+                                    ${reminder.title}
+                                </div>
+                                <span class="urgency-pill ${urgency}">${urgencyLabel[urgency]}</span>
+                            </header>
+                            <div class="reminder-meta">
+                                <span><strong>Prazo:</strong> ${new Date(reminder.dueDateTime).toLocaleString('pt-BR')}</span>
+                                <span><strong>Status:</strong> ${reminder.completed ? 'Concluído' : 'Pendente'}</span>
+                            </div>
+                        </article>
+                    `;
+                }).join('');
+            }
+
+            function upsertReminder(dataPayload) {
+                const data = readData();
+                if (editingId) {
+                    const idx = data.findIndex(item => item.id === editingId);
+                    if (idx !== -1) {
+                        data[idx] = { ...data[idx], ...dataPayload, id: editingId, updatedAt: new Date().toISOString() };
+                    }
+                } else {
+                    data.push({
+                        ...dataPayload,
+                        id: crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(),
+                        createdAt: new Date().toISOString(),
+                        updatedAt: new Date().toISOString()
+                    });
+                }
+                writeData(data);
+                render();
+            }
+
+            function populateDetail(reminder) {
+                document.getElementById('detailTitle').value = reminder.title;
+                document.getElementById('detailDescription').value = reminder.description || '';
+                document.getElementById('detailDateTime').value = reminder.dueDateTime;
+                activeDetailId = reminder.id;
+            }
+
+            openCreateBtn.addEventListener('click', () => {
+                resetForms();
+                openModal(createModal);
+            });
+
+            form.addEventListener('submit', evt => {
+                evt.preventDefault();
+                const payload = {
+                    title: document.getElementById('reminderTitle').value.trim(),
+                    description: document.getElementById('reminderDescription').value.trim(),
+                    dueDateTime: document.getElementById('reminderDateTime').value,
+                    completed: false
+                };
+                if (!payload.title || !payload.dueDateTime) {
+                    alert('Preencha título e data.');
+                    return;
+                }
+                upsertReminder(payload);
+                closeModal(createModal);
+                resetForms();
+            });
+
+            list.addEventListener('click', evt => {
+                const item = evt.target.closest('.reminder-card-item');
+                if (!item) return;
+                const data = readData();
+                const reminder = data.find(r => r.id === item.dataset.id);
+                if (!reminder) return;
+                populateDetail(reminder);
+                openModal(detailModal);
+            });
+
+            editDetailBtn.addEventListener('click', () => {
+                if (!activeDetailId) return;
+                const mode = editDetailBtn.dataset.mode || 'view';
+                if (mode === 'view') {
+                    setDetailEditable(true);
+                    editDetailBtn.textContent = 'Cancelar edição';
+                    saveDetailBtn.style.display = 'inline-flex';
+                    editDetailBtn.dataset.mode = 'editing';
+                } else {
+                    editDetailBtn.textContent = 'Editar';
+                    saveDetailBtn.style.display = 'none';
+                    editDetailBtn.dataset.mode = 'view';
+                    setDetailEditable(false);
+                    const reminder = readData().find(r => r.id === activeDetailId);
+                    if (reminder) populateDetail(reminder);
+                }
+            });
+
+            saveDetailBtn.addEventListener('click', () => {
+                if (!activeDetailId) return;
+                const data = readData();
+                const idx = data.findIndex(r => r.id === activeDetailId);
+                if (idx === -1) return;
+                data[idx].title = document.getElementById('detailTitle').value.trim();
+                data[idx].description = document.getElementById('detailDescription').value.trim();
+                data[idx].dueDateTime = document.getElementById('detailDateTime').value;
+                data[idx].updatedAt = new Date().toISOString();
+                writeData(data);
+                render();
+                editDetailBtn.textContent = 'Editar';
+                saveDetailBtn.style.display = 'none';
+                editDetailBtn.dataset.mode = 'view';
+                setDetailEditable(false);
+                alert('Lembrete atualizado com sucesso!');
+            });
+
+            completeDetailBtn?.addEventListener('click', () => {
+                if (!activeDetailId) return;
+                if (completeReminderById(activeDetailId)) {
+                    alert('Lembrete concluído e arquivado no histórico.');
+                }
+            });
+
+            deleteDetailBtn.addEventListener('click', () => {
+                if (!activeDetailId) return;
+                if (!confirm('Deseja realmente excluir este lembrete?')) return;
+                const data = readData().filter(item => item.id !== activeDetailId);
+                writeData(data);
+                render();
+                closeModal(detailModal);
+                resetForms();
+            });
+
+            function toInputValue(date) {
+                const pad = n => n.toString().padStart(2,'0');
+                return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+            }
+
+            if (!readData().length) {
+                const now = new Date();
+                writeData([
+                    {
+                        id: 'demo-1',
+                        title: 'Enviar briefing comercial',
+                        description: 'Atualizar condições para o parceiro OTA e enviar até amanhã cedo.',
+                        dueDateTime: toInputValue(new Date(now.getTime() + 12 * 3600 * 1000)),
+                        completed: false,
+                        createdAt: now.toISOString(),
+                        updatedAt: now.toISOString()
+                    },
+                    {
+                        id: 'demo-2',
+                        title: 'Revisar bloqueios do calendário',
+                        description: 'Checar paradas técnicas com manutenção.',
+                        dueDateTime: toInputValue(new Date(now.getTime() + 36 * 3600 * 1000)),
+                        completed: false,
+                        createdAt: now.toISOString(),
+                        updatedAt: now.toISOString()
+                    },
+                    {
+                        id: 'demo-3',
+                        title: 'Enviar relatório semanal',
+                        description: 'Consolidar os KPIs e disparar para diretoria.',
+                        dueDateTime: toInputValue(new Date(now.getTime() + 5 * 24 * 3600 * 1000)),
+                        completed: false,
+                        createdAt: now.toISOString(),
+                        updatedAt: now.toISOString()
+                    }
+                ]);
+            }
+
+            render();
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,1032 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SellaStay | Radar de Preços</title> 
+    <link rel="icon" type="image/x-icon" href="img/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">''
+    
+    <!--CSS-->
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        /* ---Sorry page */
+        .sorry{
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            margin-top: 200px;
+        }
+        .sorry h1{
+            color: var(--tittle-color);
+            font-size: 70px;
+            font-weight: 900;
+        }
+        .sorry h3{
+            color: var(--text-color);
+            font-size: 25px;
+            font-weight: 500;
+        }
+        .sorry p{
+            color: var(--text-color);
+            font-size: 18px;
+            font-weight: 400;
+        }
+        /* ---/Sorry page */
+
+        /* Modal Disclaimer - mesmo estilo do outro */
+        #modal-disclaimer {
+            position: fixed;
+            z-index: 999999999999999999;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.699);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #modal-disclaimer .modal-content {
+            background: rgba(255, 255, 255, 0.834);
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            text-align: center;
+            color: #333;
+        }
+
+        #modal-disclaimer .modal-content h2 {
+            margin-bottom: 10px;
+        }
+
+        #modal-disclaimer .modal-content p {
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        #modal-disclaimer input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+        }
+
+        #btn-entendi {
+            padding: 10px 20px;
+            background-color: #132d61;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        #btn-entendi:hover {
+            background-color: #0e234a;
+        }
+
+        /* Price Spy module */
+        .price-spy-module{
+            margin-top: 20px;
+            background: var(--calc-color);
+            border-radius: 22px;
+            padding: 32px;
+            box-shadow: 0 18px 45px rgba(0,0,0,0.08);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        .price-spy-module header{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .price-spy-module header h2{
+            color: var(--tittle-color);
+            margin-bottom: 6px;
+        }
+        .price-spy-module header p{
+            color: var(--text-color);
+        }
+        .price-spy-search{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding: 20px;
+            background: rgba(19,45,97,0.05);
+            border: 1px dashed rgba(19,45,97,0.3);
+            border-radius: 18px;
+            margin-bottom: 24px;
+        }
+        .price-spy-fields{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            flex: 1;
+        }
+        .price-spy-field{
+            flex: 1 1 180px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .price-spy-field label{
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-color);
+        }
+        .price-spy-field input,
+        .price-spy-field select{
+            border: 1px solid rgba(0,0,0,0.08);
+            border-radius: 12px;
+            padding: 12px 14px;
+            font-size: 15px;
+            color: var(--tittle-color);
+            background: #fff;
+        }
+        .price-spy-search button{
+            border: none;
+            border-radius: 14px;
+            padding: 14px 28px;
+            background: linear-gradient(135deg,#132d61,#294a9a);
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            align-self: flex-end;
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+        .price-spy-search button:hover{
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px rgba(19,45,97,0.25);
+        }
+        .price-spy-tabs{
+            display: inline-flex;
+            gap: 10px;
+            background: rgba(19,45,97,0.06);
+            border-radius: 999px;
+            padding: 6px;
+            margin-bottom: 20px;
+        }
+        .price-spy-tabs button{
+            border: none;
+            background: transparent;
+            padding: 10px 20px;
+            border-radius: 999px;
+            font-weight: 600;
+            color: var(--text-color);
+            cursor: pointer;
+        }
+        .price-spy-tabs button.active{
+            background: #fff;
+            color: var(--sidebar-color);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+        }
+        .price-spy-panel{
+            display: none;
+        }
+        .price-spy-panel.active{
+            display: block;
+        }
+        .recent-grid{
+            display: grid;
+            grid-template-columns: repeat(auto-fit,minmax(230px,1fr));
+            gap: 18px;
+        }
+        .rate-card{
+            border: 1px solid rgba(0,0,0,0.05);
+            border-radius: 18px;
+            padding: 18px;
+            background: linear-gradient(180deg,#fff,rgba(19,45,97,0.05));
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .rate-card h4{
+            margin: 0;
+            font-size: 18px;
+            color: var(--tittle-color);
+        }
+        .rate-card p{
+            margin: 0;
+            color: var(--text-color);
+            font-size: 14px;
+        }
+        .rate-price{
+            font-size: 26px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+        .rate-meta{
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-color);
+        }
+        .selected-list{
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .selected-card{
+            border: 1px solid rgba(0,0,0,0.08);
+            border-radius: 16px;
+            padding: 16px;
+            background: #fff;
+            display: flex;
+            justify-content: space-between;
+            gap: 14px;
+            align-items: center;
+        }
+        .selected-card h4{
+            margin: 0;
+            color: var(--tittle-color);
+        }
+        .selected-card p{
+            margin: 2px 0;
+            color: var(--text-color);
+            font-size: 13px;
+        }
+        .selected-card button{
+            border: none;
+            background: rgba(220,38,38,0.12);
+            color: #be123c;
+            border-radius: 10px;
+            padding: 8px 14px;
+            cursor: pointer;
+        }
+        .empty-state{
+            text-align: center;
+            padding: 40px 10px;
+            color: var(--text-color);
+        }
+        .form-feedback{
+            width: 100%;
+            font-size: 13px;
+            color: #be123c;
+            margin-top: -8px;
+            margin-bottom: 8px;
+        }
+        .price-spy-popup{
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 20px;
+        }
+        .price-spy-popup.open{
+            display: flex;
+        }
+        .popup-card{
+            background: #fff;
+            border-radius: 22px;
+            width: min(900px, 100%);
+            max-height: 90vh;
+            overflow: hidden;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .popup-close{
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            border: none;
+            background: rgba(0,0,0,0.08);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .popup-body{
+            padding: 30px;
+            overflow-y: auto;
+        }
+        .popup-results{
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .result-card{
+            border: 1px solid rgba(0,0,0,0.07);
+            border-radius: 16px;
+            padding: 18px;
+            display: flex;
+            justify-content: space-between;
+            gap: 14px;
+            align-items: center;
+        }
+        .result-card h4{
+            margin: 0 0 6px 0;
+            color: var(--tittle-color);
+        }
+        .result-card p{
+            margin: 0;
+            color: var(--text-color);
+            font-size: 13px;
+        }
+        .result-meta{
+            display: flex;
+            gap: 12px;
+            font-size: 12px;
+            color: rgba(15,23,42,0.7);
+        }
+        .result-actions button{
+            border: none;
+            background: var(--sidebar-color);
+            color: #fff;
+            padding: 10px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+        .popup-details{
+            display: none;
+        }
+        .popup-details.active{
+            display: block;
+        }
+        .details-header{
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+        .details-meta{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 13px;
+            color: var(--text-color);
+        }
+        .details-amenities{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 12px 0 18px;
+        }
+        .details-amenities span{
+            background: rgba(19,45,97,0.08);
+            color: var(--sidebar-color);
+            border-radius: 999px;
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+        .details-back{
+            border: none;
+            background: transparent;
+            color: var(--sidebar-color);
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+        .details-actions{
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        .details-actions button{
+            border: none;
+            border-radius: 12px;
+            padding: 12px 18px;
+            cursor: pointer;
+        }
+        .details-actions .ghost{
+            background: rgba(15,23,42,0.08);
+            color: var(--tittle-color);
+        }
+        .details-actions .primary{
+            background: linear-gradient(135deg,#ff914d,#ffb347);
+            color: #fff;
+            font-weight: 600;
+        }
+        .loading-state{
+            text-align: center;
+            padding: 40px 10px;
+            color: var(--text-color);
+        }
+        @media (max-width: 768px){
+            .price-spy-module{
+                padding: 20px;
+            }
+            .rate-card{
+                padding: 16px;
+            }
+            .selected-card{
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .result-card{
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .details-actions{
+                flex-direction: column;
+            }
+            .details-actions button{
+                width: 100%;
+            }
+        }
+    </style>
+    <!--/CSS-->
+    
+    <!--Boxicons CSS-->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <!--/Boxicons CSS-->
+    
+</head>
+<body>
+
+    <!-- Menu -->
+    <nav class="sidebar close">
+
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="img/logo.png" alt="">
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name" id="nome">SellaStay</span>
+                    <span class="profession">EGRC Control</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu-scrollable">
+
+                <ul class="menu-links">
+
+                    <br>
+                    <br>
+
+                    <li class="nav-link">
+                        <a href="home.html">
+                            <i class='bx bxs-home icon' ></i>
+                            <span class="text nav-text">Home</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="dashboard.html">
+                            <i class='bx bxs-dashboard icon' ></i>
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link has-submenu">
+                        <a href="leads.html">
+                            <i class='bx bxs-grid icon' ></i>
+                            <span class="text nav-text">Operacional <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="leads.html"><i class='bx bxs-chevrons-right icon' ></i>Negociações</a></li>
+                            <li><a href="follow-up.html"><i class='bx bx-transfer icon' ></i>Follow Up log</a></li>
+                            <li><a href="clients.html"><i class='bx bx-id-card icon' ></i>Carteira de Clientes</a></li>
+                            <li><a href="vendas.html"><i class='bx bx-history icon'></i></i>Histórico de Vendas</a></li>
+                            <li><a href="tasks.html"><i class='bx bx-task icon'></i></i>Gestor de Tarefas</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="calendar.html">
+                            <i class='bx bxs-calendar-event icon'></i>
+                            <span class="text nav-text">Mapa de Eventos</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link" id="navselected">
+                        <a href="pricespy.html">
+                            <i class='bx bx-radar icon'></i>
+                            <span class="text nav-text">Radar de Preços</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="reminder.html">
+                            <i class='bx bxs-bell-ring icon' ></i>
+                            <span class="text nav-text">Lembretes</span>
+                        </a>
+                    </li>
+
+                    <!-- ::::::: VERIFICAR NECESSIDADE ::::::::-->
+                    <!-- <li class="nav-link">
+                        <a href="contratos.html">
+                            <i class='bx bx-briefcase icon' ></i>
+                            <span class="text nav-text">Contratos</span>
+                        </a>
+                    </li> -->
+
+                    <li class="nav-link">
+                        <a href="relatorios.html">
+                            <i class='bx bx-line-chart icon'></i>
+                            <span class="text nav-text">Relatórios</span>
+                        </a>
+                    </li>
+
+                    <!-- ::::::: REALOCAR PARA OUTRO LUGAR ::::::::-->
+                    <!-- <li class="nav-link"> 
+                        <a href="doc.html">
+                            <i class='bx bx-help-circle icon' ></i>
+                            <span class="text nav-text">Ajuda</span>
+                        </a>
+                    </li> -->
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <ul class="menu-links">
+                    <li class="nav-link has-submenu">
+                        <a href="#">
+                            <img id="profile-pic" src="img/profile_pic_F.png" alt="Usuário logado">
+                            <span class="text nav-text"><span id="menuUserName">Usuário</span> <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="profile.html"><i class='bx bx-user icon'></i> Perfil</a></li>
+                            <li class="has-submenu">
+                                <a href="empresas.html">
+                                    <i class='bx bxs-building icon'></i> Empresa <i class='bx bx-chevron-down arrow'></i>
+                                </a>
+                                <ul class="submenu">
+                                    <li><a href="#empresa-config"><i class='bx bx-briefcase icon'></i> Configurações da Empresa</a></li>
+                                    <li><a href="#hoteis-config"><i class='bx bx-hotel icon'></i> Cadastro de Hotéis</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="settings.html"><i class='bx bx-cog icon'></i> Configurações</a></li>
+                            <li><a href="help.html"><i class='bx bx-support icon'></i> Suporte</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="logout" id="logout">
+                        <a href="index.html">
+                            <i class='bx bx-log-out icon' ></i>
+                            <span class="text nav-text">Logout</span>
+                        </a>
+                    </li>
+
+                    <li class="mode">
+                        <div class="sun-moon">
+                            <i class='bx bx-moon icon moon'></i>
+                            <i class='bx bx-sun icon sun'></i>
+                        </div>
+                        <span class="mode-text text">Dark mode</span>
+
+                        <div class="toggle-switch">
+                            <span class="switch"></span>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- /Menu -->
+
+    <section class="home">
+        <div style="display: none;"> 
+            <h3 id="saudacao"></h3>
+            <p class="data-hora" id="dataHora"></p>
+        </div>
+        
+        <!-- Modal de Disclaimer -->
+        <div id="modal-disclaimer" style="display: none;">
+            <div class="modal-content">
+                <h2><i class='bx bxs-error'></i> Aviso Importante</h2>
+                <p>
+                    Este serviço de monitoramento de preços funciona através de consultas publicas na web.
+                    <br><br>
+                    <b>Atenção:</b> alguns sites podem bloquear ou limitar esse tipo de consulta devido as políticas de privacidade, proteção de dados ou bloqueios automático. 
+                    <br><br>
+                    Portanto, não garantimos 100% de funcionamento em todos os sites.
+                </p>
+                <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 15px;">
+                    <input type="checkbox" id="nao-mostrar-disclaimer">
+                    Não mostrar novamente
+                </label>
+                <button id="btn-entendi" class="btn">Entendi</button>
+            </div>
+        </div>
+
+        <!-- Price Spy module -->
+        <div class="price-spy-module" id="priceSpyModule">
+            <header>
+                <div>
+                    <p class="overline">Monitoramento inteligente</p>
+                    <h2>Radar de Preços</h2>
+                    <p>Visualize as últimas tarifas aplicadas e pesquise novas oportunidades com base na cidade, período e ocupação.</p>
+                </div>
+                <div>
+                    <p class="rate-meta" style="gap:6px;"><i class='bx bx-signal-4'></i> Indicadores atualizados a cada 2h</p>
+                </div>
+            </header>
+
+            <form class="price-spy-search" id="priceSpySearch">
+                <div class="price-spy-fields">
+                    <div class="price-spy-field">
+                        <label for="priceCity">Cidade</label>
+                        <input type="text" id="priceCity" name="city" placeholder="Ex.: São Paulo, Rio de Janeiro">
+                    </div>
+                    <div class="price-spy-field">
+                        <label for="priceCheckIn">Check-in</label>
+                        <input type="date" id="priceCheckIn" name="checkin">
+                    </div>
+                    <div class="price-spy-field">
+                        <label for="priceCheckOut">Check-out</label>
+                        <input type="date" id="priceCheckOut" name="checkout">
+                    </div>
+                    <div class="price-spy-field">
+                        <label for="priceGuests">Pessoas</label>
+                        <select id="priceGuests" name="guests">
+                            <option value="1">1 adulto</option>
+                            <option value="2" selected>2 adultos</option>
+                            <option value="3">3 pessoas</option>
+                            <option value="4">4 pessoas</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit"><i class='bx bx-search-alt'></i> Pesquisar preços</button>
+            </form>
+            <p class="form-feedback" id="priceSpyFeedback"></p>
+
+            <div class="price-spy-tabs">
+                <button type="button" class="tab-btn active" data-tab="recent">Últimas diárias</button>
+                <button type="button" class="tab-btn" data-tab="selected">Selecionados (<span id="selectedCount">0</span>)</button>
+            </div>
+
+            <div class="price-spy-panel active" data-tab-panel="recent">
+                <div class="recent-grid" id="recentRatesGrid"></div>
+            </div>
+            <div class="price-spy-panel" data-tab-panel="selected">
+                <div id="selectedRatesList" class="selected-list">
+                    <p class="empty-state">Nenhum preço selecionado ainda. Pesquise uma cidade, escolha uma tarifa e salve aqui para comparar.</p>
+                </div>
+            </div>
+        </div>
+        <!-- /Price Spy module -->
+
+        <div class="price-spy-popup" id="priceSpyPopup" aria-hidden="true">
+            <div class="popup-card" role="dialog" aria-modal="true">
+                <button type="button" class="popup-close" aria-label="Fechar resultados">&times;</button>
+                <div class="popup-body">
+                    <div id="popupResultsStep">
+                        <h3>Resultados da busca <span id="popupQuery"></span></h3>
+                        <div class="popup-results" id="popupResultsList"></div>
+                    </div>
+                    <div class="popup-details" id="popupDetailsStep">
+                        <button type="button" class="details-back" id="popupBackButton"><i class='bx bx-chevron-left'></i> Voltar para os resultados</button>
+                        <div id="popupDetailsContent"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <img id="logoavi" src="img/aviat.png">
+    </section>
+
+    <!--Rodapé -->
+    <footer style="line-height: 15px;">
+        &copy; <span id="anoAtual"></span> SellaStay - Gestão para Hotéis. <br> <span style="font-size: 10px; cursor: pointer;">Desenvolvido por <a href="https://www.syncsoftware.com.br" style="text-decoration: none; color: var(--text-color);" onmouseover="this.style.color='#ff914d';" onmouseout="this.style.color='var(--text-color)';" target="_blank"> <b>Sync Software LTDA</b></a></span>
+    </footer>
+    <!-- Rodapé -->
+        
+    <script src="js/script.js"></script>
+
+    <!-- Disclaimer script -->
+    <script>
+        // Verifica se jÃ¡ foi aceito
+        window.addEventListener('load', () => {
+            const aceitou = localStorage.getItem('disclaimerAceito');
+            if (!aceitou) {
+                document.getElementById('modal-disclaimer').style.display = 'flex';
+            }
+        });
+
+        // Evento de fechar o disclaimer
+        document.getElementById('btn-entendi').addEventListener('click', () => {
+            const naoMostrar = document.getElementById('nao-mostrar-disclaimer').checked;
+
+            if (naoMostrar) {
+                localStorage.setItem('disclaimerAceito', 'true');
+            }
+
+            document.getElementById('modal-disclaimer').style.display = 'none';
+        });
+    </script>
+    <!-- /Disclaimer script -->
+
+    <!-- Price Spy module script -->
+    <script>
+        (function(){
+            const module = document.getElementById('priceSpyModule');
+            if(!module) return;
+
+            const recentGrid = document.getElementById('recentRatesGrid');
+            const searchForm = document.getElementById('priceSpySearch');
+            const feedbackEl = document.getElementById('priceSpyFeedback');
+            const selectedList = document.getElementById('selectedRatesList');
+            const selectedCount = document.getElementById('selectedCount');
+            const tabs = document.querySelectorAll('.price-spy-tabs .tab-btn');
+            const panels = document.querySelectorAll('.price-spy-panel');
+
+            const popup = document.getElementById('priceSpyPopup');
+            const popupClose = popup.querySelector('.popup-close');
+            const resultsStep = document.getElementById('popupResultsStep');
+            const detailsStep = document.getElementById('popupDetailsStep');
+            const resultsList = document.getElementById('popupResultsList');
+            const popupQuery = document.getElementById('popupQuery');
+            const popupBackButton = document.getElementById('popupBackButton');
+            const detailsContent = document.getElementById('popupDetailsContent');
+
+            const cityField = document.getElementById('priceCity');
+            const checkInField = document.getElementById('priceCheckIn');
+            const checkOutField = document.getElementById('priceCheckOut');
+            const guestsField = document.getElementById('priceGuests');
+
+            const currency = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+            const formatCurrency = (value) => currency.format(value);
+            const normalize = (value = '') => value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            const formatDateLabel = (value) => {
+                if(!value) return '--';
+                const date = new Date(value + 'T00:00:00');
+                return date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
+            };
+
+            const state = {
+                recentRates: [
+                    { id: 'sp-corp', hotel: 'Aurora Paulista Corporate', city: 'São Paulo', nightlyRate: 689, plan: 'Diária flexível', occupancy: '2 adultos', lastUpdated: 'Hoje • 07h40', channel: 'Direto' },
+                    { id: 'rio-design', hotel: 'Design Copacabana', city: 'Rio de Janeiro', nightlyRate: 812, plan: 'Mapa NET • 7 dias', occupancy: '2 adultos + 1 criança', lastUpdated: 'Hoje • 06h55', channel: 'OTA' },
+                    { id: 'bh-airport', hotel: 'Hub Pampulha', city: 'Belo Horizonte', nightlyRate: 524, plan: 'Fim de semana', occupancy: '2 adultos', lastUpdated: 'Ontem • 23h10', channel: 'Direto' },
+                    { id: 'poa-center', hotel: 'Skyline Porto Alegre', city: 'Porto Alegre', nightlyRate: 468, plan: 'Corporativo', occupancy: '1 adulto', lastUpdated: 'Ontem • 21h20', channel: 'GDS' }
+                ],
+                catalog: [
+                    { id: 'sp-01', city: 'São Paulo', tags: ['sp','sao paulo','paulista'], hotel: 'Skyline Paulista', baseRate: 610, rating: 4.7, distance: 0.4, board: 'Café incluso', description: 'Localizado na Av. Paulista, perfeito para equipes comerciais que precisam ganhar velocidade entre reuniões.', amenities: ['Wi-Fi 500mb','Café premium','Coworking 24h'] },
+                    { id: 'sp-02', city: 'São Paulo', tags: ['sp','sao paulo','itaim'], hotel: 'Nuvem Itaim', baseRate: 540, rating: 4.5, distance: 1.1, board: 'Tarifa flexível', description: 'Quartos com estação de trabalho e parcerias com restaurantes da região do Itaim.', amenities: ['Room service 24h','Transfer executivo','Academia parceira'] },
+                    { id: 'rio-01', city: 'Rio de Janeiro', tags: ['rio','rj','copacabana'], hotel: 'Vista Atlântica', baseRate: 780, rating: 4.8, distance: 0.6, board: 'Café + late checkout', description: 'Frente mar em Copacabana com rooftop e salas privativas para calls estratégicos.', amenities: ['Rooftop pool','Espaço para reuniões','Estacionamento'] },
+                    { id: 'rio-02', city: 'Rio de Janeiro', tags: ['rio','rj','barra'], hotel: 'Work Barra Experience', baseRate: 620, rating: 4.4, distance: 1.8, board: 'Tarifa corporativa', description: 'Próximo ao Parque Olímpico, ideal para eventos e equipes de implantação.', amenities: ['Transfer aeroporto','Business lounge','Suporte 24h'] },
+                    { id: 'bh-01', city: 'Belo Horizonte', tags: ['bh','belo horizonte'], hotel: 'Circuito Savassi', baseRate: 490, rating: 4.3, distance: 0.9, board: 'Café incluso', description: 'Hotel boutique com foco em executivos que atuam na região da Savassi.', amenities: ['Wi-Fi turbo','Bike sharing','Sala de board'] },
+                    { id: 'fln-01', city: 'Florianópolis', tags: ['florianopolis','fln'], hotel: 'Beira-Mar Tech Stay', baseRate: 560, rating: 4.6, distance: 0.5, board: 'Flexível', description: 'Vista para a ponte Hercílio Luz com suítes equipadas para long stay.', amenities: ['Copa equipada','Smart TV 55"','Estac. coberto'] }
+                ],
+                selected: [],
+                currentResults: []
+            };
+
+            const renderRecentRates = () => {
+                if(!recentGrid) return;
+                recentGrid.innerHTML = state.recentRates.map(rate => `
+                    <article class="rate-card">
+                        <div>
+                            <p class="rate-meta">${rate.plan}</p>
+                            <h4>${rate.hotel}</h4>
+                            <p>${rate.city} • ${rate.occupancy}</p>
+                        </div>
+                        <div class="rate-price">${formatCurrency(rate.nightlyRate)}</div>
+                        <div class="rate-meta"><span>${rate.lastUpdated}</span><span>${rate.channel}</span></div>
+                    </article>
+                `).join('');
+            };
+
+            const switchTab = (tab) => {
+                tabs.forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tab));
+                panels.forEach(panel => panel.classList.toggle('active', panel.dataset.tabPanel === tab));
+            };
+
+            tabs.forEach(btn => {
+                btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+            });
+
+            const renderSelectedRates = () => {
+                if(!selectedList) return;
+                if(!state.selected.length){
+                    selectedList.innerHTML = '<p class="empty-state">Nenhum preço selecionado ainda. Execute uma busca e escolha a melhor oferta.</p>';
+                } else {
+                    selectedList.innerHTML = state.selected.map(item => `
+                        <div class="selected-card">
+                            <div>
+                                <h4>${item.hotel}</h4>
+                                <p>${item.city} • ${item.stayLabel}</p>
+                                <p>${item.guestsLabel} • ${item.board}</p>
+                            </div>
+                            <div>
+                                <div class="rate-price" style="font-size:22px;">${formatCurrency(item.nightlyRate)}</div>
+                                <p class="rate-meta" style="gap:4px;">${item.distance.toFixed(1)} km do centro</p>
+                                <button type="button" data-remove="${item.uid}">Remover</button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+                if(selectedCount){
+                    selectedCount.textContent = state.selected.length;
+                }
+            };
+
+            if(selectedList){
+                selectedList.addEventListener('click', (event) => {
+                    const removeBtn = event.target.closest('button[data-remove]');
+                    if(!removeBtn) return;
+                    state.selected = state.selected.filter(item => item.uid !== removeBtn.dataset.remove);
+                    renderSelectedRates();
+                });
+            }
+
+            const closePopup = () => {
+                popup.classList.remove('open');
+                popup.setAttribute('aria-hidden', 'true');
+                resultsStep.style.display = 'block';
+                detailsStep.classList.remove('active');
+                detailsContent.innerHTML = '';
+            };
+
+            const openPopup = (cityLabel) => {
+                popup.classList.add('open');
+                popup.setAttribute('aria-hidden', 'false');
+                popupQuery.textContent = cityLabel ? `– ${cityLabel}` : '';
+                resultsStep.style.display = 'block';
+                detailsStep.classList.remove('active');
+            };
+
+            popupClose.addEventListener('click', closePopup);
+            popup.addEventListener('click', (event) => {
+                if(event.target === popup){
+                    closePopup();
+                }
+            });
+            popupBackButton.addEventListener('click', () => {
+                detailsStep.classList.remove('active');
+                resultsStep.style.display = 'block';
+            });
+
+            const showLoading = (city) => {
+                resultsList.innerHTML = `<div class="loading-state">Buscando tarifas em <strong>${city}</strong>...</div>`;
+            };
+
+            const showNoResults = (city) => {
+                resultsList.innerHTML = `<div class="loading-state">Nenhum parceiro encontrado em ${city}. Ajuste os filtros e tente novamente.</div>`;
+            };
+
+            const renderResults = (results) => {
+                resultsList.innerHTML = results.map(item => `
+                    <div class="result-card">
+                        <div>
+                            <h4>${item.hotel}</h4>
+                            <div class="result-meta">
+                                <span>${item.rating.toFixed(1)} ★</span>
+                                <span>${item.distance.toFixed(1)} km do centro</span>
+                                <span>${item.board}</span>
+                            </div>
+                            <p>${item.description}</p>
+                        </div>
+                        <div class="result-actions">
+                            <strong class="rate-price">${formatCurrency(item.nightlyRate)}</strong>
+                            <button type="button" data-result="${item.uid}">Ver detalhes</button>
+                        </div>
+                    </div>
+                `).join('');
+            };
+
+            const showDetails = (hotel) => {
+                if(!hotel) return;
+                detailsStep.classList.add('active');
+                resultsStep.style.display = 'none';
+                detailsContent.innerHTML = `
+                    <div class="details-header">
+                        <div>
+                            <h3>${hotel.hotel}</h3>
+                            <div class="details-meta">
+                                <span>${hotel.city}</span>
+                                <span>${hotel.rating.toFixed(1)} ★</span>
+                                <span>${hotel.distance.toFixed(1)} km do centro</span>
+                            </div>
+                        </div>
+                        <div class="rate-price">${formatCurrency(hotel.nightlyRate)}</div>
+                    </div>
+                    <p>${hotel.description}</p>
+                    <div class="details-amenities">
+                        ${hotel.amenities.map(a => `<span>${a}</span>`).join('')}
+                    </div>
+                    <div class="details-meta">
+                        <span>Estadia: ${hotel.stayLabel}</span>
+                        <span>Hóspedes: ${hotel.guestsLabel}</span>
+                    </div>
+                    <div class="details-actions">
+                        <button type="button" class="ghost" id="popupBackInline">Voltar</button>
+                        <button type="button" class="primary" id="popupSelectButton">Selecionar preço</button>
+                    </div>
+                `;
+                document.getElementById('popupBackInline').addEventListener('click', () => {
+                    detailsStep.classList.remove('active');
+                    resultsStep.style.display = 'block';
+                });
+                document.getElementById('popupSelectButton').addEventListener('click', () => {
+                    addSelectedRate(hotel);
+                });
+            };
+
+            const addSelectedRate = (hotel) => {
+                state.selected.unshift({ ...hotel });
+                renderSelectedRates();
+                closePopup();
+                switchTab('selected');
+            };
+
+            resultsList.addEventListener('click', (event) => {
+                const btn = event.target.closest('button[data-result]');
+                if(!btn) return;
+                const hotel = state.currentResults.find(item => item.uid === btn.dataset.result);
+                showDetails(hotel);
+            });
+
+            const simulateHotelSearch = (city, checkIn, checkOut, guests) => {
+                const normalizedCity = normalize(city);
+                const guestLabel = guests === '1' ? '1 adulto' : `${guests} pessoas`;
+                const stayLabel = checkIn && checkOut ? `${formatDateLabel(checkIn)} a ${formatDateLabel(checkOut)}` : 'Datas flexíveis';
+
+                const base = state.catalog.filter(item => item.tags.some(tag => tag.includes(normalizedCity)));
+                const enriched = base.sort((a,b) => a.distance - b.distance).map((item, index) => ({
+                    ...item,
+                    nightlyRate: item.baseRate + Math.max(0, guests - 2) * 70 + index * 25,
+                    guestsLabel: guestLabel,
+                    stayLabel,
+                    uid: `${item.id}-${Date.now()}-${index}`
+                }));
+
+                return new Promise((resolve) => {
+                    setTimeout(() => resolve(enriched), 700);
+                });
+            };
+
+            const validateForm = (values) => {
+                if(!values.city || !values.checkIn || !values.checkOut){
+                    return 'Preencha cidade, check-in e check-out para continuar.';
+                }
+                if(new Date(values.checkOut) <= new Date(values.checkIn)){
+                    return 'A data de check-out deve ser maior que o check-in.';
+                }
+                return '';
+            };
+
+            searchForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const payload = {
+                    city: cityField.value.trim(),
+                    checkIn: checkInField.value,
+                    checkOut: checkOutField.value,
+                    guests: Number(guestsField.value)
+                };
+                const error = validateForm(payload);
+                if(error){
+                    feedbackEl.textContent = error;
+                    return;
+                }
+                feedbackEl.textContent = '';
+                openPopup(payload.city);
+                showLoading(payload.city);
+                try{
+                    const results = await simulateHotelSearch(payload.city, payload.checkIn, payload.checkOut, payload.guests);
+                    state.currentResults = results;
+                    if(!results.length){
+                        showNoResults(payload.city);
+                    } else {
+                        renderResults(results);
+                    }
+                } catch (err){
+                    console.error(err);
+                    resultsList.innerHTML = '<div class="loading-state">Não foi possível concluir a busca agora. Tente novamente em instantes.</div>';
+                }
+            });
+
+            const setDefaultDates = () => {
+                const today = new Date();
+                const tomorrow = new Date(today.getTime() + 86400000);
+                if(checkInField && !checkInField.value){
+                    checkInField.value = today.toISOString().slice(0,10);
+                }
+                if(checkOutField && !checkOutField.value){
+                    checkOutField.value = tomorrow.toISOString().slice(0,10);
+                }
+            };
+
+            renderRecentRates();
+            renderSelectedRates();
+            setDefaultDates();
+        })();
+    </script>
+    <!-- /Price Spy module script -->
+</body>
+</html>
+

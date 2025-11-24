@@ -1,0 +1,662 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+:root {
+    --admin-page-bg: #f6f7fb;
+    --admin-panel-bg: #ffffff;
+    --admin-border: rgba(19, 45, 97, 0.08);
+    --admin-primary: #132d61;
+    --admin-accent: #0ea5e9;
+    --admin-text: #1f2933;
+}
+
+body.admin-login-body,
+body.admin-panel-body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(180deg, #e6ecff 0%, #f6f7fb 50%, #ffffff 100%);
+    min-height: 100vh;
+    margin: 0;
+    color: var(--admin-text);
+}
+
+.admin-login-shell {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+.admin-login-box {
+    background: var(--admin-panel-bg);
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+    border-radius: 26px;
+    width: min(520px, 100%);
+    padding: 3rem;
+    border: 1px solid var(--admin-border);
+    text-align: center;
+}
+
+.admin-login-box h1 {
+    font-size: 2rem;
+    margin-bottom: 0.25rem;
+}
+
+.admin-login-box p {
+    font-size: 0.95rem;
+    color: rgba(31, 41, 51, 0.75);
+    margin-bottom: 2rem;
+}
+
+.admin-login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: left;
+}
+
+.admin-login-form label {
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.admin-login-form input {
+    padding: 0.9rem 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(19, 45, 97, 0.2);
+    font-size: 1rem;
+    width: 100%;
+}
+
+.admin-login-form button {
+    border: none;
+    background: var(--admin-primary);
+    color: #fff;
+    padding: 0.95rem 1rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-login-form button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 20px rgba(19, 45, 97, 0.25);
+}
+
+.admin-login-footer {
+    margin-top: 1.5rem;
+    font-size: 0.85rem;
+    color: rgba(31, 41, 51, 0.7);
+}
+
+.admin-panel-shell {
+    min-height: 100vh;
+    padding: 3rem clamp(1rem, 2vw, 2rem);
+    background: var(--admin-page-bg);
+}
+
+.admin-panel {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: var(--admin-panel-bg);
+    border-radius: 28px;
+    padding: 2.5rem;
+    box-shadow: 0 25px 45px rgba(15, 23, 42, 0.12);
+    border: 1px solid var(--admin-border);
+}
+
+.admin-panel-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.admin-header-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.admin-header-actions button {
+    border: none;
+    background: var(--admin-accent);
+    color: #fff;
+    padding: 0.6rem 1rem;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-header-actions button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 18px rgba(14, 165, 233, 0.3);
+}
+
+.admin-panel h1 {
+    margin-bottom: 0.5rem;
+    font-size: 2.2rem;
+}
+
+.admin-panel p {
+    color: rgba(31, 41, 51, 0.7);
+}
+
+.admin-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.admin-overview-card {
+    border: 1px solid var(--admin-border);
+    border-radius: 18px;
+    padding: 1.25rem;
+    background: #fdfdfd;
+}
+
+.overview-label {
+    color: rgba(31, 41, 51, 0.7);
+    font-size: 0.9rem;
+}
+
+.admin-overview-card strong {
+    display: block;
+    font-size: 2rem;
+    color: var(--admin-primary);
+}
+
+.admin-table-wrapper {
+    margin-top: 1.5rem;
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 720px;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 0.85rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(19, 45, 97, 0.07);
+    font-size: 0.95rem;
+}
+
+.admin-table th {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+}
+
+.client-row {
+    cursor: pointer;
+}
+
+.client-row:hover {
+    background: rgba(14, 165, 233, 0.04);
+}
+
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.8rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.status-pill.pending {
+    background: rgba(248, 113, 113, 0.15);
+    color: #dc2626;
+}
+
+.status-pill.active {
+    background: rgba(16, 185, 129, 0.15);
+    color: #059669;
+}
+
+.status-pill.blocked {
+    background: rgba(241, 245, 249, 0.8);
+    color: rgba(15, 23, 42, 0.6);
+}
+
+.status-pill.test {
+    background: rgba(59, 130, 246, 0.15);
+    color: #1d4ed8;
+}
+
+.admin-actions button {
+    border: 1px solid rgba(19, 45, 97, 0.3);
+    background: #fff;
+    border-radius: 8px;
+    padding: 0.55rem 0.85rem;
+    cursor: pointer;
+    font-size: 0.85rem;
+    margin-right: 0.35rem;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.admin-actions button.primary {
+    background: var(--admin-accent);
+    color: #fff;
+    border-color: transparent;
+}
+
+.admin-actions button.primary:hover {
+    background: #0b84c9;
+}
+
+.admin-actions button.outline:hover {
+    background: rgba(19, 45, 97, 0.08);
+}
+
+.admin-note {
+    margin-top: 2rem;
+    padding: 1.25rem 1.5rem;
+    border-radius: 16px;
+    background: #fff9f3;
+    border: 1px solid rgba(254, 205, 131, 0.5);
+    font-size: 0.95rem;
+    color: #92400e;
+}
+
+.admin-panel a {
+    color: var(--admin-accent);
+    text-decoration: none;
+}
+
+.admin-panel a:hover {
+    text-decoration: underline;
+}
+
+.admin-popup,
+.payment-popup {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    z-index: 100000;
+}
+
+.admin-popup.open,
+.payment-popup.open {
+    display: flex;
+}
+
+.admin-popup-content,
+.payment-popup-content {
+    background: #fff;
+    border-radius: 24px;
+    width: min(600px, 100%);
+    padding: 2rem;
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.2);
+}
+
+.admin-tabs {
+    display: flex;
+    gap: 0.75rem;
+    border-bottom: 1px solid rgba(19, 45, 97, 0.15);
+    padding-bottom: 0.5rem;
+    margin-top: 2rem;
+}
+
+.admin-tab {
+    padding: 0.65rem 1rem;
+    background: transparent;
+    border: 1px solid transparent;
+    border-bottom: none;
+    border-radius: 12px 12px 0 0;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--admin-primary);
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.admin-tab.active {
+    background: #fff;
+    border-color: rgba(19, 45, 97, 0.2);
+    border-bottom: 1px solid #fff;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.admin-tab-content {
+    background: #fff;
+    border: 1px solid rgba(19, 45, 97, 0.1);
+    border-radius: 18px;
+    padding: 1.5rem;
+    margin-top: -1px;
+    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.08);
+}
+
+.admin-tab-content.hidden {
+    display: none;
+}
+
+.finance-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.finance-summary strong {
+    font-size: 1.5rem;
+    color: var(--admin-primary);
+}
+
+.finance-list {
+    margin-top: 1rem;
+    border-top: 1px solid rgba(19, 45, 97, 0.08);
+}
+
+.finance-entry {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0.75rem;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid rgba(19, 45, 97, 0.05);
+}
+
+.finance-entry:last-child {
+    border-bottom: none;
+}
+
+.finance-entry span {
+    font-size: 0.9rem;
+    color: rgba(15, 23, 42, 0.75);
+}
+
+.config-user-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    border: 1px solid rgba(19, 45, 97, 0.12);
+    padding: 1.5rem;
+    border-radius: 16px;
+    background: #f8fafc;
+}
+
+.config-user-form label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: rgba(15, 23, 42, 0.7);
+}
+
+.config-user-form input,
+.config-user-form select {
+    width: 100%;
+    padding: 0.7rem;
+    border-radius: 8px;
+    border: 1px solid rgba(15, 23, 42, 0.25);
+    font-family: inherit;
+}
+
+.config-user-form button {
+    grid-column: 1 / -1;
+    padding: 0.8rem;
+    border: none;
+    background: var(--admin-accent);
+    color: #fff;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.config-user-list {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+}
+
+.config-user-entry {
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    background: #fff;
+    border: 1px solid rgba(19, 45, 97, 0.1);
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.popup-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.popup-field input,
+.popup-field textarea {
+    width: 100%;
+    border: 1px solid rgba(15, 23, 42, 0.2);
+    border-radius: 8px;
+    padding: 0.6rem;
+    font-family: inherit;
+    font-size: 0.95rem;
+}
+
+.popup-field textarea {
+    resize: vertical;
+    min-height: 90px;
+}
+
+.popup-edit-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.popup-edit-actions button {
+    border: 1px solid rgba(19, 45, 97, 0.3);
+    background: #fff;
+    border-radius: 8px;
+    padding: 0.65rem 1.1rem;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--admin-primary);
+}
+
+.popup-edit-actions button.primary {
+    background: var(--admin-accent);
+    color: #fff;
+    border-color: transparent;
+}
+.popup-close {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    border: none;
+    background: transparent;
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: rgba(15, 23, 42, 0.7);
+}
+
+.popup-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin: 1.25rem 0 1.75rem;
+}
+
+.popup-detail-grid strong {
+    display: block;
+    font-size: 0.95rem;
+    color: rgba(15, 23, 42, 0.7);
+}
+
+.popup-history {
+    margin-top: 1.5rem;
+}
+
+.popup-history h3 {
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+}
+
+.popup-history-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.popup-history-entry {
+    padding: 0.85rem 1rem;
+    border-radius: 12px;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    margin-bottom: 0.5rem;
+    background: #f8fafc;
+}
+
+.popup-history-entry span {
+    display: block;
+    font-size: 0.85rem;
+    color: rgba(15, 23, 42, 0.7);
+}
+
+.popup-actions {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.popup-actions button {
+    border: 1px solid rgba(19, 45, 97, 0.35);
+    background: #fff;
+    border-radius: 8px;
+    padding: 0.65rem 1rem;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--admin-primary);
+}
+
+.popup-actions button.primary {
+    background: var(--admin-accent);
+    color: #fff;
+    border-color: transparent;
+}
+
+.popup-plan-section {
+    margin-top: 1.5rem;
+}
+
+.popup-plan-section h3 {
+    margin-bottom: 0.75rem;
+}
+
+.plan-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.85rem;
+}
+
+.plan-card {
+    border: 1px solid rgba(15, 23, 42, 0.1);
+    border-radius: 16px;
+    padding: 1rem;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.plan-card strong {
+    font-size: 1rem;
+}
+
+.plan-card .plan-price {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--admin-primary);
+}
+
+.plan-card p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: rgba(15, 23, 42, 0.7);
+}
+
+.plan-card small {
+    font-size: 0.8rem;
+    color: rgba(15, 23, 42, 0.6);
+}
+
+.plan-card.selected {
+    border-color: var(--admin-accent);
+    box-shadow: 0 8px 20px rgba(14, 165, 233, 0.25);
+    transform: translateY(-2px);
+}
+
+.payment-popup h2 {
+    margin-top: 0;
+}
+
+.payment-methods {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin: 1rem 0 1.5rem;
+}
+
+.payment-method {
+    flex: 1;
+    min-width: 200px;
+    padding: 1rem;
+    border: 1px solid rgba(15, 23, 42, 0.15);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.payment-method input[type="radio"] {
+    accent-color: var(--admin-accent);
+}
+
+.payment-method label {
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.payment-popup-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.payment-popup-actions button {
+    border-radius: 10px;
+    border: none;
+    padding: 0.75rem 1.4rem;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.payment-popup-actions .outline {
+    background: transparent;
+    border: 1px solid rgba(15, 23, 42, 0.2);
+    color: rgba(15, 23, 42, 0.75);
+}
+
+.payment-popup-actions .primary {
+    background: var(--admin-accent);
+    color: #fff;
+}

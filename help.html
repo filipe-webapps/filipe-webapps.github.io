@@ -1,0 +1,649 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>SellaStay | Painel Central</title>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="img/favicon.png">
+    
+    <!--CSS-->
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .help-hero{
+            background: linear-gradient(135deg,#0a1f44,#132d61 70%,#1f3b81);
+            color:#fff;
+            border-radius: 28px;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+        .help-hero h1{
+            font-size: 2.4rem;
+            margin:0;
+        }
+        .help-hero p{
+            max-width: 600px;
+            opacity:.9;
+        }
+        .help-hero .hero-actions{
+            display:flex;
+            gap:12px;
+            flex-wrap:wrap;
+        }
+        .help-hero .hero-actions button,
+        .help-hero .hero-actions a{
+            border:none;
+            border-radius:14px;
+            padding:12px 20px;
+            font-weight:600;
+            cursor:pointer;
+            display:flex;
+            align-items:center;
+            gap:8px;
+        }
+        .btn-light{
+            background:rgba(255,255,255,.15);
+            color:#fff;
+        }
+        .btn-contrast{
+            background:#fff;
+            color:#132d61;
+        }
+        .help-stats{
+            display:flex;
+            gap:20px;
+            flex-wrap:wrap;
+        }
+        .help-stat{
+            flex:1;
+            min-width:140px;
+            background:rgba(255,255,255,0.15);
+            border-radius:18px;
+            padding:18px;
+        }
+        .help-stat span{
+            font-size:32px;
+            font-weight:700;
+        }
+        .help-actions,
+        .support-grid,
+        .knowledge-grid{
+            display:grid;
+            gap:20px;
+        }
+        .help-actions{
+            grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+            margin-bottom:30px;
+        }
+        .action-card{
+            border:1px solid rgba(19,45,97,0.08);
+            border-radius:22px;
+            padding:18px;
+            background:var(--calc-color);
+            display:flex;
+            flex-direction:column;
+            gap:12px;
+            box-shadow:0 10px 30px rgba(0,0,0,0.05);
+        }
+        .action-card i{
+            font-size:28px;
+            color:#ff914d;
+        }
+        .action-card button{
+            align-self:flex-start;
+            border:none;
+            background:transparent;
+            color:var(--sidebar-color);
+            font-weight:600;
+            cursor:pointer;
+            display:flex;
+            align-items:center;
+            gap:6px;
+        }
+        .section-head{
+            display:flex;
+            justify-content:space-between;
+            align-items:flex-end;
+            flex-wrap:wrap;
+            gap:12px;
+            margin-bottom:14px;
+        }
+        .section-head h3{
+            margin:0;
+            color:var(--tittle-color);
+        }
+        .section-head p{
+            color:var(--text-color);
+            max-width:460px;
+        }
+        .knowledge-grid{
+            grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+            margin-bottom:30px;
+        }
+        .knowledge-card{
+            border:1px solid rgba(19,45,97,0.08);
+            border-radius:22px;
+            padding:20px;
+            background:var(--calc-color);
+            display:flex;
+            flex-direction:column;
+            gap:10px;
+            min-height:220px;
+        }
+        .knowledge-card header{
+            display:flex;
+            flex-direction:column;
+            gap:6px;
+        }
+        .knowledge-card .tag{
+            font-size:12px;
+            text-transform:uppercase;
+            letter-spacing:0.2em;
+            color:#ff914d;
+        }
+        .knowledge-card details{
+            background:rgba(19,45,97,0.04);
+            border-radius:12px;
+            padding:10px 14px;
+            border:1px solid rgba(19,45,97,0.07);
+        }
+        .knowledge-card summary{
+            font-weight:600;
+            cursor:pointer;
+        }
+        .knowledge-card p{
+            color:var(--text-color);
+            margin:8px 0 0;
+        }
+        .support-grid{
+            grid-template-columns: repeat(auto-fit,minmax(320px,1fr));
+            margin-bottom:40px;
+        }
+        .support-card{
+            border-radius:22px;
+            padding:24px;
+            border:1px solid rgba(19,45,97,0.08);
+            background:var(--calc-color);
+            display:flex;
+            flex-direction:column;
+            gap:16px;
+        }
+        .support-card.contact{
+            background:linear-gradient(135deg,#132d61,#1e3a8a);
+            color:#fff;
+            border:none;
+        }
+        .support-card.contact input,
+        .support-card.contact textarea{
+            width:100%;
+            border:none;
+            border-radius:12px;
+            padding:12px;
+            margin-bottom:12px;
+        }
+        .support-card.contact button{
+            width:100%;
+            border:none;
+            border-radius:12px;
+            padding:12px;
+            font-weight:600;
+            background:#ff914d;
+            color:#fff;
+            cursor:pointer;
+        }
+        #openSpecialistPopup{
+            position: relative;
+            overflow: hidden;
+        }
+        #openSpecialistPopup i{
+            font-size:1.15rem;
+        }
+        .specialist-popup-backdrop{
+            position:fixed;
+            inset:0;
+            background:rgba(2,6,23,0.85);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            padding:20px;
+            z-index:1500;
+            opacity:0;
+            pointer-events:none;
+            transition:opacity 0.3s ease;
+        }
+        .specialist-popup-backdrop.open{
+            opacity:1;
+            pointer-events:auto;
+        }
+        .specialist-popup{
+            background:rgba(15,20,40,0.95);
+            border-radius:18px;
+            padding:28px;
+            border:1px solid rgba(255,255,255,0.12);
+            box-shadow:0 30px 60px rgba(0,0,0,0.5);
+            max-width:420px;
+            width:100%;
+            display:flex;
+            flex-direction:column;
+            gap:16px;
+            color:#fff;
+        }
+        .specialist-popup .popup-head{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+        .specialist-popup h4{
+            margin:0;
+            font-size:1.35rem;
+        }
+        .specialist-popup p{
+            margin:0;
+            color:rgba(255,255,255,0.8);
+            font-size:0.95rem;
+        }
+        .specialist-popup .popup-note{
+            font-size:0.85rem;
+            color:rgba(255,255,255,0.7);
+            display:flex;
+            align-items:center;
+            gap:6px;
+        }
+        .specialist-popup .popup-actions{
+            display:flex;
+            flex-direction:column;
+            gap:12px;
+        }
+        .specialist-popup .popup-actions .btn{
+            border-radius:12px;
+            padding:12px 16px;
+            font-weight:600;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            gap:8px;
+            border:none;
+            cursor:pointer;
+            text-decoration:none;
+            color:#fff;
+        }
+        .specialist-popup .btn-whatsapp{
+            background:linear-gradient(135deg,#25d366,#159e4a);
+            box-shadow:0 10px 20px rgba(37,211,102,0.35);
+        }
+        .specialist-popup .btn-phone{
+            background:rgba(255,255,255,0.08);
+            color:rgba(255,255,255,0.7);
+            cursor:not-allowed;
+        }
+        .specialist-popup .soon-badge{
+            font-size:0.8rem;
+            color:#facc15;
+            display:inline-flex;
+            align-items:center;
+            gap:4px;
+        }
+        .support-list{
+            display:flex;
+            flex-direction:column;
+            gap:10px;
+        }
+        .support-list li{
+            list-style:none;
+            display:flex;
+            align-items:center;
+            gap:12px;
+            color:var(--tittle-color);
+        }
+        .support-list li i{
+            color:#ff914d;
+        }
+        @media(max-width:768px){
+            .help-hero{
+                padding:24px;
+            }
+            .help-hero .hero-actions{
+                flex-direction:column;
+            }
+            .support-grid{
+                grid-template-columns:1fr;
+            }
+        }
+    </style>
+    <!--/CSS-->
+    
+    <!--Boxicons CSS-->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <!--/Boxicons CSS-->
+    
+</head>
+<body>
+
+    <!-- Menu -->
+    <nav class="sidebar close">
+
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="img/logo.png" alt="">
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name" id="nome">SellaStay</span>
+                    <span class="profession">EGRC Control</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu-scrollable">
+
+                <ul class="menu-links">
+
+                    <br>
+                    <br>
+
+                    <li class="nav-link" id="navselected">
+                        <a href="home.html">
+                            <i class='bx bxs-home icon' ></i>
+                            <span class="text nav-text">Home</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="dashboard.html">
+                            <i class='bx bxs-dashboard icon' ></i>
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link has-submenu">
+                        <a href="leads.html">
+                            <i class='bx bxs-grid icon' ></i>
+                            <span class="text nav-text">Operacional <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="leads.html"><i class='bx bxs-chevrons-right icon' ></i>Negociações</a></li>
+                            <li><a href="follow-up.html"><i class='bx bx-transfer icon' ></i>Follow Up log</a></li>
+                            <li><a href="clients.html"><i class='bx bx-id-card icon' ></i>Carteira de Clientes</a></li>
+                            <li><a href="vendas.html"><i class='bx bx-history icon'></i></i>Histórico de Vendas</a></li>
+                            <li><a href="tasks.html"><i class='bx bx-task icon'></i></i>Gestor de Tarefas</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="calendar.html">
+                            <i class='bx bxs-calendar-event icon'></i>
+                            <span class="text nav-text">Mapa de Eventos</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="pricespy.html">
+                            <i class='bx bx-radar icon'></i>
+                            <span class="text nav-text">Radar de Preços</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="reminder.html">
+                            <i class='bx bxs-bell-ring icon' ></i>
+                            <span class="text nav-text">Lembretes</span>
+                        </a>
+                    </li>
+
+                    <!-- ::::::: VERIFICAR NECESSIDADE ::::::::-->
+                    <!-- <li class="nav-link">
+                        <a href="contratos.html">
+                            <i class='bx bx-briefcase icon' ></i>
+                            <span class="text nav-text">Contratos</span>
+                        </a>
+                    </li> -->
+
+                    <li class="nav-link">
+                        <a href="relatorios.html">
+                            <i class='bx bx-line-chart icon'></i>
+                            <span class="text nav-text">Relatórios</span>
+                        </a>
+                    </li>
+
+                    <!-- ::::::: REALOCAR PARA OUTRO LUGAR ::::::::-->
+                    <!-- <li class="nav-link"> 
+                        <a href="doc.html">
+                            <i class='bx bx-help-circle icon' ></i>
+                            <span class="text nav-text">Ajuda</span>
+                        </a>
+                    </li> -->
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <ul class="menu-links">
+                    <li class="nav-link has-submenu">
+                        <a href="#" id="navselected">
+                            <img id="profile-pic" src="img/profile_pic_F.png" alt="Usuário logado">
+                            <span class="text nav-text"><span id="menuUserName">Usuário</span> <i class='bx bx-chevron-down arrow'></i></span>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="profile.html"><i class='bx bx-user icon'></i> Perfil</a></li>
+                            <li class="has-submenu">
+                                <a href="empresas.html">
+                                    <i class='bx bxs-building icon'></i> Empresa <i class='bx bx-chevron-down arrow'></i>
+                                </a>
+                                <ul class="submenu">
+                                    <li><a href="#empresa-config"><i class='bx bx-briefcase icon'></i> Configurações da Empresa</a></li>
+                                    <li><a href="#hoteis-config"><i class='bx bx-hotel icon'></i> Cadastro de Hotéis</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="settings.html"><i class='bx bx-cog icon'></i> Configurações</a></li>
+                            <li id="subactive"><a href="help.html"><i class='bx bx-support icon'></i> Suporte</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="logout" id="logout">
+                        <a href="index.html">
+                            <i class='bx bx-log-out icon' ></i>
+                            <span class="text nav-text">Logout</span>
+                        </a>
+                    </li>
+
+                    <li class="mode">
+                        <div class="sun-moon">
+                            <i class='bx bx-moon icon moon'></i>
+                            <i class='bx bx-sun icon sun'></i>
+                        </div>
+                        <span class="mode-text text">Dark mode</span>
+
+                        <div class="toggle-switch">
+                            <span class="switch"></span>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- /Menu -->
+
+    <section class="home">
+        <div class="help-hero">
+            <span class="overline" style="letter-spacing:0.3em;text-transform:uppercase;opacity:.7;">Central de Ajuda</span>
+            <h1>Como podemos ajudar hoje?</h1>
+            <p>Estamos aqui para acompanhar a operação do seu time em todas as etapas: dúvidas rápidas, configurações avançadas ou abertura de chamados com o nosso time.</p>
+            <div class="hero-actions">
+                <button class="btn-contrast" id="openTicketBtn"><i class='bx bx-message-add'></i> Abrir chamado</button>
+                <button class="btn-light" id="openSpecialistPopup"><i class='bx bx-phone-call'></i> Falar com especialista</button>
+            </div>
+            <div class="help-stats">
+                <div class="help-stat">
+                    <span>98%</span>
+                    <p>soluções no primeiro contato</p>
+                </div>
+                <div class="help-stat">
+                    <span>10 min</span>
+                    <p>tempo médio de resposta</p>
+                </div>
+                <div class="help-stat">
+                    <span>08hs às 17hs</span>
+                    <p>Segunda a Sexta</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="help-actions">
+            <article class="action-card">
+                <i class='bx bx-slideshow'></i>
+                <h4>Tour guiado</h4>
+                <p>Veja as funcionalidades chave do SellaStay em vídeos curtos.</p>
+                <button type="button">Assistir agora <i class='bx bx-chevron-right'></i></button>
+            </article>
+            <article class="action-card">
+                <i class='bx bx-book-content'></i>
+                <h4>Documentação</h4>
+                <p>Checklists para integrar equipes, metas e integrações.</p>
+                <button type="button" >Baixar documento <i class='bx link'></i></button>
+            </article>
+            <article class="action-card">
+                <i class='bx bx-headphone'></i>
+                <h4>Quadro de status</h4>
+                <p>Veja incidentes, atualizações e mantenha o time informado.</p>
+                <button type="button">Ver painel <i class='bx bx-pulse'></i></button>
+            </article>
+        </div>
+
+        <div class="section-head">
+            <div>
+                <h3>Base de conhecimento</h3>
+                <p>Materiais curados para administradores, equipes comerciais e revenue managers.</p>
+            </div>
+        </div>
+        <div class="knowledge-grid">
+            <article class="knowledge-card">
+                <header>
+                    <span class="tag">CRM</span>
+                    <h4>Gestão de leads e negociações</h4>
+                </header>
+                <details>
+                    <summary>Qual é o funil recomendado?</summary>
+                    <p>Use estágios personalizados: Prospecção, Demonstração, Proposta, Fechamento.</p>
+                </details>
+                <details>
+                    <summary>Como atribuir owners?</summary>
+                    <p>No quadro de leads selecione &gt; Ações rápidas &gt; Reatribuir e defina SLA.</p>
+                </details>
+            </article>
+            <article class="knowledge-card">
+                <header>
+                    <span class="tag">OPERAÇÃO</span>
+                    <h4>Integrações e automações</h4>
+                </header>
+                <details>
+                    <summary>Posso ligar meu PMS?</summary>
+                    <p>Sim. Em Configurações &gt; Integrações selecione o conector disponível e siga o passo a passo.</p>
+                </details>
+                <details>
+                    <summary>Alertas por WhatsApp</summary>
+                    <p>Habilite o canal em Automação &gt; Alertas e vincule um número oficial.</p>
+                </details>
+            </article>
+            <article class="knowledge-card">
+                <header>
+                    <span class="tag">FINANCEIRO</span>
+                    <h4>Propostas, billing e auditorias</h4>
+                </header>
+                <details>
+                    <summary>Como gerar faturas?</summary>
+                    <p>Financeiro &gt; Faturas &gt; Nova fatura. Anexe a negociação e escolha a forma de cobrança.</p>
+                </details>
+                <details>
+                    <summary>Auditoria de tarifas</summary>
+                    <p>Use o Price Spy para comparar concorrentes e exporte o relatório com evidências.</p>
+                </details>
+            </article>
+        </div>
+
+        <div class="section-head">
+            <div>
+                <h3>Suporte e contato</h3>
+                <p>Abra um ticket detalhado ou utilize nossos canais imediatos.</p>
+            </div>
+        </div>
+        <div class="support-grid">
+            <article class="support-card contact">
+                <h4>Fale com especialistas</h4>
+                <p>Priorize chamados críticos com o formulário abaixo.</p>
+                <form id="helpContactForm">
+                    <input type="text" id="helpName" placeholder="Seu nome" required>
+                    <input type="email" id="helpEmail" placeholder="email@empresa.com" required>
+                    <select id="helpTopic" required style="border:none;border-radius:12px;padding:12px;margin-bottom:12px;">
+                        <option value="" disabled selected>Tipo de solicitação</option>
+                        <option value="implantacao">Implantação</option>
+                        <option value="suporte">Suporte técnico</option>
+                        <option value="financeiro">Financeiro</option>
+                        <option value="outro">Outro</option>
+                    </select>
+                    <textarea id="helpMessage" rows="4" placeholder="Descreva o que aconteceu" required style="border:none;border-radius:12px;padding:12px;margin-bottom:12px;"></textarea>
+                    <button type="submit">Enviar solicitação</button>
+                </form>
+              <!--  <button type="button" id="openSpecialistPopup" style="margin-top:12px;background:var(--sidebar-color);color:#fff;border:none;padding:10px 18px;border-radius:12px;display:inline-flex;align-items:center;gap:8px;box-shadow:0 12px 25px rgba(0,0,0,0.25);">
+                    <i class='bx bxs-user-pin'></i>
+                    Fale com um especialista
+                </button> -->
+            </article>
+            <article class="support-card">
+                <h4>Canais rápidos</h4>
+                <ul class="support-list">
+                    <li><i class='bx bx-time-five'></i>Segunda a sexta, 08h às 20h</li>
+                    <li><i class='bx bx-phone'></i>0800 123 8833 (prioridade urgente)</li>
+                    <li><i class='bx bx-message-rounded'></i>Chat interno no app (resposta em 5 min)</li>
+                    <li><i class='bx bx-envelope'></i>support@sellastay.com</li>
+                </ul>
+                <hr style="border:none;border-top:1px solid rgba(19,45,97,0.1);">
+                <h4>Status da plataforma</h4>
+                <p style="color:var(--text-color);">Todos os serviços operando normalmente.</p>
+                <button type="button" class="btn-light" style="align-self:flex-start;background:rgba(19,45,97,0.08);color:var(--sidebar-color);border-radius:10px;padding:8px 14px;border:none;cursor:pointer;">Ver histórico</button>
+            </article>
+        </div>
+    </section>
+
+    <div class="specialist-popup-backdrop" id="specialistPopup" aria-hidden="true">
+        <div class="specialist-popup" role="dialog" aria-modal="true" aria-label="Suporte humanizado">
+            <div class="popup-head">
+                <div>
+                    <h4>Suporte ao Usuário</h4>
+                    <p>Suporte humanizado por especialistas.</p>
+                </div>
+                <button type="button" class="popup-close" id="closeSpecialistPopup" aria-label="Fechar popup">×</button>
+            </div>
+            <p>chame nosso time de especialistas. Chame pelo WhatsApp ativo ou telefone.</p>
+            <div class="popup-actions">
+                <a href="https://wa.me/5511999999999" class="btn btn-whatsapp" target="_blank" rel="noopener">
+                    <i class='bx bxl-whatsapp'></i>
+                    Chamar no WhatsApp
+                </a>
+                <button type="button" class="btn btn-phone" disabled>
+                    <i class='bx bx-phone'></i>
+                    Ligar para o time <span class="soon-badge">Em breve</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+     <!--Rodapé -->
+    <footer style="line-height: 15px;">
+        &copy; <span id="anoAtual"></span> SellaStay - Gestão para Hotéis. <br> <span style="font-size: 10px; cursor: pointer;">Desenvolvido por <a href="https://www.syncsoftware.com.br" style="text-decoration: none; color: var(--text-color);" onmouseover="this.style.color='#ff914d';" onmouseout="this.style.color='var(--text-color)';" target="_blank"> <b>Sync Software LTDA</b></a></span>
+    </footer>
+    <!-- Rodapé -->
+        
+    <script src="js/script.js"></script>
+
+</body>
+</html>
