@@ -402,8 +402,8 @@ section[id] {
     position: relative; z-index: 2; max-width: 800px;
     margin-top: 10vh;
 }
-.hero-title { font-size: 5vw; font-weight: 800; line-height: 1.05; margin-bottom: 30px; text-transform: uppercase; }
-.hero-desc { font-size: 1.1rem; color: #ccc; margin-bottom: 50px; max-width: 500px; line-height: 1.8; }
+.hero-title { font-size: clamp(2.9rem, 4.2vw, 4.6rem); font-weight: 800; line-height: 1.05; margin-bottom: 22px; text-transform: uppercase; }
+.hero-desc { font-size: 1rem; color: #ccc; margin-bottom: 40px; max-width: 480px; line-height: 1.7; }
 
 /* Floating Stat Box no Hero */
 .hero-stat-box {
@@ -756,13 +756,17 @@ body.modal-open {
     border: none;
     background: transparent;
     display: none;
+    grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(28px, 5vw, 60px);
+    align-items: center;
 }
 #why-mm > .why-network-block {
-    display: block;
+    display: grid;
 }
 .why-network-header {
-    max-width: 760px;
-    margin-bottom: 18px;
+    max-width: 38ch;
+    margin-bottom: 0;
+    text-align: left;
 }
 .why-network-title {
     font-size: clamp(1.65rem, 2.6vw, 2.4rem);
@@ -777,9 +781,10 @@ body.modal-open {
 }
 .why-network-block .map-container {
     margin-top: 0 !important;
-    max-width: 100%;
-    aspect-ratio: 95 / 34;
-    min-height: 260px;
+    width: 100%;
+    max-width: none;
+    aspect-ratio: 95 / 62;
+    min-height: 0;
     border-radius: 24px;
     background:
         radial-gradient(circle at center, rgba(255, 102, 0, 0.06), transparent 35%),
@@ -986,7 +991,8 @@ body.modal-open {
 }
 .map-container {
     margin-top: -75px !important;
-    width: 100vh;
+    width: 100%;
+    max-width: 950px;
     aspect-ratio: 95 / 62;
     margin: 0 auto;
     position: relative;
@@ -1054,6 +1060,9 @@ body.modal-open {
     transform: translate(-50%, -50%);
     z-index: 3;
 }
+.map-pin.map-pin-priority {
+    z-index: 6;
+}
 .map-pin-dot {
     position: relative;
     display: block;
@@ -1078,23 +1087,38 @@ body.modal-open {
 .map-pin-label {
     position: absolute;
     left: 50%;
-    bottom: 20px;
+    bottom: 22px;
     transform: translate(-50%, 6px);
     padding: 8px 12px;
-    border-radius: 999px;
-    background: rgba(10,10,10,0.82);
-    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    background: rgba(12,12,12,0.92);
+    border: 1px solid rgba(255, 102, 0, 0.18);
     color: #fff;
     font-size: 11px;
     font-weight: 600;
-    letter-spacing: 0.8px;
+    letter-spacing: 0.4px;
     white-space: nowrap;
-    box-shadow: 0 12px 24px rgba(0,0,0,0.24);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 16px 34px rgba(0,0,0,0.28);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     opacity: 0;
     transition: var(--transition-smooth);
     pointer-events: none;
+}
+.map-pin-label::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -7px;
+    width: 12px;
+    height: 12px;
+    background: rgba(12,12,12,0.92);
+    border-right: 1px solid rgba(255, 102, 0, 0.18);
+    border-bottom: 1px solid rgba(255, 102, 0, 0.18);
+    transform: translateX(-50%) rotate(45deg);
+}
+.map-pin-priority .map-pin-label {
+    bottom: 34px;
 }
 .map-pin-featured {
     z-index: 4;
@@ -1195,7 +1219,7 @@ footer {
 /* --- Responsive --- */
 @media (max-width: 1200px) {
     .services-grid { grid-template-columns: repeat(2, 1fr); }
-    .hero-title { font-size: 4rem; }
+    .hero-title { font-size: clamp(2.7rem, 4.4vw, 3.7rem); }
     nav { gap: 24px; }
     .nav-links { gap: 20px; }
     .btn.header-cta { padding: 7px 12px; }
@@ -1246,12 +1270,12 @@ footer {
         margin-top: 0;
     }
     .hero-title {
-        font-size: clamp(2.8rem, 8vw, 4rem);
-        margin-bottom: 24px;
+        font-size: clamp(2.35rem, 6.6vw, 3.2rem);
+        margin-bottom: 20px;
     }
     .hero-desc {
         max-width: 100%;
-        margin-bottom: 34px;
+        margin-bottom: 30px;
     }
     .section-header {
         margin-bottom: 54px;
@@ -1279,10 +1303,12 @@ footer {
     .why-grid { grid-template-columns: 1fr; }
     .why-network-block {
         padding: 20px;
+        grid-template-columns: 1fr;
+        gap: 20px;
     }
     .why-network-block .map-container {
-        aspect-ratio: 95 / 42;
-        min-height: 230px;
+        aspect-ratio: 95 / 62;
+        min-height: 0;
     }
     .why-card { min-height: 0; padding: 28px; }
     .clients-carousel-head {
@@ -1362,11 +1388,11 @@ footer {
         font-size: 12px;
     }
     .hero-title {
-        font-size: clamp(2.35rem, 11vw, 3.4rem);
+        font-size: clamp(2rem, 8.6vw, 2.8rem);
         line-height: 1.02;
     }
     .hero-desc {
-        font-size: 0.98rem;
+        font-size: 0.95rem;
         line-height: 1.7;
         margin-bottom: 28px;
     }
@@ -1457,15 +1483,15 @@ footer {
         border-radius: 24px;
     }
     .why-network-header {
-        margin-bottom: 14px;
+        margin-bottom: 0;
     }
     .why-network-desc {
         font-size: 0.92rem;
         line-height: 1.64;
     }
     .why-network-block .map-container {
-        aspect-ratio: 95 / 54;
-        min-height: 210px;
+        aspect-ratio: 95 / 62;
+        min-height: 0;
         border-radius: 22px;
     }
     .why-card h3 {
@@ -1578,10 +1604,10 @@ footer {
         padding: calc(118px + var(--safe-top)) calc(4.5% + var(--safe-right)) 64px calc(4.5% + var(--safe-left));
     }
     .hero-title {
-        font-size: clamp(2.05rem, 11.5vw, 2.8rem);
+        font-size: clamp(1.75rem, 9.4vw, 2.3rem);
     }
     .hero-desc {
-        font-size: 0.94rem;
+        font-size: 0.9rem;
     }
     .fullscreen-section {
         padding: 72px calc(4.5% + var(--safe-right)) 72px calc(4.5% + var(--safe-left));
