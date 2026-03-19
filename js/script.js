@@ -887,7 +887,7 @@ function initAnimations() {
 const translations = {
     pt: {
         "nav-home": "Início", "nav-services": "Serviços", "nav-about": "Sobre", "nav-why": "Porque MM?", "nav-clients": "Clientes", "nav-network": "Rede", "nav-contact": "Contato",
-        "hero-title": "Al&eacute;m das Fronteiras.<br>Sem Limites.",
+        "hero-title": "10+ Anos de Mercado.<br>Precis&atilde;o em Cada Opera&ccedil;&atilde;o.",
         "hero-desc": "Engenharia de suprimentos e otimização de rotas e custos logísticos pra melhorar a rentabilidade da sua operação.",
         "btn-quote": "Solicitar Or&ccedil;amento <i class='fa-solid fa-arrow-right'></i>",
         "hero-stat": "Países Conectados",
@@ -926,7 +926,7 @@ const translations = {
     },
     en: {
         "nav-home": "Home", "nav-services": "Services", "nav-about": "About", "nav-why": "Why MM?", "nav-clients": "Clients", "nav-network": "Network", "nav-contact": "Contact",
-        "hero-title": "Beyond Borders.<br>Beyond Limits.",
+        "hero-title": "10+ Years in the Market.<br>Precision in Every Operation.",
         "hero-desc": "Supply chain engineering with route and logistics cost optimization to improve the profitability of your operation.",
         "btn-quote": "Request a Quote <i class='fa-solid fa-arrow-right'></i>",
         "hero-stat": "Countries Connected",
@@ -965,7 +965,7 @@ const translations = {
     },
     es: {
         "nav-home": "Inicio", "nav-services": "Servicios", "nav-about": "Nosotros", "nav-why": "¿Por qué MM?", "nav-clients": "Clientes", "nav-network": "Red", "nav-contact": "Contacto",
-        "hero-title": "M&aacute;s All&aacute; de las Fronteras.<br>Sin L&iacute;mites.",
+        "hero-title": "10+ A&ntilde;os en el Mercado.<br>Precisi&oacute;n en Cada Operaci&oacute;n.",
         "hero-desc": "Ingeniería de cadena de suministro y optimización de rutas y costos logísticos para mejorar la rentabilidad de su operación.",
         "btn-quote": "Solicitar Cotizaci&oacute;n <i class='fa-solid fa-arrow-right'></i>",
         "hero-stat": "Países Conectados",
