@@ -267,11 +267,11 @@ nav { display: flex; align-items: center; gap: 40px; }
     gap: 16px;
 }
 .mobile-nav-brand {
-    max-width: 150px;
+    max-width: 170px;
 }
 .mobile-nav-brand img {
     display: block;
-    max-height: 34px;
+    max-height: 40px;
     object-fit: contain;
 }
 .mobile-nav-close {
@@ -792,7 +792,7 @@ body.modal-open {
 }
 .why-network-block .map-pin-label {
     opacity: 1;
-    transform: translate(-50%, 0);
+    transform: translate(var(--pin-label-x, -50%), 0);
 }
 .network-legacy {
     display: none !important;
@@ -1056,6 +1056,10 @@ body.modal-open {
     animation: dashFlow 16s linear infinite;
 }
 .map-pin {
+    --pin-label-x: -50%;
+    --pin-label-y: 6px;
+    --pin-label-bottom: 22px;
+    --pin-label-tail-x: 50%;
     position: absolute;
     transform: translate(-50%, -50%);
     z-index: 3;
@@ -1087,8 +1091,8 @@ body.modal-open {
 .map-pin-label {
     position: absolute;
     left: 50%;
-    bottom: 22px;
-    transform: translate(-50%, 6px);
+    bottom: var(--pin-label-bottom);
+    transform: translate(var(--pin-label-x), var(--pin-label-y));
     padding: 8px 12px;
     border-radius: 14px;
     background: rgba(12,12,12,0.92);
@@ -1108,7 +1112,7 @@ body.modal-open {
 .map-pin-label::after {
     content: '';
     position: absolute;
-    left: 50%;
+    left: var(--pin-label-tail-x);
     bottom: -7px;
     width: 12px;
     height: 12px;
@@ -1118,7 +1122,7 @@ body.modal-open {
     transform: translateX(-50%) rotate(45deg);
 }
 .map-pin-priority .map-pin-label {
-    bottom: 34px;
+    --pin-label-bottom: 34px;
 }
 .map-pin-featured {
     z-index: 4;
@@ -1133,7 +1137,7 @@ body.modal-open {
 .map-pin-featured .map-pin-label,
 .map-pin:hover .map-pin-label {
     opacity: 1;
-    transform: translate(-50%, 0);
+    transform: translate(var(--pin-label-x, -50%), 0);
 }
 .map-pin-featured .map-pin-label {
     border-color: rgba(255, 102, 0, 0.35);
@@ -1375,8 +1379,8 @@ footer {
         padding: calc(14px + var(--safe-top)) calc(5% + var(--safe-right)) 14px calc(5% + var(--safe-left));
     }
     .logo-container {
-        height: 34px;
-        max-width: 150px;
+        height: 42px;
+        max-width: 170px;
     }
     #hero {
         padding: calc(124px + var(--safe-top)) calc(5% + var(--safe-right)) 72px calc(5% + var(--safe-left));
@@ -1462,7 +1466,25 @@ footer {
     .about-text-col {
         padding: 34px 5% 0;
     }
-    .stats-grid { grid-template-columns: 1fr; gap: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 26px;
+        padding-top: 26px;
+    }
+    .stat-item {
+        padding: 18px 12px;
+        text-align: center;
+    }
+    .stat-item h4 {
+        font-size: clamp(2rem, 9vw, 2.55rem);
+        margin-bottom: 8px;
+    }
+    .stat-item p {
+        font-size: 0.72rem;
+        letter-spacing: 1px;
+        line-height: 1.35;
+    }
     .why-intro::before {
         top: -24px;
         left: -10px;
@@ -1533,12 +1555,23 @@ footer {
         border-width: 3px;
     }
     .map-pin-featured .map-pin-label {
-        font-size: 9px;
+        font-size: 8.5px;
         padding: 6px 8px;
-        max-width: 110px;
+        max-width: 98px;
         white-space: normal;
         line-height: 1.25;
         text-align: center;
+    }
+    .map-pin-bh {
+        --pin-label-bottom: 42px;
+        --pin-label-x: -70%;
+        --pin-label-tail-x: 66%;
+    }
+    .map-pin-asu {
+        --pin-label-bottom: 12px;
+        --pin-label-x: -22%;
+        --pin-label-tail-x: 34%;
+        z-index: 5;
     }
     .contact-box {
         padding: 36px 20px;
@@ -1552,22 +1585,36 @@ footer {
         margin-bottom: 28px !important;
     }
     .contact-info-flex {
-        flex-wrap: wrap;
-        justify-content: center;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 28px;
     }
     .info-card {
+        min-width: 0;
+        min-height: 104px;
+        flex-direction: column;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         text-align: center;
-        gap: 8px;
+        gap: 10px;
+        padding: 14px 10px;        
         white-space: normal;
     }
     .info-card i {
-        font-size: 0.84rem;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.50rem;
     }
     .info-card span {
-        font-size: 0.9rem;
-        letter-spacing: 0.3px;
+        font-size: 0.76rem;
+        letter-spacing: 0.1px;
+        line-height: 1.45;
+        overflow-wrap: anywhere;
         word-break: break-word;
     }
     footer {
@@ -1590,6 +1637,13 @@ footer {
     :root { --anchor-offset: 60px; }
     header {
         padding: calc(12px + var(--safe-top)) calc(4.5% + var(--safe-right)) 12px calc(4.5% + var(--safe-left));
+    }
+    .logo-container {
+        height: 40px;
+        max-width: 160px;
+    }
+    .mobile-nav-brand img {
+        max-height: 38px;
     }
     .mobile-menu-toggle {
         width: 44px;
@@ -1624,8 +1678,45 @@ footer {
     .service-modal-panel {
         padding: 18px;
     }
+    .stats-grid {
+        gap: 10px;
+        margin-top: 22px;
+        padding-top: 22px;
+    }
+    .stat-item {
+        padding: 16px 10px;
+    }
+    .stat-item h4 {
+        font-size: clamp(1.7rem, 9vw, 2.2rem);
+    }
+    .stat-item p {
+        font-size: 0.66rem;
+        letter-spacing: 0.85px;
+    }
+    .map-pin-bh {
+        --pin-label-bottom: 44px;
+        --pin-label-x: -76%;
+        --pin-label-tail-x: 70%;
+    }
+    .map-pin-asu {
+        --pin-label-bottom: 10px;
+        --pin-label-x: -16%;
+        --pin-label-tail-x: 32%;
+    }
     .contact-box {
         padding: 32px 16px;
+    }
+    .contact-info-flex {
+        grid-template-columns: 1fr;
+        gap: 9px;
+    }
+    .info-card {
+        min-height: 0;
+        padding: 14px 12px;
+        gap: 8px;
+    }
+    .info-card span {
+        font-size: 0.84rem;
     }
     .clients-control {
         width: 44px;
@@ -1634,5 +1725,8 @@ footer {
     .why-card,
     .client-card {
         padding: 22px 18px;
+    }
+    .btn-whatsapp {
+        font-size: 12px;
     }
 }
