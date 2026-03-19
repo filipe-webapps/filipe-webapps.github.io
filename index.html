@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MM Logistics | Global Supply Chain</title>
+
+    <link rel="icon" type="image/png" href="img/favicon.png" />
+    <link rel="stylesheet" href="css/style.css" />
+    
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- GSAP Core & Plugins -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+</head>
+<body>
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="loader-logo">
+            <img src="img/logo.png" alt="MM Logistics" onerror="this.style.display='none'; document.getElementById('preloader-fallback').style.display='flex';">
+            <div id="preloader-fallback" class="logo-fallback preloader-fallback" style="display:none;">
+                <i class="fa-solid fa-ship"></i>
+                MM<span>LOGISTICS</span>
+            </div>
+        </div>
+        <div class="loader-bar-bg">
+            <div class="loader-bar" id="loader-bar"></div>
+        </div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-outline" id="cursor-outline"></div>
+
+    <header id="main-header">
+        <div class="logo-container interactable">
+            <img id="logo-img" src="img/logo.png" alt="MM Logistics" style="display:none;" onload="this.style.display='block'; document.getElementById('logo-fallback').style.display='none';" onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='flex';">
+            <div id="logo-fallback" class="logo-fallback">
+                <i class="fa-solid fa-ship"></i>
+                MM<span>LOGISTICS</span>
+            </div>
+        </div>
+        
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#hero" class="interactable" data-i18n="nav-home">Início</a></li>
+                <li><a href="#services" class="interactable" data-i18n="nav-services">Serviços</a></li>
+                <li><a href="#about" class="interactable" data-i18n="nav-about">Sobre</a></li>
+                <li><a href="#why-mm" class="interactable" data-i18n="nav-why">Porque MM?</a></li>
+                <li><a href="#clients" class="interactable" data-i18n="nav-clients">Clientes</a></li>
+                <li><a href="#contact" class="interactable" data-i18n="nav-contact">Contato</a></li>
+            </ul>
+            <div class="nav-actions">
+                <div class="lang-switch interactable">
+                    <button class="lang-btn" onclick="changeLanguage('es')">ES</button>
+                    <button class="lang-btn active" onclick="changeLanguage('pt')">PT</button>
+                    <button class="lang-btn" onclick="changeLanguage('en')">EN</button>
+                </div>
+                <a href="#contact" class="btn header-cta interactable" data-i18n="btn-quote">Solicitar Or&ccedil;amento <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            <button type="button" class="mobile-menu-toggle interactable" id="mobile-menu-toggle" aria-expanded="false" aria-controls="mobile-nav" aria-label="Abrir menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <div class="mobile-nav" id="mobile-nav" aria-hidden="true">
+        <button type="button" class="mobile-nav-backdrop" data-mobile-nav-close aria-label="Fechar menu"></button>
+        <div class="mobile-nav-panel">
+            <div class="mobile-nav-top">
+                <div class="mobile-nav-brand">
+                    <img src="img/logo_.png" alt="MM Logistics">
+                </div>
+                <button type="button" class="mobile-nav-close interactable" data-mobile-nav-close aria-label="Fechar menu">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="mobile-nav-links">
+                <a href="#hero" class="interactable" data-i18n="nav-home" data-mobile-nav-close>Início</a>
+                <a href="#services" class="interactable" data-i18n="nav-services" data-mobile-nav-close>Serviços</a>
+                <a href="#about" class="interactable" data-i18n="nav-about" data-mobile-nav-close>Sobre</a>
+                <a href="#why-mm" class="interactable" data-i18n="nav-why" data-mobile-nav-close>Porque MM?</a>
+                <a href="#clients" class="interactable" data-i18n="nav-clients" data-mobile-nav-close>Clientes</a>
+                <a href="#contact" class="interactable" data-i18n="nav-contact" data-mobile-nav-close>Contato</a>
+            </div>
+            <div class="mobile-nav-footer">
+                <div class="lang-switch interactable">
+                    <button class="lang-btn" onclick="changeLanguage('es')">ES</button>
+                    <button class="lang-btn active" onclick="changeLanguage('pt')">PT</button>
+                    <button class="lang-btn" onclick="changeLanguage('en')">EN</button>
+                </div>
+                <a href="#contact" class="btn mobile-nav-cta interactable" data-i18n="btn-quote" data-mobile-nav-close>Solicitar Orçamento <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Seção: Hero -->
+    <section id="hero" class="fullscreen-section" data-nav-target="hero">
+        <div class="hero-bg gs-parallax">
+            <video class="hero-video" autoplay muted loop playsinline preload="auto">
+                <source src="img/video.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="hero-content">
+            <h1 class="hero-title split-text" data-i18n="hero-title">Al&eacute;m das Fronteiras.<br>Sem Limites.</h1>
+            <p class="hero-desc gs-fade-up" data-i18n="hero-desc">Engenharia de suprimentos e otimização de rotas e custos logísticos pra melhorar a rentabilidade da sua operação.</p>
+            <div class="gs-fade-up">
+                <a href="#contact" class="btn interactable" data-i18n="btn-quote">Solicitar Or&ccedil;amento <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </div>
+        <div class="hero-stat-box gs-fade-left">
+            <i class="fa-solid fa-globe"></i>
+            <div>
+                <h4><span class="counter" data-target="50">0</span>+</h4>
+                <p data-i18n="hero-stat">Países Conectados</p>
+            </div>
+        </div>
+
+        <div class="why-network-block gs-fade-up">
+            <div class="why-network-header">
+                <span class="section-subtitle" data-i18n="network-sub">Alcance Global</span>
+                <h3 class="why-network-title split-text" data-i18n="network-title">Presença Mundial</h3>
+                <p class="why-network-desc" data-i18n="network-desc">Hubs estratégicos operando nos principais portos e aeroportos do mundo.</p>
+            </div>
+            <div class="map-container gs-scale-up">
+                <img class="world-map-svg world-map-image" src="img/world-map.svg" alt="" aria-hidden="true">
+
+                <svg class="map-routes-svg" viewBox="0 0 950 620" aria-hidden="true">
+                    <path class="route-line" d="M360 379Q430 260 486 131"></path>
+                    <path class="route-line" d="M323 397Q540 340 795 202"></path>
+                    <path class="route-line" d="M360 379Q575 380 749 306"></path>
+                    <path class="route-line" d="M323 397Q562 420 874 427"></path>
+                    <path class="route-line" d="M486 131Q550 160 621 223"></path>
+                    <path class="route-line" d="M621 223Q706 190 795 202"></path>
+                </svg>
+
+                <div class="map-pin interactable" style="top: 35.7%; left: 27.7%;">
+                    <span class="map-pin-dot"></span>
+                    <span class="map-pin-label">Miami, US</span>
+                </div>
+                <div class="map-pin map-pin-featured interactable" style="top: 61.1%; left: 37.8%;">
+                    <span class="map-pin-dot"></span>
+                    <span class="map-pin-label">Belo Horizonte, BR</span>
+                </div>
+                <div class="map-pin map-pin-featured interactable" style="top: 64%; left: 34%;">
+                    <span class="map-pin-dot"></span>
+                    <span class="map-pin-label">Asunción, PY</span>
+                </div>
+                <div class="map-pin interactable" style="top: 21.2%; left: 51.2%;">
+                    <span class="map-pin-dot"></span>
+                    <span class="map-pin-label">Rotterdam, NL</span>
+                </div>
+                <div class="map-pin interactable" style="top: 36%; left: 65.4%;">
+                    <span class="map-pin-dot"></span>
+                    <span class="map-pin-label">Dubai, UAE</span>
+                </div>
+                <div class="map-pin interactable" style="top: 39.4%; left: 70.2%;">
+                    <span class="map-pin-dot"></span>
+                    <span class="map-pin-label">Mumbai, IN</span>
+                </div>
+                <div class="map-pin interactable" style="top: 32.6%; left: 83.7%;">
+                    <span class="map-pin-dot"></span>
+                    <span class="map-pin-label">Shanghai, CN</span>
+                </div>
+                <div class="map-pin interactable" style="top: 49.3%; left: 78.8%;">
+                    <span class="map-pin-dot"></span>
+                    <span class="map-pin-label">Singapore, SG</span>
+                </div>
+                <div class="map-pin interactable" style="top: 64.6%; left: 57.8%;">
+                    <span class="map-pin-dot"></span>
+                    <span class="map-pin-label">Johannesburg, ZA</span>
+                </div>
+                <div class="map-pin interactable" style="top: 68.8%; left: 92%;">
+                    <span class="map-pin-dot"></span>
+                    <span class="map-pin-label">Sydney, AU</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="why-network-block gs-fade-up">
+            <div class="why-network-header">
+                <span class="section-subtitle" data-i18n="network-sub">Alcance Global</span>
+                <h3 class="why-network-title split-text" data-i18n="network-title">Presença Mundial</h3>
+                <p class="why-network-desc" data-i18n="network-desc">Hubs estratégicos operando nos principais portos e aeroportos do mundo.</p>
+            </div>
+            <div class="map-container gs-scale-up">
+                <img class="world-map-svg world-map-image" src="img/world-map.svg" alt="" aria-hidden="true">
+
+                <svg class="map-routes-svg" viewBox="0 0 950 620" aria-hidden="true">
+                    <path class="route-line" d="M360 379Q430 260 486 131"></path>
+                    <path class="route-line" d="M323 397Q540 340 795 202"></path>
+                    <path class="route-line" d="M360 379Q575 380 749 306"></path>
+                    <path class="route-line" d="M323 397Q562 420 874 427"></path>
+                    <path class="route-line" d="M486 131Q550 160 621 223"></path>
+                    <path class="route-line" d="M621 223Q706 190 795 202"></path>
+                </svg>
+
+                <div class="map-pin interactable" style="top: 35.7%; left: 27.7%;">
+                    <span class="map-pin-dot"></span>
+                    <span class="map-pin-label">Miami, US</span>
+                </div>
+                <div class="map-pin map-pin-featured interactable" style="top: 61.1%; left: 37.8%;">
+                    <span class="map-pin-dot"></span>
+                    <span class="map-pin-label">Belo Horizonte, BR</span>
+                </div>
+                <div class="map-pin map-pin-featured interactable" style="top: 64%; left: 34%;">
+                    <span class="map-pin-dot"></span>
+                    <span class="map-pin-label">Asunción, PY</span>
+                </div>
+                <div class="map-pin interactable" style="top: 21.2%; left: 51.2%;">
+                    <span class="map-pin-dot"></span>
+                    <span class="map-pin-label">Rotterdam, NL</span>
+                </div>
+                <div class="map-pin interactable" style="top: 36%; left: 65.4%;">
+                    <span class="map-pin-dot"></span>
+                    <span class="map-pin-label">Dubai, UAE</span>
+                </div>
+                <div class="map-pin interactable" style="top: 39.4%; left: 70.2%;">
+                    <span class="map-pin-dot"></span>
+                    <span class="map-pin-label">Mumbai, IN</span>
+                </div>
+                <div class="map-pin interactable" style="top: 32.6%; left: 83.7%;">
+                    <span class="map-pin-dot"></span>
+                    <span class="map-pin-label">Shanghai, CN</span>
+                </div>
+                <div class="map-pin interactable" style="top: 49.3%; left: 78.8%;">
+                    <span class="map-pin-dot"></span>
+                    <span class="map-pin-label">Singapore, SG</span>
+                </div>
+                <div class="map-pin interactable" style="top: 64.6%; left: 57.8%;">
+                    <span class="map-pin-dot"></span>
+                    <span class="map-pin-label">Johannesburg, ZA</span>
+                </div>
+                <div class="map-pin interactable" style="top: 68.8%; left: 92%;">
+                    <span class="map-pin-dot"></span>
+                    <span class="map-pin-label">Sydney, AU</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção: Serviços -->
+    <section id="services" class="fullscreen-section" data-nav-target="services">
+        <div class="section-header gs-fade-up">
+            <span class="section-subtitle" data-i18n="services-sub">Expertise Logística</span>
+            <h2 class="section-title split-text" data-i18n="services-title">Soluções Globais</h2>
+        </div>
+        
+        <div class="services-grid">
+            <!-- Card 1 -->
+            <div class="service-card gs-fade-up interactable" data-service="sea">
+                <i class="fa-solid fa-ship srv-bg-icon"></i>
+                <div class="service-content">
+                    <i class="fa-solid fa-ship service-icon"></i>
+                    <h3 class="service-title" data-i18n="srv-sea-title">Frete Marítimo</h3>
+                    <p class="service-text" data-i18n="srv-sea-desc">Nem sempre o caminho mais longo precisa ser o mais complicado. Cuidamos da sua carga no mar com planejamento e atenção em cada detalhe, para que você tenha previsibilidade do início ao fim.</p>
+                    <button type="button" class="service-link service-modal-trigger interactable" data-service="sea" data-i18n="btn-learn">Saiba Mais <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+            <!-- Card 2 -->
+            <div class="service-card gs-fade-up interactable" style="transition-delay: 0.1s;" data-service="air">
+                <i class="fa-solid fa-plane srv-bg-icon"></i>
+                <div class="service-content">
+                    <i class="fa-solid fa-plane service-icon"></i>
+                    <h3 class="service-title" data-i18n="srv-air-title">Frete Aéreo</h3>
+                    <p class="service-text" data-i18n="srv-air-desc">Quando o tempo é decisivo, cada minuto conta. Garantimos que sua carga chegue no momento certo, com agilidade, experiência e total segurança.</p>
+                    <button type="button" class="service-link service-modal-trigger interactable" data-service="air" data-i18n="btn-learn">Saiba Mais <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+            <!-- Card 3 -->
+            <div class="service-card gs-fade-up interactable" style="transition-delay: 0.2s;" data-service="road">
+                <i class="fa-solid fa-truck-fast srv-bg-icon"></i>
+                <div class="service-content">
+                    <i class="fa-solid fa-truck-fast service-icon"></i>
+                    <h3 class="service-title" data-i18n="srv-land-title">Frete Rodoviário</h3>
+                    <p class="service-text" data-i18n="srv-land-desc">Do início ao destino final, sua operação é conduzida com acompanhamento contínuo, garantindo segurança, previsibilidade e eficiência.</p>
+                    <button type="button" class="service-link service-modal-trigger interactable" data-service="road" data-i18n="btn-learn">Saiba Mais <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+            <!-- Card 4 -->
+            <div class="service-card gs-fade-up interactable" style="transition-delay: 0.3s;" data-service="customs">
+                <i class="fa-solid fa-file-shield srv-bg-icon"></i>
+                <div class="service-content">
+                    <i class="fa-solid fa-file-shield service-icon"></i>
+                    <h3 class="service-title" data-i18n="srv-customs-title">Desembaraço Aduaneiro</h3>
+                    <p class="service-text" data-i18n="srv-customs-desc">A burocracia não precisa ser um problema para você. Cuidamos de todo o processo para que sua carga siga sem atrasos e sem surpresas.</p>
+                    <button type="button" class="service-link service-modal-trigger interactable" data-service="customs" data-i18n="btn-learn">Saiba Mais <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção: Sobre -->
+    <div class="service-modal" id="service-modal" aria-hidden="true">
+        <div class="service-modal-backdrop" data-modal-close></div>
+        <div class="service-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="service-modal-title">
+            <button type="button" class="service-modal-close interactable" data-modal-close aria-label="Fechar modal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="service-modal-top">
+                <div class="service-modal-icon">
+                    <i id="service-modal-icon" class="fa-solid fa-ship"></i>
+                </div>
+                <div class="service-modal-heading">
+                    <span class="service-modal-eyebrow" id="service-modal-eyebrow"></span>
+                    <h3 class="service-modal-title" id="service-modal-title"></h3>
+                    <p class="service-modal-summary" id="service-modal-summary"></p>
+                </div>
+            </div>
+            <div class="service-modal-highlights" id="service-modal-highlights"></div>
+            <div class="service-modal-grid">
+                <section class="service-modal-panel">
+                    <h4 id="service-modal-scope-title"></h4>
+                    <ul id="service-modal-deliverables"></ul>
+                </section>
+                <section class="service-modal-panel">
+                    <h4 id="service-modal-process-title"></h4>
+                    <ol id="service-modal-process"></ol>
+                </section>
+                <section class="service-modal-panel service-modal-panel-wide">
+                    <h4 id="service-modal-bestfor-title"></h4>
+                    <ul id="service-modal-bestfor"></ul>
+                </section>
+            </div>
+            <div class="service-modal-footer">
+                <p id="service-modal-note"></p>
+                <a href="#contact" class="btn service-modal-cta interactable" id="service-modal-cta">Solicitar Or&ccedil;amento <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <section id="about" class="fullscreen-section" data-nav-target="about">
+        <div class="about-image-col">
+            <div class="about-img gs-parallax-img"></div>
+            <div class="about-overlay"></div>
+        </div>
+        <div class="about-text-col">
+            <span class="section-subtitle gs-fade-up" data-i18n="about-sub">Nossa Essência</span>
+            <h2 class="section-title gs-fade-up" style="font-size: 3rem; margin-bottom: 30px;" data-i18n="about-title">A Nova Era da <span style="color:var(--primary-color)">Logística</span></h2>
+            
+            <p class="about-desc gs-fade-up" data-i18n="about-p1">Não somos apenas transitários. Somos arquitetos de cadeias de suprimentos. Combinamos tecnologia de ponta, análise de dados e décadas de inteligência de mercado para simplificar o complexo.</p>
+            <p class="about-desc gs-fade-up" data-i18n="about-p2">Da origem ao destino, garantimos visibilidade total, mitigação de riscos e otimização de custos operacionais.</p>
+            
+            <div class="stats-grid gs-fade-up">
+                <div class="stat-item">
+                    <h4><span class="counter" data-target="10">0</span>+</h4>
+                    <p data-i18n="stat-years">Anos no Mercado</p>
+                </div>
+                <div class="stat-item">
+                    <h4><span class="counter" data-target="5">0</span>k</h4>
+                    <p data-i18n="stat-ops">Embarques Realizados</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção: Diferenciais -->
+    <section id="why-mm" class="fullscreen-section" data-nav-target="why-mm">
+        <div class="why-shell">
+            <div class="why-intro">
+                <span class="section-subtitle gs-fade-up" data-i18n="why-sub">Diferenciais Estratégicos</span>
+                <h2 class="section-title split-text" data-i18n="why-title">Por que escolher a MM Logistics como seu aliado?</h2>
+                <p class="why-lead gs-fade-up" data-i18n="why-lead">Uma estrutura de suporte pensada para dar previsibilidade, acelerar decisões e proteger a rentabilidade da sua operação.</p>
+            </div>
+
+            <div class="why-grid">
+                <article class="why-card gs-fade-up">
+                    <div class="why-card-top">
+                        <span class="why-number">01</span>
+                        <i class="fa-solid fa-headset why-icon"></i>
+                    </div>
+                    <h3 data-i18n="why-1-title">Acompanhamento próximo</h3>
+                    <p data-i18n="why-1-desc">Estamos ao seu lado em cada etapa da operação, garantindo controle, agilidade e respostas rápidas quando você precisa.</p>
+                </article>
+
+                <article class="why-card gs-fade-up" style="transition-delay: 0.08s;">
+                    <div class="why-card-top">
+                        <span class="why-number">02</span>
+                        <i class="fa-solid fa-coins why-icon"></i>
+                    </div>
+                    <h3 data-i18n="why-2-title">Otimização de custos</h3>
+                    <p data-i18n="why-2-desc">Buscamos as melhores soluções para tornar sua logística mais eficiente, sem comprometer a qualidade e a segurança.</p>
+                </article>
+
+                <article class="why-card gs-fade-up" style="transition-delay: 0.16s;">
+                    <div class="why-card-top">
+                        <span class="why-number">03</span>
+                        <i class="fa-solid fa-compass-drafting why-icon"></i>
+                    </div>
+                    <h3 data-i18n="why-3-title">Assessoria personalizada</h3>
+                    <p data-i18n="why-3-desc">Cada operação é única. Por isso, entendemos sua necessidade e desenhamos soluções sob medida para o seu negócio.</p>
+                </article>
+
+                <article class="why-card gs-fade-up" style="transition-delay: 0.24s;">
+                    <div class="why-card-top">
+                        <span class="why-number">04</span>
+                        <i class="fa-solid fa-shield-halved why-icon"></i>
+                    </div>
+                    <h3 data-i18n="why-4-title">Experiência comprovada</h3>
+                    <p data-i18n="why-4-desc">Atuamos com conhecimento prático e visão estratégica para garantir resultados consistentes e confiáveis.</p>
+                </article>
+            </div>
+        </div>
+        <div class="why-network-block gs-fade-up">
+            <div class="why-network-header">
+                <span class="section-subtitle" data-i18n="network-sub">Alcance Global</span>
+                <h3 class="why-network-title split-text" data-i18n="network-title">PresenÃ§a Mundial</h3>
+                <p class="why-network-desc" data-i18n="network-desc">Hubs estratÃ©gicos operando nos principais portos e aeroportos do mundo.</p>
+            </div>
+            <div class="map-container gs-scale-up">
+                <img class="world-map-svg world-map-image" src="img/world-map.svg" alt="" aria-hidden="true">
+
+                <svg class="map-routes-svg" viewBox="0 0 950 620" aria-hidden="true">
+                    <path class="route-line" d="M360 379Q430 260 486 131"></path>
+                    <path class="route-line" d="M323 397Q540 340 795 202"></path>
+                    <path class="route-line" d="M360 379Q575 380 749 306"></path>
+                    <path class="route-line" d="M323 397Q562 420 874 427"></path>
+                    <path class="route-line" d="M486 131Q550 160 621 223"></path>
+                    <path class="route-line" d="M621 223Q706 190 795 202"></path>
+                </svg>
+
+                <div class="map-pin interactable" style="top: 35.7%; left: 27.7%;">
+                    <span class="map-pin-dot"></span>
+                    <span class="map-pin-label">Miami, US</span>
+                </div>
+                <div class="map-pin map-pin-featured interactable" style="top: 61.1%; left: 37.8%;">
+                    <span class="map-pin-dot"></span>
+                    <span class="map-pin-label">Belo Horizonte, BR</span>
+                </div>
+                <div class="map-pin map-pin-featured interactable" style="top: 64%; left: 34%;">
+                    <span class="map-pin-dot"></span>
+                    <span class="map-pin-label">Asunci&oacute;n, PY</span>
+                </div>
+                <div class="map-pin interactable" style="top: 21.2%; left: 51.2%;">
+                    <span class="map-pin-dot"></span>
+                    <span class="map-pin-label">Rotterdam, NL</span>
+                </div>
+                <div class="map-pin interactable" style="top: 36%; left: 65.4%;">
+                    <span class="map-pin-dot"></span>
+                    <span class="map-pin-label">Dubai, UAE</span>
+                </div>
+                <div class="map-pin interactable" style="top: 39.4%; left: 70.2%;">
+                    <span class="map-pin-dot"></span>
+                    <span class="map-pin-label">Mumbai, IN</span>
+                </div>
+                <div class="map-pin interactable" style="top: 32.6%; left: 83.7%;">
+                    <span class="map-pin-dot"></span>
+                    <span class="map-pin-label">Shanghai, CN</span>
+                </div>
+                <div class="map-pin interactable" style="top: 49.3%; left: 78.8%;">
+                    <span class="map-pin-dot"></span>
+                    <span class="map-pin-label">Singapore, SG</span>
+                </div>
+                <div class="map-pin interactable" style="top: 64.6%; left: 57.8%;">
+                    <span class="map-pin-dot"></span>
+                    <span class="map-pin-label">Johannesburg, ZA</span>
+                </div>
+                <div class="map-pin interactable" style="top: 68.8%; left: 92%;">
+                    <span class="map-pin-dot"></span>
+                    <span class="map-pin-label">Sydney, AU</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="clients" class="fullscreen-section" data-nav-target="clients">
+        <div class="section-header gs-fade-up clients-header">
+            <span class="section-subtitle" data-i18n="clients-sub">CLIENTES</span>
+            <h2 class="section-title split-text" data-i18n="clients-title">O que nossos clientes dizem...</h2>
+        </div>
+
+        <div class="clients-shell">
+            <div class="clients-carousel-head gs-fade-up">
+                <div class="clients-controls">
+                    <button type="button" class="clients-control interactable" data-clients-nav="prev" aria-label="Depoimento anterior">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <button type="button" class="clients-control interactable" data-clients-nav="next" aria-label="Próximo depoimento">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="clients-viewport gs-fade-up">
+                <div class="clients-track" id="clients-track">
+                    <article class="client-card interactable">
+                        <div class="client-card-top">
+                            <span class="client-badge">B2B</span>
+                            <i class="fa-solid fa-quote-right client-quote-icon"></i>
+                        </div>
+                        <p class="client-quote" data-i18n="client-1-quote">A equipe da MM Logistics nos deu visibilidade e agilidade em uma operação sensível entre Paraguai e Brasil. O acompanhamento foi impecável.</p>
+                        <div class="client-footer">
+                            <strong class="client-name">Juliana Costa</strong>
+                            <span class="client-role" data-i18n="client-1-role">Gerente de Supply Chain, Agrovia Foods</span>
+                        </div>
+                    </article>
+
+                    <article class="client-card interactable">
+                        <div class="client-card-top">
+                            <span class="client-badge">B2B</span>
+                            <i class="fa-solid fa-quote-right client-quote-icon"></i>
+                        </div>
+                        <p class="client-quote" data-i18n="client-2-quote">Conseguimos reduzir custos sem perder previsibilidade. A comunicação é rápida, objetiva e sempre muito próxima.</p>
+                        <div class="client-footer">
+                            <strong class="client-name">Carlos Benítez</strong>
+                            <span class="client-role" data-i18n="client-2-role">Diretor de Operações, Mercosur Foods</span>
+                        </div>
+                    </article>
+
+                    <article class="client-card interactable">
+                        <div class="client-card-top">
+                            <span class="client-badge">B2B</span>
+                            <i class="fa-solid fa-quote-right client-quote-icon"></i>
+                        </div>
+                        <p class="client-quote" data-i18n="client-3-quote">Tínhamos uma operação urgente e a MM Logistics assumiu com segurança do início ao fim. O nível de resposta realmente faz diferença.</p>
+                        <div class="client-footer">
+                            <strong class="client-name">Renata Almeida</strong>
+                            <span class="client-role" data-i18n="client-3-role">Coordenadora de Importação, NovaMed</span>
+                        </div>
+                    </article>
+
+                    <article class="client-card interactable">
+                        <div class="client-card-top">
+                            <span class="client-badge">B2B</span>
+                            <i class="fa-solid fa-quote-right client-quote-icon"></i>
+                        </div>
+                        <p class="client-quote" data-i18n="client-4-quote">O diferencial está na assessoria personalizada. Eles entendem o negócio antes de propor a melhor rota para a operação.</p>
+                        <div class="client-footer">
+                            <strong class="client-name">Martín Rojas</strong>
+                            <span class="client-role" data-i18n="client-4-role">Gerente Comercial, Andina Parts</span>
+                        </div>
+                    </article>
+
+                    <article class="client-card interactable">
+                        <div class="client-card-top">
+                            <span class="client-badge">B2B</span>
+                            <i class="fa-solid fa-quote-right client-quote-icon"></i>
+                        </div>
+                        <p class="client-quote" data-i18n="client-5-quote">Mais do que um fornecedor logístico, a MM Logistics virou um parceiro estratégico para nossas exportações na região.</p>
+                        <div class="client-footer">
+                            <strong class="client-name">Felipe Duarte</strong>
+                            <span class="client-role" data-i18n="client-5-role">CEO, Atlas Commodities</span>
+                        </div>
+                    </article>
+                </div>
+            </div>
+
+            <div class="clients-dots" id="clients-dots"></div>
+        </div>
+    </section>
+
+    <!-- Seção: Rede Global -->
+    <section id="network" class="fullscreen-section network-legacy" aria-hidden="true">
+        <div class="section-header gs-fade-up">
+            <span style="margin-top: -50px;" class="section-subtitle" data-i18n="network-sub">Alcance Global</span>
+            <h2 class="section-title split-text" data-i18n="network-title">Presença Mundial</h2>
+            <p style="color: var(--text-muted); margin-top: 0px;" data-i18n="network-desc">Hubs estratégicos operando nos principais portos e aeroportos do mundo.</p>
+        </div>
+        <div class="map-container gs-scale-up" style="zoom: 90%;">
+            <img class="world-map-svg world-map-image" src="img/world-map.svg" alt="" aria-hidden="true">
+
+            <svg class="map-routes-svg" viewBox="0 0 950 620" aria-hidden="true">
+                <path class="route-line" d="M360 379Q430 260 486 131"></path>
+                <path class="route-line" d="M323 397Q540 340 795 202"></path>
+                <path class="route-line" d="M360 379Q575 380 749 306"></path>
+                <path class="route-line" d="M323 397Q562 420 874 427"></path>
+                <path class="route-line" d="M486 131Q550 160 621 223"></path>
+                <path class="route-line" d="M621 223Q706 190 795 202"></path>
+            </svg>
+
+            <div class="map-pin interactable" style="top: 35.7%; left: 27.7%;">
+                <span class="map-pin-dot"></span>
+                <span class="map-pin-label">Miami, US</span>
+            </div>
+            <div class="map-pin map-pin-featured interactable" style="top: 61.1%; left: 37.8%;">
+                <span class="map-pin-dot"></span>
+                <span class="map-pin-label">Belo Horizonte, BR</span>
+            </div>
+            <div class="map-pin map-pin-featured interactable" style="top: 64%; left: 34%;">
+                <span class="map-pin-dot"></span>
+                <span class="map-pin-label">Asunci&oacute;n, PY</span>
+            </div>
+            <div class="map-pin interactable" style="top: 21.2%; left: 51.2%;">
+                <span class="map-pin-dot"></span>
+                <span class="map-pin-label">Rotterdam, NL</span>
+            </div>
+            <div class="map-pin interactable" style="top: 36%; left: 65.4%;">
+                <span class="map-pin-dot"></span>
+                <span class="map-pin-label">Dubai, UAE</span>
+            </div>
+            <div class="map-pin interactable" style="top: 39.4%; left: 70.2%;">
+                <span class="map-pin-dot"></span>
+                <span class="map-pin-label">Mumbai, IN</span>
+            </div>
+            <div class="map-pin interactable" style="top: 32.6%; left: 83.7%;">
+                <span class="map-pin-dot"></span>
+                <span class="map-pin-label">Shanghai, CN</span>
+            </div>
+            <div class="map-pin interactable" style="top: 49.3%; left: 78.8%;">
+                <span class="map-pin-dot"></span>
+                <span class="map-pin-label">Singapore, SG</span>
+            </div>
+            <div class="map-pin interactable" style="top: 64.6%; left: 57.8%;">
+                <span class="map-pin-dot"></span>
+                <span class="map-pin-label">Johannesburg, ZA</span>
+            </div>
+            <div class="map-pin interactable" style="top: 68.8%; left: 92%;">
+                <span class="map-pin-dot"></span>
+                <span class="map-pin-label">Sydney, AU</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção: Contato -->
+    <section id="contact" class="fullscreen-section" data-nav-target="contact">
+        <div class="contact-box gs-fade-up">
+            <h2 class="section-title split-text" data-i18n="contact-title" style="font-size: 3rem;">Pronto para <span style="color:var(--primary-color)">Embarcar?</span></h2>
+            <p style="color: #ccc; margin-bottom: 40px; font-size: 1.1rem;" data-i18n="contact-desc">Converse com nossos especialistas e construa a rota perfeita para seu negócio e <span class="contact-highlight">atenderemos você de forma imediata</span>.</p>
+            
+            <a href="https://wa.me/595973605501" target="_blank" class="btn btn-whatsapp interactable" data-i18n="btn-whatsapp">
+                <i class="fa-brands fa-whatsapp" style="font-size: 1.2rem;"></i> Falar no WhatsApp Agora
+            </a>
+
+            <div class="contact-info-flex">
+                <div class="info-card">
+                    <i class="fa-solid fa-envelope"></i>
+                    <span data-i18n="contact-email">mavendano@mmlogistics.com.py</span>
+                </div>
+                <div class="info-card">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <span data-i18n="contact-address">Global Logistics HUB</span>
+                </div>
+                <div class="info-card">
+                    <i class="fa-solid fa-phone"></i>
+                    <span>+595 973 605501</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; <span id="current-year"></span> MM Logistics. <span data-i18n="footer-rights">Todos os direitos reservados.</span> | Premium Supply Chain Solutions.</p>
+    </footer>
+
+    <!-- Botão WhatsApp Fixo -->
+    <a href="https://wa.me/595973605501" target="_blank" class="whatsapp-float interactable">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
