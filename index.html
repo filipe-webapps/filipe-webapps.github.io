@@ -729,14 +729,16 @@
     .footer-links a{font-size:var(--text-xs);color:var(--color-text-muted);text-decoration:none;letter-spacing:.05em;transition:color var(--transition-interactive)}
     .footer-links a:hover{color:var(--color-text)}
     .footer-social{
-      width:38px;height:38px;border-radius:var(--radius-full);
+      width:45px;height:45px;
       display:inline-grid;place-items:center;
-      border:1px solid var(--color-border);
+      border: none;
       color:var(--color-text-muted);
       transition:color var(--transition-interactive),border-color var(--transition-interactive),background var(--transition-interactive),transform var(--transition-interactive);
     }
-    .footer-social i{font-size:1.1rem}
-    .footer-social:hover{color:var(--color-primary);border-color:var(--color-primary);background:oklch(from var(--color-primary) l c h / .08);transform:translateY(-2px)}
+    .footer-social i{font-size:1.2rem}
+    .footer-social:hover{
+      color:var(--color-primary) !important;
+    }
 
     /* ─── CURSOR GLOW ─────────────────────────────────────── */
     .cursor-glow{
@@ -1072,7 +1074,7 @@
   <footer>
     <div class="container">
       <div class="footer-inner">
-        <div class="footer-copy">© 2024 Master Multimídia · Belo Horizonte, MG · +55 31 9930-0445</div>
+        <div class="footer-copy">© <span data-current-year>2026</span> Master Multimídia · Belo Horizonte, MG · +55 31 9930-0445</div>
         <div class="footer-links">
           <a href="#servicos">Serviços</a>
           <a href="#sobre">Sobre</a>
@@ -1110,6 +1112,9 @@
   </a>
 
   <script>
+    const currentYear=document.querySelector('[data-current-year]');
+    if(currentYear)currentYear.textContent=new Date().getFullYear();
+
     /* ─── THEME TOGGLE ───────────────────────────────────── */
     (function(){
       const t=document.querySelector('[data-theme-toggle]'),r=document.documentElement;
@@ -1391,6 +1396,5 @@
       scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:true}
     });
   </script>
-
 </body>
 </html>
