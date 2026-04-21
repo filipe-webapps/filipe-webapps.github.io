@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Master Multimidia Eventos: sonorizacao, iluminacao, paineis de LED, estrutura, filmagem e operacao tecnica para eventos corporativos, sociais e institucionais em Belo Horizonte e Minas Gerais.">
+  <meta name="keywords" content="Master Multimidia, eventos em Belo Horizonte, sonorizacao profissional, iluminacao para eventos, painel de LED, estrutura para eventos, filmagem de eventos, transmissao ao vivo">
+  <meta name="author" content="Master Multimidia Eventos">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="theme-color" content="#111314">
+  <meta name="format-detection" content="telephone=no">
+
+  <link rel="canonical" href="https://www.mastermultimidia.com.br/">
+  <link rel="icon" type="image/png" href="./img/favicon.png">
+  <link rel="apple-touch-icon" href="./img/favicon.png">
+  <link rel="preload" as="image" href="./img/master_logo_.png">
+
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Master Multimidia Eventos | Producao Tecnica para Eventos">
+  <meta property="og:description" content="Som, luz, LED, estrutura, filmagem e operacao tecnica com padrao profissional para eventos em Minas Gerais.">
+  <meta property="og:url" content="https://www.mastermultimidia.com.br/">
+  <meta property="og:site_name" content="Master Multimidia Eventos">
+  <meta property="og:image" content="./img/master_logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Master Multimidia Eventos">
+  <meta name="twitter:description" content="Estrutura audiovisual completa para eventos corporativos, sociais e institucionais.">
+  <meta name="twitter:image" content="./img/master_logo.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <title>Master Multimídia</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300..700;1,300..400&display=swap" rel="stylesheet">
+
+  <!-- GSAP -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/SplitText.min.js"></script>
+
+  <style>
+    /* ─── TOKENS ─────────────────────────────────────────── */
+    :root {
+      --text-xs:   clamp(0.75rem,  0.7rem  + 0.25vw, 0.875rem);
+      --text-sm:   clamp(0.875rem, 0.8rem  + 0.35vw, 1rem);
+      --text-base: clamp(1rem,     0.95rem + 0.25vw, 1.125rem);
+      --text-lg:   clamp(1.125rem, 1rem    + 0.75vw, 1.5rem);
+      --text-xl:   clamp(1.5rem,   1.2rem  + 1.25vw, 2.25rem);
+      --text-2xl:  clamp(2rem,     1.2rem  + 2.5vw,  3.5rem);
+      --text-3xl:  clamp(2.5rem,   1rem    + 4vw,    5rem);
+      --text-hero: clamp(4rem,     1rem    + 9vw,   11rem);
+
+      --space-1: .25rem; --space-2: .5rem; --space-3: .75rem;
+      --space-4: 1rem;   --space-5: 1.25rem; --space-6: 1.5rem;
+      --space-8: 2rem;   --space-10: 2.5rem; --space-12: 3rem;
+      --space-16: 4rem;  --space-20: 5rem;   --space-24: 6rem;
+
+      --font-display: 'Bebas Neue', 'Georgia', serif;
+      --font-body:    'DM Sans', 'Helvetica Neue', sans-serif;
+
+      --radius-sm: 0.375rem; --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;  --radius-xl: 1rem; --radius-full: 9999px;
+      --transition-interactive: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ─── DARK PALETTE ───────────────────────────────────── */
+    :root, [data-theme="dark"] {
+      --color-bg:              #0a0a0a;
+      --color-surface:         #111111;
+      --color-surface-2:       #161616;
+      --color-surface-offset:  #1c1c1c;
+      --color-border:          #2a2a2a;
+      --color-divider:         #222;
+      --color-text:            #f0ede8;
+      --color-text-muted:      #888580;
+      --color-text-faint:      #444;
+      --color-text-inverse:    #0a0a0a;
+      --color-primary:         #f15a24;
+      --color-primary-hover:   #ff7d4d;
+      --color-primary-active:  #ff7949;
+      --shadow-sm: 0 1px 2px oklch(0 0 0 / .3);
+      --shadow-md: 0 4px 12px oklch(0 0 0 / .5);
+      --shadow-lg: 0 12px 40px oklch(0 0 0 / .7);
+    }
+
+    [data-theme="light"] {
+      --color-bg:              #f9f7f2;
+      --color-surface:         #f4f1ec;
+      --color-surface-2:       #ffffff;
+      --color-surface-offset:  #ede9e2;
+      --color-border:          #ddd9d0;
+      --color-divider:         #e5e2da;
+      --color-text:            #1a1814;
+      --color-text-muted:      #6a6760;
+      --color-text-faint:      #bbb;
+      --color-primary:         #c47a08;
+      --color-primary-hover:   #a86400;
+      --shadow-sm: 0 1px 2px oklch(0.2 0.01 80 / .06);
+      --shadow-md: 0 4px 12px oklch(0.2 0.01 80 / .1);
+      --shadow-lg: 0 12px 40px oklch(0.2 0.01 80 / .15);
+    }
+
+    /* ─── RESET + BASE ───────────────────────────────────── */
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;scroll-behavior:smooth;scroll-padding-top:var(--space-16)}
+    body{min-height:100dvh;line-height:1.6;font-family:var(--font-body);font-size:var(--text-base);color:var(--color-text);background-color:var(--color-bg);overflow-x:hidden}
+    img,picture,video,canvas,svg{display:block;max-width:100%;height:auto}
+    ul[role="list"],ol[role="list"]{list-style:none}
+    input,button,textarea,select{font:inherit;color:inherit}
+    h1,h2,h3,h4,h5,h6{text-wrap:balance;line-height:1.1}
+    p,li{text-wrap:pretty;max-width:72ch}
+    button{cursor:pointer;background:none;border:none}
+    ::selection{background:oklch(from var(--color-primary) l c h / .25);color:var(--color-text)}
+    :focus-visible{outline:2px solid var(--color-primary);outline-offset:3px;border-radius:var(--radius-sm)}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+    ::-webkit-scrollbar{
+        width: 10px;
+        background: transparent;
+    }
+    ::-webkit-scrollbar-thumb{
+        width: 10px;
+        background-color: var(--color-primary);
+    }
+
+    /* ─── LAYOUT ─────────────────────────────────────────── */
+    .container{max-width:1200px;margin-inline:auto;padding-inline:clamp(var(--space-4),4vw,var(--space-12))}
+    .container--narrow{max-width:800px;margin-inline:auto;padding-inline:clamp(var(--space-4),4vw,var(--space-12))}
+
+    /* ─── NOISE TEXTURE ──────────────────────────────────── */
+    body::before{
+      content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity:.03;
+    }
+
+    /* ─── NAV ────────────────────────────────────────────── */
+    nav{
+      position:fixed;top:0;left:0;right:0;z-index:100;
+      padding:var(--space-4) 0;
+      transition:background var(--transition-interactive),box-shadow var(--transition-interactive),padding var(--transition-interactive);
+    }
+    nav.scrolled{
+      background:oklch(from var(--color-bg) l c h / .92);
+      backdrop-filter:blur(20px);
+      -webkit-backdrop-filter:blur(20px);
+      box-shadow:0 1px 0 var(--color-border);
+      padding:var(--space-3) 0;
+    }
+    .nav-inner{display:flex;align-items:center;justify-content:space-between}
+    .nav-logo{display:flex;align-items:center;gap:var(--space-3);text-decoration:none;color:var(--color-text)}
+    .nav-logo-img{width:clamp(150px,13vw,210px);height:auto;object-fit:contain}
+    .nav-logo-mark{width:36px;height:36px}
+    .nav-logo-text{font-family:var(--font-display);font-size:1.3rem;letter-spacing:.05em;color:var(--color-text)}
+    .nav-links{display:flex;align-items:center;gap:var(--space-8)}
+    .nav-links a{font-size:var(--text-sm);color:var(--color-text-muted);text-decoration:none;letter-spacing:.02em;transition:color var(--transition-interactive)}
+    .nav-links a:hover{color:var(--color-text)}
+    .nav-cta{
+      font-size:var(--text-sm);font-weight:600;letter-spacing:.04em;
+      padding:var(--space-2) var(--space-5);
+      border:1px solid var(--color-primary);
+      color:var(--color-primary);
+      border-radius:var(--radius-full);
+      text-decoration:none;
+      transition:background var(--transition-interactive),color var(--transition-interactive),box-shadow var(--transition-interactive);
+    }
+    .nav-cta:hover{background:var(--color-primary);color:var(--color-text-inverse);box-shadow:0 0 24px oklch(from var(--color-primary) l c h / .4)}
+    .nav-actions{display:flex;align-items:center;gap:var(--space-4)}
+    .theme-toggle{
+      display:flex;align-items:center;justify-content:center;
+      width:36px;height:36px;border-radius:var(--radius-full);
+      color:var(--color-text-muted);
+      transition:color var(--transition-interactive),background var(--transition-interactive);
+    }
+    .theme-toggle:hover{color:var(--color-text);background:var(--color-surface-offset)}
+    .hamburger{display:none;flex-direction:column;gap:5px;width:24px;cursor:pointer}
+    .hamburger span{display:block;height:2px;background:var(--color-text);transition:transform var(--transition-interactive),opacity var(--transition-interactive)}
+    .mobile-menu{display:none}
+    @media(max-width:768px){
+      .nav-links{display:none}.hamburger{display:flex}
+      .mobile-menu{
+        display:none;position:fixed;inset:0;z-index:99;
+        background:var(--color-bg);
+        flex-direction:column;align-items:center;justify-content:center;gap:var(--space-8);
+      }
+      .mobile-menu.open{display:flex}
+      .mobile-menu a{font-family:var(--font-display);font-size:var(--text-2xl);color:var(--color-text);text-decoration:none;letter-spacing:.06em}
+      .mobile-menu a:hover{color:var(--color-primary)}
+    }
+
+    /* ─── HERO ───────────────────────────────────────────── */
+    .hero{
+      position:relative;height:100vh;min-height:100vh;
+      --color-text:#f7f3ed;
+      --color-text-muted:rgba(247,243,237,.78);
+      --color-text-faint:rgba(247,243,237,.38);
+      --color-border:rgba(255,255,255,.14);
+      --color-primary:#f15a24;
+      --color-text-inverse:#12100d;
+      display:flex;flex-direction:column;justify-content:center;
+      padding-block:clamp(var(--space-20),12vh,var(--space-24)) clamp(var(--space-10),7vh,var(--space-20));
+      overflow:hidden;
+      color:var(--color-text);
+    }
+    .hero-video{
+      position:absolute;inset:0;z-index:0;
+      width:100%;height:100%;object-fit:cover;
+      opacity:.62;filter:saturate(.95) contrast(1.05);
+    }
+    .hero-bg{
+      position:absolute;inset:0;z-index:1;pointer-events:none;
+      background:
+        linear-gradient(90deg,oklch(0 0 0 / .9) 0%,oklch(0 0 0 / .72) 44%,oklch(0 0 0 / .4) 100%),
+        linear-gradient(180deg,oklch(0 0 0 / .4) 0%,oklch(0 0 0 / .82) 100%),
+        radial-gradient(ellipse 80% 60% at 70% 50%, oklch(0.55 0.16 55 / .12) 0%, transparent 70%);
+    }
+    .hero-grid{
+      position:absolute;inset:0;z-index:1;
+      background-image:
+        linear-gradient(rgba(255,255,255,.13) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.13) 1px, transparent 1px);
+      background-position:left top;
+      background-size:clamp(56px,6vw,88px) clamp(56px,6vw,88px);
+      -webkit-mask-image:linear-gradient(90deg, black 0%, black 58%, transparent 100%);
+      mask-image:linear-gradient(90deg, black 0%, black 58%, transparent 100%);
+      opacity:.32;
+    }
+   
+    .hero .container{
+      position:relative;z-index:3;
+      width:100%;
+      display:flex;align-items:center;justify-content:flex-start;
+    }
+    .hero-content{
+      position:relative;z-index:3;
+      max-width:min(760px,62vw);
+      margin-right:auto;
+      text-align:left;
+    }
+    .hero-eyebrow{
+      display:inline-flex;align-items:center;gap:var(--space-2);
+      font-size:var(--text-xs);font-weight:500;letter-spacing:.18em;text-transform:uppercase;
+      color:var(--color-primary);margin-bottom:var(--space-6);
+      opacity:0;
+    }
+    .hero-eyebrow::before{content:'';width:30px;height:1px;background:var(--color-primary)}
+    .hero-eyebrow::after{content:'';width:30px;height:1px;background:var(--color-primary)}
+    .hero-title{
+      font-family:var(--font-display);
+      font-size:clamp(4rem,8.6vw,9.25rem);
+      line-height:1;
+      letter-spacing:0;
+      color:var(--color-text);
+      margin-bottom:var(--space-8);
+      overflow:visible;
+      text-align:left;
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+    }
+    .hero-title .word{display:block;overflow:visible;line-height:.84}
+    .hero-title .word + .word{margin-top:-.1em}
+    .hero-title .char{display:inline-block; transform: translateY(1%) !important;}
+    .hero-title .accent-word{color:var(--color-primary)}
+    .hero-desc{
+      font-size:var(--text-lg);color:var(--color-text-muted);
+      max-width:660px;line-height:1.35;margin-bottom:var(--space-10);
+      opacity:0;
+      text-align:left;
+    }
+    .hero-actions{display:flex;align-items:center;justify-content:flex-start;gap:var(--space-4);flex-wrap:wrap;opacity:0}
+    .btn-primary{
+      display:inline-flex;align-items:center;gap:var(--space-2);
+      padding:var(--space-4) var(--space-8);
+      background:var(--color-primary);color:var(--color-text-inverse);
+      font-weight:700;font-size:var(--text-sm);letter-spacing:.06em;text-transform:uppercase;
+      border-radius:var(--radius-full);text-decoration:none;
+      transition:background var(--transition-interactive),box-shadow var(--transition-interactive),transform var(--transition-interactive);
+    }
+    .btn-primary:hover{background:var(--color-primary-hover);box-shadow:0 0 32px oklch(from var(--color-primary) l c h / .5);transform:translateY(-2px)}
+    .btn-primary:active{transform:translateY(0)}
+    .btn-ghost{
+      display:inline-flex;align-items:center;gap:var(--space-2);
+      padding:var(--space-4) var(--space-6);
+      color:var(--color-text-muted);font-size:var(--text-sm);letter-spacing:.04em;
+      text-decoration:none;border-bottom:1px solid var(--color-border);
+      transition:color var(--transition-interactive),border-color var(--transition-interactive);
+    }
+    .btn-ghost:hover{color:var(--color-text);border-color:var(--color-text)}
+    [data-theme="light"] .hero{
+      --color-text:#fff8ef;
+      --color-text-muted:rgba(255,248,239,.8);
+      --color-text-faint:rgba(255,248,239,.42);
+      --color-border:rgba(255,255,255,.16);
+    }
+    [data-theme="light"] .hero-video{opacity:.7;filter:saturate(.96) contrast(1.08) brightness(.9)}
+    [data-theme="light"] .hero-bg{
+      background:
+        linear-gradient(90deg,rgba(0,0,0,.86) 0%,rgba(0,0,0,.64) 46%,rgba(0,0,0,.32) 100%),
+        linear-gradient(180deg,rgba(0,0,0,.28) 0%,rgba(0,0,0,.72) 100%),
+        radial-gradient(ellipse 80% 60% at 72% 50%, rgba(241,90,36,.14) 0%, transparent 70%);
+    }
+    [data-theme="light"] .hero-grid{opacity:.24}
+    .hero-scroll{
+      position:absolute;bottom:var(--space-8);left:50%;transform:translateX(-50%);
+      display:flex;flex-direction:column;align-items:center;gap:var(--space-2);
+      color:var(--color-text-faint);font-size:var(--text-xs);letter-spacing:.12em;text-transform:uppercase;
+      z-index:2;opacity:0;
+    }
+    .hero-scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,var(--color-primary),transparent);animation:scrollLine 2s ease-in-out infinite}
+    @keyframes scrollLine{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+    .hero-stats{
+      position:absolute;bottom:clamp(var(--space-8),6vh,var(--space-16));right:clamp(var(--space-6),6vw,var(--space-20));
+      display:flex;flex-direction:column;gap:var(--space-6);z-index:3;
+      opacity:0;
+    }
+    .stat-item{text-align:right}
+    .stat-num{font-family:var(--font-display);font-size:var(--text-2xl);color:var(--color-primary);line-height:1}
+    .stat-label{font-size:var(--text-xs);color:var(--color-text-muted);letter-spacing:.1em;text-transform:uppercase}
+    @media(max-width:768px){
+      .hero{
+        padding-block:clamp(var(--space-20),16vh,var(--space-24)) var(--space-12);
+      }
+      .hero-content{max-width:100%}
+      .hero-title{font-size:clamp(4rem,18vw,6.25rem);line-height:1;margin-bottom:var(--space-6)}
+      .hero-title .word{line-height:.86}
+      .hero-title .word + .word{margin-top:-.08em}
+      .hero-desc{max-width:36rem;margin-bottom:var(--space-8)}
+      .hero-actions{align-items:flex-start}
+      .hero-stats{display:none}
+      .hero-counter{display:none}
+    }
+
+    /* ─── MARQUEE ─────────────────────────────────────────── */
+    .marquee-section{padding:var(--space-8) 0;border-top:1px solid var(--color-border);border-bottom:1px solid var(--color-border);overflow:hidden;background:var(--color-surface)}
+    .marquee-track{display:flex;gap:var(--space-12);white-space:nowrap;animation:marquee 20s linear infinite}
+    .marquee-track:hover{animation-play-state:paused}
+    .marquee-item{
+      font-family:var(--font-display);font-size:var(--text-xl);
+      letter-spacing:.08em;color:var(--color-text-faint);
+      display:flex;align-items:center;gap:var(--space-6);flex-shrink:0;
+    }
+    .marquee-item strong{color:var(--color-primary)}
+    .marquee-dot{width:6px;height:6px;border-radius:50%;background:var(--color-primary);flex-shrink:0}
+    @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+    /* ─── SECTION HEADER ─────────────────────────────────── */
+    .section-header{margin-bottom:clamp(var(--space-10),6vw,var(--space-20))}
+    .section-header--compact{max-width:540px}
+    .section-eyebrow{
+      display:inline-flex;align-items:center;gap:var(--space-2);
+      font-size:var(--text-xs);font-weight:500;letter-spacing:.18em;text-transform:uppercase;
+      color:var(--color-primary);margin-bottom:var(--space-4);
+    }
+    .section-eyebrow::before{content:'';width:24px;height:1px;background:var(--color-primary)}
+    .section-eyebrow::after{content:'';width:24px;height:1px;background:var(--color-primary)}
+    .section-title{font-family:var(--font-display);font-size:var(--text-3xl);letter-spacing:-.01em;line-height:1}
+    .section-title em{font-style:normal;color:var(--color-primary)}
+
+    /* ─── SERVICES ────────────────────────────────────────── */
+    .services,
+    .about,
+    .process,
+    .portfolio,
+    .testimonial,
+    .cta-section{
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+    .services{padding:clamp(var(--space-12),6vw,var(--space-16)) 0;background:var(--color-bg)}
+    .services .section-header{margin-bottom:var(--space-8)}
+    .services-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      grid-auto-rows:1fr;
+      gap:1px;background:var(--color-border);
+      border:1px solid var(--color-border);
+      border-radius:var(--radius-xl);overflow:hidden;
+      cursor: pointer;
+    }
+    .service-card{
+      border:1px solid var(--color-border) !important;
+      padding: 20px !important;
+      background:var(--color-surface);
+      padding:clamp(var(--space-5),2vw,var(--space-7));
+      position:relative;overflow:hidden;
+      min-height:245px;
+      display:flex;flex-direction:column;
+      transition:background var(--transition-interactive);
+    }
+    .service-card:hover{background:var(--color-surface-2)}
+    .service-card--featured{
+      grid-column:auto;
+      background:var(--color-surface);
+    }
+    .service-card--featured:hover{background:var(--color-surface-2)}
+    .service-number{
+      font-family:var(--font-display);font-size:clamp(4rem,7vw,7rem);
+      color:oklch(from var(--color-text) l c h / .04);
+      position:absolute;top:-var(--space-6);right:var(--space-4);
+      line-height:1;user-select:none;letter-spacing:-.03em;
+    }
+    .service-icon{
+      width:36px;height:36px;margin-bottom:var(--space-3);
+      color:var(--color-primary);
+    }
+    .service-name{
+      font-family:var(--font-display);font-size:clamp(1.65rem,2.2vw,2.2rem);
+      letter-spacing:.02em;line-height:1.08;margin-bottom:var(--space-3);
+      color:var(--color-text);
+    }
+    .service-desc{font-size:clamp(.82rem,.78rem + .2vw,.95rem);color:var(--color-text-muted);line-height:1.48}
+    .service-tag{
+      display:inline-block;margin-top:auto;padding-top:var(--space-4);
+      align-self:flex-start;
+      font-size:var(--text-xs);letter-spacing:.12em;text-transform:uppercase;
+      color:var(--color-primary);border-bottom:1px solid oklch(from var(--color-primary) l c h / .4);
+      padding-bottom:var(--space-1);
+      background:transparent;
+      cursor:pointer;
+      transition:color var(--transition-interactive),border-color var(--transition-interactive),transform var(--transition-interactive);
+    }
+    .service-tag:hover{color:var(--color-primary-hover);border-color:var(--color-primary-hover);transform:translateX(3px)}
+    @media(max-width:900px){.services-grid{grid-template-columns:1fr 1fr}.service-card--featured{grid-column:span 1}}
+    @media(max-width:600px){.services-grid{grid-template-columns:1fr}.service-card--featured{grid-column:span 1}}
+
+    /* ─── ABOUT / NUMBERS ─────────────────────────────────── */
+    .about{
+      padding:clamp(var(--space-16),10vw,var(--space-24)) 0;
+      background:var(--color-surface);
+      position:relative;overflow:hidden;
+    }
+    .about::before{
+      content:'30';
+      position:absolute;right:-2vw;top:50%;transform:translateY(-50%);
+      font-family:var(--font-display);font-size:clamp(15rem,30vw,28rem);
+      color:oklch(from var(--color-text) l c h / .025);
+      line-height:1;user-select:none;pointer-events:none;
+      letter-spacing:-.05em;
+    }
+    .about-inner{display:grid;grid-template-columns:1fr 1fr;gap:clamp(var(--space-10),8vw,var(--space-24));align-items:center}
+    .about-text .section-header{margin-bottom:var(--space-6)}
+    .about-body{font-size:var(--text-base);color:var(--color-text-muted);line-height:1.8;max-width:46ch}
+    .about-body+.about-body{margin-top:var(--space-4)}
+    .about-cta{margin-top:var(--space-8)}
+    .numbers-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--color-border);border:1px solid var(--color-border);border-radius:var(--radius-xl);overflow:hidden}
+    .number-item{background:var(--color-surface-2);padding:var(--space-8) var(--space-6)}
+    .number-val{font-family:var(--font-display);font-size:var(--text-3xl);color:var(--color-primary);line-height:1}
+    .number-desc{font-size:var(--text-xs);letter-spacing:.1em;text-transform:uppercase;color:var(--color-text-muted);margin-top:var(--space-2)}
+    @media(max-width:768px){
+      .about-inner{grid-template-columns:1fr}
+      .about::before{font-size:clamp(8rem,30vw,15rem);right:-4vw}
+    }
+
+    /* ─── PROCESS ─────────────────────────────────────────── */
+    .process{padding:clamp(var(--space-16),10vw,var(--space-24)) 0;background:var(--color-bg)}
+    .process-steps{
+      display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+      margin-top:clamp(var(--space-10),6vw,var(--space-16));
+      position:relative;
+    }
+    .process-steps::before{
+      content:'';position:absolute;top:28px;left:12.5%;right:12.5%;
+      height:1px;background:linear-gradient(to right,transparent,var(--color-border),var(--color-border),transparent);
+      z-index:0;
+    }
+    .step-item{
+      position:relative;z-index:1;
+      display:flex;flex-direction:column;align-items:center;text-align:center;
+      padding:0 var(--space-4);
+    }
+    .step-dot{
+      width:56px;height:56px;border-radius:50%;
+      background:var(--color-surface);border:1px solid var(--color-border);
+      display:flex;align-items:center;justify-content:center;
+      font-family:var(--font-display);font-size:var(--text-xl);color:var(--color-text-faint);
+      margin-bottom:var(--space-6);
+      transition:border-color var(--transition-interactive),color var(--transition-interactive),background var(--transition-interactive),box-shadow var(--transition-interactive);
+    }
+    .step-item:hover .step-dot{
+      border-color:var(--color-primary);color:var(--color-primary);background:var(--color-surface-2);
+      box-shadow:0 0 24px oklch(from var(--color-primary) l c h / .3);
+    }
+    .step-title{font-size:var(--text-sm);font-weight:600;color:var(--color-text);margin-bottom:var(--space-2)}
+    .step-desc{font-size:var(--text-xs);color:var(--color-text-muted);line-height:1.7}
+    @media(max-width:600px){
+      .process-steps{grid-template-columns:1fr 1fr;gap:var(--space-8)}
+      .process-steps::before{display:none}
+    }
+
+    /* ─── PORTFOLIO ────────────────────────────────────────── */
+    .portfolio{padding:clamp(var(--space-16),10vw,var(--space-24)) 0;background:var(--color-surface);overflow:hidden}
+    .portfolio-outer{padding-inline:clamp(var(--space-4),4vw,var(--space-12))}
+    .portfolio-grid{
+      display:grid;
+      grid-template-columns:repeat(12,1fr);
+      grid-template-rows:auto;
+      gap:var(--space-3);
+      margin-top:clamp(var(--space-10),6vw,var(--space-16));
+    }
+    .portfolio-item{
+      overflow:hidden;border-radius:var(--radius-lg);
+      background:var(--color-surface-2);
+      position:relative;aspect-ratio:4/3;cursor:pointer;
+    }
+    .portfolio-item:nth-child(1){grid-column:span 7;aspect-ratio:16/9}
+    .portfolio-item:nth-child(2){grid-column:span 5}
+    .portfolio-item:nth-child(3){grid-column:span 4}
+    .portfolio-item:nth-child(4){grid-column:span 4}
+    .portfolio-item:nth-child(5){grid-column:span 4}
+    .portfolio-img{
+      width:100%;height:100%;object-fit:cover;
+      filter:grayscale(.6) brightness(.7);
+      transition:filter .6s cubic-bezier(0.16,1,0.3,1),transform .6s cubic-bezier(0.16,1,0.3,1);
+    }
+    .portfolio-item:hover .portfolio-img{filter:grayscale(0) brightness(.9);transform:scale(1.04)}
+    .portfolio-overlay{
+      position:absolute;inset:0;
+      background:linear-gradient(to top,oklch(0 0 0 / .7) 0%,transparent 60%);
+      display:flex;flex-direction:column;justify-content:flex-end;
+      padding:var(--space-5);opacity:0;
+      transition:opacity .3s ease;
+    }
+    .portfolio-item:hover .portfolio-overlay{opacity:1}
+    .portfolio-label{font-size:var(--text-xs);letter-spacing:.1em;text-transform:uppercase;color:var(--color-primary)}
+    .portfolio-title{font-family:var(--font-display);font-size:var(--text-lg);color:#fff;letter-spacing:.03em;margin-top:var(--space-1)}
+    @media(max-width:768px){
+      .portfolio-grid{grid-template-columns:1fr 1fr}
+      .portfolio-item:nth-child(1){grid-column:span 2;aspect-ratio:16/9}
+      .portfolio-item:nth-child(2){grid-column:span 2}
+      .portfolio-item:nth-child(3),.portfolio-item:nth-child(4),.portfolio-item:nth-child(5){grid-column:span 1}
+    }
+    @media(max-width:480px){
+      .portfolio-grid{grid-template-columns:1fr}
+      .portfolio-item,.portfolio-item:nth-child(n){grid-column:span 1}
+    }
+
+    /* ─── TESTIMONIAL ──────────────────────────────────────── */
+    .testimonial{
+      padding:clamp(var(--space-16),10vw,var(--space-24)) 0;
+      background:var(--color-bg);
+      position:relative;overflow:hidden;
+    }
+    .testimonial-bg{
+      position:absolute;inset:0;
+      background:radial-gradient(ellipse 60% 60% at 50% 50%, oklch(0.55 0.16 55 / .07) 0%,transparent 70%);
+    }
+    .testimonial-inner{position:relative;z-index:1;max-width:800px;margin-inline:auto;text-align:center}
+    .testimonial-quote{position:relative;max-width:800px;margin-inline:auto}
+    .quote-mark{
+      position:absolute;
+      left:clamp(-2.5rem,-4vw,-1.15rem);
+      top:clamp(-4.25rem,-6vw,-2.75rem);
+      z-index:0;
+      font-family:Georgia,'Times New Roman',serif;
+      font-size:clamp(9rem,15vw,13rem);
+      font-weight:700;
+      line-height:1;
+      color:var(--color-primary);
+      opacity:.28;
+      display:block;
+      pointer-events:none;
+    }
+    .testimonial-text{
+      position:relative;z-index:1;
+      font-size:var(--text-xl);color:var(--color-text);font-weight:300;
+      line-height:1.6;font-style:italic;margin-bottom:var(--space-8);
+      text-align:center;
+    }
+    .testimonial-author{font-size:var(--text-sm);color:var(--color-text-muted);letter-spacing:.1em;text-transform:uppercase}
+    .testimonial-role{font-size:var(--text-xs);color:var(--color-primary);letter-spacing:.12em;margin-top:var(--space-1);display:block}
+    @media(max-width:600px){
+      .quote-mark{
+        left:-.85rem;
+        top:-3.25rem;
+        font-size:8.5rem;
+        opacity:.22;
+      }
+      .testimonial-text{font-size:var(--text-lg)}
+    }
+
+    /* ─── CTA SECTION ─────────────────────────────────────── */
+    .cta-section{
+      padding:clamp(var(--space-16),10vw,var(--space-24)) 0;
+      background:var(--color-surface);
+      text-align:center;position:relative;overflow:hidden;
+    }
+    .cta-section::before{
+      content:'';position:absolute;inset:0;
+      background:radial-gradient(ellipse 80% 80% at 50% 120%, oklch(0.55 0.16 55 / .12) 0%,transparent 60%);
+    }
+    .cta-inner{position:relative;z-index:1}
+    .cta-title{
+      font-family:var(--font-display);font-size:var(--text-3xl);
+      letter-spacing:-.01em;line-height:1;margin-bottom:var(--space-6);
+    }
+    .cta-subtitle{font-size:var(--text-base);color:var(--color-text-muted);max-width:50ch;margin-inline:auto;margin-bottom:var(--space-10)}
+    .cta-actions{display:flex;align-items:center;justify-content:center;gap:var(--space-4);flex-wrap:wrap}
+    .btn-whatsapp{
+      display:inline-flex;align-items:center;gap:var(--space-3);
+      padding:var(--space-4) var(--space-8);
+      background:#25D366;color:#fff;
+      font-weight:700;font-size:var(--text-sm);letter-spacing:.04em;
+      border-radius:var(--radius-full);text-decoration:none;
+      transition:background var(--transition-interactive),transform var(--transition-interactive),box-shadow var(--transition-interactive);
+    }
+    .btn-whatsapp:hover{background:#1fba57;transform:translateY(-2px);box-shadow:0 0 32px rgba(37,211,102,.4)}
+    .btn-whatsapp:active{transform:translateY(0)}
+
+    /* â”€â”€â”€ SERVICE MODAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    body.modal-open{overflow:hidden}
+    .service-modal[hidden]{display:none}
+    .service-modal{
+      position:fixed;inset:0;z-index:220;
+      display:grid;place-items:center;
+      padding:clamp(var(--space-4),4vw,var(--space-10));
+    }
+    .service-modal__overlay{
+      position:absolute;inset:0;
+      background:oklch(0 0 0 / .76);
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
+    }
+    .service-modal__dialog{
+      position:relative;z-index:1;
+      width:min(720px,100%);
+      max-height:min(84vh,760px);
+      overflow:auto;
+      padding:clamp(var(--space-8),5vw,var(--space-12));
+      border:1px solid var(--color-border);
+      border-radius:var(--radius-xl);
+      background:
+        linear-gradient(135deg,oklch(from var(--color-surface-2) l c h / .98),oklch(from var(--color-surface) l c h / .98)),
+        var(--color-surface);
+      box-shadow:var(--shadow-lg);
+    }
+    .service-modal__close{
+      position:absolute;top:var(--space-5);right:var(--space-5);
+      width:40px;height:40px;border-radius:var(--radius-full);
+      display:grid;place-items:center;
+      color:var(--color-text-muted);
+      background:var(--color-surface-offset);
+      transition:color var(--transition-interactive),background var(--transition-interactive),transform var(--transition-interactive);
+    }
+    .service-modal__close:hover{color:var(--color-text);background:var(--color-primary);transform:rotate(90deg)}
+    .service-modal__kicker{
+      display:inline-flex;align-items:center;gap:var(--space-2);
+      font-size:var(--text-xs);font-weight:600;letter-spacing:.18em;text-transform:uppercase;
+      color:var(--color-primary);margin-bottom:var(--space-4);
+    }
+    .service-modal__kicker::before{content:'';width:24px;height:1px;background:var(--color-primary)}
+    .service-modal__title{
+      font-family:var(--font-display);
+      font-size:clamp(2.7rem,6vw,5rem);
+      line-height:.9;letter-spacing:.02em;
+      margin-bottom:var(--space-5);
+    }
+    .service-modal__lead{
+      color:var(--color-text-muted);
+      font-size:var(--text-base);
+      line-height:1.7;
+      max-width:62ch;
+      margin-bottom:var(--space-8);
+    }
+    .service-modal__list{
+      list-style:none;
+      display:grid;gap:var(--space-4);
+      margin-bottom:var(--space-8);
+    }
+    .service-modal__list li{
+      position:relative;
+      padding-left:var(--space-6);
+      color:var(--color-text);
+      line-height:1.6;
+    }
+    .service-modal__list li::before{
+      content:'';
+      position:absolute;left:0;top:.68em;
+      width:8px;height:8px;border-radius:50%;
+      background:var(--color-primary);
+      box-shadow:0 0 18px oklch(from var(--color-primary) l c h / .45);
+    }
+    .service-modal__actions{display:flex;align-items:center;gap:var(--space-4);flex-wrap:wrap}
+    @media(max-width:600px){
+      .service-modal{align-items:end;padding:var(--space-3)}
+      .service-modal__dialog{max-height:88vh;padding:var(--space-8) var(--space-5);border-radius:var(--radius-lg)}
+      .service-modal__close{top:var(--space-3);right:var(--space-3)}
+    }
+
+    .wa-float{
+      position:fixed;right:22px;bottom:22px;z-index:120;
+      width:58px;height:58px;border-radius:50%;
+      display:grid;place-items:center;
+      color:#fff;background:#25D366;
+      box-shadow:0 18px 42px rgba(0,0,0,.28);
+      text-decoration:none;isolation:isolate;
+    }
+    .wa-float::before,
+    .wa-float::after{
+      content:'';position:absolute;inset:0;z-index:-1;
+      border-radius:inherit;background:rgba(37,211,102,.42);
+      animation:waPulse 2.4s cubic-bezier(.16,1,.3,1) infinite;
+    }
+    .wa-float::after{animation-delay:1.2s}
+    .wa-float i{font-size:1.65rem}
+    @keyframes waPulse{
+      0%{opacity:.75;transform:scale(1)}
+      70%,100%{opacity:0;transform:scale(1.85)}
+    }
+
+    /* ─── FOOTER ──────────────────────────────────────────── */
+    footer{
+      padding:var(--space-12) 0;
+      border-top:1px solid var(--color-border);
+      background:var(--color-bg);
+    }
+    .footer-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-6)}
+    .footer-copy{font-size:var(--text-xs);color:var(--color-text-faint);letter-spacing:.05em}
+    .footer-links{display:flex;align-items:center;gap:var(--space-6)}
+    .footer-links a{font-size:var(--text-xs);color:var(--color-text-muted);text-decoration:none;letter-spacing:.05em;transition:color var(--transition-interactive)}
+    .footer-links a:hover{color:var(--color-text)}
+    .footer-social{
+      width:38px;height:38px;border-radius:var(--radius-full);
+      display:inline-grid;place-items:center;
+      border:1px solid var(--color-border);
+      color:var(--color-text-muted);
+      transition:color var(--transition-interactive),border-color var(--transition-interactive),background var(--transition-interactive),transform var(--transition-interactive);
+    }
+    .footer-social i{font-size:1.1rem}
+    .footer-social:hover{color:var(--color-primary);border-color:var(--color-primary);background:oklch(from var(--color-primary) l c h / .08);transform:translateY(-2px)}
+
+    /* ─── CURSOR GLOW ─────────────────────────────────────── */
+    .cursor-glow{
+      position:fixed;pointer-events:none;z-index:9999;
+      width:400px;height:400px;
+      border-radius:50%;
+      background:radial-gradient(circle,oklch(0.55 0.16 55 / .06) 0%,transparent 70%);
+      transform:translate(-50%,-50%);
+      transition:opacity .3s ease;
+    }
+  </style>
+
+</head>
+<body>
+
+  <!-- CURSOR GLOW -->
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#servicos" onclick="closeMobile()">Serviços</a>
+    <a href="#sobre" onclick="closeMobile()">Sobre</a>
+    <a href="#portfolio" onclick="closeMobile()">Portfólio</a>
+    <a href="https://wa.me/+553199300445" target="_blank" rel="noopener noreferrer">Orçamento</a>
+  </div>
+
+  <!-- NAV -->
+  <nav id="mainNav">
+    <div class="container">
+      <div class="nav-inner">
+        <a class="nav-logo" href="#">
+          <img class="nav-logo-img" src="./img/master_logo.png" alt="Master Multimídia Eventos" width="1364" height="490" data-nav-logo data-logo-hero="./img/master_logo.png" data-logo-light="./img/master_logo_.png">
+        </a>
+        <div class="nav-links">
+          <a href="#servicos">Serviços</a>
+          <a href="#sobre">Sobre</a>
+          <a href="#portfolio">Portfólio</a>
+          <div class="nav-actions">
+            <button class="theme-toggle" type="button" data-theme-toggle aria-label="Alternar tema">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            </button>
+            <a class="nav-cta" href="https://wa.me/+553199300445" target="_blank" rel="noopener noreferrer">Orçamento</a>
+          </div>
+        </div>
+        <button class="hamburger" id="hamburger" type="button" onclick="toggleMobile()" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <video class="hero-video" muted loop playsinline preload="metadata" poster="./img/master_logo.png" data-hero-video>
+      <source src="./img/hero_section.mp4" type="video/mp4">
+    </video>
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-eyebrow">Som · Luz · LED · Estrutura</div>
+        <h1 class="hero-title">
+          <span class="word">MASTER</span>
+          <span class="word">MULTIMÍDIA</span>
+          <span class="word accent-word">EVENTOS</span>
+        </h1>
+        <p class="hero-desc">Alto padrão técnico, confiabilidade e execução profissional. Há 30 anos transformando eventos em experiências inesquecíveis.</p>
+        <div class="hero-actions">
+          <a class="btn-primary" href="https://wa.me/+553199300445" target="_blank" rel="noopener noreferrer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+            Solicitar Orçamento
+          </a>
+          <a class="btn-ghost" href="#servicos">
+            Ver Serviços
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="hero-stats" role="group" aria-label="Estatísticas">
+      <div class="stat-item"><div class="stat-num" data-count="30">0</div><div class="stat-label">Anos de Mercado</div></div>
+      <div class="stat-item"><div class="stat-num" data-count="500">0</div><div class="stat-label">Eventos/Ano</div></div>
+      <div class="stat-item"><div class="stat-num" data-count="100">0</div><div class="stat-label">% Satisfação</div></div>
+    </div>
+    <div class="hero-scroll" aria-hidden="true">
+      <div class="hero-scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-section" aria-hidden="true">
+    <div class="marquee-track">
+      <div class="marquee-item"><span class="marquee-dot"></span>Sonorização <strong>Profissional</strong></div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Iluminação <strong>Técnica</strong></div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Painéis de <strong>LED</strong></div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Estrutura e <strong>Palco</strong></div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Transmissão <strong>ao Vivo</strong></div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Eventos <strong>Corporativos</strong></div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Produção <strong>Audiovisual</strong></div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Sonorização <strong>Profissional</strong></div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Iluminação <strong>Técnica</strong></div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Painéis de <strong>LED</strong></div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Estrutura e <strong>Palco</strong></div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Transmissão <strong>ao Vivo</strong></div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Eventos <strong>Corporativos</strong></div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Produção <strong>Audiovisual</strong></div>
+    </div>
+  </div>
+
+  <!-- SERVIÇOS -->
+  <section class="services" id="servicos">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-eyebrow">O que fazemos</p>
+        <h2 class="section-title">Serviços de <em>Alto Padrão</em></h2>
+      </div>
+      <div class="services-grid">
+        <!-- Featured -->
+        <div class="service-card service-card--featured" data-gsap-reveal>
+          <div class="service-number">01</div>
+          <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <circle cx="24" cy="24" r="10"/><path d="M24 4v4M24 40v4M4 24h4M40 24h4M8.7 8.7l2.8 2.8M36.5 36.5l2.8 2.8M8.7 39.3l2.8-2.8M36.5 11.5l2.8-2.8"/>
+            <circle cx="24" cy="24" r="3" fill="currentColor" stroke="none"/>
+          </svg>
+          <div class="service-name">Sonorização Profissional</div>
+          <div class="service-desc">Sistemas de áudio dimensionados para cada porte de evento. Desde pequenas reuniões corporativas até grandes shows e festivais, garantimos clareza de som e impacto sonoro impecável.</div>
+          <button class="service-tag" type="button" data-service-open data-service="sonorizacao">Saiba mais →</button>
+        </div>
+        <!-- Cards menores -->
+        <div class="service-card" data-gsap-reveal>
+          <div class="service-number">02</div>
+          <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M24 8l4 8h8l-6.5 5 2.5 8L24 24l-8 5 2.5-8L12 16h8z"/>
+            <circle cx="24" cy="38" r="2.5"/>
+            <line x1="24" y1="35" x2="24" y2="24"/>
+          </svg>
+          <div class="service-name">Iluminação Técnica e Cênica</div>
+          <div class="service-desc">Soluções de luz que valorizam espaços e criam atmosferas únicas, do corporativo ao festivo.</div>
+          <button class="service-tag" type="button" data-service-open data-service="iluminacao">Saiba mais →</button>
+        </div>
+        <div class="service-card" data-gsap-reveal>
+          <div class="service-number">03</div>
+          <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <rect x="6" y="14" width="36" height="22" rx="2"/>
+            <path d="M16 36v4M32 36v4M12 40h24"/>
+            <rect x="12" y="19" width="10" height="7" rx="1"/>
+            <rect x="26" y="19" width="10" height="7" rx="1"/>
+          </svg>
+          <div class="service-name">Painéis de LED</div>
+          <div class="service-desc">Conteúdo visual de alto impacto com tecnologia LED de última geração para palcos e stands.</div>
+          <button class="service-tag" type="button" data-service-open data-service="led">Saiba mais →</button>
+        </div>
+        <div class="service-card" data-gsap-reveal>
+          <div class="service-number">04</div>
+          <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M8 36h32M8 36v-4l8-8 8 8 8-12 8 12v4"/>
+            <circle cx="16" cy="12" r="3"/><circle cx="32" cy="12" r="3"/>
+            <line x1="16" y1="15" x2="16" y2="36" stroke-dasharray="3 3"/>
+            <line x1="32" y1="15" x2="32" y2="36" stroke-dasharray="3 3"/>
+          </svg>
+          <div class="service-name">Estruturas e Palco</div>
+          <div class="service-desc">Montagem modular segura e esteticamente refinada para qualquer porte de evento.</div>
+          <button class="service-tag" type="button" data-service-open data-service="estrutura">Saiba mais →</button>
+        </div>
+        <div class="service-card" data-gsap-reveal>
+          <div class="service-number">05</div>
+          <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <circle cx="24" cy="24" r="14"/>
+            <path d="M20 18l10 6-10 6V18z" fill="currentColor" stroke="none"/>
+            <path d="M6 24c0-9.9 8.1-18 18-18"/>
+            <path d="M42 24c0 9.9-8.1 18-18 18"/>
+          </svg>
+          <div class="service-name">Filmagem e Transmissão</div>
+          <div class="service-desc">Live streaming e captação profissional para eventos presenciais, híbridos e online.</div>
+          <button class="service-tag" type="button" data-service-open data-service="filmagem">Saiba mais →</button>
+        </div>
+        <div class="service-card" data-gsap-reveal>
+          <div class="service-number">06</div>
+          <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <rect x="8" y="8" width="14" height="14" rx="2"/>
+            <rect x="26" y="8" width="14" height="14" rx="2"/>
+            <rect x="8" y="26" width="14" height="14" rx="2"/>
+            <rect x="26" y="26" width="14" height="14" rx="2"/>
+          </svg>
+          <div class="service-name">Cenografia e Design</div>
+          <div class="service-desc">Ambientes personalizados com identidade visual, integração de luz, LED e cenografia exclusiva.</div>
+          <button class="service-tag" type="button" data-service-open data-service="cenografia">Saiba mais →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOBRE -->
+  <section class="about" id="sobre">
+    <div class="container">
+      <div class="about-inner">
+        <div>
+          <div class="section-header">
+            <p class="section-eyebrow">Nossa história</p>
+            <h2 class="section-title">30 Anos de <em>Excelência</em></h2>
+          </div>
+          <p class="about-body">A Master Multimídia nasceu da paixão por eventos e pela técnica audiovisual. Ao longo de três décadas construímos uma reputação sólida, atendendo clientes corporativos, institucionais e sociais com o mesmo nível de exigência e dedicação.</p>
+          <p class="about-body">Nossa equipe altamente especializada cuida de cada detalhe, do planejamento à execução, garantindo que cada evento seja uma experiência memorável para realizadores e convidados.</p>
+          <div class="about-cta">
+            <a class="btn-primary" href="https://wa.me/+553199300445" target="_blank" rel="noopener noreferrer">Fale Conosco</a>
+          </div>
+        </div>
+        <div class="numbers-grid" data-gsap-numbers>
+          <div class="number-item">
+            <div class="number-val" data-count="30">0</div>
+            <div class="number-desc">Anos de Mercado</div>
+          </div>
+          <div class="number-item">
+            <div class="number-val" data-count="500">0</div>
+            <div class="number-desc">Eventos por Ano</div>
+          </div>
+          <div class="number-item">
+            <div class="number-val" data-count="200">0</div>
+            <div class="number-desc">Clientes Ativos</div>
+          </div>
+          <div class="number-item">
+            <div class="number-val" data-count="100">0</div>
+            <div class="number-desc">% Satisfação</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESSO -->
+  <section class="process">
+    <div class="container">
+      <div class="section-header section-header--compact">
+        <p class="section-eyebrow">Como trabalhamos</p>
+        <h2 class="section-title">Processo <em>Simples</em></h2>
+      </div>
+      <div class="process-steps">
+        <div class="step-item" data-gsap-step>
+          <div class="step-dot">01</div>
+          <div class="step-title">Briefing</div>
+          <div class="step-desc">Entendemos cada detalhe do seu evento, objetivos e expectativas.</div>
+        </div>
+        <div class="step-item" data-gsap-step>
+          <div class="step-dot">02</div>
+          <div class="step-title">Proposta</div>
+          <div class="step-desc">Elaboramos uma solução personalizada com equipamentos e equipe ideais.</div>
+        </div>
+        <div class="step-item" data-gsap-step>
+          <div class="step-dot">03</div>
+          <div class="step-title">Produção</div>
+          <div class="step-desc">Montagem com rigor técnico, testes completos e equipe dedicada.</div>
+        </div>
+        <div class="step-item" data-gsap-step>
+          <div class="step-dot">04</div>
+          <div class="step-title">Execução</div>
+          <div class="step-desc">Operação técnica profissional do início ao fim do evento.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PORTFÓLIO -->
+  <section class="portfolio" id="portfolio">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-eyebrow">Nossos trabalhos</p>
+        <h2 class="section-title">Portfólio de <em>Eventos</em></h2>
+      </div>
+    </div>
+    <div class="portfolio-outer">
+      <div class="portfolio-grid">
+        <div class="portfolio-item">
+          <img class="portfolio-img" src="img/img-1.png" alt="Grande evento corporativo com palco iluminado" width="1200" height="675" loading="lazy">
+          <div class="portfolio-overlay"><div class="portfolio-label">Corporativo</div><div class="portfolio-title">Summit Empresarial Sicoob</div></div>
+        </div>
+        <div class="portfolio-item">
+          <img class="portfolio-img" src="img/img-2.png" alt="Grande evento corporativo com palco iluminado" width="1200" height="675" loading="lazy">
+          <div class="portfolio-overlay"><div class="portfolio-label">Entretenimento</div><div class="portfolio-title">Show X Artista</div></div>
+        </div>
+        <div class="portfolio-item">
+          <img class="portfolio-img" src="img/img-3.png" alt="Grande evento corporativo com palco iluminado" width="1200" height="675" loading="lazy">
+          <div class="portfolio-overlay"><div class="portfolio-label">Social</div><div class="portfolio-title">Casamento</div></div>
+        </div>
+        <div class="portfolio-item">
+          <img class="portfolio-img" src="img/img-4.png" alt="Grande evento corporativo com palco iluminado" width="1200" height="675" loading="lazy">
+          <div class="portfolio-overlay"><div class="portfolio-label">Corporativo</div><div class="portfolio-title">Summit Empresarial 2024</div></div>
+        </div>
+        <div class="portfolio-item">
+          <img class="portfolio-img" src="img/img-5.png" alt="Grande evento corporativo com palco iluminado" width="1200" height="675" loading="lazy">
+          <div class="portfolio-overlay"><div class="portfolio-label">Corporativo</div><div class="portfolio-title">Summit Empresarial 2024</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIAL -->
+  <section class="testimonial">
+    <div class="testimonial-bg"></div>
+    <div class="container">
+      <div class="testimonial-inner" data-gsap-testimonial>
+        <div class="testimonial-quote">
+          <span class="quote-mark" aria-hidden="true">“</span>
+          <p class="testimonial-text">A Master Multimídia transformou nosso evento anual em uma experiência verdadeiramente inesquecível. Profissionalismo, técnica e atenção aos detalhes em cada etapa da produção.</p>
+        </div>
+        <div class="testimonial-author">Carolina Mendes</div>
+        <span class="testimonial-role">Diretora de Marketing · Grupo Empresarial MG</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-inner" data-gsap-cta>
+        <h2 class="cta-title">Seu próximo evento<br>começa aqui.</h2>
+        <p class="cta-subtitle">Fale com nossa equipe e receba uma proposta personalizada para o seu evento.</p>
+        <div class="cta-actions">
+          <a class="btn-whatsapp" href="https://wa.me/+553199300445" target="_blank" rel="noopener noreferrer">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+            Solicitar Orçamento via WhatsApp
+          </a>
+          <a class="btn-ghost" href="mailto:ventas@mastermultimidia.com.br">
+            ventas@mastermultimidia.com.br
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-copy">© 2024 Master Multimídia · Belo Horizonte, MG · +55 31 9930-0445</div>
+        <div class="footer-links">
+          <a href="#servicos">Serviços</a>
+          <a href="#sobre">Sobre</a>
+          <a href="#portfolio">Portfólio</a>
+          <a href="https://wa.me/+553199300445" target="_blank" rel="noopener noreferrer">Contato</a>
+          <a class="footer-social" href="https://www.instagram.com/mastermultimidia_eventos/" target="_blank" rel="noopener noreferrer" aria-label="Instagram da Master Multimídia Eventos">
+            <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="service-modal" data-service-modal role="dialog" aria-modal="true" aria-labelledby="serviceModalTitle" hidden>
+    <div class="service-modal__overlay" data-service-close></div>
+    <div class="service-modal__dialog" role="document">
+      <button class="service-modal__close" type="button" data-service-close aria-label="Fechar modal">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+      <div class="service-modal__kicker">Detalhes do serviço</div>
+      <h2 class="service-modal__title" id="serviceModalTitle">Detalhes do serviço</h2>
+      <p class="service-modal__lead" data-service-modal-lead></p>
+      <ul class="service-modal__list" data-service-modal-list></ul>
+      <div class="service-modal__actions">
+        <a class="btn-primary" href="https://wa.me/+553199300445" target="_blank" rel="noopener noreferrer">
+          Solicitar orçamento
+        </a>
+        <button class="btn-ghost" type="button" data-service-close>Voltar aos serviços</button>
+      </div>
+    </div>
+  </div>
+
+  <a class="wa-float" href="https://wa.me/553199300445" target="_blank" rel="noopener noreferrer" aria-label="Falar com a Master Multimídia no WhatsApp">
+    <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+  </a>
+
+  <script>
+    /* ─── THEME TOGGLE ───────────────────────────────────── */
+    (function(){
+      const t=document.querySelector('[data-theme-toggle]'),r=document.documentElement;
+      let d=r.getAttribute('data-theme') || 'dark';
+      r.setAttribute('data-theme',d);
+      if(t)t.addEventListener('click',()=>{
+        d=d==='dark'?'light':'dark';
+        r.setAttribute('data-theme',d);
+        t.innerHTML=d==='dark'
+          ?'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'
+          :'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>';
+        updateNavState();
+      });
+    })();
+
+    /* ─── NAV SCROLL ──────────────────────────────────────── */
+    const nav=document.getElementById('mainNav');
+    const navLogo=document.querySelector('[data-nav-logo]');
+    const heroSection=document.querySelector('.hero');
+
+    function isNavOverHero(){
+      if(!heroSection || !nav)return false;
+      return heroSection.getBoundingClientRect().bottom > nav.offsetHeight + 8;
+    }
+
+    function updateNavState(){
+      const overHero=isNavOverHero();
+      if(nav)nav.classList.toggle('scrolled',scrollY>40 && !overHero);
+      if(!navLogo)return;
+
+      const isLight=document.documentElement.getAttribute('data-theme')==='light';
+      const nextSrc=isLight && !overHero
+        ? navLogo.dataset.logoLight
+        : navLogo.dataset.logoHero;
+
+      if(nextSrc && navLogo.getAttribute('src')!==nextSrc){
+        navLogo.setAttribute('src',nextSrc);
+      }
+    }
+
+    updateNavState();
+    window.addEventListener('scroll',updateNavState,{passive:true});
+    window.addEventListener('resize',updateNavState);
+
+    /* ─── HERO VIDEO ─────────────────────────────────────── */
+    const heroVideo=document.querySelector('[data-hero-video]');
+    if(heroVideo && !matchMedia('(prefers-reduced-motion: reduce)').matches){
+      heroVideo.play().catch(()=>{});
+    }
+
+    /* ─── MOBILE MENU ─────────────────────────────────────── */
+    function toggleMobile(){
+      const m=document.getElementById('mobileMenu');
+      m.classList.toggle('open');
+    }
+    function closeMobile(){
+      document.getElementById('mobileMenu').classList.remove('open');
+    }
+
+    /* SERVICE DETAILS MODAL */
+    const serviceDetails={
+      sonorizacao:{
+        title:'Sonorização Profissional',
+        lead:'Projetamos o sistema de áudio de acordo com o porte, o formato e a acústica do evento, garantindo inteligibilidade, pressão sonora equilibrada e operação técnica durante toda a realização.',
+        items:[
+          'Dimensionamento de PA, monitores, microfones, consoles e periféricos.',
+          'Equipe técnica para montagem, passagem de som, operação e desmontagem.',
+          'Soluções para palestras, congressos, cerimônias, shows, festas e eventos híbridos.'
+        ]
+      },
+      iluminacao:{
+        title:'Iluminação Técnica e Cênica',
+        lead:'Criamos desenhos de luz que valorizam palco, arquitetura, marca e momentos-chave do evento, combinando precisão técnica com impacto visual.',
+        items:[
+          'Moving heads, refletores, recortes, wash, luz decorativa e efeitos cênicos.',
+          'Programação de cenas para abertura, apresentações, pista e protocolo.',
+          'Integração com LED, cenografia, fotografia e captação de vídeo.'
+        ]
+      },
+      led:{
+        title:'Painéis de LED',
+        lead:'Entregamos soluções de LED para fundos de palco, plenárias, stands, ativações e transmissões, com montagem segura e conteúdo visual em alta definição.',
+        items:[
+          'Painéis modulares com formatos adaptados ao espaço e à proposta visual.',
+          'Processamento de imagem, cabeamento, testes e acompanhamento técnico.',
+          'Aplicações para identidade visual, apresentações, vídeos, live feed e cenários.'
+        ]
+      },
+      estrutura:{
+        title:'Estruturas e Palco',
+        lead:'Montamos estruturas com foco em segurança, acabamento e funcionalidade, criando a base técnica para receber som, luz, LED, cenografia e operação.',
+        items:[
+          'Palcos, praticáveis, grids, torres, pórticos, treliças e suportes técnicos.',
+          'Planejamento de carga, posicionamento, circulação e montagem no local.',
+          'Acabamento alinhado ao padrão visual do evento e às exigências operacionais.'
+        ]
+      },
+      filmagem:{
+        title:'Filmagem e Transmissão',
+        lead:'Realizamos captação e transmissão com fluxo profissional, ideal para eventos presenciais, híbridos e online que exigem estabilidade e boa apresentação.',
+        items:[
+          'Câmeras, cortes ao vivo, captação de áudio, gravação e transmissão online.',
+          'Operação integrada com palco, apresentações, LED e protocolo do evento.',
+          'Estrutura para lives, congressos, treinamentos, lançamentos e cerimônias.'
+        ]
+      },
+      cenografia:{
+        title:'Cenografia e Design',
+        lead:'Desenvolvemos ambientes com presença visual, integrando cenografia, iluminação, LED e identidade da marca para criar uma experiência consistente.',
+        items:[
+          'Composição visual para palco, backdrop, recepção, áreas sociais e ativações.',
+          'Integração de elementos físicos, conteúdo digital e iluminação cênica.',
+          'Soluções sob medida para eventos corporativos, sociais e institucionais.'
+        ]
+      }
+    };
+
+    const serviceModal=document.querySelector('[data-service-modal]');
+    const serviceModalTitle=document.getElementById('serviceModalTitle');
+    const serviceModalLead=document.querySelector('[data-service-modal-lead]');
+    const serviceModalList=document.querySelector('[data-service-modal-list]');
+    let serviceModalTrigger=null;
+
+    function fillServiceModal(details){
+      serviceModalTitle.textContent=details.title;
+      serviceModalLead.textContent=details.lead;
+      serviceModalList.replaceChildren(...details.items.map(item=>{
+        const li=document.createElement('li');
+        li.textContent=item;
+        return li;
+      }));
+    }
+
+    function openServiceModal(key,trigger){
+      const details=serviceDetails[key];
+      if(!serviceModal || !details)return;
+      serviceModalTrigger=trigger;
+      fillServiceModal(details);
+      serviceModal.hidden=false;
+      document.body.classList.add('modal-open');
+      serviceModal.querySelector('.service-modal__close').focus();
+    }
+
+    function closeServiceModal(){
+      if(!serviceModal || serviceModal.hidden)return;
+      serviceModal.hidden=true;
+      document.body.classList.remove('modal-open');
+      if(serviceModalTrigger)serviceModalTrigger.focus();
+    }
+
+    document.querySelectorAll('[data-service-open]').forEach(button=>{
+      button.addEventListener('click',()=>openServiceModal(button.dataset.service,button));
+    });
+
+    if(serviceModal){
+      serviceModal.addEventListener('click',event=>{
+        if(event.target.closest('[data-service-close]'))closeServiceModal();
+      });
+      document.addEventListener('keydown',event=>{
+        if(event.key==='Escape')closeServiceModal();
+      });
+    }
+
+    /* ─── CURSOR GLOW ─────────────────────────────────────── */
+    const glow=document.getElementById('cursorGlow');
+    let mx=0,my=0,cx=0,cy=0;
+    document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY},{passive:true});
+    (function animate(){
+      cx+=(mx-cx)*.08; cy+=(my-cy)*.08;
+      glow.style.left=cx+'px'; glow.style.top=cy+'px';
+      requestAnimationFrame(animate);
+    })();
+
+    /* ─── GSAP ANIMATIONS ─────────────────────────────────── */
+    gsap.registerPlugin(ScrollTrigger);
+
+    /* Hero entrance */
+    const heroTl = gsap.timeline({delay:.2});
+
+    // Chars animation — fallback if SplitText not loaded
+    const heroTitle = document.querySelector('.hero-title');
+    const words = heroTitle.querySelectorAll('.word');
+    words.forEach(word=>{
+      const text = word.textContent;
+      word.innerHTML = text.split('').map(c=>c===' '?'&nbsp;':`<span class="char" style="display:inline-block;overflow:hidden">${c}</span>`).join('');
+    });
+
+    heroTl
+      .to('.hero-eyebrow',{opacity:1,y:0,duration:.8,ease:'power3.out'},0.1)
+      .to('.hero-title .char',{
+        y:'0%',duration:1,ease:'expo.out',
+        stagger:{amount:.6,from:'start'}
+      },0.3)
+      .to('.hero-desc',{opacity:1,y:0,duration:.8,ease:'power3.out'},1)
+      .to('.hero-actions',{opacity:1,y:0,duration:.8,ease:'power3.out'},1.2)
+      .to('.hero-stats',{opacity:1,duration:.8,ease:'power3.out'},1.4)
+      .to('.hero-scroll',{opacity:1,duration:.8},1.8);
+
+    // Counter animation in hero
+    function animateCount(el, target, suffix=''){
+      gsap.to({val:0},{
+        val:target,duration:2,ease:'power2.out',
+        onUpdate:function(){el.textContent=Math.round(this.targets()[0].val)+(suffix||'')}
+      });
+    }
+    ScrollTrigger.create({
+      trigger:'.hero-stats',once:true,
+      onEnter:()=>{
+        document.querySelectorAll('.hero-stats [data-count]').forEach(el=>{
+          animateCount(el,+el.dataset.count,el.dataset.count==='100'?'%':'+');
+        });
+      }
+    });
+
+    // Service cards stagger
+    gsap.from('[data-gsap-reveal]',{
+      opacity:0,y:40,duration:.8,stagger:.1,ease:'power3.out',
+      scrollTrigger:{trigger:'.services-grid',start:'top 80%'}
+    });
+
+    // Numbers counter
+    ScrollTrigger.create({
+      trigger:'[data-gsap-numbers]',start:'top 75%',once:true,
+      onEnter:()=>{
+        document.querySelectorAll('[data-gsap-numbers] [data-count]').forEach(el=>{
+          const suffix = el.dataset.count==='100'?'%':'+';
+          animateCount(el,+el.dataset.count,suffix);
+        });
+      }
+    });
+
+    // Process steps
+    gsap.from('[data-gsap-step]',{
+      opacity:0,y:30,duration:.7,stagger:.15,ease:'power3.out',
+      scrollTrigger:{trigger:'.process-steps',start:'top 80%'}
+    });
+
+    // Portfolio items
+    gsap.from('.portfolio-item',{
+      opacity:0,scale:.96,duration:.8,stagger:.08,ease:'power3.out',
+      scrollTrigger:{trigger:'.portfolio-grid',start:'top 80%'}
+    });
+
+    // Testimonial
+    gsap.from('[data-gsap-testimonial]',{
+      opacity:0,y:50,duration:1,ease:'power3.out',
+      scrollTrigger:{trigger:'[data-gsap-testimonial]',start:'top 80%'}
+    });
+
+    // CTA
+    gsap.from('[data-gsap-cta]',{
+      opacity:0,y:40,duration:1,ease:'power3.out',
+      scrollTrigger:{trigger:'[data-gsap-cta]',start:'top 80%'}
+    });
+
+    // About section text reveal
+    gsap.from('.about-body',{
+      opacity:0,y:30,duration:.8,stagger:.15,ease:'power3.out',
+      scrollTrigger:{trigger:'.about-inner',start:'top 75%'}
+    });
+
+    // Section headers
+    document.querySelectorAll('.section-header').forEach(el=>{
+      gsap.from(el,{
+        opacity:0,y:30,duration:.8,ease:'power3.out',
+        scrollTrigger:{trigger:el,start:'top 85%'}
+      });
+    });
+
+    // Parallax on hero grid
+    gsap.to('.hero-grid',{
+      y:80,ease:'none',
+      scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:true}
+    });
+
+    // Gradient parallax
+    gsap.to('.hero-bg',{
+      y:60,ease:'none',
+      scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:true}
+    });
+  </script>
+
+</body>
+</html>
